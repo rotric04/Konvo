@@ -150,3 +150,162 @@ html[data-theme="light"] {
     --header-bg: rgba(250, 249, 246, 0.75);
     --shadow-color: rgba(9, 9, 11, 0.08);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   KONVO™ COMPONENT THEME OVERRIDES
+   These rules ensure all components flip correctly in both themes.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Logo swap: shows logo_light in light mode ── */
+html[data-theme="light"] .konvo-logo-img[src*="logo_dark"] {
+    content: url('/static/logo_light.svg');
+}
+
+/* ── Input, textarea, select — themed backgrounds ── */
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+    background-color: var(--surface-primary);
+    color: var(--text-primary);
+    border-color: var(--border-secondary);
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* ── Password strength UI in light mode ── */
+html[data-theme="light"] .password-strength-wrapper {
+    background: var(--surface-secondary);
+    border-color: var(--border-secondary);
+}
+
+html[data-theme="light"] .password-strength-feedback {
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .req-item {
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .req-item.valid {
+    color: var(--accent-success);
+}
+
+/* ── Suggest username button in light mode ── */
+html[data-theme="light"] .btn-suggest-username {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+}
+
+/* ── Validation messages inherit theme ── */
+html[data-theme="light"] .validation-msg {
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .validation-msg.error {
+    color: var(--accent-danger);
+}
+
+html[data-theme="light"] .validation-msg.success {
+    color: var(--accent-success);
+}
+
+/* ── Mobile menu drawer in light mode ── */
+html[data-theme="light"] .mobile-menu-drawer {
+    background-color: var(--bg-primary);
+}
+
+html[data-theme="light"] .mobile-menu-drawer .mobile-nav a {
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .mobile-menu-drawer .mobile-actions .btn-secondary {
+    border-color: var(--border-secondary);
+    color: var(--text-primary);
+}
+
+/* ── Swipe card, profile card bg in light mode ── */
+html[data-theme="light"] .swipe-card {
+    background: linear-gradient(180deg, var(--surface-primary) 0%, var(--bg-tertiary) 100%) !important;
+}
+
+/* ── OTP input, chat bubbles ── */
+html[data-theme="light"] .chat-history {
+    background-color: var(--surface-secondary);
+}
+
+/* ── Location strip in virtual date (dark overlay on 3D canvas) ── */
+html[data-theme="light"] .vd-location-strip {
+    background: rgba(250, 249, 246, 0.9);
+    border-top-color: var(--border-primary);
+}
+
+html[data-theme="light"] .vd-loc-btn {
+    border-color: var(--border-secondary);
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .vd-loc-btn:hover,
+html[data-theme="light"] .vd-loc-btn.active {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+/* ── Landing header in light mode ── */
+html[data-theme="light"] .landing-header {
+    background: var(--header-bg);
+    border-bottom-color: var(--border-primary);
+}
+
+/* ── Cookie banner in light mode ── */
+html[data-theme="light"] .cookie-banner-container {
+    background: var(--surface-primary);
+    border-color: var(--border-secondary);
+}
+
+/* ── World's first badge text in light mode ── */
+html[data-theme="light"] .worlds-first-badge {
+    background: rgba(13, 148, 136, 0.08);
+    border-color: rgba(13, 148, 136, 0.25);
+    color: var(--accent-primary);
+}
+
+/* ── Section tags in light mode ── */
+html[data-theme="light"] .section-tag {
+    color: var(--text-secondary);
+}
+
+/* ── Footer in light mode ── */
+html[data-theme="light"] .app-footer,
+html[data-theme="light"] .landing-footer {
+    background: var(--bg-secondary);
+    border-top-color: var(--border-primary);
+}
+
+html[data-theme="light"] .footer-bottom-bar {
+    border-top-color: var(--border-primary);
+}
+
+/* ── Card/modal backgrounds ── */
+html[data-theme="light"] .card,
+html[data-theme="light"] .modal-content {
+    background-color: var(--surface-primary);
+    border-color: var(--border-primary);
+}
+
+/* ── Landing nav tab buttons in light mode ── */
+html[data-theme="light"] .landing-tab-btn {
+    color: var(--text-secondary);
+}
+
+html[data-theme="light"] .landing-tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover);
+}
+
+html[data-theme="light"] .landing-tab-btn.active {
+    color: var(--accent-primary);
+    background: rgba(13, 148, 136, 0.08);
+}

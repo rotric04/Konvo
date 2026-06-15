@@ -602,7 +602,7 @@ input:focus, textarea:focus, select:focus {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: var(--overlay-backdrop, rgba(0, 0, 0, 0.85));
     z-index: 10005;
     display: flex;
     align-items: center;
@@ -711,7 +711,7 @@ input:focus, textarea:focus, select:focus {
     padding: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--surface-secondary, var(--bg-card));
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -906,7 +906,7 @@ svg.graph-svg {
     padding: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--surface-secondary, var(--bg-card));
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -1164,13 +1164,13 @@ svg.graph-svg {
 .password-strength-wrapper {
     margin-top: 0.5rem;
     padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--surface-secondary, rgba(0, 0, 0, 0.05));
     border-radius: 6px;
     border: 1px solid var(--border-color);
 }
 .password-strength-bar-container {
     height: 4px;
-    background: var(--bg-main);
+    background: var(--border-primary, var(--border-color));
     border-radius: 2px;
     overflow: hidden;
     margin-bottom: 0.4rem;
@@ -1195,7 +1195,7 @@ svg.graph-svg {
 .req-item {
     font-size: 0.65rem;
     font-family: var(--font-sans);
-    color: var(--text-muted);
+    color: var(--text-secondary);
     transition: color 0.2s ease;
 }
 .req-item.valid {
@@ -1680,7 +1680,7 @@ input:focus, textarea:focus, select:focus {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(10, 10, 13, 0.98);
+    background-color: var(--bg-primary, var(--bg-main));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 1050;
@@ -1758,7 +1758,7 @@ input:focus, textarea:focus, select:focus {
 .app-footer {
     margin-top: 5rem;
     border-top: 1px solid var(--border-color);
-    background: linear-gradient(180deg, var(--bg-main) 0%, rgba(17, 17, 22, 0.9) 100%);
+    background: var(--bg-primary, var(--bg-main));
     padding: 3rem 2rem 2rem 2rem;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -2165,7 +2165,7 @@ body::before {
 .stage-scroller {
     height: 100px;
     border-top: 1px solid var(--border-color);
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--surface-secondary, var(--bg-card));
     overflow-y: auto;
     padding: 0.75rem;
     font-family: var(--font-mono);
@@ -2189,13 +2189,13 @@ body::before {
     width: 100%;
     max-width: 440px;
     border: 1px solid var(--border-color);
-    background: linear-gradient(180deg, #0d0d12 0%, #060608 100%);
+    background: var(--surface-primary, var(--bg-card));
     border-radius: 8px;
     overflow: hidden;
     position: relative;
     padding: 2rem;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: var(--shadow-lg, 0 10px 30px rgba(0,0,0,0.3));
 }
 .swipe-card-avatar {
     width: 120px;
@@ -2488,6 +2488,93 @@ body::before {
 }
 .landing-section {
     border-top: none;
+}
+
+/* ── Landing Header base styles ── */
+.landing-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(1rem + env(safe-area-inset-top)) max(2rem, env(safe-area-inset-right)) 1rem max(2rem, env(safe-area-inset-left));
+    background: var(--header-bg, rgba(9, 9, 11, 0.75));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid var(--border-primary, var(--border-color));
+    transition: background 250ms ease, border-color 250ms ease;
+}
+
+/* ── Landing Footer base styles ── */
+.landing-footer {
+    background: var(--bg-secondary, var(--bg-card));
+    border-top: 1px solid var(--border-primary, var(--border-color));
+}
+
+/* ── Landing Hero ── */
+.landing-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: center;
+    padding: calc(8rem + env(safe-area-inset-top)) max(4rem, env(safe-area-inset-right)) 5rem max(4rem, env(safe-area-inset-left));
+}
+
+/* ── Landing Nav ── */
+.landing-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.landing-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 200ms ease, background 200ms ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.landing-tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover, rgba(255,255,255,0.06));
+}
+
+.landing-tab-btn.active {
+    color: var(--accent-primary, var(--accent-teal));
+    background: rgba(13, 148, 136, 0.1);
+}
+
+/* Blog link in nav */
+.landing-blog-link {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-amber);
+    padding: 0.4rem 0.75rem;
+    border: 1px solid rgba(217, 119, 6, 0.25);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 200ms ease;
+}
+
+.landing-blog-link:hover {
+    border-color: var(--accent-amber);
+    background: rgba(217, 119, 6, 0.08);
+    color: var(--accent-amber);
 }
 
 /* Section tag pulse */
@@ -3765,10 +3852,10 @@ body::before {
 .vd-dialogue-area {
     position: relative;
     z-index: 10;
-    background: rgba(0,0,0,0.75);
+    background: var(--bg-secondary, var(--bg-card));
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid var(--border-color);
     padding: 1rem 2rem;
     display: flex;
     flex-direction: column;
@@ -5630,13 +5717,13 @@ input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focu
     z-index: 9999;
     width: calc(100% - 48px);
     max-width: 760px;
-    background: rgba(10, 10, 15, 0.85);
+    background: var(--modal-bg, var(--bg-card));
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.25rem 1.75rem;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
+    box-shadow: var(--shadow-lg);
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
     opacity: 0;
 }

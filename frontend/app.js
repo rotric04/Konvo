@@ -2751,7 +2751,8 @@ function initChatWorkspace() {
 const _activeModals = new Set();
 let _savedScrollY = 0;
 
-window.konvoOpenModal = function(id) {
+// Internal implementation — stored so the stub can drain queued calls
+function _konvoOpenModalImpl(id) {
     const el = document.getElementById(id);
     if (!el) return;
     
@@ -2778,7 +2779,11 @@ window.konvoOpenModal = function(id) {
             gsap.fromTo(content, { scale: 0.9, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
         }
     }
-};
+}
+
+// Register real function and drain queue from early stub
+window._konvoOpenModalReal = _konvoOpenModalImpl;
+window.konvoOpenModal = _konvoOpenModalImpl;
 
 window.konvoCloseModal = function(id) {
     const el = document.getElementById(id);
@@ -2830,6 +2835,12 @@ window.konvoCloseModal = function(id) {
         }
     }
 };
+
+// Register real close function and drain queue from early stub
+window._konvoCloseModalReal = window.konvoCloseModal;
+if (typeof window.__drainModalQueue === 'function') {
+    window.__drainModalQueue();
+}
 
 // Close Modal helper
 function setupModalClosers() {

@@ -50,6 +50,25 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/theme.css">
     <script src="/static/theme-manager.js"></script>
+    <!-- Modal stub: queues calls before app.js loads, drained when real function is defined -->
+    <script>
+        (function() {
+            var _q = [];
+            window.konvoOpenModal = function(id) { _q.push(['open', id]); };
+            window.konvoCloseModal = function(id) { _q.push(['close', id]); };
+            window.__drainModalQueue = function() {
+                var open = window._konvoOpenModalReal;
+                var close = window._konvoCloseModalReal;
+                if (open && close) {
+                    _q.forEach(function(item) {
+                        if (item[0] === 'open') open(item[1]);
+                        else close(item[1]);
+                    });
+                    _q = [];
+                }
+            };
+        })();
+    </script>
     <style>
         .dashboard-grid {
             display: grid;
@@ -65,7 +84,7 @@
 
         .swipe-card {
             border: 1px solid var(--border-color);
-            background: linear-gradient(180deg, #0d0d12 0%, #060608 100%);
+            background: var(--surface-primary, var(--bg-card));
             border-radius: 8px;
             overflow: hidden;
             position: relative;
