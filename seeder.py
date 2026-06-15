@@ -86,6 +86,7 @@ def seed_database():
         users_raw: list[dict[str, Any]] = [
             {
                 "email": "evelyn@konvo.app",
+                "username": "evelyn",
                 "password": "evelynpassword123",
                 "display_name": "Dr. Evelyn Vance",
                 "gender": "Female",
@@ -101,6 +102,7 @@ def seed_database():
             },
             {
                 "email": "marcus@konvo.app",
+                "username": "marcus",
                 "password": "marcuspassword123",
                 "display_name": "Marcus Chen",
                 "gender": "Male",
@@ -116,6 +118,7 @@ def seed_database():
             },
             {
                 "email": "sophia@konvo.app",
+                "username": "sophia",
                 "password": "sophiapassword123",
                 "display_name": "Sophia Patel",
                 "gender": "Female",
@@ -131,6 +134,7 @@ def seed_database():
             },
             {
                 "email": "lucas@konvo.app",
+                "username": "lucas",
                 "password": "lucaspassword123",
                 "display_name": "Lucas Gallagher",
                 "gender": "Male",
@@ -146,6 +150,7 @@ def seed_database():
             },
             {
                 "email": "naomi@konvo.app",
+                "username": "naomi",
                 "password": "naomipassword123",
                 "display_name": "Naomi Sterling",
                 "gender": "Female",
@@ -167,6 +172,7 @@ def seed_database():
             # Create user in database
             reg_schema = schemas.UserRegister(
                 email=ur["email"],
+                username=ur["username"],
                 password=ur["password"],
                 display_name=ur["display_name"],
                 phone=ur["phone"],

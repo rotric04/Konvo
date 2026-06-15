@@ -1,0 +1,80 @@
+<div class="header-bar" style="margin-bottom: 2rem;">
+    <div>
+        <h1 class="page-title">AI System Diagnostics</h1>
+        <p class="page-subtitle">Real-time status and health of integrated AI services.</p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h3 class="card-title">Gemini Integration</h3>
+    <div class="status-item">
+        <span>Provider Status:</span>
+        <span id="gemini-status" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>API Health:</span>
+        <span id="gemini-health" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>Usage Visibility:</span>
+        <span id="gemini-usage" class="status-indicator pending">Loading...</span>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h3 class="card-title">Replicate Integration</h3>
+    <div class="status-item">
+        <span>Provider Status:</span>
+        <span id="replicate-status" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>API Health:</span>
+        <span id="replicate-health" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>Usage Visibility:</span>
+        <span id="replicate-usage" class="status-indicator pending">Loading...</span>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 1.5rem;">
+    <h3 class="card-title">FAL Integration</h3>
+    <div class="status-item">
+        <span>Provider Status:</span>
+        <span id="fal-status" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>API Health:</span>
+        <span id="fal-health" class="status-indicator pending">Loading...</span>
+    </div>
+    <div class="status-item">
+        <span>Usage Visibility:</span>
+        <span id="fal-usage" class="status-indicator pending">Loading...</span>
+    </div>
+</div>
+
+<style>
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed var(--border-color);
+    }
+    .status-item:last-child {
+        border-bottom: none;
+    }
+    .status-indicator {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+    .status-indicator.success {
+        color: var(--accent-teal);
+    }
+    .status-indicator.error {
+        color: var(--accent-rose);
+    }
+    .status-indicator.pending {
+        color: var(--accent-amber);
+    }
+</style>

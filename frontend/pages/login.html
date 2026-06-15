@@ -572,19 +572,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="regGender">I identify as</label>
-                        <select id="regGender" name="gender" required>
-                            <option value="" disabled selected>Select your identity</option>
-                            <option value="Male">Man</option>
-                            <option value="Female">Woman</option>
-                            <option value="Non-Binary">Non-Binary</option>
-                            <option value="Genderfluid">Genderfluid</option>
-                            <option value="Agender">Agender</option>
-                            <option value="Prefer not to say">Prefer not to say</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label for="regPassword">Password</label>
                         <input type="password" id="regPassword" name="password" placeholder="Create a strong password" autocomplete="new-password" required />
                         <div class="password-strength-wrapper" id="password-strength-wrapper">
@@ -604,7 +591,7 @@
                     <div style="margin-bottom: 1.25rem;">
                         <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; user-select: none; font-family: var(--font-sans); text-transform: none; letter-spacing: 0; font-size: 0.82rem; color: var(--text-secondary);">
                             <input type="checkbox" id="reg-tos-agree" name="tos" style="margin-top: 3px; width: auto; cursor: pointer;" required />
-                            I agree to the <a href="#" onclick="window.konvoOpenModal && window.konvoOpenModal('tos-modal'); return false;" style="color: var(--accent-amber);">Terms of Service</a> and <a href="#" onclick="window.konvoOpenModal && window.konvoOpenModal('privacy-modal'); return false;" style="color: var(--accent-amber);">Privacy Policy</a>
+                            I agree to the <a href="/terms-of-service" target="_blank" style="color: var(--accent-amber); text-decoration: underline;">Terms of Service</a> and <a href="/privacy-policy" target="_blank" style="color: var(--accent-amber); text-decoration: underline;">Privacy Policy</a>
                         </label>
                     </div>
 
@@ -707,6 +694,12 @@
             </div>
 
         </div>
+        <footer style="margin-top: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-secondary);">
+            <a href="/privacy-policy" style="color: var(--accent-teal); text-decoration: none; margin: 0 0.5rem;">Privacy Policy</a> | 
+            <a href="/terms-of-service" style="color: var(--accent-teal); text-decoration: none; margin: 0 0.5rem;">Terms of Service</a> |
+            <a href="/security-policy" style="color: var(--accent-teal); text-decoration: none; margin: 0 0.5rem;">Security Policy</a> |
+            <a href="#" onclick="if(window.konvoShowCookieSettings) { window.konvoShowCookieSettings(); } return false;" style="color: var(--accent-teal); text-decoration: none; margin: 0 0.5rem;">Cookie Settings</a>
+        </footer>
     </main>
 </div>
 
@@ -750,6 +743,8 @@
         if (tabRegister) tabRegister.click();
     }
 </script>
+
+<script type="module" src="/src/components/cookie-consent.js"></script>
 
 </body>
 </html>

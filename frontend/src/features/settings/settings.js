@@ -78,6 +78,11 @@ export async function initSettingsPage() {
                 const newProfileForm = document.getElementById('settings-profile-form');
                 newProfileForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
+                    const submitBtn = newProfileForm.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = 'Saving…';
+                    }
                     const display_name = document.getElementById('set-display-name').value.trim();
                     const bio = document.getElementById('set-bio').value.trim();
                     const gender = document.getElementById('set-gender').value;
@@ -108,10 +113,20 @@ export async function initSettingsPage() {
                                 goals: prof.goals || []
                             })
                         });
-                        alert("Profile configuration updated successfully.");
-                        window.location.reload();
+                        KonvoToast.show("Profile configuration updated successfully.", 'success');
+                        // Re-fetch user data and update UI dynamically instead of full reload
+                        const updatedUser = await apiFetch('/api/users/me');
+                        if (updatedUser) {
+                            window.currentUser = updatedUser; // Update global cache
+                            initSettingsPage(); // Re-initialize the page to reflect changes
+                        }
                     } catch (err) {
-                        alert(`Failed updating configuration: ${err.message}`);
+                        KonvoToast.show(`Failed updating configuration: ${err.message}`, 'error');
+                    } finally {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Save Profile';
+                        }
                     }
                 });
             }
@@ -229,6 +244,11 @@ export async function initTwinSettings() {
 
         document.getElementById('edit-twin-settings-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Saving…';
+            }
             const name = document.getElementById('set-twin-name').value;
             const description = document.getElementById('set-twin-desc').value;
             const matchPrefs = {
@@ -250,10 +270,15 @@ export async function initTwinSettings() {
                         match_preferences: matchPrefs
                     })
                 });
-                alert("AI Twin configuration synced successfully.");
+                KonvoToast.show("AI Twin configuration synced successfully.", 'success');
                 initTwinSettings();
             } catch (err) {
-                alert(`Calibration sync failed: ${err.message}`);
+                KonvoToast.show(`Calibration sync failed: ${err.message}`, 'error');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Update Twin Parameters';
+                }
             }
         });
     } catch (e) {

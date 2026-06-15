@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Konvo — World's First Agent-Based Date Finder</title>
+    <title>Konvo - World's First Agent-Based Date Finder</title>
 
     <!-- SEO Metadata -->
     <meta name="description"
         content="Access your secure compatibility dashboard, coordinate matching twin agents, and connect in direct human chat on the world's first Behavioral Internet.">
-    
+
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://konvo.space/">
-    <meta property="og:title" content="Konvo — World's First Agent-Based Date Finder">
+    <meta property="og:title" content="Konvo - World's First Agent-Based Date Finder">
     <meta property="og:description"
         content="Access your secure compatibility dashboard, coordinate matching twin agents, and connect in direct human chat on the world's first Behavioral Internet.">
     <meta property="og:image" content="https://konvo.space/static/og_banner.png">
@@ -35,8 +35,8 @@
 
     <!-- Vercel Web Analytics & Speed Insights -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -54,7 +54,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
 
     <!-- Heavy libs: loaded once -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -62,15 +64,15 @@
 
     <!-- Modal stub: queues calls before modal.js loads -->
     <script>
-        (function() {
+        (function () {
             var _q = [];
-            window.konvoOpenModal = function(id) { _q.push(['open', id]); };
-            window.konvoCloseModal = function(id) { _q.push(['close', id]); };
-            window.__drainModalQueue = function() {
+            window.konvoOpenModal = function (id) { _q.push(['open', id]); };
+            window.konvoCloseModal = function (id) { _q.push(['close', id]); };
+            window.__drainModalQueue = function () {
                 var open = window._konvoOpenModalReal;
                 var close = window._konvoCloseModalReal;
                 if (open && close) {
-                    _q.forEach(function(item) {
+                    _q.forEach(function (item) {
                         if (item[0] === 'open') open(item[1]);
                         else close(item[1]);
                     });
@@ -166,18 +168,18 @@
                 </defs>
                 <ellipse cx="50" cy="85" rx="30" ry="8" fill="rgba(0, 0, 0, 0.3)" filter="blur(3px)" />
                 <path d="M 20 50 L 50 65 L 50 80 L 20 65 Z" fill="url(#gradient-teal)" opacity="0.9">
-                    <animate attributeName="d" 
-                        values="M 20 50 L 50 65 L 50 80 L 20 65 Z; M 20 40 L 50 55 L 50 70 L 20 55 Z; M 20 50 L 50 65 L 50 80 L 20 65 Z" 
+                    <animate attributeName="d"
+                        values="M 20 50 L 50 65 L 50 80 L 20 65 Z; M 20 40 L 50 55 L 50 70 L 20 55 Z; M 20 50 L 50 65 L 50 80 L 20 65 Z"
                         dur="3s" repeatCount="indefinite" />
                 </path>
                 <path d="M 50 65 L 80 50 L 80 65 L 50 80 Z" fill="url(#gradient-indigo)" opacity="0.9">
-                    <animate attributeName="d" 
-                        values="M 50 65 L 80 50 L 80 65 L 50 80 Z; M 50 55 L 80 40 L 80 55 L 50 70 Z; M 50 65 L 80 50 L 80 65 L 50 80 Z" 
+                    <animate attributeName="d"
+                        values="M 50 65 L 80 50 L 80 65 L 50 80 Z; M 50 55 L 80 40 L 80 55 L 50 70 Z; M 50 65 L 80 50 L 80 65 L 50 80 Z"
                         dur="3s" repeatCount="indefinite" />
                 </path>
                 <path d="M 20 50 L 50 35 L 80 50 L 50 65 Z" fill="url(#gradient-amber)" opacity="0.85">
-                    <animate attributeName="d" 
-                        values="M 20 50 L 50 35 L 80 50 L 50 65 Z; M 20 40 L 50 25 L 80 40 L 50 55 Z; M 20 50 L 50 35 L 80 50 L 50 65 Z" 
+                    <animate attributeName="d"
+                        values="M 20 50 L 50 35 L 80 50 L 50 65 Z; M 20 40 L 50 25 L 80 40 L 50 55 Z; M 20 50 L 50 35 L 80 50 L 50 65 Z"
                         dur="3s" repeatCount="indefinite" />
                 </path>
                 <circle cx="50" cy="50" r="4" fill="#ffffff" filter="drop-shadow(0px 0px 4px var(--accent-cyan))">
@@ -210,8 +212,10 @@
                 <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
             </nav>
             <div class="landing-header-actions desktop-only" style="display: flex; gap: 1rem; align-items: center;">
-                <a href="/login" class="btn btn-secondary" style="padding: 0.5rem 1rem; border-color: transparent;">Login</a>
-                <a href="/login?register=true" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Create My AI Twin</a>
+                <a href="/login" class="btn btn-secondary"
+                    style="padding: 0.5rem 1rem; border-color: transparent;">Login</a>
+                <a href="/login?register=true" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Create My AI
+                    Twin</a>
             </div>
             <button class="mobile-menu-toggle" aria-label="Toggle Menu">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -230,9 +234,12 @@
                     <a href="/blog" class="landing-blog-link">Insights Blog</a>
                     <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
                 </nav>
-                <div class="mobile-actions" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 0 2rem; margin-top: 2rem;">
-                    <a href="/login" class="btn btn-secondary" style="width: 100%; text-align: center; border-color: var(--border-color);">Login</a>
-                    <a href="/login?register=true" class="btn btn-primary" style="width: 100%; text-align: center;">Create My AI Twin</a>
+                <div class="mobile-actions"
+                    style="display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 0 2rem; margin-top: 2rem;">
+                    <a href="/login" class="btn btn-secondary"
+                        style="width: 100%; text-align: center; border-color: var(--border-color);">Login</a>
+                    <a href="/login?register=true" class="btn btn-primary"
+                        style="width: 100%; text-align: center;">Create My AI Twin</a>
                 </div>
             </div>
         </header>
@@ -240,23 +247,32 @@
         <!-- Tab Content 1: Platform -->
         <div id="landing-platform" class="landing-tab-content active">
             <!-- Hero Section -->
-            <section id="platform" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
-                <div class="landing-hero reveal-on-scroll" style="border-top: none; padding: 0; min-height: auto; margin-bottom: 4rem;">
+            <section id="platform" class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+                <div class="landing-hero reveal-on-scroll"
+                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 4rem;">
                     <div>
                         <div class="worlds-first-badge">
                             🌍 World's First AI Agent-Based Date Finder
                         </div>
                         <span class="section-tag">Identity Verification & Connection</span>
-                        <h1 class="hero-title" style="font-size: 3.2rem; font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.02em;">
-                            Represent yourself with an <span class="gradient-text">AI Twin</span>. Connect through <span class="gradient-text">resonance</span>.
+                        <h1 class="hero-title"
+                            style="font-size: 3.2rem; font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.02em;">
+                            Represent yourself with an <span class="gradient-text">AI Twin</span>. Connect through <span
+                                class="gradient-text">resonance</span>.
                         </h1>
-                        <p class="hero-subtitle" style="font-size: 1.05rem; color: var(--text-secondary); margin-top: 1.25rem; line-height: 1.6;">
-                            Traditional networks monetize attention, resulting in small-talk fatigue. 
-                            <strong>Konvo</strong> replaces profiles with behavior analysis, simulated date previews, and dual human approval. We protect your time.
+                        <p class="hero-subtitle"
+                            style="font-size: 1.05rem; color: var(--text-secondary); margin-top: 1.25rem; line-height: 1.6;">
+                            Traditional networks monetize attention, resulting in small-talk fatigue.
+                            <strong>Konvo</strong> replaces profiles with behavior analysis, simulated date previews,
+                            and dual human approval. We protect your time.
                         </p>
                         <div class="hero-ctas" style="margin-top: 2rem;">
-                            <a href="/login?register=true" class="btn btn-primary btn-primary-glow" style="padding: 0.8rem 2rem; font-size: 0.95rem;">Create My AI Twin</a>
-                            <button class="btn btn-secondary" id="btn-watch-demo" onclick="window.konvoOpenModal('demo-modal')" style="padding: 0.8rem 2rem; font-size: 0.95rem;">Watch Demo</button>
+                            <a href="/login?register=true" class="btn btn-primary btn-primary-glow"
+                                style="padding: 0.8rem 2rem; font-size: 0.95rem;">Create My AI Twin</a>
+                            <button class="btn btn-secondary" id="btn-watch-demo"
+                                onclick="window.konvoOpenModal('demo-modal')"
+                                style="padding: 0.8rem 2rem; font-size: 0.95rem;">Watch Demo</button>
                         </div>
                     </div>
                     <div class="hero-viz">
@@ -273,9 +289,12 @@
                             </defs>
                             <circle cx="140" cy="200" r="110" fill="url(#teal-glow)" />
                             <circle cx="260" cy="200" r="110" fill="url(#indigo-glow)" />
-                            <circle class="res-ring-1" cx="140" cy="200" r="50" fill="none" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="6 6" />
-                            <circle class="res-ring-2" cx="260" cy="200" r="50" fill="none" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="6 6" />
-                            <line class="pulse-line" x1="140" y1="200" x2="260" y2="200" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" />
+                            <circle class="res-ring-1" cx="140" cy="200" r="50" fill="none" stroke="var(--border-color)"
+                                stroke-width="1.5" stroke-dasharray="6 6" />
+                            <circle class="res-ring-2" cx="260" cy="200" r="50" fill="none" stroke="var(--border-color)"
+                                stroke-width="1.5" stroke-dasharray="6 6" />
+                            <line class="pulse-line" x1="140" y1="200" x2="260" y2="200" stroke="#D97706"
+                                stroke-width="2.5" stroke-linecap="round" />
                             <circle cx="140" cy="200" r="12" fill="var(--bg-card)" stroke="#0D9488" stroke-width="3" />
                             <circle cx="260" cy="200" r="12" fill="var(--bg-card)" stroke="#4F46E5" stroke-width="3" />
                             <circle cx="140" cy="200" r="4" fill="var(--text-primary)" />
@@ -290,41 +309,48 @@
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-teal);">How The Agent Network Works</span>
                     <h2 class="section-title">Agents Talk, Humans Decide</h2>
-                    <p class="section-desc">Two AI Twins negotiate compatibility in a sandboxed environment. You only connect if both approve.</p>
+                    <p class="section-desc">Two AI Twins negotiate compatibility in a sandboxed environment. You only
+                        connect if both approve.</p>
                 </div>
                 <div class="agent-flow-diagram">
                     <div class="agent-flow-step">
                         <div class="agent-flow-icon">🧑</div>
                         <div class="agent-flow-label">Step 1</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">You Join</div>
+                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
+                            You Join</div>
                         <div class="agent-flow-desc">Complete calibration. Your AI Twin is synthesized.</div>
                     </div>
                     <div class="agent-flow-arrow">→</div>
                     <div class="agent-flow-step">
                         <div class="agent-flow-icon">🤖</div>
                         <div class="agent-flow-label">Step 2</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">Agents Match</div>
+                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
+                            Agents Match</div>
                         <div class="agent-flow-desc">Your Twin scans for resonant personalities.</div>
                     </div>
                     <div class="agent-flow-arrow">→</div>
                     <div class="agent-flow-step">
                         <div class="agent-flow-icon">💬</div>
                         <div class="agent-flow-label">Step 3</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">Agents Converse</div>
+                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
+                            Agents Converse</div>
                         <div class="agent-flow-desc">AI Twins talk in a secure sandbox.</div>
                     </div>
                     <div class="agent-flow-arrow">→</div>
                     <div class="agent-flow-step">
                         <div class="agent-flow-icon">👥</div>
                         <div class="agent-flow-label">Step 4</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">Dual Approval</div>
+                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
+                            Dual Approval</div>
                         <div class="agent-flow-desc">Both humans review transcript and approve.</div>
                     </div>
                     <div class="agent-flow-arrow">→</div>
-                    <div class="agent-flow-step" style="border-color:rgba(13,148,136,0.3);background:rgba(13,148,136,0.05);">
+                    <div class="agent-flow-step"
+                        style="border-color:rgba(13,148,136,0.3);background:rgba(13,148,136,0.05);">
                         <div class="agent-flow-icon">❤️</div>
                         <div class="agent-flow-label">Step 5</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--accent-teal);margin-bottom:0.25rem;">Real Connection</div>
+                        <div style="font-size:0.9rem;font-weight:600;color:var(--accent-teal);margin-bottom:0.25rem;">
+                            Real Connection</div>
                         <div class="agent-flow-desc">Secure direct chat unlocks.</div>
                     </div>
                 </div>
@@ -344,68 +370,130 @@
                     <h2 class="section-title">Konvo vs Traditional Dating Apps</h2>
                 </div>
                 <div style="overflow-x:auto;">
-                <table class="comparison-table">
-                    <thead><tr>
-                        <th>Feature</th>
-                        <th class="highlight-col">🤖 Konvo</th>
-                        <th>Tinder</th>
-                        <th>Bumble</th>
-                        <th>Hinge</th>
-                    </tr></thead>
-                    <tbody>
-                        <tr><td>AI Agent Representation</td><td class="highlight-col"><span class="check">✓</span> Full AI Twin</td><td><span class="cross">×</span></td><td><span class="cross">×</span></td><td><span class="cross">×</span></td></tr>
-                        <tr><td>Pre-Match Compatibility Simulation</td><td class="highlight-col"><span class="check">✓</span> Full Sandbox</td><td><span class="cross">×</span></td><td><span class="cross">×</span></td><td><span class="cross">×</span></td></tr>
-                        <tr><td>Dual Human Approval Required</td><td class="highlight-col"><span class="check">✓</span> Yes</td><td><span class="cross">×</span></td><td>⋅ Partial</td><td><span class="cross">×</span></td></tr>
-                        <tr><td>No Ghost Profiles</td><td class="highlight-col"><span class="check">✓</span> OTP Verified</td><td><span class="cross">×</span></td><td>⋅ Partial</td><td>⋅ Partial</td></tr>
-                        <tr><td>MBTI & Behavioral DNA Matching</td><td class="highlight-col"><span class="check">✓</span> 50-Q Audit</td><td><span class="cross">×</span></td><td><span class="cross">×</span></td><td>⋅ Basic</td></tr>
-                        <tr><td>Virtual 3D Date Preview</td><td class="highlight-col"><span class="check">✓</span> 10 Locations</td><td><span class="cross">×</span></td><td><span class="cross">×</span></td><td><span class="cross">×</span></td></tr>
-                        <tr><td>Gen-Z Rizz Engine</td><td class="highlight-col"><span class="check">✓</span> Neural AI</td><td><span class="cross">×</span></td><td><span class="cross">×</span></td><td><span class="cross">×</span></td></tr>
-                    </tbody>
-                </table>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th class="highlight-col">🤖 Konvo</th>
+                                <th>Tinder</th>
+                                <th>Bumble</th>
+                                <th>Hinge</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>AI Agent Representation</td>
+                                <td class="highlight-col"><span class="check">✓</span> Full AI Twin</td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                            </tr>
+                            <tr>
+                                <td>Pre-Match Compatibility Simulation</td>
+                                <td class="highlight-col"><span class="check">✓</span> Full Sandbox</td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dual Human Approval Required</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
+                                <td><span class="cross">×</span></td>
+                                <td>⋅ Partial</td>
+                                <td><span class="cross">×</span></td>
+                            </tr>
+                            <tr>
+                                <td>No Ghost Profiles</td>
+                                <td class="highlight-col"><span class="check">✓</span> OTP Verified</td>
+                                <td><span class="cross">×</span></td>
+                                <td>⋅ Partial</td>
+                                <td>⋅ Partial</td>
+                            </tr>
+                            <tr>
+                                <td>MBTI & Behavioral DNA Matching</td>
+                                <td class="highlight-col"><span class="check">✓</span> 50-Q Audit</td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                                <td>⋅ Basic</td>
+                            </tr>
+                            <tr>
+                                <td>Virtual 3D Date Preview</td>
+                                <td class="highlight-col"><span class="check">✓</span> 10 Locations</td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                            </tr>
+                            <tr>
+                                <td>Gen-Z Rizz Engine</td>
+                                <td class="highlight-col"><span class="check">✓</span> Neural AI</td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                                <td><span class="cross">×</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
             <!-- Dashboard 2-Column -->
             <section id="how-it-works" class="landing-section reveal-on-scroll" style="padding-top: 2rem;">
                 <div class="dashboard-two-col">
-                    <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2.25rem; border-radius: 8px; height: 100%;">
-                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">The Paradigm Shift</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-display);">A Better Way to Connect</h3>
-                        <div style="display: flex; flex-direction: column; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem;">
-                            <div style="border-left: 2px solid var(--accent-rose); padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.6;">
-                                <span style="color: var(--accent-rose); font-weight: 600;">Traditional Networks:</span><br>
-                                Profile &rarr; Endless Swiping &rarr; Superficial Match &rarr; Small Talk Fatigue &rarr; Ghosting
+                    <div
+                        style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2.25rem; border-radius: 8px; height: 100%;">
+                        <div
+                            style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            The Paradigm Shift</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-display);">A Better
+                            Way to Connect</h3>
+                        <div
+                            style="display: flex; flex-direction: column; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem;">
+                            <div
+                                style="border-left: 2px solid var(--accent-rose); padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.6;">
+                                <span style="color: var(--accent-rose); font-weight: 600;">Traditional
+                                    Networks:</span><br>
+                                Profile &rarr; Endless Swiping &rarr; Superficial Match &rarr; Small Talk Fatigue &rarr;
+                                Ghosting
                             </div>
-                            <div style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem; color: var(--text-primary); font-weight: 600; line-height: 1.6;">
+                            <div
+                                style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem; color: var(--text-primary); font-weight: 600; line-height: 1.6;">
                                 <span style="color: var(--accent-teal); font-weight: 600;">Konvo Protocol:</span><br>
-                                Calibration &rarr; AI Twin Synthesis &rarr; Synergy Match &rarr; Sandboxed Date Preview &rarr; Approval &rarr; Secure Chat
+                                Calibration &rarr; AI Twin Synthesis &rarr; Synergy Match &rarr; Sandboxed Date Preview
+                                &rarr; Approval &rarr; Secure Chat
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">The Connection Pipeline</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-display);">Automated Match Chemistry</h3>
+                        <div
+                            style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            The Connection Pipeline</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-display);">
+                            Automated Match Chemistry</h3>
                         <div class="pipeline-container">
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">01</div>
                                 <div class="pipeline-text">
                                     <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Behavioral Audit</h4>
-                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">Calibrate personality, humor, and values parameters through a secure checklist.</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
+                                        Calibrate personality, humor, and values parameters through a secure checklist.
+                                    </p>
                                 </div>
                             </div>
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">02</div>
                                 <div class="pipeline-text">
                                     <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">AI Twin Synthesis</h4>
-                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">Secure digital representatives converse in isolated sandbox environments.</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
+                                        Secure digital representatives converse in isolated sandbox environments.</p>
                                 </div>
                             </div>
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">03</div>
                                 <div class="pipeline-text">
                                     <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Compatibility Previews</h4>
-                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">Review Twin dialog logs first. Mutual human approvals unlock direct connection.</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
+                                        Review Twin dialog logs first. Mutual human approvals unlock direct connection.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -413,72 +501,127 @@
                 </div>
 
                 <!-- Interactive User Guide -->
-                <div class="interactive-guide-outer-card" style="margin-top: 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px;">
+                <div class="interactive-guide-outer-card"
+                    style="margin-top: 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px;">
                     <div style="text-align: center; margin-bottom: 2rem;">
-                        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.05em;">Interactive Walkthrough</span>
-                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">In-Depth Platform Protocol Guide</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.88rem; max-width: 500px; margin: 0.5rem auto 0 auto;">Select a protocol phase below to examine detailed instructions, workflows, and operational requirements.</p>
+                        <span
+                            style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.05em;">Interactive
+                            Walkthrough</span>
+                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">In-Depth
+                            Platform Protocol Guide</h3>
+                        <p
+                            style="color: var(--text-secondary); font-size: 0.88rem; max-width: 500px; margin: 0.5rem auto 0 auto;">
+                            Select a protocol phase below to examine detailed instructions, workflows, and operational
+                            requirements.</p>
                     </div>
 
                     <div class="guide-grid-layout">
                         <!-- Navigation Guide Tabs -->
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;" class="guide-tabs">
-                            <button class="btn btn-secondary active" data-guide-tab="guide-calibration" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            <button class="btn btn-secondary active" data-guide-tab="guide-calibration"
+                                style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                                 <span>🧬</span> Phase 1: Calibration
                             </button>
-                            <button class="btn btn-secondary" data-guide-tab="guide-twin" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            <button class="btn btn-secondary" data-guide-tab="guide-twin"
+                                style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                                 <span>🤖</span> Phase 2: Twin Synthesis
                             </button>
-                            <button class="btn btn-secondary" data-guide-tab="guide-locking" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            <button class="btn btn-secondary" data-guide-tab="guide-locking"
+                                style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                                 <span>🔒</span> Phase 3: Double-Lock
                             </button>
-                            <button class="btn btn-secondary" data-guide-tab="guide-virtual" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            <button class="btn btn-secondary" data-guide-tab="guide-virtual"
+                                style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                                 <span>🌌</span> Phase 4: Virtual Dates
                             </button>
-                            <button class="btn btn-secondary" data-guide-tab="guide-chat" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            <button class="btn btn-secondary" data-guide-tab="guide-chat"
+                                style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                                 <span>💬</span> Phase 5: Secure Chat
                             </button>
                         </div>
 
                         <!-- Guide Content Panel -->
-                        <div class="guide-content-panel" style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; position: relative; min-height: 260px;">
+                        <div class="guide-content-panel"
+                            style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; position: relative; min-height: 260px;">
                             <div id="guide-calibration" class="guide-content-pane">
-                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Behavioral Audit & Onboarding Calibration</h4>
-                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">The journey begins with our 3-Stage Cognitive Calibration Wizard. Instead of basic profile tags, you will define your communication style, conflict-resolution preferences, and outline your lifestyle interests in raw natural language prompts.</p>
-                                <div style="background-color: rgba(13,148,136,0.04); border-left: 2px solid var(--accent-teal); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Notes: All 3 onboarding stages must be complete to feed the NLP compatibility parsing engines and generate your initial identity registry node.
+                                <h4
+                                    style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
+                                    Behavioral Audit & Onboarding Calibration</h4>
+                                <p
+                                    style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    The journey begins with our 3-Stage Cognitive Calibration Wizard. Instead of basic
+                                    profile tags, you will define your communication style, conflict-resolution
+                                    preferences, and outline your lifestyle interests in raw natural language prompts.
+                                </p>
+                                <div
+                                    style="background-color: rgba(13,148,136,0.04); border-left: 2px solid var(--accent-teal); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    Notes: All 3 onboarding stages must be complete to feed the NLP compatibility
+                                    parsing engines and generate your initial identity registry node.
                                 </div>
                             </div>
 
                             <div id="guide-twin" class="guide-content-pane hidden" style="display: none;">
-                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">AI Twin Representation Synthesis</h4>
-                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Based on your NLP assessment, the platform compiles your digital representative. The system uses background generative networks to build customized 3D vector avatar graphics and behavioral templates describing your archetype.</p>
-                                <div style="background-color: rgba(79,70,229,0.04); border-left: 2px solid var(--accent-indigo); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Asynchronous: A background worker generates your profile avatar, notifying your dashboard through client-side WebSockets upon completion.
+                                <h4
+                                    style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
+                                    AI Twin Representation Synthesis</h4>
+                                <p
+                                    style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    Based on your NLP assessment, the platform compiles your digital representative. The
+                                    system uses background generative networks to build customized 3D vector avatar
+                                    graphics and behavioral templates describing your archetype.</p>
+                                <div
+                                    style="background-color: rgba(79,70,229,0.04); border-left: 2px solid var(--accent-indigo); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    Asynchronous: A background worker generates your profile avatar, notifying your
+                                    dashboard through client-side WebSockets upon completion.
                                 </div>
                             </div>
 
                             <div id="guide-locking" class="guide-content-pane hidden" style="display: none;">
-                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Double-Lock Security & Mutual Consent</h4>
-                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Safety and consent are paramount. To prevent arbitrary interactions and spam, every feature operates on a mutual approval basis. When your twin matches with someone, compatibility simulated date logs are generated for review.</p>
-                                <div style="background-color: rgba(217,119,6,0.04); border-left: 2px solid var(--accent-amber); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Locked: Both direct chat and the interactive 3D virtual dates start as LOCKED. You must click "Approve Simulated Date" before features are unlocked.
+                                <h4
+                                    style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
+                                    Double-Lock Security & Mutual Consent</h4>
+                                <p
+                                    style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    Safety and consent are paramount. To prevent arbitrary interactions and spam, every
+                                    feature operates on a mutual approval basis. When your twin matches with someone,
+                                    compatibility simulated date logs are generated for review.</p>
+                                <div
+                                    style="background-color: rgba(217,119,6,0.04); border-left: 2px solid var(--accent-amber); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    Locked: Both direct chat and the interactive 3D virtual dates start as LOCKED. You
+                                    must click "Approve Simulated Date" before features are unlocked.
                                 </div>
                             </div>
 
                             <div id="guide-virtual" class="guide-content-pane hidden" style="display: none;">
-                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Interactive 3D Virtual Dates Scenario Engine</h4>
-                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Once both nodes lock in their ready status, the 3D full-screen interactive story engine becomes active. You and your match can enter WebGL environments (Rooftop, Cafe, Forest, Gallery) and go through simulated scenarios, answering questions and building affinity.</p>
-                                <div style="background-color: rgba(6,182,212,0.04); border-left: 2px solid var(--accent-cyan); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Interactive: Choose dialogue options and prompts to see real-time shifts in your "Date Vibe" metrics meter.
+                                <h4
+                                    style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
+                                    Interactive 3D Virtual Dates Scenario Engine</h4>
+                                <p
+                                    style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    Once both nodes lock in their ready status, the 3D full-screen interactive story
+                                    engine becomes active. You and your match can enter WebGL environments (Rooftop,
+                                    Cafe, Forest, Gallery) and go through simulated scenarios, answering questions and
+                                    building affinity.</p>
+                                <div
+                                    style="background-color: rgba(6,182,212,0.04); border-left: 2px solid var(--accent-cyan); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    Interactive: Choose dialogue options and prompts to see real-time shifts in your
+                                    "Date Vibe" metrics meter.
                                 </div>
                             </div>
 
                             <div id="guide-chat" class="guide-content-pane hidden" style="display: none;">
-                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Secure Cryptographic Direct Human Chat</h4>
-                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">After mutual human approval of simulated logs is established, a secure communication tunnel opens. You can now chat directly with your match. All messages are encrypted in transit and at rest using AES-256-GCM.</p>
-                                <div style="background-color: rgba(16,185,129,0.04); border-left: 2px solid var(--success); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Privacy: Conversations are end-to-end encrypted. Even platform administrators cannot decrypt your message histories.
+                                <h4
+                                    style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
+                                    Secure Cryptographic Direct Human Chat</h4>
+                                <p
+                                    style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
+                                    After mutual human approval of simulated logs is established, a secure communication
+                                    tunnel opens. You can now chat directly with your match. All messages are encrypted
+                                    in transit and at rest using AES-256-GCM.</p>
+                                <div
+                                    style="background-color: rgba(16,185,129,0.04); border-left: 2px solid var(--success); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    Privacy: Conversations are end-to-end encrypted. Even platform administrators cannot
+                                    decrypt your message histories.
                                 </div>
                             </div>
                         </div>
@@ -489,35 +632,46 @@
 
         <!-- Tab Content: System Guide -->
         <div id="landing-guide" class="landing-tab-content hidden" style="display: none;">
-            <section id="guide" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+            <section id="guide" class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-teal);">SYSTEM COMMAND PROTOCOL</span>
                     <h2 class="section-title">Incubation And Connection Guide</h2>
-                    <p class="section-desc">Unlock authentic connections by following the structured calibration phases. Protect your digital presence while representatives clear the path.</p>
+                    <p class="section-desc">Unlock authentic connections by following the structured calibration phases.
+                        Protect your digital presence while representatives clear the path.</p>
                 </div>
 
                 <div class="problem-grid">
-                    <div class="problem-card" style="border-color: rgba(13, 148, 136, 0.2); background: linear-gradient(180deg, rgba(13, 148, 136, 0.02) 0%, transparent 100%);">
+                    <div class="problem-card"
+                        style="border-color: rgba(13, 148, 136, 0.2); background: linear-gradient(180deg, rgba(13, 148, 136, 0.02) 0%, transparent 100%);">
                         <span class="section-tag" style="color: var(--accent-teal);">PHASE 01</span>
                         <h4>Mind Incubation</h4>
                         <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            Begin by seeding your behavior parameters. The onboarding calibration maps your communication styles, values, and humor. Detailed descriptions feed the semantic parsing engine to build your coordinate representative.
+                            Begin by seeding your behavior parameters. The onboarding calibration maps your
+                            communication styles, values, and humor. Detailed descriptions feed the semantic parsing
+                            engine to build your coordinate representative.
                         </p>
                     </div>
 
-                    <div class="problem-card" style="border-color: rgba(99, 102, 241, 0.2); background: linear-gradient(180deg, rgba(99, 102, 241, 0.02) 0%, transparent 100%);">
+                    <div class="problem-card"
+                        style="border-color: rgba(99, 102, 241, 0.2); background: linear-gradient(180deg, rgba(99, 102, 241, 0.02) 0%, transparent 100%);">
                         <span class="section-tag" style="color: var(--accent-indigo);">PHASE 02</span>
                         <h4>Twin Synthesis</h4>
                         <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            The network compiles your digital twin representation in secure background layers. An autonomous representative is initialized, complete with custom vector visuals describing your unique personality archetype.
+                            The network compiles your digital twin representation in secure background layers. An
+                            autonomous representative is initialized, complete with custom vector visuals describing
+                            your unique personality archetype.
                         </p>
                     </div>
 
-                    <div class="problem-card" style="border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(180deg, rgba(245, 158, 11, 0.02) 0%, transparent 100%);">
+                    <div class="problem-card"
+                        style="border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(180deg, rgba(245, 158, 11, 0.02) 0%, transparent 100%);">
                         <span class="section-tag" style="color: var(--accent-amber);">PHASE 03</span>
                         <h4>Sandbox Interaction</h4>
                         <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            Representatives discover matching nodes and converse inside secure isolated sandboxes. They pre-run dialogues to evaluate synergy. A comprehensive simulation report details conversational harmony.
+                            Representatives discover matching nodes and converse inside secure isolated sandboxes. They
+                            pre-run dialogues to evaluate synergy. A comprehensive simulation report details
+                            conversational harmony.
                         </p>
                     </div>
                 </div>
@@ -528,7 +682,9 @@
                         <div class="pipeline-text">
                             <h4 style="font-size: 1.25rem;">The Double Lock Gateway</h4>
                             <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
-                                Mutual consent remains a hard rule. Review simulated conversation transcripts. To clear the communication path, both searchers must approve the reports and lock in their ready signals.
+                                Mutual consent remains a hard rule. Review simulated conversation transcripts. To clear
+                                the communication path, both searchers must approve the reports and lock in their ready
+                                signals.
                             </p>
                         </div>
                         <div class="pipeline-meta" style="color: var(--accent-amber);">CONSENT SYNCED</div>
@@ -539,7 +695,8 @@
                         <div class="pipeline-text">
                             <h4 style="font-size: 1.25rem;">Direct Cognitive Sync</h4>
                             <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
-                                A cryptographic direct channel unlocks. Humans converse over fully encrypted tunnels, enjoying genuine alignment without superficial games or small talk fatigue.
+                                A cryptographic direct channel unlocks. Humans converse over fully encrypted tunnels,
+                                enjoying genuine alignment without superficial games or small talk fatigue.
                             </p>
                         </div>
                         <div class="pipeline-meta" style="color: var(--accent-teal);">SECURE CONNECTION</div>
@@ -550,33 +707,48 @@
 
         <!-- Tab Content: About Us -->
         <div id="landing-about" class="landing-tab-content hidden" style="display: none;">
-            <section id="about" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+            <section id="about" class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-amber);">Incubator Mandate</span>
                     <h2 class="section-title">The Konvo Philosophy</h2>
-                    <p class="section-desc">Designed by cognitive scientists, social psychologists, and security architects to restore intention to digital social discovery.</p>
+                    <p class="section-desc">Designed by cognitive scientists, social psychologists, and security
+                        architects to restore intention to digital social discovery.</p>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;" class="grid-2col-responsive">
                     <div>
-                        <h4 style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">The Human Attention Crisis</h4>
-                        <p style="font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                            Swiping platforms treat humans as commodities, using variable-ratio reward schedules to maximize screen time rather than connection. The result is small-talk fatigue, burnout, and shallow interactions.
+                        <h4
+                            style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">
+                            The Human Attention Crisis</h4>
+                        <p
+                            style="font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                            Swiping platforms treat humans as commodities, using variable-ratio reward schedules to
+                            maximize screen time rather than connection. The result is small-talk fatigue, burnout, and
+                            shallow interactions.
                         </p>
                         <p style="font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary);">
-                            We believe connection should be deliberate. By delegating the initial discovery phase to secure, personalized AI Twin representations, we protect human attention and isolate it for meaningful interactions.
+                            We believe connection should be deliberate. By delegating the initial discovery phase to
+                            secure, personalized AI Twin representations, we protect human attention and isolate it for
+                            meaningful interactions.
                         </p>
                     </div>
                     <div>
-                        <h4 style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">Our Three Mandates</h4>
-                        <ul style="font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1rem;">
+                        <h4
+                            style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">
+                            Our Three Mandates</h4>
+                        <ul
+                            style="font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1rem;">
                             <li style="border-left: 2px solid var(--accent-teal); padding-left: 1rem;">
-                                <strong>Sovereign Representation:</strong> Your Twin is constructed solely from calibrations you approve. We do not sell or leak behavioral parameters.
+                                <strong>Sovereign Representation:</strong> Your Twin is constructed solely from
+                                calibrations you approve. We do not sell or leak behavioral parameters.
                             </li>
                             <li style="border-left: 2px solid var(--accent-indigo); padding-left: 1rem;">
-                                <strong>Contextual Security:</strong> Geolocation coordinates use approximate postal postal zones (DIGIPIN). Dialogues are sandbox isolated.
+                                <strong>Contextual Security:</strong> Geolocation coordinates use approximate postal
+                                postal zones (DIGIPIN). Dialogues are sandbox isolated.
                             </li>
                             <li style="border-left: 2px solid var(--accent-amber); padding-left: 1rem;">
-                                <strong>Intentional Connection:</strong> Direct human communication is strictly locked until both users review simulation logs and approve.
+                                <strong>Intentional Connection:</strong> Direct human communication is strictly locked
+                                until both users review simulation logs and approve.
                             </li>
                         </ul>
                     </div>
@@ -586,45 +758,72 @@
 
         <!-- Tab Content: Security -->
         <div id="landing-security" class="landing-tab-content hidden" style="display: none;">
-            <section id="security" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+            <section id="security" class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-rose);">SECURITY ARCHITECTURE</span>
                     <h2 class="section-title">Zero-Exposure Data Mandate</h2>
-                    <p class="section-desc">We secure your behavioral footprint. Calibrations, dialogues, and coordinates are shielded by industry-standard cryptography.</p>
+                    <p class="section-desc">We secure your behavioral footprint. Calibrations, dialogues, and
+                        coordinates are shielded by industry-standard cryptography.</p>
                 </div>
 
                 <div class="dashboard-two-col">
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
-                            <h4 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">1. Approximate Coordinates (DIGIPIN)</h4>
-                            <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Real physical locations are never processed. We map coordinates using approximate post office grid areas.
+                            <h4
+                                style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
+                                1. Approximate Coordinates (DIGIPIN)</h4>
+                            <p
+                                style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
+                                Real physical locations are never processed. We map coordinates using approximate post
+                                office grid areas.
                             </p>
                         </div>
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
-                            <h4 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">2. Cryptographic OTP Verification</h4>
-                            <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Every active profile maps to verified device identifiers through encrypted OTP challenges.
+                            <h4
+                                style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
+                                2. Cryptographic OTP Verification</h4>
+                            <p
+                                style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
+                                Every active profile maps to verified device identifiers through encrypted OTP
+                                challenges.
                             </p>
                         </div>
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
-                            <h4 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">3. Explainability Audit Ledger</h4>
-                            <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Twins operate under direct limits. An auditable sandbox log outlines every automated interaction.
+                            <h4
+                                style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
+                                3. Explainability Audit Ledger</h4>
+                            <p
+                                style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
+                                Twins operate under direct limits. An auditable sandbox log outlines every automated
+                                interaction.
                             </p>
                         </div>
                     </div>
 
-                    <div class="card" id="data-protection" style="padding: 1.75rem; background-color: var(--bg-card); border-color: var(--border-color); margin-bottom: 0; height: 100%;">
-                        <h4 style="font-family: var(--font-display); font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1rem;">Security Statement & Mandate</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            To protect human connection, Konvo operates on a zero-exposure data mandate. Calibrations are secured by AES-256-GCM encryption. Sandboxed matches run inside secure container boundaries that only exchange compatibility synergy scores, never exposing raw responses or private identities.
+                    <div class="card" id="data-protection"
+                        style="padding: 1.75rem; background-color: var(--bg-card); border-color: var(--border-color); margin-bottom: 0; height: 100%;">
+                        <h4
+                            style="font-family: var(--font-display); font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1rem;">
+                            Security Statement & Mandate</h4>
+                        <p
+                            style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                            To protect human connection, Konvo operates on a zero-exposure data mandate. Calibrations
+                            are secured by AES-256-GCM encryption. Sandboxed matches run inside secure container
+                            boundaries that only exchange compatibility synergy scores, never exposing raw responses or
+                            private identities.
                         </p>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            Authentication mechanisms use rotating session tokens, strict CORS parameters, and secure cryptographic hashing. Rate-limit blocks prevent dictionary scanning.
+                        <p
+                            style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                            Authentication mechanisms use rotating session tokens, strict CORS parameters, and secure
+                            cryptographic hashing. Rate-limit blocks prevent dictionary scanning.
                         </p>
-                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
-                            Verify configuration parameters inside the public configuration file at <a href="/security.txt" style="color: var(--accent-teal); text-decoration: underline;">security.txt</a> or contact system administrators.
+                        <p
+                            style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
+                            Verify configuration parameters inside the public configuration file at <a
+                                href="/security.txt"
+                                style="color: var(--accent-teal); text-decoration: underline;">security.txt</a> or
+                            contact system administrators.
                         </p>
                     </div>
                 </div>
@@ -633,25 +832,35 @@
 
         <!-- Tab Content 5: Legal & FAQ -->
         <div id="landing-legal" class="landing-tab-content hidden" style="display: none;">
-            <section class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+            <section class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-amber);">Legislation Summary</span>
                     <h2 class="section-title">Legal Terms & Frequently Asked Questions</h2>
-                    <p class="section-desc">Review your absolute rights regarding representative AI clones, privacy bounds, and direct communication.</p>
+                    <p class="section-desc">Review your absolute rights regarding representative AI clones, privacy
+                        bounds, and direct communication.</p>
                 </div>
 
                 <div class="dashboard-two-col">
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="card" style="padding: 1.5rem; margin-bottom: 0;">
-                            <h4 style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--accent-amber); margin-bottom: 0.5rem;">Privacy Agreement Summary</h4>
+                            <h4
+                                style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--accent-amber); margin-bottom: 0.5rem;">
+                                Privacy Agreement Summary</h4>
                             <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
-                                Konvo is built on absolute consent. Answers compiled during onboarding are parsed solely to compute MBTI synergies and match ratios. Direct chat keys are generated human-to-human.
+                                Konvo is built on absolute consent. Answers compiled during onboarding are parsed solely
+                                to compute MBTI synergies and match ratios. Direct chat keys are generated
+                                human-to-human.
                             </p>
                         </div>
                         <div class="card" style="padding: 1.5rem; margin-bottom: 0;">
-                            <h4 style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--accent-amber); margin-bottom: 0.5rem;">Terms of Service Summary</h4>
+                            <h4
+                                style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--accent-amber); margin-bottom: 0.5rem;">
+                                Terms of Service Summary</h4>
                             <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
-                                Users must verify profile identities using verified mobile checks. Scraping indices, spamming community domains, or distributing unsafe scripts will trigger an instant IP blacklist ban.
+                                Users must verify profile identities using verified mobile checks. Scraping indices,
+                                spamming community domains, or distributing unsafe scripts will trigger an instant IP
+                                blacklist ban.
                             </p>
                         </div>
                     </div>
@@ -659,20 +868,37 @@
                     <div id="faq">
                         <div class="faq-list">
                             <div class="faq-item">
-                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">What exactly is Konvo?</div>
-                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">Konvo is a compatibility-first human connection platform designed for professionals, engineers, and creators who value alignment and want to avoid superficial swiping. We match users based on deep personality, values, and communication calibrations.</div>
+                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">What
+                                    exactly is Konvo?</div>
+                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">
+                                    Konvo is a compatibility-first human connection platform designed for professionals,
+                                    engineers, and creators who value alignment and want to avoid superficial swiping.
+                                    We match users based on deep personality, values, and communication calibrations.
+                                </div>
                             </div>
                             <div class="faq-item">
-                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">Does the AI Twin talk to other real people?</div>
-                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">Never. Your AI Twin only converses with other AI Twins inside secure sandboxed environments to pre-simulate compatibility chemistry. Direct human communication is strictly human-to-human, unlocked only after dual approval.</div>
+                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">Does the AI
+                                    Twin talk to other real people?</div>
+                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">
+                                    Never. Your AI Twin only converses with other AI Twins inside secure sandboxed
+                                    environments to pre-simulate compatibility chemistry. Direct human communication is
+                                    strictly human-to-human, unlocked only after dual approval.</div>
                             </div>
                             <div class="faq-item">
-                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">How are exact locations protected?</div>
-                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">We utilize geospatial masking using approximate hexagonal areas (DIGIPIN indices). The discovery map shows other compatible entities inside these approximate grids, never revealing your home address or physical location.</div>
+                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">How are
+                                    exact locations protected?</div>
+                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">We
+                                    utilize geospatial masking using approximate hexagonal areas (DIGIPIN indices). The
+                                    discovery map shows other compatible entities inside these approximate grids, never
+                                    revealing your home address or physical location.</div>
                             </div>
                             <div class="faq-item">
-                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">Is the data sold or used for model training?</div>
-                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">No. All behavioral parameters, MBTI assessments, and chat ledgers are encrypted with AES-256-GCM. We do not sell user behavioral insights or use them for third-party model training.</div>
+                                <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">Is the data
+                                    sold or used for model training?</div>
+                                <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">No.
+                                    All behavioral parameters, MBTI assessments, and chat ledgers are encrypted with
+                                    AES-256-GCM. We do not sell user behavioral insights or use them for third-party
+                                    model training.</div>
                             </div>
                         </div>
                     </div>
@@ -682,18 +908,24 @@
 
         <!-- Tab Content 6: Feedback -->
         <div id="landing-feedback" class="landing-tab-content hidden" style="display: none;">
-            <section class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+            <section class="landing-section"
+                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-teal);">Community Signal</span>
                     <h2 class="section-title">Your Voice Shapes Konvo</h2>
-                    <p class="section-desc">Report bugs, request features, or share your experience. Every signal makes the world's first AI agent dating platform better.</p>
+                    <p class="section-desc">Report bugs, request features, or share your experience. Every signal makes
+                        the world's first AI agent dating platform better.</p>
                 </div>
 
                 <div style="max-width:700px;margin:0 auto 2rem auto;">
-                    <div class="feedback-tabs" id="landing-feedback-tabs" style="display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
-                        <button class="btn btn-secondary active" data-subtab="bug" id="landing-tab-bug" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">🐛 Bug Report</button>
-                        <button class="btn btn-secondary" data-subtab="feature" id="landing-tab-feature" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">✨ Feature Request</button>
-                        <button class="btn btn-secondary" data-subtab="suggestion" id="landing-tab-suggestion" style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">💡 Suggestion</button>
+                    <div class="feedback-tabs" id="landing-feedback-tabs"
+                        style="display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+                        <button class="btn btn-secondary active" data-subtab="bug" id="landing-tab-bug"
+                            style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">🐛 Bug Report</button>
+                        <button class="btn btn-secondary" data-subtab="feature" id="landing-tab-feature"
+                            style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">✨ Feature Request</button>
+                        <button class="btn btn-secondary" data-subtab="suggestion" id="landing-tab-suggestion"
+                            style="flex: 1; padding: 0.5rem; font-size: 0.85rem;">💡 Suggestion</button>
                     </div>
                 </div>
 
@@ -702,30 +934,38 @@
                     <div id="landing-form-bug" class="landing-feedback-form-pane">
                         <div class="card" style="padding: 2rem;">
                             <h3 class="card-title" style="margin-bottom: 0.5rem;">Bug Report</h3>
-                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Help us squash it. Provide as much detail as possible.</p>
+                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Help us
+                                squash it. Provide as much detail as possible.</p>
 
                             <div class="form-group">
                                 <label for="landing-bug-title">Bug Title</label>
-                                <input type="text" id="landing-bug-title" placeholder="e.g. Dark mode doesn't save after page refresh">
+                                <input type="text" id="landing-bug-title"
+                                    placeholder="e.g. Dark mode doesn't save after page refresh">
                             </div>
 
                             <div class="form-group">
                                 <label>Severity</label>
-                                <div class="severity-btns" id="landing-severity-group" style="display: flex; gap: 0.5rem;">
-                                    <button class="btn btn-secondary critical" data-severity="critical" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Critical</button>
-                                    <button class="btn btn-secondary active major" data-severity="major" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Major</button>
-                                    <button class="btn btn-secondary minor" data-severity="minor" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Minor</button>
+                                <div class="severity-btns" id="landing-severity-group"
+                                    style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-secondary critical" data-severity="critical"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Critical</button>
+                                    <button class="btn btn-secondary active major" data-severity="major"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Major</button>
+                                    <button class="btn btn-secondary minor" data-severity="minor"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Minor</button>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-bug-desc">Description</label>
-                                <textarea id="landing-bug-desc" rows="4" placeholder="What happened? What did you expect to happen?"></textarea>
+                                <textarea id="landing-bug-desc" rows="4"
+                                    placeholder="What happened? What did you expect to happen?"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-bug-steps">Steps to Reproduce</label>
-                                <textarea id="landing-bug-steps" rows="3" placeholder="1. Go to Settings&#10;2. Toggle dark mode..."></textarea>
+                                <textarea id="landing-bug-steps" rows="3"
+                                    placeholder="1. Go to Settings&#10;2. Toggle dark mode..."></textarea>
                             </div>
 
                             <div class="form-group">
@@ -748,15 +988,18 @@
 
                             <div class="form-group">
                                 <label for="landing-bug-browser">Browser & Device</label>
-                                <input type="text" id="landing-bug-browser" placeholder="e.g. Chrome 124 on Windows 11 / Safari on iPhone 15">
+                                <input type="text" id="landing-bug-browser"
+                                    placeholder="e.g. Chrome 124 on Windows 11 / Safari on iPhone 15">
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-bug-email">Your Email (optional)</label>
-                                <input type="email" id="landing-bug-email" placeholder="For follow-up (we respect your privacy)">
+                                <input type="email" id="landing-bug-email"
+                                    placeholder="For follow-up (we respect your privacy)">
                             </div>
 
-                            <button class="btn btn-primary" onclick="submitLandingFeedback('bug')" style="width: 100%; margin-top: 1rem;">Submit Bug Report →</button>
+                            <button class="btn btn-primary" onclick="submitLandingFeedback('bug')"
+                                style="width: 100%; margin-top: 1rem;">Submit Bug Report →</button>
                         </div>
                     </div>
 
@@ -764,7 +1007,8 @@
                     <div id="landing-form-feature" class="landing-feedback-form-pane" style="display:none;">
                         <div class="card" style="padding: 2rem;">
                             <h3 class="card-title" style="margin-bottom: 0.5rem;">Feature Request</h3>
-                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Got a great idea? We love building what our community needs.</p>
+                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Got a great
+                                idea? We love building what our community needs.</p>
 
                             <div class="form-group">
                                 <label for="landing-feat-title">Feature Title</label>
@@ -773,21 +1017,27 @@
 
                             <div class="form-group">
                                 <label>Priority</label>
-                                <div class="severity-btns" id="landing-priority-group" style="display: flex; gap: 0.5rem;">
-                                    <button class="btn btn-secondary critical" data-priority="high" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">High Impact</button>
-                                    <button class="btn btn-secondary active major" data-priority="medium" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Medium</button>
-                                    <button class="btn btn-secondary minor" data-priority="nice" style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Nice to Have</button>
+                                <div class="severity-btns" id="landing-priority-group"
+                                    style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-secondary critical" data-priority="high"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">High Impact</button>
+                                    <button class="btn btn-secondary active major" data-priority="medium"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Medium</button>
+                                    <button class="btn btn-secondary minor" data-priority="nice"
+                                        style="flex: 1; padding: 0.4rem; font-size: 0.8rem;">Nice to Have</button>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-feat-desc">Describe the Feature</label>
-                                <textarea id="landing-feat-desc" rows="4" placeholder="What should it do? How would it work?"></textarea>
+                                <textarea id="landing-feat-desc" rows="4"
+                                    placeholder="What should it do? How would it work?"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-feat-usecase">Your Use Case / Problem it Solves</label>
-                                <textarea id="landing-feat-usecase" rows="3" placeholder="Why would this be useful? What problem are you facing today?"></textarea>
+                                <textarea id="landing-feat-usecase" rows="3"
+                                    placeholder="Why would this be useful? What problem are you facing today?"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -810,10 +1060,12 @@
 
                             <div class="form-group">
                                 <label for="landing-feat-email">Your Email (optional)</label>
-                                <input type="email" id="landing-feat-email" placeholder="We'll notify you when it ships!">
+                                <input type="email" id="landing-feat-email"
+                                    placeholder="We'll notify you when it ships!">
                             </div>
 
-                            <button class="btn btn-primary" onclick="submitLandingFeedback('feature')" style="width: 100%; margin-top: 1rem;">Submit Feature Request →</button>
+                            <button class="btn btn-primary" onclick="submitLandingFeedback('feature')"
+                                style="width: 100%; margin-top: 1rem;">Submit Feature Request →</button>
                         </div>
                     </div>
 
@@ -821,7 +1073,8 @@
                     <div id="landing-form-suggestion" class="landing-feedback-form-pane" style="display:none;">
                         <div class="card" style="padding: 2rem;">
                             <h3 class="card-title" style="margin-bottom: 0.5rem;">General Suggestion</h3>
-                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Share your experience, thoughts, and ideas freely.</p>
+                            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Share your
+                                experience, thoughts, and ideas freely.</p>
 
                             <div class="form-group">
                                 <label for="landing-sug-title">Subject</label>
@@ -830,107 +1083,173 @@
 
                             <div class="form-group">
                                 <label>Category Tags</label>
-                                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;" id="landing-sug-tags">
-                                    <button class="btn btn-secondary" data-tag="ux" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">UX/Design</button>
-                                    <button class="btn btn-secondary active" data-tag="matching" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Matching Algorithm</button>
-                                    <button class="btn btn-secondary" data-tag="ai" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">AI Twins</button>
-                                    <button class="btn btn-secondary" data-tag="safety" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Safety</button>
-                                    <button class="btn btn-secondary" data-tag="dating" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Dating Experience</button>
-                                    <button class="btn btn-secondary" data-tag="community" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Community</button>
-                                    <button class="btn btn-secondary" data-tag="general" onclick="toggleLandingTag(this)" style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">General</button>
+                                <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;"
+                                    id="landing-sug-tags">
+                                    <button class="btn btn-secondary" data-tag="ux" onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">UX/Design</button>
+                                    <button class="btn btn-secondary active" data-tag="matching"
+                                        onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Matching Algorithm</button>
+                                    <button class="btn btn-secondary" data-tag="ai" onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">AI Twins</button>
+                                    <button class="btn btn-secondary" data-tag="safety" onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Safety</button>
+                                    <button class="btn btn-secondary" data-tag="dating" onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Dating Experience</button>
+                                    <button class="btn btn-secondary" data-tag="community"
+                                        onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">Community</button>
+                                    <button class="btn btn-secondary" data-tag="general"
+                                        onclick="toggleLandingTag(this)"
+                                        style="padding: 0.4rem 0.6rem; font-size: 0.8rem;">General</button>
                                 </div>
                             </div>
 
                             <div class="form-group" style="margin-top: 1rem;">
                                 <label for="landing-sug-message">Your Message</label>
-                                <textarea id="landing-sug-message" rows="6" placeholder="Tell us what you think..."></textarea>
+                                <textarea id="landing-sug-message" rows="6"
+                                    placeholder="Tell us what you think..."></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label>Overall Experience (1-5)</label>
                                 <div style="display:flex;gap:0.5rem;margin-top:0.25rem;" id="landing-sug-rating-row">
-                                    <button class="btn btn-secondary star-btn" data-val="1" onclick="setLandingSugRating(1)" style="padding: 0.4rem; font-size: 1rem;">⭐</button>
-                                    <button class="btn btn-secondary star-btn" data-val="2" onclick="setLandingSugRating(2)" style="padding: 0.4rem; font-size: 1rem;">⭐</button>
-                                    <button class="btn btn-secondary star-btn" data-val="3" onclick="setLandingSugRating(3)" style="padding: 0.4rem; font-size: 1rem;">⭐</button>
-                                    <button class="btn btn-secondary star-btn" data-val="4" onclick="setLandingSugRating(4)" style="padding: 0.4rem; font-size: 1rem;">⭐</button>
-                                    <button class="btn btn-secondary star-btn" data-val="5" onclick="setLandingSugRating(5)" style="padding: 0.4rem; font-size: 1rem;">⭐</button>
+                                    <button class="btn btn-secondary star-btn" data-val="1"
+                                        onclick="setLandingSugRating(1)"
+                                        style="padding: 0.4rem; font-size: 1rem;">⭐</button>
+                                    <button class="btn btn-secondary star-btn" data-val="2"
+                                        onclick="setLandingSugRating(2)"
+                                        style="padding: 0.4rem; font-size: 1rem;">⭐</button>
+                                    <button class="btn btn-secondary star-btn" data-val="3"
+                                        onclick="setLandingSugRating(3)"
+                                        style="padding: 0.4rem; font-size: 1rem;">⭐</button>
+                                    <button class="btn btn-secondary star-btn" data-val="4"
+                                        onclick="setLandingSugRating(4)"
+                                        style="padding: 0.4rem; font-size: 1rem;">⭐</button>
+                                    <button class="btn btn-secondary star-btn" data-val="5"
+                                        onclick="setLandingSugRating(5)"
+                                        style="padding: 0.4rem; font-size: 1rem;">⭐</button>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="landing-sug-email">Your Email (optional)</label>
-                                <input type="email" id="landing-sug-email" placeholder="Optional — we read every message">
+                                <input type="email" id="landing-sug-email"
+                                    placeholder="Optional — we read every message">
                             </div>
 
-                            <button class="btn btn-primary" onclick="submitLandingFeedback('suggestion')" style="width: 100%; margin-top: 1rem;">Send Suggestion →</button>
+                            <button class="btn btn-primary" onclick="submitLandingFeedback('suggestion')"
+                                style="width: 100%; margin-top: 1rem;">Send Suggestion →</button>
                         </div>
                     </div>
 
                     <!-- Success State -->
-                    <div class="card" id="landing-feedback-success" style="display: none; text-align: center; padding: 3rem 2rem;">
+                    <div class="card" id="landing-feedback-success"
+                        style="display: none; text-align: center; padding: 3rem 2rem;">
                         <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
-                        <h2 style="font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--text-primary);">Thank you!</h2>
-                        <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; max-width: 400px; margin: 0 auto 2rem;">
+                        <h2
+                            style="font-family: var(--font-display); font-size: 1.75rem; margin-bottom: 0.75rem; color: var(--text-primary);">
+                            Thank you!</h2>
+                        <p
+                            style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; max-width: 400px; margin: 0 auto 2rem;">
                             Your feedback has been received. We read every submission and use it to make Konvo better.
                         </p>
-                        <button class="btn btn-primary" style="max-width: 300px; margin: 0 auto;" onclick="resetLandingFeedback()">Submit Another</button>
+                        <button class="btn btn-primary" style="max-width: 300px; margin: 0 auto;"
+                            onclick="resetLandingFeedback()">Submit Another</button>
                     </div>
                 </div>
             </section>
         </div>
 
         <!-- Replicated Footer -->
-        <footer class="landing-footer" style="padding: 4rem max(2rem, env(safe-area-inset-right)) max(3rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));">
-            <div class="footer-grid" style="grid-template-columns: 1.5fr repeat(3, 1fr); gap: 2.5rem; max-width: 1200px; margin: 0 auto;">
+        <footer class="landing-footer"
+            style="padding: 4rem max(2rem, env(safe-area-inset-right)) max(3rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));">
+            <div class="footer-grid"
+                style="grid-template-columns: 1.5fr repeat(3, 1fr); gap: 2.5rem; max-width: 1200px; margin: 0 auto;">
                 <div class="footer-logo">
-                    <img src="/logo_dark.svg" alt="Konvo Logo" style="height: 32px; display: block;" class="konvo-logo-img">
+                    <img src="/logo_dark.svg" alt="Konvo Logo" style="height: 32px; display: block;"
+                        class="konvo-logo-img">
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
                         Sovereign behavioral representation and compatibility-first human connections.
                     </p>
                     <div style="margin-top: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-teal); border: 1px solid rgba(13,148,136,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">TLS 1.3</span>
-                        <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES-256-GCM</span>
-                        <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px;">E2E Encrypted</span>
+                        <span
+                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-teal); border: 1px solid rgba(13,148,136,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">TLS
+                            1.3</span>
+                        <span
+                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES-256-GCM</span>
+                        <span
+                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px;">E2E
+                            Encrypted</span>
                     </div>
                 </div>
                 <div class="footer-column">
-                    <h5 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">Platform</h5>
+                    <h5
+                        style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">
+                        Platform</h5>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#how-it-works" style="font-size: 0.85rem; color: var(--text-secondary);">How It Works</a></li>
-                        <li><a href="#guide" style="font-size: 0.85rem; color: var(--text-secondary);">System Guide</a></li>
+                        <li><a href="#how-it-works" style="font-size: 0.85rem; color: var(--text-secondary);">How It
+                                Works</a></li>
+                        <li><a href="#guide" style="font-size: 0.85rem; color: var(--text-secondary);">System Guide</a>
+                        </li>
                         <li><a href="#about" style="font-size: 0.85rem; color: var(--text-secondary);">About Us</a></li>
-                        <li><a href="/blog" style="font-size: 0.85rem; color: var(--text-secondary);">Insights Blog</a></li>
-                        <li><a href="/login?register=true" style="font-size: 0.85rem; color: var(--text-secondary);">Create AI Twin</a></li>
-                        <li><a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback" style="font-size: 0.85rem; color: var(--accent-teal);">💬 Feedback &amp; Bug Report</a></li>
+                        <li><a href="/blog" style="font-size: 0.85rem; color: var(--text-secondary);">Insights Blog</a>
+                        </li>
+                        <li><a href="/login?register=true"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Create AI Twin</a></li>
+                        <li><a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback"
+                                style="font-size: 0.85rem; color: var(--accent-teal);">💬 Feedback &amp; Bug Report</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h5 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">Security</h5>
+                    <h5
+                        style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">
+                        Security</h5>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#safety" onclick="document.querySelector('[data-tab=landing-security]') && document.querySelector('[data-tab=landing-security]').click()" style="font-size: 0.85rem; color: var(--text-secondary);">Data Protection</a></li>
-                        <li><a href="#safety" style="font-size: 0.85rem; color: var(--text-secondary);">Privacy Protocol</a></li>
+                        <li><a href="#safety"
+                                onclick="document.querySelector('[data-tab=landing-security]') && document.querySelector('[data-tab=landing-security]').click()"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Data Protection</a></li>
+                        <li><a href="#safety" style="font-size: 0.85rem; color: var(--text-secondary);">Privacy
+                                Protocol</a></li>
                         <li><a href="#faq" style="font-size: 0.85rem; color: var(--text-secondary);">FAQs</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h5 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">Legal</h5>
+                    <h5
+                        style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">
+                        Legal</h5>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#" id="footer-privacy-link" onclick="window.konvoOpenModal('privacy-modal'); return false;" style="font-size: 0.85rem; color: var(--text-secondary);">Privacy Policy</a></li>
-                        <li><a href="#" id="footer-tos-link" onclick="window.konvoOpenModal('tos-modal'); return false;" style="font-size: 0.85rem; color: var(--text-secondary);">Terms of Service</a></li>
-                        <li><a href="#" id="footer-security-link" onclick="window.konvoOpenModal('security-policy-modal'); return false;" style="font-size: 0.85rem; color: var(--text-secondary);">Security Policy</a></li>
-                        <li><a href="#" onclick="alert('System Status: All gateway microservices are operational.')" style="font-size: 0.85rem; color: var(--accent-teal);">● Systems: Operational</a></li>
+                        <li><a href="#" id="footer-privacy-link"
+                                onclick="window.konvoOpenModal('privacy-modal'); return false;"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Privacy Policy</a></li>
+                        <li><a href="#" id="footer-tos-link" onclick="window.konvoOpenModal('tos-modal'); return false;"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Terms of Service</a></li>
+                        <li><a href="#" id="footer-security-link"
+                                onclick="window.konvoOpenModal('security-policy-modal'); return false;"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Security Policy</a></li>
+                        <li><a href="#" onclick="if(window.konvoShowCookieSettings) { window.konvoShowCookieSettings(); } return false;"
+                                style="font-size: 0.85rem; color: var(--text-secondary);">Cookie Settings</a></li>
+                        <li><a href="#" onclick="alert('System Status: All gateway microservices are operational.')"
+                                style="font-size: 0.85rem; color: var(--accent-teal);">● Systems: Operational</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom" style="margin-top: 3rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 3rem auto 0 auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem;">
+            <div class="footer-bottom"
+                style="margin-top: 3rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 3rem auto 0 auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem;">
                 <div>
                     © 2026 Konvo. All rights reserved.
-                    <span style="margin-left:1rem;color:var(--accent-teal);border:1px solid rgba(13,148,136,0.3);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.6rem;">🌍 World's First Agent-Based Date Finder</span>
+                    <span
+                        style="margin-left:1rem;color:var(--accent-teal);border:1px solid rgba(13,148,136,0.3);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.6rem;">🌍
+                        World's First Agent-Based Date Finder</span>
                 </div>
                 <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-                    <a href="#" onclick="window.konvoOpenModal('privacy-modal'); return false;" style="color: var(--text-muted);">Privacy</a>
-                    <a href="#" onclick="window.konvoOpenModal('tos-modal'); return false;" style="color: var(--text-muted);">Terms</a>
-                    <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback" style="color: var(--accent-teal);">Feedback</a>
+                    <a href="#" onclick="window.konvoOpenModal('privacy-modal'); return false;"
+                        style="color: var(--text-muted);">Privacy</a>
+                    <a href="#" onclick="window.konvoOpenModal('tos-modal'); return false;"
+                        style="color: var(--text-muted);">Terms</a>
+                    <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback"
+                        style="color: var(--accent-teal);">Feedback</a>
                     <span>v2.0.0</span>
                 </div>
             </div>
@@ -952,70 +1271,124 @@
             </div>
 
             <div style="margin-top: 1.5rem; text-align: center;">
-                <a href="/login?register=true" class="btn btn-primary" style="display: inline-block;">Unlock Your Own AI Twin</a>
+                <a href="/login?register=true" class="btn btn-primary" style="display: inline-block;">Unlock Your Own AI
+                    Twin</a>
             </div>
         </div>
     </div>
 
     <!-- Privacy Policy Modal -->
     <div class="modal" id="privacy-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
-            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(13,148,136,0.05) 0%, transparent 100%); flex-shrink: 0;">
+        <div class="modal-content"
+            style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div
+                style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;">
+            </div>
+            <div
+                style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(13,148,136,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
-                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-teal); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
+                    <div
+                        style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-teal); text-transform: uppercase; margin-bottom: 0.25rem;">
+                        Legal Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Privacy Policy</h3>
                 </div>
-                <button class="close-modal" onclick="window.konvoCloseModal('privacy-modal')" aria-label="Close privacy policy">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('privacy-modal')"
+                    aria-label="Close privacy policy">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1;">
-                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">1. Data We Collect</h4>
-                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">Konvo collects only what is necessary for behavioral compatibility matching. This includes display identifiers you provide, MBTI calibration responses, DIGIPIN approximate area coordinates, and interaction ledger data within sandboxed simulations.</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">2. How We Use Your Data</h4>
-                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">Your behavioral parameters are used exclusively to compute Resonance Engine synergy scores. AI Twin sandbox conversations run in isolated containers — these logs are processed only for compatibility previews and are never sold or shared.</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">3. Encryption &amp; Security</h4>
-                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">All data is encrypted at rest using AES-256-GCM. In-transit data is protected under TLS 1.3. Direct human-to-human conversations are end-to-end encrypted and inaccessible to administrators.</p>
+                <p
+                    style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Last updated: June 2026 · Version 1.0</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">
+                    1. Data We Collect</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    Konvo collects only what is necessary for behavioral compatibility matching. This includes display
+                    identifiers you provide, MBTI calibration responses, DIGIPIN approximate area coordinates, and
+                    interaction ledger data within sandboxed simulations.</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">
+                    2. How We Use Your Data</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    Your behavioral parameters are used exclusively to compute Resonance Engine synergy scores. AI Twin
+                    sandbox conversations run in isolated containers — these logs are processed only for compatibility
+                    previews and are never sold or shared.</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">
+                    3. Encryption &amp; Security</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    All data is encrypted at rest using AES-256-GCM. In-transit data is protected under TLS 1.3. Direct
+                    human-to-human conversations are end-to-end encrypted and inaccessible to administrators.</p>
             </div>
         </div>
     </div>
 
     <!-- Terms of Service Modal -->
     <div class="modal" id="tos-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
-            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(217,119,6,0.05) 0%, transparent 100%); flex-shrink: 0;">
+        <div class="modal-content"
+            style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div
+                style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;">
+            </div>
+            <div
+                style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(217,119,6,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
-                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
+                    <div
+                        style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.25rem;">
+                        Legal Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Terms of Service</h3>
                 </div>
-                <button class="close-modal" onclick="window.konvoCloseModal('tos-modal')" aria-label="Close terms of service">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('tos-modal')"
+                    aria-label="Close terms of service">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1;">
-                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-amber);">1. Eligibility</h4>
-                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">You must be 18 years or older to register a profile on Konvo. False identity credentials will result in immediate account termination.</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-amber);">2. Acceptable Use</h4>
-                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">Konvo is a professional and purposeful connection platform. Scraping behavioral indices, reverse-engineering compatibility algorithms, or distributing malicious scripts will result in immediate permanent IP blacklisting.</p>
+                <p
+                    style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Last updated: June 2026 · Version 1.0</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-amber);">
+                    1. Eligibility</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    You must be 18 years or older to register a profile on Konvo. False identity credentials will result
+                    in immediate account termination.</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-amber);">
+                    2. Acceptable Use</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                    Konvo is a professional and purposeful connection platform. Scraping behavioral indices,
+                    reverse-engineering compatibility algorithms, or distributing malicious scripts will result in
+                    immediate permanent IP blacklisting.</p>
             </div>
         </div>
     </div>
 
     <!-- Security Policy Modal -->
     <div class="modal" id="security-policy-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
-            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(225,29,72,0.05) 0%, transparent 100%); flex-shrink: 0;">
+        <div class="modal-content"
+            style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <div
+                style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;">
+            </div>
+            <div
+                style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(225,29,72,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
-                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 0.25rem;">Security Document</div>
+                    <div
+                        style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 0.25rem;">
+                        Security Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Security Policy</h3>
                 </div>
-                <button class="close-modal" onclick="window.konvoCloseModal('security-policy-modal')" aria-label="Close security policy">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('security-policy-modal')"
+                    aria-label="Close security policy">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1;">
-                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 &middot; Version 1.0</p>
-                <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-rose);">Infrastructure Security</h4>
-                <ul style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <p
+                    style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                    Last updated: June 2026 &middot; Version 1.0</p>
+                <h4
+                    style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-rose);">
+                    Infrastructure Security</h4>
+                <ul
+                    style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
                     <li>TLS 1.3 for all data in transit</li>
                     <li>AES-256-GCM encryption for all data at rest</li>
                     <li>Secure cryptographic password hashing with dynamic salt</li>
@@ -1029,47 +1402,60 @@
         <div class="cookie-banner-content">
             <div class="cookie-banner-text">
                 <h3>🍪 Cookie & Privacy Protocol</h3>
-                <p>We use essential cookies for session cryptography and state integrity. By continuing, you agree to our <a href="#" onclick="window.konvoOpenModal('tos-modal'); return false;">Terms of Service</a> and <a href="#" onclick="window.konvoOpenModal('privacy-modal'); return false;">Privacy Policy</a>.</p>
+                <p>We use essential cookies for session cryptography and state integrity. By continuing, you agree to
+                    our <a href="#" onclick="window.konvoOpenModal('tos-modal'); return false;">Terms of Service</a> and
+                    <a href="#" onclick="window.konvoOpenModal('privacy-modal'); return false;">Privacy Policy</a>.
+                </p>
             </div>
             <div class="cookie-banner-actions">
-                <button class="btn btn-secondary" id="btn-cookie-preferences" style="font-size: 0.8rem; padding: 0.5rem 1rem;">Manage Preferences</button>
-                <button class="btn btn-primary btn-primary-glow" id="btn-cookie-accept-all" style="font-size: 0.8rem; padding: 0.5rem 1.25rem;">Accept All</button>
+                <button class="btn btn-secondary" id="btn-cookie-preferences"
+                    style="font-size: 0.8rem; padding: 0.5rem 1rem;">Manage Preferences</button>
+                <button class="btn btn-primary btn-primary-glow" id="btn-cookie-accept-all"
+                    style="font-size: 0.8rem; padding: 0.5rem 1.25rem;">Accept All</button>
             </div>
         </div>
     </div>
 
     <!-- Cookie Preferences Modal -->
     <div class="modal" id="cookie-preferences-modal">
-        <div class="modal-content" style="max-width: 500px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0; color: var(--text-primary);">Cookie Settings</h3>
-                <button type="button" class="close-modal" onclick="window.konvoCloseModal('cookie-preferences-modal')" aria-label="Close cookie settings">&times;</button>
+        <div class="modal-content"
+            style="max-width: 500px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0; color: var(--text-primary);">
+                    Cookie Settings</h3>
+                <button type="button" class="close-modal" onclick="window.konvoCloseModal('cookie-preferences-modal')"
+                    aria-label="Close cookie settings">&times;</button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
                     <div>
                         <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Essential Cryptographic Cookies</h4>
-                        <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Required for JWT authentication and session state preservation. Cannot be disabled.</p>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Required for JWT
+                            authentication and session state preservation. Cannot be disabled.</p>
                     </div>
                     <input type="checkbox" checked disabled style="margin-top: 0.2rem;">
                 </div>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button type="button" class="btn btn-secondary" onclick="window.konvoCloseModal('cookie-preferences-modal')" style="flex: 1;">Cancel</button>
-                <button type="button" class="btn btn-primary" id="btn-cookie-save-prefs" style="flex: 1.5; text-align: center;">Save Preferences</button>
+                <button type="button" class="btn btn-secondary"
+                    onclick="window.konvoCloseModal('cookie-preferences-modal')" style="flex: 1;">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btn-cookie-save-prefs"
+                    style="flex: 1.5; text-align: center;">Save Preferences</button>
             </div>
         </div>
     </div>
 
     <!-- Load Lightweight Landing module -->
     <script type="module">
-        import { 
-            initLandingPage, 
-            initScrollReveal, 
-            animateStatCounters, 
-            initAgentLivePreview, 
-            initCookieConsent, 
-            initUserGuideTabs 
+        import {
+            initLandingPage,
+            initScrollReveal,
+            animateStatCounters,
+            initAgentLivePreview,
+            initCookieConsent,
+            initUserGuideTabs
         } from '/src/features/landing/landing.js';
 
         import { setupModalClosers } from '/src/components/modal.js';

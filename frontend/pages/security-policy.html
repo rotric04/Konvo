@@ -3,34 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Security Policy | Konvo</title>
+    <title>Security & System Architecture | Konvo</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/theme.css">
     <script src="/static/src/theme-manager.js"></script>
     <style>
         .policy-container {
-            max-width: 800px;
-            margin: 8rem auto;
+            max-width: 840px;
+            margin: 6rem auto;
             padding: 3rem;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            background-color: var(--bg-card, #121214);
+            border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         .policy-title {
             font-family: var(--font-display);
             font-size: 2.5rem;
             color: var(--text-primary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
+        .policy-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
         .policy-section {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
         .policy-section h2 {
             font-family: var(--font-display);
             font-size: 1.5rem;
             color: var(--accent-amber);
             margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 0.5rem;
         }
         .policy-section p {
             color: var(--text-secondary);
@@ -38,16 +48,39 @@
             line-height: 1.6;
             margin-bottom: 1rem;
         }
-        .policy-list {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
+        
+        /* Visual flowchart architecture styling */
+        .architecture-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            overflow-x: auto;
+            line-height: 1.5;
         }
-        .policy-list li {
-            margin-bottom: 0.5rem;
+
+        .flow-step {
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            background: rgba(20, 184, 166, 0.05);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
         }
+
+        .flow-arrow {
+            text-align: center;
+            color: #71717a;
+            font-size: 1.2rem;
+            margin: 0.25rem 0;
+        }
+
         .btn-back {
             display: block;
             width: fit-content;
@@ -59,6 +92,7 @@
             font-weight: 600;
             text-decoration: none;
             transition: var(--transition);
+            text-align: center;
         }
         .btn-back:hover {
             background-color: var(--accent-cyan);
@@ -66,33 +100,57 @@
         }
     </style>
 </head>
-<body style="background-color: var(--bg-main); color: var(--text-primary);">
+<body style="background-color: var(--bg-main, #0b0b0c); color: var(--text-primary);">
     <div class="policy-container">
-        <h1 class="policy-title">Vulnerability Disclosure Policy</h1>
+        <h1 class="policy-title">Security & System Guide</h1>
+        <p class="policy-subtitle">How we shield your digital self (in English and pure math)</p>
         
+        <!-- Commitment Section -->
         <div class="policy-section">
-            <h2>Our Commitment</h2>
-            <p>We take the security of our platform and user privacy extremely seriously. We are committed to working with the security research community to identify and resolve vulnerabilities in a responsible manner.</p>
+            <h2>1. Security Disclosure Policy</h2>
+            <p>We actively coordinate with ethical developers and security researchers. If you identify a flaw, write to us at <strong>security@konvo.space</strong>. We promise to investigate it within 48 hours. No legal actions will be taken against researchers working in good faith.</p>
         </div>
 
+        <!-- Humorous layman guide -->
         <div class="policy-section">
-            <h2>How to Report</h2>
-            <p>If you believe you have found a security vulnerability in our platform, please report it immediately by emailing us at <strong>security@konvo.space</strong>.</p>
-            <p>Please include a detailed description of the vulnerability, steps to reproduce it, and any potential impact. We will acknowledge receipt of your report within 48 hours.</p>
+            <h2>2. The Layman Guide: How Konvo Works</h2>
+            <p>Most connection apps dump your raw profile, messages, and coordinates in cleartext databases. Here at Konvo, we believe that is a recipe for social embarrassment. Instead, we convert your very existence into math. Here is the lifecycle of your data:</p>
+            
+            <div class="architecture-box">
+                <div class="flow-step">1. AUTHENTICATION (OTP + HASH)</div>
+                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Hashed with Argon2. Verified via Resend API OTP. Hacker-proof.</div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">2. COGNITIVE CALIBRATION</div>
+                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Gemini presents Scenarios & Tradeoffs. Measures latency & writing style.</div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">3. 128-DIMENSIONAL VECTOR SYNTHESIS</div>
+                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Converted to 8 domain matrices of 128 floats. Raw text answers are discarded.</div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">4. COGNITIVE TWIN ACTIVATION (SANDBOX)</div>
+                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Your AI Agent Twin negotiates dates inside secure, private virtual instances.</div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">5. MUTUAL HUMAN ALIGNMENT</div>
+                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Only when twins report compatibility > 60% do we unlock direct human chat.</div>
+            </div>
         </div>
 
+        <!-- Security safeguards explained humorously -->
         <div class="policy-section">
-            <h2>Guidelines for Research</h2>
-            <p>We ask that you follow these guidelines when performing security research on our platform:</p>
-            <ul class="policy-list">
-                <li>Do not perform actions that cause service degradation or disruption (no denial of service).</li>
-                <li>Do not access, modify, or delete data belonging to other users.</li>
-                <li>Do not share details of any identified vulnerabilities publicly until they have been resolved.</li>
-                <li>Act in good faith to protect our users and system integrity.</li>
-            </ul>
+            <h2>3. Cryptographic Safeguards (The Funny Details)</h2>
+            <p><strong>Argon2 Password Hash:</strong> We scramble your password into a mathematical mush. Even if a supercomputer tries to crack it, the computer will get bored and melt first.</p>
+            <p><strong>Vectorization Anonymity:</strong> Because we only store 128-dimensional floats (like <code>[0.12, -0.45, 0.89...]</code>) in our Supabase databases, an intruder looking at your record would just see an abstract spreadsheet. You are essentially a series of 1,024 floating points. Good luck deciphering what your Friday night mood implies from that!</p>
+            <p><strong>Geospatial DIGIPIN Segmenting:</strong> Instead of transmitting your exact location, we map you to a broad alphanumeric segment grid using India Post's DIGIPIN. We know you are close by, but we don't know if you're in the living room or the kitchen.</p>
         </div>
 
-        <a href="/" class="btn-back">Return to Home Page</a>
+        <button onclick="window.history.back()" class="btn-back">Go Back</button>
     </div>
 </body>
 </html>

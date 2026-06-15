@@ -1,7 +1,7 @@
 import os
 import sys
 import uvicorn
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,6 +38,8 @@ if SENTRY_DSN:
     )
     print("[GATEWAY] Sentry logging initialized.")
 
+from websocket_manager import manager
+
 # Create tables in SQLite/Postgres
 Base.metadata.create_all(bind=engine)
 
@@ -48,6 +50,41 @@ app = FastAPI(
     version="1.0.0",
     debug=True
 )
+
+@app.websocket("/ws/realtime")
+async def websocket_endpoint(websocket: WebSocket, channel: str = "global"):
+    await manager.connect(websocket, channel)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                await manager.broadcast(message, channel)
+            except Exception as e:
+                print(f"[WS ERROR] Failed to broadcast message on channel {channel}: {e}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, channel)
+
+@app.post("/api/realtime/presence")
+async def handle_presence_update(update: dict):
+    user_id = update.get("user_id")
+    status = update.get("status")
+    if user_id is None or status is None:
+        raise HTTPException(status_code=400, detail="Invalid presence update payload")
+    
+    message = {"type": "presence_update", "user_id": user_id, "status": status}
+    await manager.broadcast(message, "presence_updates")
+    return {"success": True}
+
+@app.post("/api/realtime/notification")
+async def handle_notification(notification: dict):
+    user_id = notification.get("user_id")
+    if user_id is None:
+        raise HTTPException(status_code=400, detail="Invalid notification payload")
+    
+    message = {"type": "new_notification", "notification": notification}
+    await manager.broadcast(message, f"user_notifications_{user_id}")
+    return {"success": True}
 
 
 # 2. slowapi Rate Limiter Init
@@ -165,9 +202,16 @@ def include_service_routes(gateway_app: FastAPI, service_dir_name: str):
         # Copy every non-meta route from the service into the gateway
         for route in service_app.routes:
             if isinstance(route, APIRoute):
-                # Avoid duplicates
-                existing_paths = [r.path for r in gateway_app.routes if hasattr(r, 'path')]
-                if route.path not in existing_paths:
+                # Avoid duplicate path + method combinations
+                duplicate = False
+                for r in gateway_app.routes:
+                    if isinstance(r, APIRoute) and r.path == route.path:
+                        r_methods = set(r.methods or ["GET"])
+                        route_methods = set(route.methods or ["GET"])
+                        if r_methods & route_methods:
+                            duplicate = True
+                            break
+                if not duplicate:
                     gateway_app.add_api_route(
                         path=route.path,
                         endpoint=route.endpoint,
@@ -179,9 +223,14 @@ def include_service_routes(gateway_app: FastAPI, service_dir_name: str):
                         dependencies=route.dependencies,
                         include_in_schema=True
                     )
-            elif isinstance(route, APIWebSocketRoute) or isinstance(route, WebSocketRoute):
-                existing_ws = [r.path for r in gateway_app.routes if hasattr(r, 'path')]
-                if route.path not in existing_ws:
+            elif isinstance(route, (APIWebSocketRoute, WebSocketRoute)):
+                # Avoid duplicate WebSocket routes
+                duplicate = False
+                for r in gateway_app.routes:
+                    if isinstance(r, (APIWebSocketRoute, WebSocketRoute)) and r.path == route.path:
+                        duplicate = True
+                        break
+                if not duplicate:
                     gateway_app.add_api_websocket_route(
                         path=route.path,
                         endpoint=route.endpoint
@@ -255,6 +304,15 @@ def get_auth_html():
 def get_onboarding_html():
     return FileResponse(os.path.join(_root, "frontend", "pages", "onboarding.html"))
 
+@app.get("/privacy-policy")
+def get_privacy_policy_html():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "privacy-policy.html"))
+
+@app.get("/terms-of-service")
+def get_terms_of_service_html():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "terms-of-service.html"))
+
+
 @app.get("/discover")
 @app.get("/chat")
 @app.get("/grid")
@@ -266,6 +324,8 @@ def get_onboarding_html():
 @app.get("/graph")
 @app.get("/virtual-dates")
 @app.get("/diagnostics")
+@app.get("/ai-diagnostics")
+@app.get("/notifications")
 def get_app_html():
     return FileResponse(os.path.join(_root, "frontend", "pages", "app.html"))
 

@@ -12,9 +12,11 @@ import { initChatPage } from '/src/features/chat/chat.js';
 import { initProfilePage } from '/src/features/profile/profile.js';
 import { initSettingsPage } from '/src/features/settings/settings.js';
 import { initAgentsPage } from '/src/features/agents/agents.js';
+import { initAIDiagnosticsPage } from '/src/features/ai-diagnostics/ai-diagnostics.js';
 import { initCommunitiesPage, initGraphPage, initMapPage, initDiscoverTabs } from '/src/features/grid/grid.js';
 import { setupLogout, updateSidebarUser } from '/src/components/nav.js';
 import { initLiveWebSockets } from '/src/services/websocket.js';
+import { initRealtimeWebSockets } from '/src/services/realtime.js';
 import { openVirtualDate, initRatingPopup, animateStatCounters } from '/src/features/virtual-dates/virtual-dates.js';
 import { initLandingPage, initAgentLivePreview, initCookieConsent, initUserGuideTabs } from '/src/features/landing/landing.js';
 import { initAuthPage } from '/src/features/auth/auth.js';
@@ -45,6 +47,10 @@ registerPageInit('profile', () => {
 
 registerPageInit('settings', () => {
     initSettingsPage();
+});
+
+registerPageInit('ai-diagnostics', () => {
+    initAIDiagnosticsPage();
 });
 
 // Expose apiFetch to window for other modules
@@ -123,6 +129,15 @@ async function bootKonvo() {
 
     // 12. Initialize stat counters
     animateStatCounters();
+
+    // 13. Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('[ServiceWorker] Registered successfully with scope: ', reg.scope))
+                .catch(err => console.error('[ServiceWorker] Registration failed: ', err));
+        });
+    }
 }
 
 // ─── Auth Boot ──────────────────────────────────────────────────────
@@ -160,17 +175,21 @@ async function bootAuth() {
 
         // Boot live features
         initLiveWebSockets();
+        initRealtimeWebSockets();
         initRatingPopup();
 
         // Wire up virtual date launch buttons (delegation)
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', async (e) => {
             const btn = e.target.closest('[data-open-vdate]');
             if (btn) {
                 const loc = btn.dataset.openVdate || 'rooftop';
                 const partnerName = btn.dataset.partnerName || 'Your Match';
+                const { getState } = await import('/src/store/state.js');
+                const partnerId = btn.dataset.partnerId || getState('chatPartnerId');
                 openVirtualDate(loc, {
                     displayName: window.currentUser?.profile?.display_name || 'You',
                     partnerName,
+                    partnerId,
                 });
             }
         });

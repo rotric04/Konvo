@@ -12,6 +12,7 @@ from algorithms.mbti_engine import calculate_mbti
 from algorithms.compatibility import calculate_compatibility
 from algorithms.date_simulator import simulate_date
 from algorithms.astrology import calculate_astrology
+from algorithms.digipin import calculate_digipin_proximity
 from redis_client import redis_client
 from neo4j_client import neo4j_client
 from clickhouse_client import clickhouse_client
@@ -39,6 +40,9 @@ def get_user_by_email(db: Session, email: str):
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
+
 def create_user(db: Session, user: schemas.UserRegister):
     hashed_password = ph.hash(user.password)
     otp = generate_otp()
@@ -48,7 +52,8 @@ def create_user(db: Session, user: schemas.UserRegister):
     
     db_user = models.User(
         email=user.email, password_hash=hashed_password, konvo_id=konvo_id,
-        phone=user.phone, otp_code=otp, otp_verified=False
+        phone=user.phone, otp_code=otp, otp_verified=False, otp_created_at=datetime.utcnow(),
+        username=user.username
     )
     db.add(db_user)
     db.commit()
@@ -92,9 +97,94 @@ def create_user(db: Session, user: schemas.UserRegister):
     
     return db_user
 
+def create_verified_user(db: Session, user_data: dict) -> models.User:
+    email = user_data["email"]
+    password_hash = user_data["password_hash"]
+    display_name = user_data["display_name"]
+    username = user_data["username"]
+    phone = user_data["phone"]
+    gender = user_data.get("gender", "Unknown")
+    relationship_intent = user_data.get("relationship_intent", "Long Term")
+    interests = user_data.get("interests", [])
+    goals = user_data.get("goals", [])
+    birth_date_str = user_data.get("birth_date")
+    birth_time_str = user_data.get("birth_time")
+    birth_location = user_data.get("birth_location")
+    digipin = user_data.get("digipin")
+
+    b_date = None
+    if birth_date_str:
+        b_date = datetime.strptime(birth_date_str, "%Y-%m-%d").date()
+    
+    b_time = None
+    if birth_time_str:
+        b_time = datetime.strptime(birth_time_str, "%H:%M:%S").time()
+
+    # Pre-calculate baseline MBTI and ID
+    konvo_id = generate_konvo_id("INTJ")
+
+    db_user = models.User(
+        email=email, password_hash=password_hash, konvo_id=konvo_id,
+        phone=phone, otp_code=None, otp_verified=True, otp_created_at=datetime.utcnow(),
+        username=username
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    # Calculate baseline astrology Sun/Moon/Ascendant if birth data provided
+    sun = moon = asc = "Aries"
+    if b_date and birth_location:
+        bt = b_time or time(12, 0)
+        try:
+            astro = calculate_astrology(b_date, bt, birth_location)
+            sun = astro["sun_sign"]
+            moon = astro["moon_sign"]
+            asc = astro["ascendant"]
+        except Exception as e:
+            print(f"[ASTROLOGY ERROR] {e}")
+
+    db_profile = models.UserProfile(
+        user_id=db_user.id, display_name=display_name, gender=gender, bio="",
+        relationship_intent=relationship_intent,
+        birth_date=b_date, birth_time=b_time, birth_location=birth_location,
+        digipin=digipin,
+        sun_sign=sun, moon_sign=moon, ascendant=asc,
+        interests=interests, goals=goals
+    )
+    db.add(db_profile)
+    db.commit()
+
+    # Create baseline fingerprint
+    db_fingerprint = models.BehavioralFingerprint(
+        user_id=db_user.id, communication_style="Analytical", debate_style="Constructive",
+        listening_score=70.0, empathy_index=70.0, curiosity_index=70.0, creativity_index=70.0,
+        leadership_index=70.0, consistency_index=70.0, trust_index=70.0, contribution_score=30.0
+    )
+    db.add(db_fingerprint)
+    db.commit()
+
+    # Send welcoming marketing email and user guide onboarding email via Resend
+    try:
+        resend_client.send_marketing_welcome_email(email, display_name)
+        resend_client.send_user_guide_email(email, display_name)
+    except Exception as e:
+        print(f"[WELCOME EMAIL ERROR] {e}")
+
+    clickhouse_client.log_event("UserRegistered", {"email": email, "konvo_id": konvo_id})
+    clickhouse_client.log_event("UserOTPVerified", {"email": email})
+
+    return db_user
+
 def verify_user_otp(db: Session, email: str, otp_code: str) -> bool:
     user = get_user_by_email(db, email)
     if not user:
+        return False
+        
+    # Check for OTP expiry (5 minutes)
+    if user.otp_created_at and (datetime.utcnow() - user.otp_created_at).total_seconds() > 300:
+        user.otp_code = None  # Invalidate expired OTP
+        db.commit()
         return False
         
     # Check against database stored OTP code
@@ -111,6 +201,157 @@ def verify_user_otp(db: Session, email: str, otp_code: str) -> bool:
         resend_client.send_user_guide_email(email, display_name)
         return True
         
+    return False
+
+def update_user_profile(db: Session, user_id: int, profile_update: schemas.ProfileUpdateRequest) -> Optional[models.User]:
+    user = get_user_by_id(db, user_id)
+    if not user:
+        return None
+
+    # Calculate baseline astrology Sun/Moon/Ascendant if birth data provided
+    sun = moon = asc = "Aries"
+    b_date = profile_update.birth_date
+    b_time = profile_update.birth_time
+    b_location = profile_update.birth_location
+    if b_date and b_location:
+        bt = b_time or time(12, 0)
+        try:
+            astro = calculate_astrology(b_date, bt, b_location)
+            sun = astro["sun_sign"]
+            moon = astro["moon_sign"]
+            asc = astro["ascendant"]
+        except Exception as e:
+            print(f"[ASTROLOGY RECALCULATION ERROR] {e}")
+
+    # Update UserProfile fields
+    if user.profile:
+        user.profile.display_name = profile_update.display_name
+        user.profile.bio = profile_update.bio
+        user.profile.gender = profile_update.gender
+        user.profile.birth_date = b_date
+        user.profile.birth_time = b_time
+        user.profile.birth_location = b_location
+        user.profile.digipin = profile_update.digipin
+        user.profile.interests = profile_update.interests
+        user.profile.goals = profile_update.goals
+        user.profile.relationship_intent = profile_update.relationship_intent
+        
+        # Only override astrology signs if we calculated them successfully
+        if b_date and b_location:
+            user.profile.sun_sign = sun
+            user.profile.moon_sign = moon
+            user.profile.ascendant = asc
+    else:
+        # Create a new profile if one doesn't exist (shouldn't happen after onboarding)
+        user.profile = models.UserProfile(
+            user_id=user_id,
+            display_name=profile_update.display_name,
+            bio=profile_update.bio,
+            gender=profile_update.gender,
+            birth_date=b_date,
+            birth_time=b_time,
+            birth_location=b_location,
+            digipin=profile_update.digipin,
+            interests=profile_update.interests,
+            goals=profile_update.goals,
+            relationship_intent=profile_update.relationship_intent,
+            sun_sign=sun,
+            moon_sign=moon,
+            ascendant=asc
+        )
+
+    db.commit()
+    db.refresh(user)
+    return user
+
+def get_nearby_users(db: Session, current_user_id: int, min_proximity_tier: str = "Same Locality") -> List[models.User]:
+    current_user = get_user_by_id(db, current_user_id)
+    if not current_user or not current_user.profile or not current_user.profile.digipin:
+        return []
+
+    nearby_users = []
+    all_users = db.query(models.User).filter(models.User.id != current_user_id).all()
+
+    proximity_tiers_order = [
+        "Unknown", "Different Region", "Same Region", "Same Sub-Region",
+        "Same District Circle", "Same Sub-District", "Same Locality",
+        "Same Neighborhood", "Immediate Proximity", "Same Building/Complex", "Virtually Identical", "Same Spot"
+    ]
+    min_tier_index = proximity_tiers_order.index(min_proximity_tier)
+
+    for user in all_users:
+        if user.profile and user.profile.digipin:
+            proximity_info = calculate_digipin_proximity(current_user.profile.digipin, user.profile.digipin)
+            user_tier_index = proximity_tiers_order.index(proximity_info["proximity_tier"])
+            
+            if user_tier_index >= min_tier_index:
+                nearby_users.append(user)
+    
+    return nearby_users
+
+
+def calculate_profile_completion(user: models.User) -> float:
+    score = 0
+    total_fields = 12 # Total fields considered for completion
+
+    # Essential fields (higher weight)
+    if user.profile:
+        if user.profile.display_name: score += 1
+        if user.profile.bio and len(user.profile.bio) >= 10: score += 1
+        if user.profile.gender and user.profile.gender not in ["Unknown", "Prefer Not To Say"]: score += 1
+        if user.profile.interests and len(user.profile.interests) >= 3: score += 1
+        if user.profile.relationship_intent and user.profile.relationship_intent != "Long Term": score += 1
+        if user.profile.mbti_type and user.profile.mbti_summary: score += 1 # MBTI assessment completed
+    
+    if user.otp_verified: score += 1
+
+    # Optional fields (lower weight)
+    if user.profile:
+        if user.profile.birth_date: score += 0.5
+        if user.profile.birth_time: score += 0.5
+        if user.profile.birth_location: score += 0.5
+        if user.profile.digipin and user.profile.digipin != "GP-1102": score += 0.5
+
+    # Max possible score for these criteria
+    max_score = 7 + (4 * 0.5) # 7 essential + 4 optional * 0.5 weight
+    
+    return round((score / max_score) * 100, 2)
+
+
+def create_notification(db: Session, notification: schemas.NotificationCreate) -> models.Notification:
+    db_notification = models.Notification(
+        user_id=notification.user_id,
+        message=notification.message,
+        type=notification.type
+    )
+    db.add(db_notification)
+    db.commit()
+    db.refresh(db_notification)
+    return db_notification
+
+def get_user_notifications(db: Session, user_id: int, skip: int = 0, limit: int = 100) -> List[models.Notification]:
+    return db.query(models.Notification).filter(models.Notification.user_id == user_id).offset(skip).limit(limit).all()
+
+def mark_notification_as_read(db: Session, notification_id: int, user_id: int) -> Optional[models.Notification]:
+    notification = db.query(models.Notification).filter(
+        models.Notification.id == notification_id,
+        models.Notification.user_id == user_id
+    ).first()
+    if notification:
+        notification.read = True
+        db.commit()
+        db.refresh(notification)
+    return notification
+
+def delete_notification(db: Session, notification_id: int, user_id: int):
+    notification = db.query(models.Notification).filter(
+        models.Notification.id == notification_id,
+        models.Notification.user_id == user_id
+    ).first()
+    if notification:
+        db.delete(notification)
+        db.commit()
+        return True
     return False
 
 

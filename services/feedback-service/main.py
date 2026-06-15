@@ -20,11 +20,10 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime
-from database import get_db
+from database import get_db, Base, engine
 from auth_helper import get_current_user
 import models
 from sqlalchemy import Column, Integer, String, DateTime, JSON, Text, Float
-from database import Base
 
 app = FastAPI(title="Feedback Service", version="1.0.0")
 
@@ -45,6 +44,9 @@ class FeedbackEntry(Base):
     browser = Column(String, nullable=True)
     email = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+# Ensure table is created
+Base.metadata.create_all(bind=engine)
 
 class FeedbackCreate(BaseModel):
     type: str
@@ -97,7 +99,25 @@ def submit_feedback(
     return entry
 
 @app.post("/api/feedback/anonymous")
-def submit_feedback_anonymous(request: FeedbackCreate):
+def submit_feedback_anonymous(request: FeedbackCreate, db: Session = Depends(get_db)):
+    entry = FeedbackEntry(
+        user_id=None,
+        type=request.type,
+        title=request.title,
+        description=request.description,
+        severity=request.severity,
+        priority=request.priority,
+        category=request.category,
+        tags=request.tags or [],
+        rating=request.rating,
+        steps=request.steps,
+        page=request.page,
+        browser=request.browser,
+        email=request.email
+    )
+    db.add(entry)
+    db.commit()
+    db.refresh(entry)
     return {"status": "received", "message": "Feedback recorded. Thank you!"}
 
 @app.get("/api/feedback", response_model=List[FeedbackResponse])

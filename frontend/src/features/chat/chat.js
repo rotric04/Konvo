@@ -8,6 +8,9 @@
 import { apiFetch } from '/src/services/api.js';
 import { getState, setState } from '/src/store/state.js';
 import { WS_BASE_URL } from '/src/constants/config.js';
+import { subscribeToRealtimeUpdates } from '/src/services/realtime.js';
+
+let userPresenceMap = {};
 
 export function initChatWorkspace() {
     const contactsList = document.getElementById('chat-contacts-list') || document.getElementById('matched-contacts-list');
@@ -64,6 +67,15 @@ export function initChatWorkspace() {
                 }
                 
                 let badgeHtml = '';
+                let presenceIndicator = '';
+                const isOnline = userPresenceMap[partner_id] === 'online';
+                
+                if (isOnline) {
+                    presenceIndicator = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--accent-teal); margin-left:5px;"></span>`;
+                } else {
+                    presenceIndicator = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-muted); margin-left:5px;"></span>`;
+                }
+
                 if (!isApproved) {
                     badgeHtml = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-rose); border:1px solid rgba(234,88,12,0.3); border-radius:3px; padding:0.05rem 0.25rem; background:rgba(234,88,12,0.02);">🔒 Locked</span>`;
                 } else {
@@ -72,7 +84,7 @@ export function initChatWorkspace() {
 
                 item.innerHTML = `
                     <div style="font-weight:600; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center; color: var(--text-primary);">
-                        <span>${match.partner_name}</span>
+                        <span>${match.partner_name}${presenceIndicator}</span>
                         ${badgeHtml}
                     </div>
                 `;
@@ -135,6 +147,14 @@ export function initChatWorkspace() {
         }
     }
 
+    function updateChatHeaderPresence(partner_id) {
+        const presenceIndicator = document.getElementById('chat-partner-presence');
+        if (presenceIndicator) {
+            const isOnline = userPresenceMap[partner_id] === 'online';
+            presenceIndicator.style.backgroundColor = isOnline ? 'var(--accent-teal)' : 'var(--text-muted)';
+        }
+    }
+
     async function openDirectChat(match, partner_id) {
         const currentUser = window.currentUser || getState('currentUser');
         
@@ -143,6 +163,7 @@ export function initChatWorkspace() {
                 <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: rgba(20,20,22,0.4);">
                     <div>
                         <strong style="font-size: 1.1rem; color: var(--text-primary);">${match.partner_name}</strong>
+                        <span id="chat-partner-presence" style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:var(--text-muted); margin-left:0.5rem;"></span>
                         <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem;">${match.partner_konvo_id || ''}</span>
                     </div>
                     <div>
@@ -150,6 +171,9 @@ export function initChatWorkspace() {
                         <button class="btn btn-secondary" id="btn-report-node" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; background: transparent;">Report</button>
                     </div>
                 </div>
+        `;
+
+        updateChatHeaderPresence(partner_id); // Initialize presence indicator
                 
                 <div class="chat-search-row" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 1rem; align-items: center;">
                     <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">FILTER MESSAGES:</span>
@@ -439,6 +463,21 @@ export function initChatWorkspace() {
     }
 
     loadMatches();
+
+    // Subscribe to real-time presence updates
+    subscribeToRealtimeUpdates('presence_updates', (payload) => {
+        const { user_id, status } = payload;
+        userPresenceMap[user_id] = status;
+        
+        // Refresh contacts list to update presence indicators
+        loadMatches();
+
+        // If the updated user is the current chat partner, update chat header presence
+        const currentChatPartnerId = getState('chatPartnerId');
+        if (currentChatPartnerId === user_id) {
+            updateChatHeaderPresence(user_id);
+        }
+    });
 }
 
 // Expose globally for backward compatibility

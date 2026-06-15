@@ -7,6 +7,7 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str
     display_name: str
+    username: str
     phone: str
     gender: str = "Unknown"
     relationship_intent: str = "Long Term"
@@ -18,6 +19,11 @@ class UserRegister(BaseModel):
     birth_time: Optional[time] = None
     birth_location: Optional[str] = None
     digipin: Optional[str] = None
+
+class RegisterResponse(BaseModel):
+    success: bool
+    message: str
+    email: EmailStr
 
 class OTPVerifyRequest(BaseModel):
     email: EmailStr
@@ -105,6 +111,15 @@ class UserProfileSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class NearbyUserResponse(BaseModel):
+    id: int
+    konvo_id: str
+    username: str
+    profile: Optional[UserProfileSchema] = None
+
+    class Config:
+        from_attributes = True
+
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
@@ -112,6 +127,7 @@ class UserResponse(BaseModel):
     created_at: datetime
     otp_verified: bool
     premium_user: bool
+    profile_completion: float = Field(default=0.0, description="Profile completion percentage (0-100%)")
     profile: Optional[UserProfileSchema] = None
     agent_twin: Optional[TwinResponse] = None
 
@@ -272,7 +288,62 @@ class ResetPasswordRequest(BaseModel):
     code: str
     new_password: str
 
+class Notification(BaseModel):
+    id: Optional[int] = None
+    user_id: int
+    message: str
+    type: str = "info"  # e.g., "info", "warning", "success", "error"
+    read: bool = False
+    created_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+
+class NotificationCreate(BaseModel):
+    user_id: int
+    message: str
+    type: str = "info"
+
+class NotificationResponse(BaseModel):
+    message: str
+    type: str
+    read: bool
+    created_at: datetime
+
+class AIProviderStatus(BaseModel):
+    status: str = Field(..., description="Overall status (e.g., 'Operational', 'Degraded', 'Offline')")
+    api_health: str = Field(..., description="API health (e.g., 'Healthy', 'Unresponsive', 'Error')")
+    usage_visibility: str = Field(..., description="Usage visibility (e.g., 'Visible', 'Limited', 'None')")
+
+class AIDiagnosticsResponse(BaseModel):
+    gemini: AIProviderStatus
+    replicate: AIProviderStatus
+    fal: AIProviderStatus
+
 class AvatarGenerateRequest(BaseModel):
     prompt: str = Field(default="A futuristic digital twin representation")
     style: str = Field(default="photorealistic") # photorealistic | anime | digital-art
+
+class UsernameCheckRequest(BaseModel):
+    username: str
+
+class OnboardingDraft(BaseModel):
+    step: int
+    data: Dict[str, Any]
+
+class CalibrationInitRequest(BaseModel):
+    gender: str
+    birth_date: str
+    birth_time: Optional[str] = None
+    birth_location: Optional[str] = None
+    digipin: str
+    language: str
+
+class CalibrationAnswerRequest(BaseModel):
+    question_text: str
+    question_type: str
+    answer_text: str
+    latency_ms: int
+
+
 

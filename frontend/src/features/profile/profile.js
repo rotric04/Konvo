@@ -100,8 +100,38 @@ export function initProfilePage() {
                 const completionBar = document.getElementById('trust-completion-bar');
                 if (scoreEl) scoreEl.textContent = `${Math.round(trust.trust_score)}%`;
                 if (behaviorEl) behaviorEl.textContent = `${Math.round(trust.behavior_score)}%`;
-                if (completionEl) completionEl.textContent = `${Math.round(trust.profile_completion)}%`;
-                if (completionBar) completionBar.style.width = `${trust.profile_completion}%`;
+                if (completionEl) completionEl.textContent = `${Math.round(user.profile_completion)}%`;
+                if (completionBar) completionBar.style.width = `${user.profile_completion}%`;
+
+                // Guided Onboarding Tips
+                const onboardingTipsCard = document.getElementById('guided-onboarding-tips');
+                const onboardingTipText = document.getElementById('onboarding-tip-text');
+                if (onboardingTipsCard && onboardingTipText) {
+                    if (user.profile_completion < 100) { // Show tips if not 100% complete
+                        onboardingTipsCard.classList.remove('hidden');
+                        let missingItems = [];
+
+                        if (!user.profile.display_name) missingItems.push("Display Name");
+                        if (!user.profile.bio || user.profile.bio.length < 10) missingItems.push("Biography (min 10 chars)");
+                        if (!user.profile.gender || user.profile.gender === "Unknown" || user.profile.gender === "Prefer Not To Say") missingItems.push("Gender Identity");
+                        if (!user.profile.interests || user.profile.interests.length < 3) missingItems.push("At least 3 Interests");
+                        if (!user.profile.relationship_intent) missingItems.push("Relationship Intent");
+                        if (!user.profile.mbti_type) missingItems.push("Personality Assessment");
+                        if (!user.otp_verified) missingItems.push("Email Verification (OTP)");
+                        if (!user.profile.birth_date) missingItems.push("Birth Date");
+                        if (!user.profile.birth_time) missingItems.push("Birth Time");
+                        if (!user.profile.birth_location) missingItems.push("Birth Location");
+                        if (!user.profile.digipin || user.profile.digipin === "GP-1102") missingItems.push("DIGIPIN Coordinate");
+
+                        if (missingItems.length > 0) {
+                            onboardingTipText.innerHTML = `To unlock full features and better matches, please complete your profile. Missing: <ul>${missingItems.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                        } else {
+                            onboardingTipText.textContent = "Your profile is almost complete! Keep it up!";
+                        }
+                    } else {
+                        onboardingTipsCard.classList.add('hidden');
+                    }
+                }
 
                 const historyList = document.getElementById('trust-safety-history');
                 if (historyList && trust.safety_history) {

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Terms of Service | Konvo</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/theme.css">
+    <script src="/static/src/theme-manager.js"></script>
+    <style>
+        .policy-container {
+            max-width: 800px;
+            margin: 6rem auto;
+            padding: 3rem;
+            background-color: var(--bg-card, #121214);
+            border: 1px solid var(--border-color, rgba(255,255,255,0.08));
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .policy-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .policy-section {
+            margin-bottom: 2rem;
+        }
+        .policy-section h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--accent-amber);
+            margin-bottom: 0.75rem;
+        }
+        .policy-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .policy-list {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .policy-list li {
+            margin-bottom: 0.5rem;
+        }
+        .btn-back {
+            display: block;
+            width: fit-content;
+            margin: 3rem auto 0 auto;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-teal);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            text-align: center;
+        }
+        .btn-back:hover {
+            background-color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-main, #0b0b0c); color: var(--text-primary);">
+    <div class="policy-container">
+        <h1 class="policy-title">Terms of Service</h1>
+        
+        <div class="policy-section">
+            <h2>1. Acceptable Use of Cognitive Twins</h2>
+            <p>By creating a verified account on Konvo, you authorize the system to compile an AI Agent representative (Cognitive Twin) of your personality to simulate conversation logs with other participants' twins.</p>
+            <p>You agree not to manipulate calibration parameters using automated scripts, scrapers, or third-party behavioral generators. All assessments must represent authentic human reactions.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>2. User Representations & Conduct</h2>
+            <p>You agree to treat all members and their agent twins with respect. We maintain a zero-tolerance policy against toxic signals, hate speech, or harassment in direct chat or simulator scripts. Violating these guidelines will trigger immediate token revocation and account deletion.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>3. Spatial and Proximity Matching</h2>
+            <p>Konvo coordinates approximate location matching using alphanumerical segments of the India Post geospatial DIGIPIN. You agree that proximity indicators are calculated in aggregation to maintain spatial anonymity.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>4. Liability & Termination</h2>
+            <p>We reserve the right to suspend or terminate accounts that breach the safety thresholds defined by the Sentiment Engine, or if user activity poses a toxicity threat to the community.</p>
+        </div>
+
+        <button onclick="window.history.back()" class="btn-back">Go Back</button>
+    </div>
+</body>
+</html>

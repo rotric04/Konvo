@@ -15,15 +15,18 @@ while _curr:
 sys.path.append(os.path.join(_root, "packages", "shared-utils"))
 sys.path.append(os.path.join(_root, "packages", "shared-schemas"))
 
-from fastapi import FastAPI, Depends, HTTPException, status, Response, Request
+from fastapi import FastAPI, Depends, HTTPException, status, Response, Request, Query
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from typing import List
+from datetime import datetime
 from database import get_db, engine, Base
 import schemas
 import models
 import crud
 import auth_helper
 from auth_helper import create_access_token, create_refresh_token, REFRESH_TOKEN_EXPIRE_MINUTES
-from fastapi.security import OAuth2PasswordRequestForm
+from auth_helper import create_access_token, create_refresh_token, REFRESH_TOKEN_EXPIRE_MINUTES, get_current_user
 from redis_client import redis_client
 from resend_client import resend_client
 import random
@@ -33,25 +36,322 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Auth Service", version="1.0.0")
 
-@app.post("/api/auth/register", response_model=schemas.UserResponse)
+@app.post("/api/auth/register", response_model=schemas.RegisterResponse)
 def register(user: schemas.UserRegister, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db=db, user=user)
+        
+    db_user_username = crud.get_user_by_username(db, username=user.username)
+    if db_user_username:
+        raise HTTPException(status_code=400, detail="Username already taken")
+        
+    db_user_phone = db.query(models.User).filter(models.User.phone == user.phone).first()
+    if db_user_phone:
+        raise HTTPException(status_code=400, detail="Phone number already registered")
+        
+    otp = str(secrets.randbelow(900000) + 100000)
+    
+    email_sent = resend_client.send_otp_email(user.email, otp)
+    if not email_sent:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to send verification code. Please check your email address or Resend configuration."
+        )
+        
+    hashed_password = crud.ph.hash(user.password)
+    pending_data = {
+        "user_data": {
+            "email": user.email,
+            "password_hash": hashed_password,
+            "display_name": user.display_name,
+            "username": user.username,
+            "phone": user.phone,
+            "gender": user.gender,
+            "relationship_intent": user.relationship_intent,
+            "interests": user.interests,
+            "goals": user.goals,
+            "birth_date": user.birth_date.isoformat() if user.birth_date else None,
+            "birth_time": user.birth_time.isoformat() if user.birth_time else None,
+            "birth_location": user.birth_location,
+            "digipin": user.digipin
+        },
+        "otp_code": otp,
+        "otp_created_at": datetime.utcnow().isoformat()
+    }
+    
+    import json
+    redis_client.set_val(f"pending_reg:{user.email}", json.dumps(pending_data), ex_seconds=300)
+    
+    print(f"\n[OTP SYSTEM] Verification code generated for {user.email}: {otp}\n")
+    return schemas.RegisterResponse(
+        success=True,
+        message="Verification code sent successfully.",
+        email=user.email
+    )
+
+@app.post("/api/users/assessment", response_model=schemas.UserResponse)
+def submit_assessment(
+    assessment: schemas.AssessmentSubmission,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    updated_user = crud.submit_personality_assessment(db, current_user.id, assessment.answers, assessment.custom_inputs)
+    if not updated_user:
+        raise HTTPException(status_code=400, detail="Failed to submit personality assessment.")
+    return updated_user
+
+@app.put("/api/users/profile", response_model=schemas.UserResponse)
+def update_profile(
+    profile_update: schemas.ProfileUpdateRequest,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    updated_user = crud.update_user_profile(db, current_user.id, profile_update)
+    if not updated_user:
+        raise HTTPException(status_code=400, detail="Failed to update profile.")
+    return updated_user
+
+@app.get("/api/ai-diagnostics", response_model=schemas.AIDiagnosticsResponse)
+async def get_ai_diagnostics(
+    current_user: models.User = Depends(get_current_user)
+):
+    import httpx
+    
+    # 1. Gemini Diagnostics
+    gemini_key = os.getenv("GEMINI_API_KEY", "")
+    if not gemini_key:
+        gemini = schemas.AIProviderStatus(status="Degraded", api_health="Missing API Key", usage_visibility="None")
+    else:
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}",
+                    json={"contents": [{"parts": [{"text": "ping"}]}]},
+                    timeout=2.0
+                )
+                if resp.status_code == 200:
+                    gemini = schemas.AIProviderStatus(status="Operational", api_health="Healthy", usage_visibility="Visible")
+                else:
+                    gemini = schemas.AIProviderStatus(status="Degraded", api_health=f"HTTP {resp.status_code}", usage_visibility="Limited")
+        except Exception as e:
+            gemini = schemas.AIProviderStatus(status="Offline", api_health=f"Unresponsive: {str(e)[:50]}", usage_visibility="None")
+
+    # 2. Replicate Diagnostics
+    replicate_token = os.getenv("REPLICATE_API_TOKEN", "")
+    if not replicate_token:
+        replicate = schemas.AIProviderStatus(status="Degraded", api_health="Missing API Token", usage_visibility="None")
+    else:
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(
+                    "https://api.replicate.com/v1/models/meta/llama-2-70b-chat",
+                    headers={"Authorization": f"Bearer {replicate_token}"},
+                    timeout=2.0
+                )
+                if resp.status_code in [200, 401]:
+                    api_health = "Healthy" if resp.status_code == 200 else "Invalid Token"
+                    status_val = "Operational" if resp.status_code == 200 else "Degraded"
+                    replicate = schemas.AIProviderStatus(status=status_val, api_health=api_health, usage_visibility="Visible" if resp.status_code == 200 else "Limited")
+                else:
+                    replicate = schemas.AIProviderStatus(status="Degraded", api_health=f"HTTP {resp.status_code}", usage_visibility="Limited")
+        except Exception as e:
+            replicate = schemas.AIProviderStatus(status="Offline", api_health=f"Unresponsive: {str(e)[:50]}", usage_visibility="None")
+
+    # 3. FAL Diagnostics
+    fal_key = os.getenv("FAL_API_KEY", "")
+    if not fal_key:
+        fal = schemas.AIProviderStatus(status="Degraded", api_health="Missing API Key", usage_visibility="None")
+    else:
+        try:
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(
+                    "https://queue.fal.run/status",
+                    headers={"Authorization": f"Key {fal_key}"},
+                    timeout=2.0
+                )
+                if resp.status_code in [200, 401]:
+                    api_health = "Healthy" if resp.status_code == 200 else "Invalid Key"
+                    status_val = "Operational" if resp.status_code == 200 else "Degraded"
+                    fal = schemas.AIProviderStatus(status=status_val, api_health=api_health, usage_visibility="Visible" if resp.status_code == 200 else "Limited")
+                else:
+                    fal = schemas.AIProviderStatus(status="Degraded", api_health=f"HTTP {resp.status_code}", usage_visibility="Limited")
+        except Exception as e:
+            fal = schemas.AIProviderStatus(status="Offline", api_health=f"Unresponsive: {str(e)[:50]}", usage_visibility="None")
+
+    return schemas.AIDiagnosticsResponse(
+        gemini=gemini,
+        replicate=replicate,
+        fal=fal
+    )
+
+@app.get("/api/users/nearby", response_model=List[schemas.NearbyUserResponse])
+def get_nearby_users_endpoint(
+    min_proximity_tier: str = Query("Same Locality", description="Minimum proximity tier for nearby users"),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    nearby_users = crud.get_nearby_users(db, current_user.id, min_proximity_tier)
+    return nearby_users
+
+@app.post("/api/notifications", response_model=schemas.Notification)
+async def create_notification_endpoint(
+    notification: schemas.NotificationCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user) # Ensure only authenticated users can create notifications
+):
+    if notification.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to create notifications for other users")
+    
+    db_notification = crud.create_notification(db, notification)
+    
+    # Broadcast notification via WebSocket
+    import httpx
+    try:
+        async with httpx.AsyncClient() as client:
+            await client.post(
+                "http://localhost:8000/api/realtime/notification", # Gateway endpoint
+                json={
+                    "user_id": db_notification.user_id,
+                    "message": db_notification.message,
+                    "type": db_notification.type,
+                    "created_at": db_notification.created_at.isoformat()
+                }
+            )
+    except Exception as e:
+        print(f"Failed to notify gateway of new notification: {e}")
+
+    return db_notification
+
+@app.get("/api/notifications", response_model=List[schemas.NotificationResponse])
+def get_notifications_endpoint(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    notifications = crud.get_user_notifications(db, current_user.id)
+    return notifications
+
+@app.put("/api/notifications/{notification_id}/read", response_model=schemas.NotificationResponse)
+def mark_notification_read_endpoint(
+    notification_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    notification = crud.mark_notification_as_read(db, notification_id, current_user.id)
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found or not authorized")
+    return notification
+
+@app.delete("/api/notifications/{notification_id}", status_code=204)
+def delete_notification_endpoint(
+    notification_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    success = crud.delete_notification(db, notification_id, current_user.id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Notification not found or not authorized")
+    return {"message": "Notification deleted successfully"}
+
+@app.get("/api/users/me", response_model=schemas.UserResponse)
+def read_users_me(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    user = crud.get_user_by_id(db, current_user.id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_response = schemas.UserResponse.from_orm(user)
+    user_response.profile_completion = crud.calculate_profile_completion(user)
+    return user_response
 
 @app.post("/api/auth/verify-otp")
 def verify_otp(request: schemas.OTPVerifyRequest, db: Session = Depends(get_db)):
-    success = crud.verify_user_otp(db, email=request.email, otp_code=request.otp_code)
-    if not success:
-        raise HTTPException(status_code=400, detail="Invalid verification code or email.")
+    pending_key = f"pending_reg:{request.email}"
+    pending_str = redis_client.get_val(pending_key)
+    if not pending_str:
+        raise HTTPException(
+            status_code=400,
+            detail="Verification session expired or invalid email. Please register again."
+        )
+        
+    import json
+    try:
+        pending_data = json.loads(pending_str)
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail="Verification session corrupted."
+        )
+        
+    if pending_data.get("otp_code") != request.otp_code:
+        raise HTTPException(status_code=400, detail="Invalid verification code.")
+        
+    # Check for expiration (5 minutes)
+    created_at_str = pending_data.get("otp_created_at")
+    if created_at_str:
+        created_at = datetime.fromisoformat(created_at_str)
+        if (datetime.utcnow() - created_at).total_seconds() > 300:
+            redis_client.set_val(pending_key, "", ex_seconds=1)
+            raise HTTPException(status_code=400, detail="Verification code has expired.")
+            
+    # Double check uniqueness in DB to prevent race conditions
+    user_data = pending_data["user_data"]
+    db_user = crud.get_user_by_email(db, email=user_data["email"])
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+        
+    db_user_username = crud.get_user_by_username(db, username=user_data["username"])
+    if db_user_username:
+        raise HTTPException(status_code=400, detail="Username already taken")
+        
+    db_user_phone = db.query(models.User).filter(models.User.phone == user_data["phone"]).first()
+    if db_user_phone:
+        raise HTTPException(status_code=400, detail="Phone number already registered")
+        
+    # Create the verified user
+    crud.create_verified_user(db=db, user_data=user_data)
+    
+    # Invalidate Redis pending key
+    redis_client.set_val(pending_key, "", ex_seconds=1)
+    
     return {"success": True, "message": "Account successfully verified."}
 
 @app.post("/api/auth/resend-otp")
 def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, email=request.email)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+    if user:
+        if user.otp_verified:
+            raise HTTPException(status_code=400, detail="Email is already verified. Please log in.")
+        cooldown_key = f"cooldown:otp:{request.email}"
+        cooldown = redis_client.get_val(cooldown_key)
+        if cooldown:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Please wait 60 seconds before requesting a new OTP."
+            )
+            
+        new_otp = str(secrets.randbelow(900000) + 100000)
+        email_sent = resend_client.send_otp_email(request.email, new_otp)
+        if not email_sent:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to send verification code. Please check your email or Resend configuration."
+            )
+            
+        user.otp_code = new_otp
+        user.otp_created_at = datetime.utcnow()
+        db.commit()
+        
+        redis_client.set_val(cooldown_key, "1", ex_seconds=60)
+        print(f"\n[OTP SYSTEM] Verification code generated for {request.email}: {new_otp}\n")
+        return {"success": True, "message": "Verification code resent successfully."}
+        
+    pending_key = f"pending_reg:{request.email}"
+    pending_str = redis_client.get_val(pending_key)
+    if not pending_str:
+        raise HTTPException(status_code=404, detail="Registration session not found. Please register first.")
         
     cooldown_key = f"cooldown:otp:{request.email}"
     cooldown = redis_client.get_val(cooldown_key)
@@ -61,16 +361,34 @@ def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db))
             detail="Please wait 60 seconds before requesting a new OTP."
         )
         
+    import json
+    try:
+        pending_data = json.loads(pending_str)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Registration session corrupted.")
+        
     new_otp = str(secrets.randbelow(900000) + 100000)
-    user.otp_code = new_otp
-    db.commit()
+    email_sent = resend_client.send_otp_email(request.email, new_otp)
+    if not email_sent:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to send verification code. Please check your email or Resend configuration."
+        )
+        
+    pending_data["otp_code"] = new_otp
+    pending_data["otp_created_at"] = datetime.utcnow().isoformat()
+    redis_client.set_val(pending_key, json.dumps(pending_data), ex_seconds=300)
     
     redis_client.set_val(cooldown_key, "1", ex_seconds=60)
-    
-    resend_client.send_otp_email(request.email, new_otp)
     print(f"\n[OTP SYSTEM] Verification code generated for {request.email}: {new_otp}\n")
-    
     return {"success": True, "message": "Verification code resent successfully."}
+
+@app.post("/api/auth/check-username")
+def check_username(request: schemas.UsernameCheckRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_username(db, username=request.username)
+    if user:
+        raise HTTPException(status_code=400, detail="Username already taken.")
+    return {"success": True, "message": "Username is available."}
 
 @app.post("/api/auth/login", response_model=schemas.Token)
 def login(credentials: schemas.UserLogin, response: Response, db: Session = Depends(get_db)):
@@ -81,6 +399,9 @@ def login(credentials: schemas.UserLogin, response: Response, db: Session = Depe
         crud.ph.verify(user.password_hash, credentials.password)
     except Exception:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
+        
+    if not user.otp_verified:
+        raise HTTPException(status_code=400, detail="Account email not verified. Please verify your email first.")
         
     access_token = create_access_token(data={"sub": user.email})
     refresh_token = create_refresh_token(data={"sub": user.email})
@@ -114,6 +435,9 @@ def login_form(response: Response, form_data: OAuth2PasswordRequestForm = Depend
         crud.ph.verify(user.password_hash, form_data.password)
     except Exception:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
+        
+    if not user.otp_verified:
+        raise HTTPException(status_code=400, detail="Account email not verified. Please verify your email first.")
         
     access_token = create_access_token(data={"sub": user.email})
     refresh_token = create_refresh_token(data={"sub": user.email})

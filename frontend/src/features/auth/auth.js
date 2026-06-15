@@ -136,23 +136,11 @@ export function initAuthPage() {
     const adjectives = ['vibe', 'neon', 'hyper', 'pixel', 'cyber', 'glow', 'meta', 'spicy', 'luna', 'wired', 'retro', 'stellar', 'drip', 'omega', 'slay'];
     const nouns      = ['byte', 'soul', 'twin', 'rizz', 'coder', 'avatar', 'pulse', 'aura', 'ghost', 'hacker', 'wave', 'spark', 'glitch', 'nomad', 'flux'];
 
-    if (regUsername && usernameMsg) {
-        regUsername.addEventListener('input', () => {
-            let { selectionStart: s, selectionEnd: e } = regUsername;
-            const orig = regUsername.value.length;
-            regUsername.value = regUsername.value.toLowerCase().replace(/[^a-z0-9_\-\.]/g, '');
-            const diff = orig - regUsername.value.length;
-            if (diff > 0) regUsername.setSelectionRange(s - diff, e - diff);
-            usernameMsg.textContent = regUsername.value ? '✓ Username format valid' : '';
-            usernameMsg.className   = regUsername.value ? 'validation-msg success' : 'validation-msg';
-        });
-    }
-
-    btnSuggestUsername?.addEventListener('click', () => {
+    btnSuggestUsername?.addEventListener('click', async () => {
         const regEmail = document.getElementById('regEmail');
         let username = '';
         if (regEmail?.value && regEmail.value.includes('@')) {
-            const prefix = regEmail.value.split('@')[0].toLowerCase().replace(/[^a-z0-9_\-\.]/g, '');
+            const prefix = regEmail.value.split('@')[0].toLowerCase().replace(/[^a-z0-9_\-\. ]/g, '');
             if (prefix.length >= 2) {
                 const suffixes = ['_rizz', '_twin', '_x', '99', '42', '_byte', '_soul'];
                 username = prefix + suffixes[Math.floor(Math.random() * suffixes.length)];
@@ -161,7 +149,48 @@ export function initAuthPage() {
         if (!username) {
             username = `${adjectives[Math.floor(Math.random() * adjectives.length)]}_${nouns[Math.floor(Math.random() * nouns.length)]}${Math.floor(Math.random() * 90) + 10}`;
         }
-        if (regUsername) { regUsername.value = username; regUsername.dispatchEvent(new Event('input')); }
+        if (regUsername) { 
+            regUsername.value = username; 
+            regUsername.dispatchEvent(new Event('input'));
+            // Immediately check availability for the suggested username
+            checkUsernameAvailability(username);
+        }
+    });
+
+    // Function to check username availability
+    async function checkUsernameAvailability(username) {
+        if (!username) {
+            usernameMsg.textContent = '';
+            usernameMsg.className = 'validation-msg';
+            return;
+        }
+        try {
+            const res = await apiFetch('/api/auth/check-username', {
+                method: 'POST',
+                body: JSON.stringify({ username }),
+            });
+            if (res?.success) {
+                usernameMsg.textContent = '✓ Username is available';
+                usernameMsg.className = 'validation-msg success';
+            } else {
+                usernameMsg.textContent = res?.message || 'Username check failed';
+                usernameMsg.className = 'validation-msg error';
+            }
+        } catch (err) {
+            usernameMsg.textContent = err.message || 'Username check failed';
+            usernameMsg.className = 'validation-msg error';
+        }
+    }
+
+    // Add event listener for regUsername input to check availability on change
+    regUsername?.addEventListener('input', () => {
+        let { selectionStart: s, selectionEnd: e } = regUsername;
+        const orig = regUsername.value.length;
+        regUsername.value = regUsername.value.toLowerCase().replace(/[^a-z0-9_\-\. ]/g, '');
+        const diff = orig - regUsername.value.length;
+        if (diff > 0) regUsername.setSelectionRange(s - diff, e - diff);
+        // Call the availability check function
+        checkUsernameAvailability(regUsername.value);
     });
 
     // ─── Password Strength ────────────────────────────────────────────────────────
@@ -169,7 +198,8 @@ export function initAuthPage() {
     const pwInput    = document.getElementById('regPassword');
     const pwFill     = document.getElementById('password-strength-fill');
     const pwFeedback = document.getElementById('password-strength-feedback');
-    const colorMap   = ['', '#ef4444', '#f97316', '#eab308', '#22c55e', '#16a34a'];
+    // Use CSS variables for colors to support dark mode
+    const colorMap   = ['', 'var(--strength-very-weak)', 'var(--strength-weak)', 'var(--strength-fair)', 'var(--strength-strong)', 'var(--strength-very-strong)'];
     const labelMap   = ['', 'Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
 
     function checkReq(id, valid) {
@@ -244,10 +274,9 @@ export function initAuthPage() {
         const displayName = document.getElementById('regDisplayName')?.value.trim();
         const username    = document.getElementById('regUsername')?.value.trim();
         const phoneVal    = document.getElementById('regPhone')?.value.trim();
-        const gender      = document.getElementById('regGender')?.value;
         const tosAgreed   = document.getElementById('reg-tos-agree')?.checked;
 
-        if (!email || !password || !displayName || !username || !phoneVal || !gender) {
+        if (!email || !password || !displayName || !username || !phoneVal) {
             if (registerError) registerError.textContent = 'All fields are required.';
             return;
         }
@@ -270,7 +299,7 @@ export function initAuthPage() {
                     display_name: displayName,
                     username,
                     phone: fullPhone,
-                    gender,
+                    gender: 'Unknown',
                     relationship_intent: 'Long Term',
                     bio: '',
                     interests: [],
@@ -326,6 +355,10 @@ export function initAuthPage() {
                 switchTab('login');
                 const loginEmailInput = document.getElementById('loginEmail');
                 if (loginEmailInput) { loginEmailInput.value = email; document.getElementById('loginPassword')?.focus(); }
+            } else {
+                // Handle cases where res.success is explicitly false but no error was thrown
+                if (otpError) otpError.textContent = res?.message || 'Verification failed.';
+                KonvoToast.show(res?.message || 'Verification failed', 'error');
             }
         } catch (err) {
             if (otpError) otpError.textContent = err.message || 'Verification failed.';
@@ -345,8 +378,12 @@ export function initAuthPage() {
             btn.textContent = 'Resending…';
         }
         try {
-            await apiFetch('/api/auth/resend-otp', { method: 'POST', body: JSON.stringify({ email }) });
-            KonvoToast.show('Verification code resent!', 'success');
+            const res = await apiFetch('/api/auth/resend-otp', { method: 'POST', body: JSON.stringify({ email }) });
+            if (res?.success) {
+                KonvoToast.show('Verification code resent!', 'success');
+            } else {
+                KonvoToast.show(res?.message || 'Failed to resend code', 'error');
+            }
         } catch (err) {
             KonvoToast.show(err.message || 'Failed to resend code', 'error');
         } finally {

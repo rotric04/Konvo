@@ -486,13 +486,14 @@ async function initMapPage() {
         }
 
         try {
-            const candidates = await apiFetch('/api/compatibility/discovery');
-            if (candidates && candidates.length > 0) {
-                candidates.forEach(user => {
-                    if (!user.user_id) return;
+            const nearbyUsers = await apiFetch('/api/users/nearby');
+            if (nearbyUsers && nearbyUsers.length > 0) {
+                nearbyUsers.forEach(user => {
+                    if (!user.id) return;
 
-                    let userDigipin = user.digipin;
+                    let userDigipin = user.profile?.digipin;
                     if (!userDigipin) {
+                        // Fallback for users without a DIGIPIN
                         const fallbackDigipins = {
                             1: '8Y1A3B5C7D',
                             2: '8Y1A3B5C7E',
@@ -500,7 +501,7 @@ async function initMapPage() {
                             4: '8Y2A1B3C5D',
                             5: '1A2B3C4D5E'
                         };
-                        userDigipin = fallbackDigipins[user.user_id] || '8Y1A3B5C7D';
+                        userDigipin = fallbackDigipins[user.id % 5 + 1] || '8Y1A3B5C7D'; // Use user.id for a pseudo-random fallback
                     }
 
                     const userCoords = getCoordsForDigipin(userDigipin);
@@ -510,13 +511,10 @@ async function initMapPage() {
 
                         let color = 'var(--text-muted)';
                         let shadowColor = 'rgba(85, 85, 98, 0.4)';
-                        if (user.compatibility_score >= 80) {
-                            color = 'var(--accent-indigo)';
-                            shadowColor = 'rgba(79, 70, 229, 0.5)';
-                        } else if (user.compatibility_score >= 60) {
-                            color = 'var(--accent-teal)';
-                            shadowColor = 'rgba(13, 148, 136, 0.5)';
-                        }
+                        // For nearby users, we don't have compatibility score directly from this endpoint
+                        // We can use a default color or derive it from other profile attributes if needed
+                        color = 'var(--accent-teal)'; // Default for nearby users
+                        shadowColor = 'rgba(13, 148, 136, 0.5)';
 
                         const el = document.createElement('div');
                         el.className = 'user-location-marker';
@@ -524,10 +522,10 @@ async function initMapPage() {
 
                         const popupContent = `
                             <div style="font-family: var(--font-sans); min-width: 180px; text-align: center; color: var(--text-primary);">
-                                <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: bold; margin-bottom: 0.25rem;">${user.display_name}</div>
-                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.5rem;">Resonance: ${user.compatibility_score}% (${user.compatibility_tier})</div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem;">MBTI: ${user.mbti_type} // Intent: ${user.relationship_intent}</div>
-                                <button class="btn btn-primary" style="font-size: 0.7rem; padding: 0.35rem 0.75rem; width: 100%;" onclick="window.location.href='/discover'">Review AI Twin</button>
+                                <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: bold; margin-bottom: 0.25rem;">${user.profile?.display_name || user.username}</div>
+                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.5rem;">Grid: ${userDigipin}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem;">MBTI: ${user.profile?.mbti_type || 'N/A'} // Intent: ${user.profile?.relationship_intent || 'N/A'}</div>
+                                <button class="btn btn-primary" style="font-size: 0.7rem; padding: 0.35rem 0.75rem; width: 100%;" onclick="window.location.href='/profile/${user.id}'">View Profile</button>
                             </div>
                         `;
 

@@ -174,6 +174,7 @@
                 <li><a href="/grid" id="nav-grid">Resonance Grid</a></li>
                 <li><a href="/profile" id="nav-profile">Twin DNA</a></li>
                 <li><a href="/settings" id="nav-settings">Settings</a></li>
+                <li><a href="/ai-diagnostics" id="nav-ai-diagnostics">AI Diagnostics</a></li>
                 <li><a href="/feedback" id="nav-feedback">Feedback</a></li>
             </ul>
 
@@ -185,6 +186,12 @@
                 <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                     <button class="btn-logout" id="btn-logout" style="flex: 1;">Log Out</button>
                     <button class="btn" id="btn-theme-toggle" style="padding: 0.4rem; font-size: 0.9rem;" title="Toggle Theme">🌓</button>
+                </div>
+                <div style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem; font-size: 0.72rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                    <a href="/privacy-policy" target="_blank" style="color: var(--text-muted); text-decoration: none;">Privacy</a> &middot;
+                    <a href="/terms-of-service" target="_blank" style="color: var(--text-muted); text-decoration: none;">Terms</a> &middot;
+                    <a href="/security-policy" target="_blank" style="color: var(--text-muted); text-decoration: none;">Security</a> &middot;
+                    <a href="#" onclick="if(window.konvoShowCookieSettings) { window.konvoShowCookieSettings(); } return false;" style="color: var(--text-muted); text-decoration: none;">Cookies</a>
                 </div>
             </div>
         </nav>
@@ -638,6 +645,17 @@
                             <div class="indicator-bar" style="flex: 1; margin-bottom: 0;"><div class="indicator-fill" id="trust-completion-bar" style="background-color: var(--accent-indigo);"></div></div>
                             <strong style="font-family: var(--font-mono); font-size: 0.85rem;" id="trust-completion-val">20%</strong>
                         </div>
+                    </div>
+
+                    <!-- Guided Onboarding Tips -->
+                    <div id="guided-onboarding-tips" class="card hidden" style="padding: 1.25rem; border-color: var(--accent-amber); background-color: rgba(245, 158, 11, 0.03); margin-bottom: 1.5rem;">
+                        <h4 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--accent-amber); margin-bottom: 0.5rem;">
+                            Complete Your Profile
+                        </h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.75rem;" id="onboarding-tip-text">
+                            Your profile is looking a bit empty! Fill out more details to improve your matches.
+                        </p>
+                        <button class="btn btn-secondary" style="font-size: 0.7rem; color: var(--accent-amber); border-color: var(--accent-amber);" onclick="navigateTo('/settings')">Go to Settings</button>
                     </div>
 
                     <div class="card" style="padding: 1.25rem; background-color: rgba(6,6,8,0.3);">
@@ -1182,6 +1200,7 @@
 
     <!-- Boot the application module -->
     <script type="module" src="/src/app.js"></script>
+    <script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
 
 </html>

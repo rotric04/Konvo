@@ -564,11 +564,17 @@ function submitFeedback(type) {
 
     // Submit to backend API
     try {
-        fetch('/api/feedback', {
+        const token = localStorage.getItem('konvo_token');
+        const url = token ? '/api/feedback' : '/api/feedback/anonymous';
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+            headers['Authorization'] = 'Bearer ' + token;
+        }
+        fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (localStorage.getItem('konvo_token') || '') },
+            headers: headers,
             body: JSON.stringify(data)
-        }).catch(() => {});
+        }).catch((err) => console.warn('API feedback submission failed:', err));
     } catch (e) {}
 
     // Submit to FormSubmit.co (mohit.info.83@gmail.com) via AJAX

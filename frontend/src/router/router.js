@@ -31,6 +31,8 @@ const ROUTES = {
     '/virtual-dates': { page: 'profile',    title: 'Twin DNA',       auth: true,  guestOnly: false },
     '/agents':        { page: 'profile',    title: 'Twin DNA',       auth: true,  guestOnly: false },
     '/settings':      { page: 'settings',   title: 'Settings',       auth: true,  guestOnly: false },
+    '/ai-diagnostics': { page: 'ai-diagnostics', title: 'AI Diagnostics', auth: true, guestOnly: false },
+    '/notifications': { page: 'notifications', title: 'Notifications', auth: true, guestOnly: false },
     '/onboarding':    { page: 'profile',    title: 'Get Started',    auth: true,  guestOnly: false },
     '/auth':          { page: 'auth',       title: 'Sign In',        auth: false, guestOnly: true  },
     '/login':         { page: 'auth',       title: 'Sign In',        auth: false, guestOnly: true  },
@@ -45,6 +47,8 @@ const PAGE_SECTIONS = {
     'grid':          'view-grid',
     'profile':       'view-profile',
     'settings':      'view-settings',
+    'ai-diagnostics': 'view-ai-diagnostics',
+    'notifications': 'view-notifications',
     'auth':          null, // auth.html is separate
     '404':           'view-404',
 };
@@ -292,6 +296,12 @@ function initSPALinks() {
         // Same origin check
         const url = new URL(href, window.location.origin);
         if (url.origin !== window.location.origin) return;
+
+        // Bypass SPA routing for standalone pages
+        const standalonePages = ['/blog', '/privacy-policy', '/terms-of-service', '/security-policy', '/feedback', '/hall-of-fame'];
+        if (standalonePages.some(page => url.pathname === page || url.pathname.startsWith(page + '/'))) {
+            return;
+        }
 
         // Intercept the click and handle via router
         e.preventDefault();

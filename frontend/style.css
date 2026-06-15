@@ -3,6 +3,13 @@
 
 /* Default Theme (Obsidian Dark Theme) */
 :root {
+    /* Password Strength Colors */
+    --strength-very-weak: #ef4444;
+    --strength-weak: #f97316;
+    --strength-fair: #eab308;
+    --strength-strong: #22c55e;
+    --strength-very-strong: #16a34a;
+    
     --bg-main: #09090B; /* Obsidian */
     --bg-card: #141416; /* Graphite card */
     --border-color: #27272A; /* Slate border */
@@ -35,6 +42,13 @@
 
 /* Light Theme Overrides */
 [data-theme="light"] {
+    /* Password Strength Colors */
+    --strength-very-weak: #ef4444;
+    --strength-weak: #f97316;
+    --strength-fair: #eab308;
+    --strength-strong: #22c55e;
+    --strength-very-strong: #16a34a;
+    
     --bg-main: #FAF9F6; /* Ivory main */
     --bg-card: #FFFFFF; /* Pure white cards for visual separation */
     --border-color: #E4E4E7; /* Light zinc border */

@@ -112,9 +112,22 @@ async def chat_websocket_handler(websocket: WebSocket, user_token: str):
     channel = f"chat_feed_{user.id}"
     await manager.connect(websocket, channel)
     
-    # Track presence in Redis
+    # Track presence in Redis and notify gateway for broadcast
     from redis_client import redis_client
-    redis_client.set_presence(user.id, "online")  # type: ignore
+    import httpx
+    
+    async def notify_gateway_presence(user_id: int, status: str):
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    "http://localhost:8000/api/realtime/presence", # Gateway endpoint
+                    json={"user_id": user.id, "status": status}
+                )
+        except Exception as e:
+            print(f"Failed to notify gateway of presence update: {e}")
+
+    redis_client.set_presence(user.id, "online")
+    await notify_gateway_presence(user.id, "online")
     
     try:
         while True:
@@ -128,6 +141,7 @@ async def chat_websocket_handler(websocket: WebSocket, user_token: str):
                 await manager.broadcast(payload, f"chat_feed_{partner_id}")
     except WebSocketDisconnect:
         manager.disconnect(websocket, channel)
-        redis_client.set_presence(user.id, "offline")  # type: ignore
+        redis_client.set_presence(user.id, "offline")
+        await notify_gateway_presence(user.id, "offline")
     finally:
         db.close()

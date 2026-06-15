@@ -346,3 +346,112 @@ CREATE POLICY communities_read_all ON communities
 DROP POLICY IF EXISTS communities_admin_all ON communities;
 CREATE POLICY communities_admin_all ON communities 
     FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
+
+-- 5. Cognitive Calibration 4.0 Tables
+CREATE TABLE IF NOT EXISTS user_embeddings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    interest_vector JSONB,
+    social_vector JSONB,
+    humor_vector JSONB,
+    communication_vector JSONB,
+    curiosity_vector JSONB,
+    compatibility_vector JSONB,
+    emotional_vector JSONB,
+    lifestyle_vector JSONB
+);
+
+CREATE TABLE IF NOT EXISTS behavioral_signals (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    scenario_choices JSONB DEFAULT '{}'::jsonb,
+    tradeoff_choices JSONB DEFAULT '{}'::jsonb,
+    open_responses JSONB DEFAULT '{}'::jsonb,
+    response_latencies JSONB DEFAULT '{}'::jsonb,
+    writing_style_metrics JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS personality_profiles (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    snapshot TEXT,
+    mbti_prediction VARCHAR(50),
+    big_five_summary TEXT,
+    communication_style TEXT,
+    humor_style TEXT,
+    social_energy TEXT,
+    emotional_style TEXT,
+    discovery_tags JSONB DEFAULT '[]'::jsonb,
+    compatibility_markers JSONB DEFAULT '[]'::jsonb,
+    conversation_hooks JSONB DEFAULT '[]'::jsonb,
+    interest_clusters JSONB DEFAULT '[]'::jsonb,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS interest_clusters (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    cluster_name VARCHAR(255) NOT NULL,
+    score FLOAT DEFAULT 0.0
+);
+
+CREATE TABLE IF NOT EXISTS compatibility_vectors (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    vector_data JSONB NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS social_vectors (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    vector_data JSONB NOT NULL
+);
+
+-- Optimization Indexes
+CREATE INDEX IF NOT EXISTS idx_user_embeddings_user_id ON user_embeddings(user_id);
+CREATE INDEX IF NOT EXISTS idx_behavioral_signals_user_id ON behavioral_signals(user_id);
+CREATE INDEX IF NOT EXISTS idx_personality_profiles_user_id ON personality_profiles(user_id);
+CREATE INDEX IF NOT EXISTS idx_interest_clusters_user_id ON interest_clusters(user_id);
+CREATE INDEX IF NOT EXISTS idx_compatibility_vectors_user_id ON compatibility_vectors(user_id);
+CREATE INDEX IF NOT EXISTS idx_social_vectors_user_id ON social_vectors(user_id);
+
+-- Enable RLS
+ALTER TABLE user_embeddings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE behavioral_signals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE personality_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE interest_clusters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE compatibility_vectors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE social_vectors ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies
+DROP POLICY IF EXISTS user_embeddings_read_all ON user_embeddings;
+CREATE POLICY user_embeddings_read_all ON user_embeddings FOR SELECT USING (true);
+DROP POLICY IF EXISTS user_embeddings_write_own ON user_embeddings;
+CREATE POLICY user_embeddings_write_own ON user_embeddings FOR ALL USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS behavioral_signals_read_own ON behavioral_signals;
+CREATE POLICY behavioral_signals_read_own ON behavioral_signals FOR SELECT USING (auth.uid()::text = user_id::text);
+DROP POLICY IF EXISTS behavioral_signals_write_own ON behavioral_signals;
+CREATE POLICY behavioral_signals_write_own ON behavioral_signals FOR ALL USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS personality_profiles_read_all ON personality_profiles;
+CREATE POLICY personality_profiles_read_all ON personality_profiles FOR SELECT USING (true);
+DROP POLICY IF EXISTS personality_profiles_write_own ON personality_profiles;
+CREATE POLICY personality_profiles_write_own ON personality_profiles FOR ALL USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS interest_clusters_read_all ON interest_clusters;
+CREATE POLICY interest_clusters_read_all ON interest_clusters FOR SELECT USING (true);
+DROP POLICY IF EXISTS interest_clusters_write_own ON interest_clusters;
+CREATE POLICY interest_clusters_write_own ON interest_clusters FOR ALL USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS compatibility_vectors_read_all ON compatibility_vectors;
+CREATE POLICY compatibility_vectors_read_all ON compatibility_vectors FOR SELECT USING (true);
+DROP POLICY IF EXISTS compatibility_vectors_write_own ON compatibility_vectors;
+CREATE POLICY compatibility_vectors_write_own ON compatibility_vectors FOR ALL USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS social_vectors_read_all ON social_vectors;
+CREATE POLICY social_vectors_read_all ON social_vectors FOR SELECT USING (true);
+DROP POLICY IF EXISTS social_vectors_write_own ON social_vectors;
+CREATE POLICY social_vectors_write_own ON social_vectors FOR ALL USING (auth.uid()::text = user_id::text);
+

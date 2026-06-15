@@ -23,8 +23,10 @@ import models
 import schemas
 import crud
 from auth_helper import get_current_user
+from redis_client import redis_client
 from algorithms.astrology import calculate_astrology
-from datetime import time
+import algorithms.onboarding_engine as onboarding_engine
+from datetime import time, datetime, date
 import base64
 import json
 from hashlib import sha256
@@ -103,6 +105,30 @@ def update_profile(
         
     db.commit()
     return {"success": True, "message": "Profile updated successfully."}
+
+@app.get("/api/users/onboarding-draft", response_model=schemas.OnboardingDraft)
+def get_onboarding_draft(current_user: models.User = Depends(get_current_user)):
+    draft_key = f"onboarding_draft:{current_user.id}"
+    draft_str = redis_client.get_val(draft_key)
+    if not draft_str:
+        return {"step": 0, "data": {}}
+    try:
+        return json.loads(draft_str)
+    except Exception:
+        return {"step": 0, "data": {}}
+
+@app.put("/api/users/onboarding-draft")
+def save_onboarding_draft(
+    draft: schemas.OnboardingDraft,
+    current_user: models.User = Depends(get_current_user)
+):
+    draft_key = f"onboarding_draft:{current_user.id}"
+    payload = {
+        "step": draft.step,
+        "data": draft.data
+    }
+    redis_client.set_val(draft_key, json.dumps(payload), ex_seconds=86400 * 30)
+    return {"success": True, "message": "Draft saved successfully."}
 
 @app.get("/api/users/profile/{konvo_id}", response_model=schemas.UserResponse)
 def read_user_profile(konvo_id: str, db: Session = Depends(get_db)):
@@ -355,5 +381,145 @@ def admin_delete_user(request: AdminDeleteUserRequest, db: Session = Depends(get
         db.rollback()
         err_msg = sanitize_msg(str(e))
         raise HTTPException(status_code=500, detail=f"Deletion failed {err_msg}")
+
+
+@app.post("/api/onboarding/init")
+def onboarding_init(
+    request: schemas.CalibrationInitRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Calculate age
+    try:
+        b_date = datetime.strptime(request.birth_date, "%Y-%m-%d").date()
+        today = date.today()
+        age = today.year - b_date.year - ((today.month, today.day) < (b_date.month, b_date.day))
+    except Exception:
+        age = 22
+
+    # Save to UserProfile basic data
+    prof = current_user.profile
+    if not prof:
+        prof = models.UserProfile(
+            user_id=current_user.id,
+            display_name=current_user.email.split("@")[0],
+        )
+        db.add(prof)
+        db.flush()
+        
+    prof.gender = request.gender
+    prof.birth_date = datetime.strptime(request.birth_date, "%Y-%m-%d").date() if request.birth_date else None
+    if request.birth_time:
+        try:
+            prof.birth_time = datetime.strptime(request.birth_time, "%H:%M").time()
+        except Exception:
+            pass
+    prof.birth_location = request.birth_location
+    prof.digipin = request.digipin
+    
+    # Calculate astrology
+    if prof.birth_date and prof.birth_location:
+        try:
+            b_time = prof.birth_time or time(12, 0)
+            astro = calculate_astrology(prof.birth_date, b_time, prof.birth_location)
+            prof.sun_sign = astro["sun_sign"]
+            prof.moon_sign = astro["moon_sign"]
+            prof.ascendant = astro["ascendant"]
+        except Exception as e:
+            print(f"[Astrology Error] {e}")
+            
+    db.commit()
+
+    # Initialize Redis session
+    session_key = f"calibration_session:{current_user.id}"
+    session_data = {
+        "demographics": {
+            "gender": request.gender,
+            "age": age,
+            "digipin": request.digipin,
+            "language": request.language
+        },
+        "history": []
+    }
+    redis_client.set_val(session_key, json.dumps(session_data), ex_seconds=3600)
+
+    # Generate first question
+    first_q = onboarding_engine.generate_next_question(session_data["demographics"], [])
+    return {"success": True, "question": first_q}
+
+
+@app.get("/api/onboarding/question")
+def onboarding_question(
+    current_user: models.User = Depends(get_current_user)
+):
+    session_key = f"calibration_session:{current_user.id}"
+    session_str = redis_client.get_val(session_key)
+    if not session_str:
+        raise HTTPException(status_code=400, detail="Calibration session not initialized.")
+        
+    session_data = json.loads(session_str)
+    q = onboarding_engine.generate_next_question(
+        session_data["demographics"],
+        session_data["history"]
+    )
+    return q
+
+
+@app.post("/api/onboarding/answer")
+def onboarding_answer(
+    request: schemas.CalibrationAnswerRequest,
+    current_user: models.User = Depends(get_current_user)
+):
+    session_key = f"calibration_session:{current_user.id}"
+    session_str = redis_client.get_val(session_key)
+    if not session_str:
+        raise HTTPException(status_code=400, detail="Calibration session not initialized.")
+        
+    session_data = json.loads(session_str)
+    
+    # Append answer
+    session_data["history"].append({
+        "question_text": request.question_text,
+        "question_type": request.question_type,
+        "answer_text": request.answer_text,
+        "latency_ms": request.latency_ms
+    })
+    
+    # Save back to Redis
+    redis_client.set_val(session_key, json.dumps(session_data), ex_seconds=3600)
+    
+    # Generate next question
+    next_q = onboarding_engine.generate_next_question(
+        session_data["demographics"],
+        session_data["history"]
+    )
+    return {"success": True, "question": next_q}
+
+
+@app.post("/api/onboarding/complete")
+def onboarding_complete(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    session_key = f"calibration_session:{current_user.id}"
+    session_str = redis_client.get_val(session_key)
+    if not session_str:
+        raise HTTPException(status_code=400, detail="Calibration session not initialized or expired.")
+        
+    session_data = json.loads(session_str)
+    demographics = session_data["demographics"]
+    history = session_data["history"]
+    
+    if not history:
+        raise HTTPException(status_code=400, detail="No answers recorded.")
+        
+    # Analyze and save
+    res = onboarding_engine.analyze_calibration(db, current_user.id, demographics, history)
+    
+    # Clear session
+    redis_client.set_val(session_key, "", ex_seconds=1)
+    
+    return {"success": True, "profile": res}
+
 
 

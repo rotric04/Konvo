@@ -45,6 +45,14 @@ svg, path, circle, rect, line {
     --accent-warning: #D97706;  /* Amber */
     --accent-danger: #EA580C;   /* Copper/Rose */
     
+    /* Password Strength colors */
+    --strength-very-weak: #EF4444;
+    --strength-weak: #F97316;
+    --strength-fair: #F59E0B;
+    --strength-strong: #84CC16;
+    --strength-very-strong: #10B981;
+    
+    
     /* Component Specific overrides */
     --card-bg: #141416;
     --input-bg: rgba(255, 255, 255, 0.03);

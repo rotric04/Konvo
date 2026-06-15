@@ -8,6 +8,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     konvo_id = Column(String, unique=True, index=True, nullable=False) # e.g. KON-INTJ-72A91
     role = Column(String, default="user")
@@ -17,6 +18,7 @@ class User(Base):
     phone = Column(String, nullable=True)
     otp_code = Column(String, nullable=True)
     otp_verified = Column(Boolean, default=False)
+    otp_created_at = Column(DateTime, nullable=True)
     premium_user = Column(Boolean, default=False)
     refresh_token_hash = Column(String, nullable=True)
 
@@ -25,6 +27,7 @@ class User(Base):
     agent_twin = relationship("Agent", back_populates="creator", uselist=False, cascade="all, delete-orphan")
     ledger_entries = relationship("BehavioralLedger", back_populates="user", cascade="all, delete-orphan")
     fingerprint = relationship("BehavioralFingerprint", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
 
 class UserProfile(Base):
     __tablename__ = "user_profiles"
@@ -68,6 +71,17 @@ class UserProfile(Base):
     dna_values = Column(Float, default=50.0)
 
     user = relationship("User", back_populates="profile")
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
+    message = Column(String, nullable=False)
+    type = Column(String, default="info") # e.g., "info", "warning", "success", "error"
+    read = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="notifications")
 
 class BehavioralFingerprint(Base):
     __tablename__ = "behavioral_fingerprints"
@@ -220,3 +234,88 @@ class Comment(Base):
     constructiveness = Column(Float, default=50.0)
     fact_density = Column(Float, default=50.0)
     toxicity_risk = Column(Float, default=0.0)
+
+
+class UserEmbedding(Base):
+    __tablename__ = "user_embeddings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    interest_vector = Column(JSON, nullable=True)
+    social_vector = Column(JSON, nullable=True)
+    humor_vector = Column(JSON, nullable=True)
+    communication_vector = Column(JSON, nullable=True)
+    curiosity_vector = Column(JSON, nullable=True)
+    compatibility_vector = Column(JSON, nullable=True)
+    emotional_vector = Column(JSON, nullable=True)
+    lifestyle_vector = Column(JSON, nullable=True)
+
+    user = relationship("User", backref="embeddings")
+
+
+class BehavioralSignal(Base):
+    __tablename__ = "behavioral_signals"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    scenario_choices = Column(JSON, default=dict)
+    tradeoff_choices = Column(JSON, default=dict)
+    open_responses = Column(JSON, default=dict)
+    response_latencies = Column(JSON, default=dict)
+    writing_style_metrics = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", backref="behavioral_signals")
+
+
+class PersonalityProfile(Base):
+    __tablename__ = "personality_profiles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
+    snapshot = Column(Text, nullable=True)
+    mbti_prediction = Column(String, nullable=True)
+    big_five_summary = Column(Text, nullable=True)
+    communication_style = Column(Text, nullable=True)
+    humor_style = Column(Text, nullable=True)
+    social_energy = Column(Text, nullable=True)
+    emotional_style = Column(Text, nullable=True)
+    discovery_tags = Column(JSON, default=list)
+    compatibility_markers = Column(JSON, default=list)
+    conversation_hooks = Column(JSON, default=list)
+    interest_clusters = Column(JSON, default=list)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    user = relationship("User", backref="personality_profile")
+
+
+class InterestCluster(Base):
+    __tablename__ = "interest_clusters"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    cluster_name = Column(String, nullable=False)
+    score = Column(Float, default=0.0)
+
+    user = relationship("User", backref="interest_clusters_rel")
+
+
+class CompatibilityVector(Base):
+    __tablename__ = "compatibility_vectors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    vector_data = Column(JSON, nullable=False)
+
+    user = relationship("User", backref="compatibility_vectors_rel")
+
+
+class SocialVector(Base):
+    __tablename__ = "social_vectors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    vector_data = Column(JSON, nullable=False)
+
+    user = relationship("User", backref="social_vectors_rel")
+

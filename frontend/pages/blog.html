@@ -26,7 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/theme.css">
-    <script src="/static/theme-manager.js"></script>
+    <script src="/static/src/theme-manager.js"></script>
 
     <style>
         :root, html[data-theme="dark"] {
@@ -110,7 +110,7 @@
             font-size: 3rem;
             line-height: 1.15;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #FAF9F6 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -178,7 +178,7 @@
             margin-top: 1.5rem;
             font-size: 1rem;
             line-height: 1.8;
-            color: #d1d5db;
+            color: var(--text-secondary);
         }
 
         .blog-full-content p {
@@ -319,7 +319,10 @@
                 </svg>
                 <span>KONVO</span>
             </a>
-            <a href="/" class="btn-back-home">Return Home ↗</a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button id="btn-theme-toggle" style="background: transparent; border: 1px solid var(--border-dim); color: var(--text-primary); padding: 0.5rem 1rem; border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">🌓 Theme</button>
+                <a href="/" class="btn-back-home">Return Home ↗</a>
+            </div>
         </div>
     </header>
 
@@ -463,6 +466,31 @@
                 }
             }
         });
+
+        // Theme Toggle
+        const btnTheme = document.getElementById('btn-theme-toggle');
+        if (btnTheme) {
+            btnTheme.addEventListener('click', () => {
+                if (window.ThemeManager) {
+                    const curr = window.ThemeManager.getTheme();
+                    let nextTheme = 'dark';
+                    if (curr === 'dark') {
+                        nextTheme = 'light';
+                    } else if (curr === 'light') {
+                        nextTheme = 'dark';
+                    } else {
+                        const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        nextTheme = isSystemDark ? 'light' : 'dark';
+                    }
+                    window.ThemeManager.setTheme(nextTheme);
+                } else {
+                    const curr = document.documentElement.getAttribute('data-theme') || 'dark';
+                    const nextTheme = curr === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('konvo_theme', nextTheme);
+                }
+            });
+        }
     </script>
 </body>
 </html>
