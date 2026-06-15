@@ -1,0 +1,152 @@
+/* ═══════════════════════════════════════════════════════════════════
+   KONVO™ SEMANTIC DESIGN TOKENS (theme.css)
+   Governs colors, shadows, borders, and overlays across all platforms.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Universal Transitions for a Premium Experience */
+html, body,
+.card, .modal, .modal-content, .sidebar, .landing-header, .app-footer,
+.cookie-banner-container, input, select, textarea, button, label, a,
+svg, path, circle, rect, line {
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                background 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                fill 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                stroke 250ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Default Theme (Dark Mode) */
+:root, html[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-primary: #09090B;      /* Obsidian */
+    --bg-secondary: #141416;    /* Graphite */
+    --bg-tertiary: #0A0A0F;     /* Deep base */
+    
+    /* Surfaces */
+    --surface-primary: #141416;
+    --surface-secondary: #202024;
+    --surface-hover: #27272A;
+    
+    /* Text */
+    --text-primary: #FAF9F6;    /* Ivory */
+    --text-secondary: #A1A1AA;  /* Stone */
+    --text-muted: #52525B;      /* Stone muted */
+    
+    /* Borders */
+    --border-primary: #27272A;
+    --border-secondary: #3F3F46;
+    
+    /* Accents */
+    --accent-primary: #0D9488;  /* Teal */
+    --accent-secondary: #06B6D4;/* Cyan */
+    --accent-success: #16A34A;  /* Forest */
+    --accent-warning: #D97706;  /* Amber */
+    --accent-danger: #EA580C;   /* Copper/Rose */
+    
+    /* Component Specific overrides */
+    --card-bg: #141416;
+    --input-bg: rgba(255, 255, 255, 0.03);
+    --button-bg: rgba(255, 255, 255, 0.04);
+    --modal-bg: #141416;
+    --tooltip-bg: #202024;
+    --toast-bg: #141416;
+    --loader-bg: #09090B;
+    --skeleton-bg: #27272A;
+    
+    /* Graph */
+    --graph-node: #06B6D4;
+    --graph-link: rgba(255, 255, 255, 0.08);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    
+    /* Overlays */
+    --overlay-backdrop: rgba(0, 0, 0, 0.85);
+
+    /* Legacy Remap Variables */
+    --bg-main: var(--bg-primary);
+    --border-color: var(--border-primary);
+    --accent-teal: var(--accent-primary);
+    --accent-forest: var(--accent-success);
+    --accent-copper: var(--accent-danger);
+    --accent-amber: var(--accent-warning);
+    --accent-cyan: var(--accent-secondary);
+    --accent-stone: #78716C;
+    --bg-deep-ocean: #0B1329;
+    --accent-indigo: var(--accent-secondary);
+    --accent-rose: var(--accent-danger);
+    --calendar-indicator-invert: 1;
+    --header-bg: rgba(9, 9, 11, 0.75);
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] {
+    /* Backgrounds */
+    --bg-primary: #FAF9F6;      /* Ivory */
+    --bg-secondary: #FFFFFF;    /* Pure White */
+    --bg-tertiary: #F4F4F5;     /* Zinc Base */
+    
+    /* Surfaces */
+    --surface-primary: #FFFFFF;
+    --surface-secondary: #F4F4F5;
+    --surface-hover: #E4E4E7;
+    
+    /* Text */
+    --text-primary: #09090B;    /* Obsidian */
+    --text-secondary: #52525B;  /* Stone text */
+    --text-muted: #71717A;      /* Zinc muted */
+    
+    /* Borders */
+    --border-primary: #E4E4E7;
+    --border-secondary: #D4D4D8;
+    
+    /* Accents */
+    --accent-primary: #0D9488;  /* Teal */
+    --accent-secondary: #0891B2;/* Cyan */
+    --accent-success: #15803D;  /* Forest */
+    --accent-warning: #B45309;  /* Amber */
+    --accent-danger: #C2410C;   /* Copper */
+    
+    /* Component Specific overrides */
+    --card-bg: #FFFFFF;
+    --input-bg: rgba(0, 0, 0, 0.03);
+    --button-bg: rgba(0, 0, 0, 0.04);
+    --modal-bg: #FFFFFF;
+    --tooltip-bg: #F4F4F5;
+    --toast-bg: #FFFFFF;
+    --loader-bg: #FAF9F6;
+    --skeleton-bg: #E4E4E7;
+    
+    /* Graph */
+    --graph-node: #0891B2;
+    --graph-link: rgba(9, 9, 11, 0.1);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(9, 9, 11, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(9, 9, 11, 0.08), 0 2px 4px -1px rgba(9, 9, 11, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(9, 9, 11, 0.1), 0 4px 6px -2px rgba(9, 9, 11, 0.05);
+    
+    /* Overlays */
+    --overlay-backdrop: rgba(250, 249, 246, 0.85);
+
+    /* Legacy Remap Variables */
+    --bg-main: var(--bg-primary);
+    --border-color: var(--border-primary);
+    --accent-teal: var(--accent-primary);
+    --accent-forest: var(--accent-success);
+    --accent-copper: var(--accent-danger);
+    --accent-amber: var(--accent-warning);
+    --accent-cyan: var(--accent-secondary);
+    --accent-stone: #78716C;
+    --bg-deep-ocean: #E2E8F0;
+    --accent-indigo: var(--accent-secondary);
+    --accent-rose: var(--accent-danger);
+    --calendar-indicator-invert: 0;
+    --header-bg: rgba(250, 249, 246, 0.75);
+    --shadow-color: rgba(9, 9, 11, 0.08);
+}

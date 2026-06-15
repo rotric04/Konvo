@@ -1,25 +1,8 @@
 // KONVO™ Client Engine (Vanilla JS)
 // Real-world logic, secure JWT rotation, and animated compatibility simulations.
 
-// Prevent flash of light/dark theme
-const initialTheme = localStorage.getItem('konvo_theme') || 'system';
-const resolvedTheme = initialTheme === 'system'
-    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    : initialTheme;
-document.documentElement.setAttribute('data-theme', resolvedTheme);
+// Theme resolution is managed globally by theme-manager.js
 
-const themeChannel = new BroadcastChannel('konvo_theme_channel');
-themeChannel.onmessage = (event) => {
-    if (event.data && event.data.theme) {
-        const targetTheme = event.data.theme === 'system'
-            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-            : event.data.theme;
-        document.documentElement.setAttribute('data-theme', targetTheme);
-        localStorage.setItem('konvo_theme', event.data.theme);
-        const picker = document.getElementById('set-theme-picker');
-        if (picker) picker.value = event.data.theme;
-    }
-};
 
 // ═══════════════════════════════════════════════════════
 // PREMIUM CUSTOM ALERT SYSTEM (Replaces Default Browser popups)
@@ -57,7 +40,7 @@ themeChannel.onmessage = (event) => {
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(9, 9, 11, 0.82);
+            background: var(--overlay-backdrop);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 100000;
@@ -71,13 +54,13 @@ themeChannel.onmessage = (event) => {
         // Create card content
         const card = document.createElement('div');
         card.style.cssText = `
-            background: var(--bg-card, #141416);
-            border: 1px solid var(--border-color, #27272A);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
             border-radius: 16px;
             width: 90%;
             max-width: 440px;
             padding: 2.25rem 2rem 2rem 2rem;
-            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(217, 119, 6, 0.05);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(var(--accent-warning-rgb, 217, 119, 6), 0.05);
             text-align: center;
             transform: scale(0.92) translateY(15px);
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -93,7 +76,7 @@ themeChannel.onmessage = (event) => {
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent-teal, #0D9488), var(--accent-amber, #D97706), var(--accent-indigo, #06B6D4));
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-warning), var(--accent-secondary));
         `;
         card.appendChild(glowLine);
 
@@ -107,13 +90,13 @@ themeChannel.onmessage = (event) => {
         
         // Premium brand-like pulsing icon
         header.innerHTML = `
-            <div style="background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.25); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--accent-amber, #D97706); font-size: 1.5rem; animation: pulseGlow 2s infinite ease-in-out;">
+            <div style="background: rgba(var(--accent-warning-rgb, 217, 119, 6), 0.08); border: 1px solid rgba(var(--accent-warning-rgb, 217, 119, 6), 0.25); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--accent-warning); font-size: 1.5rem; animation: pulseGlow 2s infinite ease-in-out;">
                 ✦
             </div>
             <style>
                 @keyframes pulseGlow {
-                    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.1); }
-                    50% { transform: scale(1.05); box-shadow: 0 0 12px 2px rgba(217, 119, 6, 0.15); }
+                    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--accent-warning-rgb, 217, 119, 6), 0.1); }
+                    50% { transform: scale(1.05); box-shadow: 0 0 12px 2px rgba(var(--accent-warning-rgb, 217, 119, 6), 0.15); }
                 }
             </style>
         `;
@@ -122,7 +105,7 @@ themeChannel.onmessage = (event) => {
         // Message text
         const text = document.createElement('div');
         text.style.cssText = `
-            color: var(--text-primary, #FAF9F6);
+            color: var(--text-primary);
             font-family: var(--font-sans, system-ui);
             font-size: 0.95rem;
             line-height: 1.6;
@@ -143,9 +126,9 @@ themeChannel.onmessage = (event) => {
         const btn = document.createElement('button');
         btn.textContent = 'Acknowledge';
         btn.style.cssText = `
-            background: var(--accent-amber, #D97706);
-            color: #09090B;
-            border: 1px solid var(--accent-amber, #D97706);
+            background: var(--accent-warning);
+            color: var(--bg-primary);
+            border: 1px solid var(--accent-warning);
             font-family: var(--font-mono, monospace);
             font-size: 0.78rem;
             font-weight: 600;
@@ -156,19 +139,19 @@ themeChannel.onmessage = (event) => {
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             outline: none;
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+            box-shadow: 0 4px 12px rgba(var(--accent-warning-rgb, 217, 119, 6), 0.15);
         `;
 
         // Hover animations
         btn.onmouseover = () => {
             btn.style.background = 'transparent';
-            btn.style.color = 'var(--accent-amber, #D97706)';
+            btn.style.color = 'var(--accent-warning)';
             btn.style.boxShadow = 'none';
         };
         btn.onmouseout = () => {
-            btn.style.background = 'var(--accent-amber, #D97706)';
-            btn.style.color = '#09090B';
-            btn.style.boxShadow = '0 4px 12px rgba(217, 119, 6, 0.15)';
+            btn.style.background = 'var(--accent-warning)';
+            btn.style.color = 'var(--bg-primary)';
+            btn.style.boxShadow = '0 4px 12px rgba(var(--accent-warning-rgb, 217, 119, 6), 0.15)';
         };
 
         btnContainer.appendChild(btn);
@@ -1625,7 +1608,7 @@ function initSwipePage(targetContainerId) {
                 <span class="comp-score-badge">${candidate.compatibility_score}% Resonance Match</span>
                 
                 <div class="swipe-card-avatar">
-                    ${candidate.avatar || `<svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="#4f46e5"/><path d="M15 85 C20 65, 80 65, 85 85" fill="#4f46e5"/></svg>`}
+                    ${candidate.avatar || `<svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="var(--accent-indigo)"/><path d="M15 85 C20 65, 80 65, 85 85" fill="var(--accent-indigo)"/></svg>`}
                 </div>
                 
                 <h2 style="font-family: var(--font-serif); font-size:1.8rem; color:var(--text-primary); margin-bottom:0.25rem;">${candidate.display_name}</h2>
@@ -1773,7 +1756,7 @@ function initAgentsPage() {
 
         twinCard.innerHTML = `
             <div class="twin-card-avatar">
-                ${twin.avatar || `<svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="#4f46e5"/><path d="M15 85 C20 65, 80 65, 85 85" fill="#4f46e5"/></svg>`}
+                ${twin.avatar || `<svg viewBox="0 0 100 100"><circle cx="50" cy="40" r="25" fill="var(--accent-indigo)"/><path d="M15 85 C20 65, 80 65, 85 85" fill="var(--accent-indigo)"/></svg>`}
             </div>
             
             <form id="edit-twin-form">
@@ -2969,7 +2952,7 @@ async function initGraphPage() {
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '100%');
         svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-        svg.style.backgroundColor = '#050507';
+        svg.style.backgroundColor = 'var(--bg-tertiary)';
         container.appendChild(svg);
 
         // Force Directed layout node mapping
@@ -3015,7 +2998,7 @@ async function initGraphPage() {
 
         const lines = links.map(l => {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('stroke', typeColors[l.type] || '#555562');
+            line.setAttribute('stroke', typeColors[l.type] || 'var(--border-secondary)');
             line.setAttribute('stroke-width', (1.5 * l.weight).toString());
             line.setAttribute('stroke-opacity', '0.5');
             linkGroup.appendChild(line);
@@ -3248,23 +3231,30 @@ async function initMapPage() {
         style: {
             version: 8,
             sources: {
-                'dark-matter': {
+                'basemap-tiles': {
                     type: 'raster',
-                    tiles: [
-                        'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                        'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-                    ],
+                    tiles: window.ThemeManager && window.ThemeManager.getTheme() === 'light'
+                        ? [
+                            'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                            'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                            'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                            'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                          ]
+                        : [
+                            'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+                          ],
                     tileSize: 256,
                     attribution: '&copy; OpenStreetMap &copy; CARTO'
                 }
             },
             layers: [
                 {
-                    id: 'dark-matter-layer',
+                    id: 'basemap-layer',
                     type: 'raster',
-                    source: 'dark-matter',
+                    source: 'basemap-tiles',
                     minzoom: 0,
                     maxzoom: 20
                 }
@@ -3273,6 +3263,30 @@ async function initMapPage() {
         center: [centerLng, centerLat],
         zoom: 11
     });
+
+    window.map = map;
+
+    window.updateMapStyle = function(theme) {
+        if (window.map) {
+            const source = window.map.getSource('basemap-tiles');
+            if (source) {
+                const lightTiles = [
+                    'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                    'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                    'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                    'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                ];
+                const darkTiles = [
+                    'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                    'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                    'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                    'https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+                ];
+                const tiles = theme === 'light' ? lightTiles : darkTiles;
+                source.setTiles(tiles);
+            }
+        }
+    };
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
@@ -3836,17 +3850,13 @@ async function initSettingsPage() {
 
     initTwinSettings();
 
-    const savedTheme = localStorage.getItem('konvo_theme') || 'dark';
+    const savedTheme = window.ThemeManager.getTheme();
     // Fix: ensure picker value is set correctly
     if (picker) {
         picker.value = savedTheme;
         // Live preview on change
         picker.addEventListener('change', () => {
-            const newTheme = picker.value;
-            const resolvedTheme = newTheme === 'system'
-                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-                : newTheme;
-            document.documentElement.setAttribute('data-theme', resolvedTheme);
+            window.ThemeManager.setTheme(picker.value);
         });
     }
     
@@ -3854,14 +3864,8 @@ async function initSettingsPage() {
     if (btnSaveAppearance) {
         btnSaveAppearance.addEventListener('click', () => {
             const newTheme = picker ? picker.value : savedTheme;
-            const resolvedTheme = newTheme === 'system'
-                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-                : newTheme;
-            document.documentElement.setAttribute('data-theme', resolvedTheme);
-            // Persist with the raw value ('dark' | 'light' | 'system')
-            localStorage.setItem('konvo_theme', newTheme);
+            window.ThemeManager.setTheme(newTheme);
             Telemetry.logEvent('theme_toggled', { theme: newTheme });
-            themeChannel.postMessage({ theme: newTheme });
             // Show non-blocking toast instead of alert
             KonvoToast.show('✅ Theme saved — ' + newTheme.charAt(0).toUpperCase() + newTheme.slice(1), 'success');
         });
@@ -3883,7 +3887,7 @@ async function initTwinSettings() {
         container.innerHTML = `
             <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
                 <div style="width: 60px; height: 60px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; background-color: var(--bg-main);">
-                    ${twin.avatar || `<svg viewBox="0 0 100 100" style="width: 40px; height: 40px;"><circle cx="50" cy="40" r="22" fill="#0d9488" opacity="0.85"/><path d="M15 85 C20 65, 80 65, 85 85" fill="#4f46e5" opacity="0.85"/></svg>`}
+                    ${twin.avatar || `<svg viewBox="0 0 100 100" style="width: 40px; height: 40px;"><circle cx="50" cy="40" r="22" fill="var(--accent-teal)" opacity="0.85"/><path d="M15 85 C20 65, 80 65, 85 85" fill="var(--accent-indigo)" opacity="0.85"/></svg>`}
                 </div>
                 <div>
                     <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin: 0;">${twin.name}</h4>
@@ -5626,6 +5630,13 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
             } catch (e) {}
             window.vdRenderer = null;
         }
+        window.threeScene = null;
+        window.threeAmbientLight = null;
+        window.threePlatformMat = null;
+        window.threeTableMat = null;
+        window.threeGridHelper = null;
+        window.threeDirLight = null;
+        window.currentVdLocationId = null;
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
         }
@@ -5764,11 +5775,17 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
             }
         }
 
+        const currentTheme = window.ThemeManager ? window.ThemeManager.getTheme() : 'dark';
+        const initialColors = getThreeJSThemeColors(locationId, currentTheme);
+
         // Initialize Three.js Scene, Camera, and WebGL Renderer
         const scene = new THREE.Scene();
+        window.threeScene = scene;
+        window.currentVdLocationId = locationId;
+
         // Reduce fog density on mobile to ease GPU fill rate
         const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
-        scene.fog = new THREE.FogExp2(0x080810, isMobile ? 0.006 : 0.0035);
+        scene.fog = new THREE.FogExp2(initialColors.fog, isMobile ? 0.006 : 0.0035);
 
         const width = el.clientWidth || window.innerWidth;
         const height = el.clientHeight || window.innerHeight;
@@ -5808,9 +5825,11 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
         dirLight.position.set(12, 24, 12);
         scene.add(dirLight);
+        window.threeDirLight = dirLight;
 
-        const ambientLight = new THREE.AmbientLight(0x0d0d18, 0.5);
+        const ambientLight = new THREE.AmbientLight(initialColors.ambient, currentTheme === 'dark' ? 0.5 : 0.85);
         scene.add(ambientLight);
+        window.threeAmbientLight = ambientLight;
 
         // Grid platform boundary helper
         const gridHelper = new THREE.GridHelper(50, 40, 0x14b8a6, 0x1f1f2e);
@@ -5818,30 +5837,33 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         gridHelper.material.opacity = 0.18;
         gridHelper.material.transparent = true;
         envGroup.add(gridHelper);
+        window.threeGridHelper = gridHelper;
 
         // Base cylindrical glass/metal platform
         const platformGeo = new THREE.CylinderGeometry(8, 8.5, 0.4, 32);
         const platformMat = new THREE.MeshStandardMaterial({
-            color: 0x0a0a0f,
+            color: initialColors.platformColor,
             roughness: 0.2,
             metalness: 0.9,
-            emissive: 0x050508
+            emissive: initialColors.platformEmissive
         });
         const platform = new THREE.Mesh(platformGeo, platformMat);
         platform.position.set(0, -0.2, 0);
         envGroup.add(platform);
+        window.threePlatformMat = platformMat;
 
         // Central interactive 3D table
         const tableGeo = new THREE.CylinderGeometry(1.5, 1.5, 2.2, 24);
         const tableMat = new THREE.MeshStandardMaterial({
-            color: 0x18181b,
+            color: initialColors.tableColor,
             roughness: 0.25,
             metalness: 0.7,
-            emissive: 0x0c0c0e
+            emissive: initialColors.tableEmissive
         });
         const table = new THREE.Mesh(tableGeo, tableMat);
         table.position.set(0, 1.1, 0);
         envGroup.add(table);
+        window.threeTableMat = tableMat;
 
         // Custom GLSL Shader Material for Holographic Effects
         const hologramShaderMat = new THREE.ShaderMaterial({
@@ -6037,8 +6059,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         // Build 10 Distinct Premium Virtual Date WebGL Environments
         if (locationId === 'rooftop') {
             locationColor = 0xfacc15;
-            scene.fog.color.setHex(0x04040a);
-            ambientLight.color.setHex(0x111124);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xfeb08b);
 
             // Tall glass high-rise towers
@@ -6079,8 +6101,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'cafe') {
             locationColor = 0xd97706;
-            scene.fog.color.setHex(0x080604);
-            ambientLight.color.setHex(0x271910);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xfbbf24);
 
             const spotLight = new THREE.SpotLight(0xfff7ed, 4.5, 20, Math.PI / 4, 0.6, 1);
@@ -6105,8 +6127,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'beach') {
             locationColor = 0xf43f5e;
-            scene.fog.color.setHex(0x0e0815);
-            ambientLight.color.setHex(0x1f112c);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xf43f5e);
             dirLight.position.set(-8, 7, -8);
 
@@ -6140,8 +6162,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'bookstore') {
             locationColor = 0xf59e0b;
-            scene.fog.color.setHex(0x050403);
-            ambientLight.color.setHex(0x181410);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xfef08a);
 
             // Library bookshelves
@@ -6179,8 +6201,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'lantern') {
             locationColor = 0xf97316;
-            scene.fog.color.setHex(0x060301);
-            ambientLight.color.setHex(0x180b06);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xf97316);
 
             // Chinese lanterns bobbing in garden
@@ -6210,8 +6232,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'gallery') {
             locationColor = 0x0ea5e9;
-            scene.fog.color.setHex(0x01040a);
-            ambientLight.color.setHex(0x0b1329);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0x0ea5e9);
 
             // Floating artwork canvas frames
@@ -6237,8 +6259,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'mountain') {
             locationColor = 0x38bdf8;
-            scene.fog.color.setHex(0x020308);
-            ambientLight.color.setHex(0x054f75);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xe0f2fe);
 
             // Wireframe mountain range cones
@@ -6284,8 +6306,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'music') {
             locationColor = 0xa855f7;
-            scene.fog.color.setHex(0x04010a);
-            ambientLight.color.setHex(0x1e0736);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xf472b6);
 
             // Dynamic music visualizer bars
@@ -6312,8 +6334,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'futurecity') {
             locationColor = 0x10b981;
-            scene.fog.color.setHex(0x010402);
-            ambientLight.color.setHex(0x064e3b);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0x34d399);
 
             // Cylinders with custom Holographic GLSL Shader
@@ -6342,8 +6364,8 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         } else if (locationId === 'observatory') {
             locationColor = 0x6366f1;
-            scene.fog.color.setHex(0x010104);
-            ambientLight.color.setHex(0x0a0c1a);
+            scene.fog.color.setHex(initialColors.fog);
+            ambientLight.color.setHex(initialColors.ambient);
             dirLight.color.setHex(0xa5b4fc);
 
             // Observatory celestial star dome particles
@@ -7130,14 +7152,10 @@ async function initApp() {
     const toggleBtn = document.getElementById('btn-theme-toggle');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('konvo_theme', newTheme);
+            const resolvedCurrent = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = resolvedCurrent === 'dark' ? 'light' : 'dark';
+            window.ThemeManager.setTheme(newTheme);
             Telemetry.logEvent('theme_toggled', { theme: newTheme });
-            themeChannel.postMessage({ theme: newTheme });
-            const picker = document.getElementById('set-theme-picker');
-            if (picker) picker.value = newTheme;
         });
     }
 
@@ -7254,6 +7272,86 @@ async function initApp() {
         }, 800);
     }
 }
+
+function getThreeJSThemeColors(locationId, theme) {
+    const isDark = theme === 'dark';
+    
+    // Base platform & table default colors (to override dark colors in light mode)
+    let platformColor = isDark ? 0x0a0a0f : 0xffffff;
+    let platformEmissive = isDark ? 0x050508 : 0xe4e4e7;
+    let tableColor = isDark ? 0x18181b : 0xf4f4f5;
+    let tableEmissive = isDark ? 0x0c0c0e : 0xe4e4e7;
+
+    let fog = isDark ? 0x080810 : 0xfaf9f6;
+    let ambient = isDark ? 0x0d0d18 : 0xe4e4e7;
+
+    switch (locationId) {
+        case 'rooftop':
+            fog = isDark ? 0x04040a : 0xf0f0f5;
+            ambient = isDark ? 0x111124 : 0xe2e8f0;
+            break;
+        case 'cafe':
+            fog = isDark ? 0x080604 : 0xfffaf5;
+            ambient = isDark ? 0x271910 : 0xfff2e5;
+            break;
+        case 'beach':
+            fog = isDark ? 0x0e0815 : 0xfff1f2;
+            ambient = isDark ? 0x1f112c : 0xffe4e6;
+            platformColor = isDark ? 0x0f172a : 0xffffff;
+            platformEmissive = isDark ? 0x050810 : 0xe4e4e7;
+            break;
+        case 'bookstore':
+            fog = isDark ? 0x050403 : 0xfefbeb;
+            ambient = isDark ? 0x181410 : 0xfef3c7;
+            break;
+        case 'lantern':
+            fog = isDark ? 0x060301 : 0xfff7ed;
+            ambient = isDark ? 0x180b06 : 0xffedd5;
+            break;
+        case 'gallery':
+            fog = isDark ? 0x01040a : 0xf0f9ff;
+            ambient = isDark ? 0x0b1329 : 0xe0f2fe;
+            break;
+        case 'mountain':
+            fog = isDark ? 0x020308 : 0xf0fdf4;
+            ambient = isDark ? 0x054f75 : 0xdcfce7;
+            break;
+        case 'music':
+            fog = isDark ? 0x04010a : 0xfaf5ff;
+            ambient = isDark ? 0x1e0736 : 0xf3e8ff;
+            break;
+        case 'futurecity':
+            fog = isDark ? 0x010402 : 0xecfdf5;
+            ambient = isDark ? 0x064e3b : 0xd1fae5;
+            break;
+        case 'observatory':
+            fog = isDark ? 0x010104 : 0xeef2ff;
+            ambient = isDark ? 0x0a0c1a : 0xe0e7ff;
+            break;
+    }
+    return { fog, ambient, platformColor, platformEmissive, tableColor, tableEmissive };
+}
+
+window.updateThreeJSTheme = function(theme) {
+    if (!window.threeScene) return;
+    const colors = getThreeJSThemeColors(window.currentVdLocationId || 'cafe', theme);
+    
+    if (window.threeScene.fog) {
+        window.threeScene.fog.color.setHex(colors.fog);
+    }
+    if (window.threeAmbientLight) {
+        window.threeAmbientLight.color.setHex(colors.ambient);
+        window.threeAmbientLight.intensity = (theme === 'dark') ? 0.5 : 0.85;
+    }
+    if (window.threePlatformMat) {
+        window.threePlatformMat.color.setHex(colors.platformColor);
+        window.threePlatformMat.emissive.setHex(colors.platformEmissive);
+    }
+    if (window.threeTableMat) {
+        window.threeTableMat.color.setHex(colors.tableColor);
+        window.threeTableMat.emissive.setHex(colors.tableEmissive);
+    }
+};
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);

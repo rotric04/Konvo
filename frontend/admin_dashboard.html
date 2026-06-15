@@ -20,17 +20,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <!-- CryptoJS CDN for Client-Side Decryption -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="/static/theme.css">
+    <script src="/static/theme-manager.js"></script>
     <style>
-        :root {
-            --bg-base: #0a0a0f;
-            --bg-surface: rgba(255, 255, 255, 0.03);
+        :root, html[data-theme="dark"] {
+            --bg-base: var(--bg-primary);
+            --bg-surface: var(--surface-primary);
             --border-glow: rgba(124, 58, 237, 0.15);
-            --border-dim: rgba(255, 255, 255, 0.08);
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
+            --border-dim: var(--border-primary);
+            --text-primary: var(--text-primary);
+            --text-secondary: var(--text-secondary);
             --accent-glow: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
-            --error: #ef4444;
-            --success: #10b981;
+            --error: var(--accent-danger);
+            --success: var(--accent-success);
+        }
+
+        html[data-theme="light"] {
+            --bg-base: var(--bg-primary);
+            --bg-surface: var(--surface-primary);
+            --border-glow: rgba(124, 58, 237, 0.08);
+            --border-dim: var(--border-primary);
+            --text-primary: var(--text-primary);
+            --text-secondary: var(--text-secondary);
+            --error: var(--accent-danger);
+            --success: var(--accent-success);
         }
 
         * {

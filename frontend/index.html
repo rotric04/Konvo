@@ -1,15 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" class="preload">
-<script>
-(() => {
-    const initialTheme = localStorage.getItem('konvo_theme') || 'system';
-    const resolvedTheme = initialTheme === 'system'
-        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : initialTheme;
-    document.documentElement.setAttribute('data-theme', resolvedTheme);
-    document.documentElement.classList.remove('preload');
-})();
-</script>
 
 <head>
     <meta charset="UTF-8">
@@ -58,6 +48,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/theme.css">
+    <script src="/static/theme-manager.js"></script>
     <style>
         .dashboard-grid {
             display: grid;

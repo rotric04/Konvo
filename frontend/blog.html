@@ -25,21 +25,38 @@
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/theme.css">
+    <script src="/static/theme-manager.js"></script>
 
     <style>
-        :root {
-            --bg-base: #0a0a0f;
-            --bg-card: rgba(255, 255, 255, 0.02);
-            --border-dim: rgba(255, 255, 255, 0.08);
-            --text-primary: #FAF9F6;
-            --text-secondary: #9ca3af;
-            --accent-amber: #f59e0b;
-            --accent-teal: #0d9488;
-            --accent-indigo: #6366f1;
+        :root, html[data-theme="dark"] {
+            --bg-base: var(--bg-primary);
+            --bg-card: var(--bg-secondary);
+            --border-dim: var(--border-primary);
+            --text-primary: var(--text-primary);
+            --text-secondary: var(--text-secondary);
+            --accent-amber: var(--accent-warning);
+            --accent-teal: var(--accent-primary);
+            --accent-indigo: var(--accent-secondary);
+            --bg-gradient-top: #120e25;
+            --header-bg: rgba(10, 10, 15, 0.8);
+        }
+
+        html[data-theme="light"] {
+            --bg-base: var(--bg-primary);
+            --bg-card: var(--bg-secondary);
+            --border-dim: var(--border-primary);
+            --text-primary: var(--text-primary);
+            --text-secondary: var(--text-secondary);
+            --accent-amber: var(--accent-warning);
+            --accent-teal: var(--accent-primary);
+            --accent-indigo: var(--accent-secondary);
+            --bg-gradient-top: #eae5ff;
+            --header-bg: rgba(250, 249, 246, 0.8);
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #120e25 0%, var(--bg-base) 80%);
+            background: radial-gradient(circle at 50% 0%, var(--bg-gradient-top) 0%, var(--bg-base) 80%);
             color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
@@ -49,7 +66,7 @@
 
         .blog-header {
             border-bottom: 1px solid var(--border-dim);
-            background: rgba(10, 10, 15, 0.8);
+            background: var(--header-bg);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -297,8 +314,8 @@
             <a href="/" class="blog-brand">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 3;">
                     <circle cx="50" cy="50" r="38" stroke-dasharray="4 4" />
-                    <circle cx="32" cy="50" r="12" fill="#0d9488" opacity="0.85" />
-                    <circle cx="68" cy="50" r="12" fill="#6366f1" opacity="0.85" />
+                    <circle cx="32" cy="50" r="12" fill="var(--accent-teal)" opacity="0.85" />
+                    <circle cx="68" cy="50" r="12" fill="var(--accent-indigo)" opacity="0.85" />
                 </svg>
                 <span>KONVO</span>
             </a>
