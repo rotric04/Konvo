@@ -73,7 +73,7 @@
       "destination": "/pages/onboarding.html"
     },
     {
-      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)?",
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)? ",
       "destination": "/pages/app.html"
     },
     {
@@ -85,7 +85,7 @@
       "destination": "/pages/blog.html"
     },
     {
-      "source": "/:page(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
+      "source": "/:page(feedback|admin_dashboard|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
       "destination": "/pages/:page.html"
     },
     {
