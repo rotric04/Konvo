@@ -1,6 +1,7 @@
 import os
 import sys
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
@@ -9,6 +10,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 # Resolve project root
 _root = os.path.dirname(os.path.abspath(__file__))
+
+# Load environment variables from .env file
+load_dotenv(os.path.join(_root, ".env"))
 
 # Inject package paths to load database, models, schemas, and algorithms
 sys.path.append(os.path.join(_root, "packages", "shared-utils"))

@@ -15,6 +15,9 @@ while _curr:
 sys.path.append(os.path.join(_root, "packages", "shared-utils"))
 sys.path.append(os.path.join(_root, "packages", "shared-schemas"))
 
+from dotenv import load_dotenv
+load_dotenv(os.path.join(_root, ".env"))
+
 from fastapi import FastAPI, Depends, HTTPException, status, Response, Request, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
