@@ -6,7 +6,7 @@
 
 ### Meet your match before you ever say hello.
 
-**Konvo is an AI-powered social connection platform where your digital twin speaks first — so you only connect with people you already vibe with.**
+**Konvo is an AI-powered social connection platform where your digital twin speaks first so you only connect with people you already vibe with.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](./LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
@@ -16,11 +16,11 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
-[Live Demo](https://konvo.social) · [Report a Bug](https://github.com/rotric04/Konvo/issues) · [Request a Feature](https://github.com/rotric04/Konvo/issues) · [Join the Community](https://github.com/rotric04/Konvo/discussions)
+[Live Demo](https://konvo.space) &nbsp;·&nbsp; [Report a Bug](https://github.com/rotric04/Konvo/issues) &nbsp;·&nbsp; [Request a Feature](https://github.com/rotric04/Konvo/issues) &nbsp;·&nbsp; [Join the Community](https://github.com/rotric04/Konvo/discussions)
 
 </div>
 
----
+<br>
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@
 17. [How to Collaborate](#17-how-to-collaborate)
 18. [License](#18-license)
 
----
+<br>
 
 ## 1. Why Konvo Exists
 
@@ -51,13 +51,13 @@ We have all been there. You open an app, scroll through a hundred profiles, swip
 
 **Konvo flips the whole thing around.**
 
-Instead of showing you a photo and hoping for the best, Konvo creates a digital twin of you — an AI agent that actually knows how you think, what you value, how you communicate, and what kind of person complements you. That twin then has a conversation with another person's twin inside a private sandbox. No humans involved yet.
+Instead of showing you a photo and hoping for the best, Konvo creates a digital twin of you. An AI agent that actually knows how you think, what you value, how you communicate, and what kind of person complements you. That twin then has a conversation with another person's twin inside a private sandbox. No humans involved yet.
 
-After the conversation, both of you get a full report. You see the dialogue. You see a compatibility score. You see a breakdown of how well your values, humor, and communication styles lined up. Then — and only then — you decide whether you want to actually meet the human behind the agent.
+After the conversation, both of you get a full report. You see the dialogue. You see a compatibility score. You see a breakdown of how well your values, humor, and communication styles lined up. Then, and only then, you decide whether you want to actually meet the human behind the agent.
 
 This means by the time you send your first real message, you already know it is going somewhere good.
 
----
+<br>
 
 ## 2. The Motive
 
@@ -71,7 +71,7 @@ Konvo was built with one goal. Not to match you with the most popular person nea
 
 It is built by a student who has spent more time thinking about why connections fail than celebrating when they succeed. The platform is a reflection of that obsession.
 
----
+<br>
 
 ## 3. Product Market Fit
 
@@ -79,7 +79,7 @@ It is built by a student who has spent more time thinking about why connections 
 |---|---|
 | Young adults tired of shallow swiping | Deep compatibility before any conversation |
 | Introverts who find cold chatting exhausting | Your twin does the hard part first |
-| People who care about personality over looks | MBTI + behavioral + astrological matching |
+| People who care about personality over looks | MBTI plus behavioral plus astrological matching |
 | Those burned by bad matches | A compatibility preview so you go in informed |
 | Privacy-conscious users | No photo feed, no follower counts, no algorithmic pressure |
 
@@ -90,11 +90,10 @@ Dating apps are a $10 billion industry and most people still find them frustrati
 Konvo sits at the intersection of those two things. It is not a dating app with an AI feature bolted on. It is an AI-first platform where connection is the output, not the product.
 
 The people who love this the most tend to be:
-- Students in college who want something more meaningful than casual swiping
-- Young professionals who do not have time to waste on bad first dates
-- Anyone who has ever thought "I wish I knew if we were compatible before I got my hopes up"
 
----
+Students in college who want something more meaningful than casual swiping. Young professionals who do not have time to waste on bad first dates. Anyone who has ever thought "I wish I knew if we were compatible before I got my hopes up."
+
+<br>
 
 ## 4. How the Agent System Works
 
@@ -105,28 +104,28 @@ Here is the exact journey from joining Konvo to getting a compatible match.
 ```
 You sign up
     ↓
-You take a behavioral quiz (not a personality test — it watches how you answer, not what you answer)
+You take a behavioral quiz (not a personality test, it watches how you answer not what you answer)
     ↓
 MBTI Engine processes your responses
     ↓
-Your AI Twin is born  ← given a name, voice style, emoji style, role archetype
+Your AI Twin is born with a name, voice style, emoji style, and role archetype
     ↓
 Gale-Shapley algorithm finds compatible users
     ↓
 Your Twin meets their Twin in a virtual environment
     ↓
-They have a real conversation (you watch the transcript)
+They have a real conversation while you watch the transcript
     ↓
 Compatibility score is generated with breakdowns
     ↓
 You decide: Approve or Decline
     ↓
-If both approve → Human chat is unlocked
+If both approve then human chat is unlocked
 ```
 
 Your twin is not a chatbot pretending to be you. It is built from your quiz results, your behavioral fingerprint, your communication style, your MBTI type, and your stated values. It represents the parts of you that matter most for a connection.
 
----
+<br>
 
 ## 5. The Virtual Date Experience
 
@@ -146,14 +145,11 @@ There are multiple environments available:
 
 The twins converse naturally inside one of these environments. The dialogue is stored as a log. After it finishes, you get:
 
-- The full conversation transcript
-- An overall compatibility score (0 to 100)
-- A breakdown by category: Humor, Values, Chemistry, Communication
-- The option to approve or decline connecting with the real person
+The full conversation transcript. An overall compatibility score from 0 to 100. A breakdown by category covering Humor, Values, Chemistry, and Communication. And the option to approve or decline connecting with the real person.
 
-If both people approve, the chat unlocks. If one person declines, no hard feelings and no embarrassment — the other person never even knows who initiated.
+If both people approve, the chat unlocks. If one person declines, no hard feelings and no embarrassment. The other person never even knows who initiated.
 
----
+<br>
 
 ## 6. MBTI at the Core
 
@@ -161,10 +157,7 @@ Konvo does not just ask you what your MBTI type is and call it a day. It actuall
 
 The MBTI engine (`mbti_engine.py`) analyzes:
 
-- **Scenario choices** — how you respond to social and ethical dilemmas
-- **Trade-off decisions** — what you prioritize when you cannot have everything
-- **Open-ended responses** — the vocabulary and structure of your writing
-- **Response latency** — how long you pause before answering certain questions
+**Scenario choices** cover how you respond to social and ethical dilemmas. **Trade-off decisions** look at what you prioritize when you cannot have everything. **Open-ended responses** examine the vocabulary and structure of your writing. **Response latency** tracks how long you pause before answering certain questions.
 
 The output is not just a four-letter type. It is a full profile that includes:
 
@@ -188,17 +181,13 @@ Growth Areas: Setting limits with others, not over-explaining
 | ISFJ | ESFP, ESTP | ISFP, ISTJ | ENTP, INTP |
 | ESTP | ISFJ, ISTJ | ESFJ, ESTJ | INFP, INFJ |
 
-> These are tendencies, not rules. Konvo uses MBTI as one signal among many — not the only one.
+> These are tendencies, not rules. Konvo uses MBTI as one signal among many, not the only one.
 
 The compatibility algorithm also accounts for:
 
-- **Sun sign** (astrology, calculated from birth date)
-- **Moon sign and ascendant** (calculated from birth time and location)
-- **Konvo DNA Indexes** — nine behavioral dimensions scored 0 to 100
-- **Interest clusters** — how much your hobby universes overlap
-- **Communication vectors** — how similar your conversational patterns are
+**Sun sign** is astrology calculated from your birth date. **Moon sign and ascendant** are calculated from your birth time and location. **Konvo DNA Indexes** are nine behavioral dimensions scored from 0 to 100. **Interest clusters** measure how much your hobby universes overlap. **Communication vectors** show how similar your conversational patterns are.
 
----
+<br>
 
 ## 7. Tech Stack
 
@@ -211,29 +200,29 @@ The compatibility algorithm also accounts for:
 | **SQLAlchemy 2.0** | ORM for database models |
 | **PostgreSQL 15** | Primary relational database |
 | **Redis 7** | Caching, pub/sub, rate limiter storage |
-| **Celery + Redis** | Background job queue for async tasks |
-| **MeiliSearch** | Full-text search engine for users and posts |
-| **gRPC** | Internal high-speed communication between services |
+| **Celery with Redis** | Background job queue for async tasks |
+| **MeiliSearch** | Full text search engine for users and posts |
+| **gRPC** | Internal high speed communication between services |
 | **Argon2** | Password hashing |
-| **JWT (PyJWT)** | Access and refresh token authentication |
-| **Cryptography (AES-CBC)** | Encrypted admin data routing |
+| **JWT via PyJWT** | Access and refresh token authentication |
+| **Cryptography AES CBC** | Encrypted admin data routing |
 | **Sentry SDK** | Error tracking and observability |
 | **Prometheus** | Metrics instrumentation |
-| **SlowAPI** | Route-level rate limiting |
+| **SlowAPI** | Route level rate limiting |
 | **uvicorn** | ASGI server |
 
 ### Frontend
 
 | Technology | Purpose |
 |---|---|
-| **Vanilla JS** | Core interactivity (no framework overhead) |
+| **Vanilla JS** | Core interactivity with no framework overhead |
 | **Three.js** | 3D WebGL environments for virtual dates |
-| **MapLibre GL** | Privacy-first location grid rendering |
+| **MapLibre GL** | Privacy first location grid rendering |
 | **GSAP** | Page transition animations |
 | **Anime.js** | Micro UI animations and feedback |
 | **Web Audio API** | Ambient soundscapes without external files |
-| **BroadcastChannel API** | Cross-tab state sync |
-| **Intersection Observer API** | Viewport-triggered animations |
+| **BroadcastChannel API** | Cross tab state sync |
+| **Intersection Observer API** | Viewport triggered animations |
 | **Service Worker** | Offline caching and PWA support |
 | **Outfit Font** | Display typography via Google Fonts |
 
@@ -241,12 +230,12 @@ The compatibility algorithm also accounts for:
 
 | Technology | Purpose |
 |---|---|
-| **Docker + Compose** | Full containerized local development |
+| **Docker with Compose** | Full containerized local development |
 | **Nginx** | Reverse proxy and static file serving |
 | **Render.yaml** | Cloud deployment spec |
 | **Flower** | Celery task monitoring dashboard |
 
----
+<br>
 
 ## 8. System Architecture
 
@@ -255,39 +244,39 @@ The compatibility algorithm also accounts for:
 ```
                         ┌─────────────────────────────────┐
                         │  Browser Client (Vanilla JS)    │
-                        │  Three.js · MapLibre · GSAP     │
+                        │  Three.js  MapLibre  GSAP       │
                         └────────────────┬────────────────┘
-                                         │ HTTP / WebSocket
+                                         │ HTTP and WebSocket
                         ┌────────────────▼────────────────┐
                         │      FastAPI Gateway             │
-                        │   gateway.py  ·  Port 8000      │
-                        │  Rate Limiting · CSP Headers     │
-                        │  Prometheus · Sentry · CORS      │
+                        │   gateway.py     Port 8000      │
+                        │  Rate Limiting   CSP Headers     │
+                        │  Prometheus   Sentry   CORS      │
                         └────┬──────────────────────┬──────┘
                              │ Dynamic route loading │
           ┌──────────────────▼──────┐   ┌───────────▼──────────────┐
-          │  Auth Service  :8001    │   │  User Service  :8002      │
-          │  Messaging     :8009    │   │  Behavior Engine :8003    │
-          │  AI Agent      :8005    │   │  Sentiment Engine :8004   │
-          │  Graph         :8008    │   │  Community  :8006         │
-          │  Search        :8010    │   │  Feedback   :8007         │
+          │  Auth Service  8001     │   │  User Service  8002       │
+          │  Messaging     8009     │   │  Behavior Engine 8003     │
+          │  AI Agent      8005     │   │  Sentiment Engine 8004    │
+          │  Graph         8008     │   │  Community  8006          │
+          │  Search        8010     │   │  Feedback   8007          │
           └──────────────────┬──────┘   └───────────┬──────────────┘
                              │                       │
                     ┌────────▼───────────────────────▼──────┐
                     │              Data Layer                │
-                    │  PostgreSQL · Redis · MeiliSearch      │
+                    │  PostgreSQL   Redis   MeiliSearch      │
                     └────────────────────────────────────────┘
                              │
                     ┌────────▼──────────────────────┐
                     │     Background Workers         │
-                    │  Celery Worker · Celery Beat   │
-                    │  Flower Dashboard  :5555       │
+                    │  Celery Worker  Celery Beat    │
+                    │  Flower Dashboard  5555        │
                     └────────────────────────────────┘
 ```
 
-The gateway does not use traditional microservice mounting (no ASGI sub-mounts). Instead it dynamically loads each service module and copies all routes directly into the main app. This means one unified API surface, one set of middleware, and zero issues with hot reload.
+The gateway does not use traditional microservice mounting with ASGI sub-mounts. Instead it dynamically loads each service module and copies all routes directly into the main app. This means one unified API surface, one set of middleware, and zero issues with hot reload.
 
----
+<br>
 
 ## 9. Project Structure
 
@@ -306,7 +295,7 @@ Konvo/
 ├── frontend/                    ← Static client app
 │   ├── index.html               ← Landing page
 │   ├── style.css                ← Global stylesheet (12,000+ lines)
-│   ├── theme.css                ← Theme tokens (light/dark)
+│   ├── theme.css                ← Theme tokens (light and dark)
 │   ├── sw.js                    ← Service Worker for PWA
 │   ├── sitemap.xml              ← SEO sitemap
 │   ├── pages/                   ← Individual HTML pages
@@ -321,7 +310,7 @@ Konvo/
 │       ├── robots.txt
 │       ├── security.txt
 │       ├── agents.json          ← AI agent discovery spec
-│       └── llms.txt             ← LLM-readable documentation
+│       └── llms.txt             ← LLM readable documentation
 │
 ├── packages/
 │   ├── shared-utils/            ← Core logic shared by all services
@@ -336,28 +325,28 @@ Konvo/
 │   │   ├── neo4j_client.py      ← Graph database client
 │   │   └── algorithms/
 │   │       ├── mbti_engine.py       ← MBTI type calculator
-│   │       ├── compatibility.py     ← Multi-dimensional match scoring
-│   │       ├── matching_dsa.py      ← Gale-Shapley stable matching
+│   │       ├── compatibility.py     ← Multi dimensional match scoring
+│   │       ├── matching_dsa.py      ← Gale Shapley stable matching
 │   │       ├── date_simulator.py    ← Twin conversation engine
 │   │       ├── onboarding_engine.py ← Quiz processing pipeline
-│   │       ├── sentiment.py         ← Post/comment sentiment analysis
-│   │       ├── astrology.py         ← Sun/moon/ascendant calculator
+│   │       ├── sentiment.py         ← Post and comment sentiment analysis
+│   │       ├── astrology.py         ← Sun moon ascendant calculator
 │   │       ├── fingerprint.py       ← Behavioral fingerprint builder
-│   │       └── digipin.py           ← Privacy-safe location encoder
-│   └── shared-schemas/          ← Pydantic request/response models
+│   │       └── digipin.py           ← Privacy safe location encoder
+│   └── shared-schemas/          ← Pydantic request and response models
 │
 ├── services/
 │   ├── auth-service/            ← Register, login, OTP, JWT
 │   ├── user-service/            ← Profiles, twins, notifications
 │   ├── behavior-engine/         ← Compatibility, discovery, swipes
-│   ├── sentiment-engine/        ← Real-time sentiment websocket
+│   ├── sentiment-engine/        ← Real time sentiment websocket
 │   ├── ai-agent-service/        ← Twin management, simulations
 │   ├── messaging-service/       ← Chat messages, reactions
 │   ├── community-service/       ← Forums, posts, comments
 │   ├── graph-service/           ← Social graph and connections
 │   ├── search-service/          ← MeiliSearch powered user search
 │   ├── feedback-service/        ← User feedback collection
-│   ├── worker_service/          ← Celery tasks (avatar generation, etc.)
+│   ├── worker_service/          ← Celery tasks for avatar generation and more
 │   ├── grpc_compatibility/      ← gRPC server for fast compatibility calls
 │   └── grpc_twin/               ← gRPC twin communication service
 │
@@ -370,7 +359,7 @@ Konvo/
 └── docs/                        ← Visual documentation assets
 ```
 
----
+<br>
 
 ## 10. Microservices Overview
 
@@ -378,56 +367,51 @@ Konvo/
 |---|---|---|
 | **Auth Service** | 8001 | Register, login, OTP verification, JWT tokens, refresh token rotation |
 | **User Service** | 8002 | User profiles, twin updates, behavioral fingerprint, notifications |
-| **Behavior Engine** | 8003 | Compatibility calculation, discovery feed (Gale-Shapley), swipe logic |
-| **Sentiment Engine** | 8004 | Real-time sentiment analysis of posts and comments via WebSocket |
-| **AI Agent Service** | 8005 | Twin retrieval, avatar generation (Celery), date simulations |
+| **Behavior Engine** | 8003 | Compatibility calculation, discovery feed via Gale Shapley, swipe logic |
+| **Sentiment Engine** | 8004 | Real time sentiment analysis of posts and comments via WebSocket |
+| **AI Agent Service** | 8005 | Twin retrieval, avatar generation via Celery, date simulations |
 | **Community Service** | 8006 | Communities, posts, comments, health scores |
 | **Feedback Service** | 8007 | User feedback and flagging |
 | **Graph Service** | 8008 | Social graph, mutual connections, relationship mapping |
-| **Search Service** | 8010 | Full-text search powered by MeiliSearch |
+| **Search Service** | 8010 | Full text search powered by MeiliSearch |
 
 All services share the same database models and utils from `packages/shared-utils`. The gateway loads them all and merges their routes into one unified API at startup.
 
----
+<br>
 
 ## 11. Core Algorithms
 
-### Gale-Shapley Stable Matching
+### Gale Shapley Stable Matching
 
-Used in the discovery feed to produce a stable set of matches — meaning no two people would both prefer to be matched with each other over their current matches. This is the same algorithm used in medical residency placements. It removes bias toward whoever signed up first or has the most activity.
+Used in the discovery feed to produce a stable set of matches. This means no two people would both prefer to be matched with each other over their current matches. It is the same algorithm used in medical residency placements. It removes bias toward whoever signed up first or has the most activity.
 
 ### MBTI Behavioral Engine
 
-Does not ask "are you more introverted or extroverted?" — that is too easy to game. Instead it watches *how* you respond. Are your answers fast or slow? Do you hedge or commit? Do you pick the logical option or the emotionally safe one? The engine builds a behavioral fingerprint from that data and maps it to MBTI dimensions.
+It does not ask "are you more introverted or extroverted?" because that is too easy to game. Instead it watches *how* you respond. Are your answers fast or slow? Do you hedge or commit? Do you pick the logical option or the emotionally safe one? The engine builds a behavioral fingerprint from that data and maps it to MBTI dimensions.
 
 ### Konvo DNA Indexes
 
-Nine dimensions scored from 0 to 100 that measure who you are across:
+Nine dimensions scored from 0 to 100 that measure who you are across these areas:
+
 `Behavior · Personality · Communication · Relationship · Emotional · Lifestyle · Interest · Trust · Values`
 
 These get calculated from your quiz results and your activity on the platform. They evolve over time. Two users whose DNA indexes are close across most dimensions will have high compatibility.
 
 ### Compatibility Engine
 
-The compatibility score between two users is calculated from a weighted combination of:
-- MBTI type compatibility matrix
-- Astrology alignment (sun, moon, ascendant)
-- Konvo DNA dimension distance
-- Interest cluster overlap
-- Communication and social vector similarity
-- Behavioral fingerprint cosine similarity
+The compatibility score between two users is calculated from a weighted combination of the following signals: MBTI type compatibility matrix, astrology alignment across sun moon and ascendant, Konvo DNA dimension distance, interest cluster overlap, communication and social vector similarity, and behavioral fingerprint cosine similarity.
 
 The final score produces a tier label: `Rare Connection · Strong Match · Compatible · Possible · Low Alignment`
 
 ### Date Simulator
 
-The twin conversation engine generates a dialogue log between two agents. It uses each twin's `prompt_template` (built from their personality profile) to drive distinct speaking styles. The dialogue is scored on humor resonance, values alignment, and conversational chemistry.
+The twin conversation engine generates a dialogue log between two agents. It uses each twin's prompt template built from their personality profile to drive distinct speaking styles. The dialogue is scored on humor resonance, values alignment, and conversational chemistry.
 
 ### Sentiment Analysis
 
-Every post and comment on the community feed gets scored across multiple dimensions in real time: positive/neutral/negative sentiment, trait signals (supportive, curious, aggressive, constructive), toxicity risk, fact density, and constructiveness score. This keeps the community quality high automatically.
+Every post and comment on the community feed gets scored across multiple dimensions in real time. That includes positive, neutral, and negative sentiment, trait signals like supportive, curious, aggressive, and constructive, plus toxicity risk, fact density, and constructiveness score. This keeps the community quality high automatically without any manual moderation.
 
----
+<br>
 
 ## 12. Getting Started
 
@@ -450,7 +434,9 @@ python seeder.py
 ```
 
 The app will be available at `http://localhost:8000`
+
 Celery flower dashboard at `http://localhost:5555`
+
 API docs at `http://localhost:8000/docs`
 
 ### Running Without Docker
@@ -476,7 +462,7 @@ python gateway.py
 pytest tests/ -v
 ```
 
----
+<br>
 
 ## 13. Environment Variables
 
@@ -512,7 +498,7 @@ ADMIN_ROUTE_PATH=your-secret-admin-path
 RESEND_API_KEY=your_resend_api_key
 ```
 
----
+<br>
 
 ## 14. API Reference
 
@@ -527,7 +513,7 @@ The full interactive API documentation is auto-generated and available at `/docs
 | `/api/auth/verify-otp` | POST | Verify OTP for account activation |
 | `/api/agents/twin` | GET | Get your AI twin profile |
 | `/api/agents/twin` | PUT | Update your twin's style and preferences |
-| `/api/agents/twin/avatar/generate` | POST | Generate a visual avatar (async) |
+| `/api/agents/twin/avatar/generate` | POST | Generate a visual avatar async |
 | `/api/agents/simulations` | GET | List all your virtual date simulations |
 | `/api/agents/simulations/{id}` | GET | Get a specific simulation transcript |
 | `/api/agents/simulations/{id}/approve` | POST | Approve or decline a match |
@@ -535,26 +521,26 @@ The full interactive API documentation is auto-generated and available at `/docs
 | `/api/compatibility/calculate/{id}` | GET | Calculate compatibility with a user |
 | `/api/compatibility/swipe` | POST | Swipe pass or interest on a user |
 | `/api/chat/messages` | GET | Get chat messages with a user |
-| `/api/sentiment/live-ratios` | GET | Get platform-wide sentiment stats |
-| `/api/search` | GET | Full-text search for users |
+| `/api/sentiment/live-ratios` | GET | Get platform wide sentiment stats |
+| `/api/search` | GET | Full text search for users |
 | `/api/health` | GET | Service health check |
 
 WebSocket endpoints:
 
 | Endpoint | Description |
 |---|---|
-| `/ws/realtime` | Real-time notifications and presence |
+| `/ws/realtime` | Real time notifications and presence |
 | `/api/sentiment/ws/live-sentiment` | Live sentiment stream |
 
----
+<br>
 
 ## 15. How to Index This Repo on GitHub
 
 If you want GitHub search, topic filtering, and the GitHub explore algorithm to find this repo more easily, here are the steps to do it properly.
 
-### Step 1: Add Repository Topics
+### Step 1 Add Repository Topics
 
-Go to your repo page → click the gear icon next to "About" → add these topics:
+Go to your repo page, click the gear icon next to "About" and add these topics:
 
 ```
 ai-agent  mbti  compatibility  social-platform  fastapi  python  
@@ -562,47 +548,37 @@ dating-app  personality  digital-twin  microservices  websockets
 three-js  redis  postgresql  gale-shapley  sentiment-analysis
 ```
 
-### Step 2: Set the About Description
+### Step 2 Set the About Description
 
-Keep it under 350 characters. Something like:
+Keep it under 350 characters. Something like this:
 
-> AI-powered social platform where digital twin agents converse to preview compatibility before humans connect. Built with FastAPI microservices, MBTI engine, Gale-Shapley matching, and Three.js virtual environments.
+> AI-powered social platform where digital twin agents converse to preview compatibility before humans connect. Built with FastAPI microservices, MBTI engine, Gale Shapley matching, and Three.js virtual environments.
 
-### Step 3: Enable Features
+### Step 3 Enable Features
 
-In Settings, make sure these are enabled:
-- Issues (so people can report bugs)
-- Discussions (for community questions)
-- Projects (if you want a public roadmap)
-- Wikis (optional, for extended documentation)
+In Settings, make sure these are turned on: Issues so people can report bugs, Discussions for community questions, Projects if you want a public roadmap, and Wikis which is optional for extended documentation.
 
-### Step 4: Add a License
+### Step 4 Add a License
 
-```bash
-# Add MIT license
-# Create a file called LICENSE in the root with MIT text
-```
+Create a file called LICENSE in the root of the repo with MIT license text. GitHub has a built-in tool to do this from the repo UI.
 
-### Step 5: Pin this Repo on Your Profile
+### Step 5 Pin this Repo on Your Profile
 
-Go to your GitHub profile → click "Customize your pins" → add this repo.
+Go to your GitHub profile, click "Customize your pins" and add this repo so it shows up front and center.
 
-### Step 6: Create a GitHub Social Preview Image
+### Step 6 Create a GitHub Social Preview Image
 
-Go to repo Settings → Social preview → upload the `docs/konvo_architecture.png`. This image appears when someone shares your repo link on Twitter, Discord, etc.
+Go to repo Settings, then Social preview, and upload the `docs/konvo_architecture.png` file. This image appears when someone shares your repo link on Twitter, Discord, and other platforms.
 
-### Step 7: Add Issue Templates
+### Step 7 Add Issue Templates
 
-Create `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md` so contribution feels welcoming and organized.
+Create `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md` so contribution feels welcoming and organized for anyone who wants to help.
 
-### Step 8: Cross-Link and Share
+### Step 8 Cross Link and Share
 
-- Post on r/Python, r/webdev, r/MachineLearning with a short write-up
-- Share on Hacker News under "Show HN"
-- Add to awesome lists (awesome-python, awesome-fastapi)
-- Link in your portfolio and LinkedIn
+Post on r/Python, r/webdev, or r/MachineLearning with a short write up. Share on Hacker News under "Show HN." Add to awesome lists like awesome-python and awesome-fastapi. Link in your portfolio and LinkedIn profile.
 
----
+<br>
 
 ## 16. What is Coming Next
 
@@ -610,7 +586,7 @@ Here is what the roadmap looks like. If any of these excite you, jump into the i
 
 ### Near Term
 
-- [ ] **Voice Twin** — Your agent speaks using your voice style with text-to-speech
+- [ ] **Voice Twin** — Your agent speaks using your voice style with text to speech
 - [ ] **MBTI Growth Mode** — Weekly challenges based on your type's growth areas
 - [ ] **Compatibility Timeline** — See how your compatibility with matched users changes over time
 - [ ] **Mobile PWA Polish** — Full offline capability and push notification support
@@ -619,17 +595,17 @@ Here is what the roadmap looks like. If any of these excite you, jump into the i
 ### Medium Term
 
 - [ ] **Twin vs Twin Debate Mode** — Structured debates between agents on topics you both pick
-- [ ] **Konvo Circles** — Small group experiences (3 to 5 people) for friendships, study groups, or team matching
-- [ ] **AI Relationship Coach** — Post-match insights about what made connections work or not
-- [ ] **Multi-language Support** — Agents that converse in the user's native language
+- [ ] **Konvo Circles** — Small group experiences for 3 to 5 people covering friendships, study groups, or team matching
+- [ ] **AI Relationship Coach** — Post match insights about what made connections work or not
+- [ ] **Multi language Support** — Agents that converse in the user's native language
 
 ### Long Term
 
 - [ ] **Open Twin Protocol** — Let other apps request a Konvo twin for compatibility checking
 - [ ] **B2B Integration** — Team compatibility for hiring and co-founder matching
-- [ ] **Privacy-preserving ML** — Train personalization models without ever seeing raw user data
+- [ ] **Privacy preserving ML** — Train personalization models without ever seeing raw user data
 
----
+<br>
 
 ## 17. How to Collaborate
 
@@ -637,25 +613,13 @@ Konvo is built in public and welcomes contributors at every skill level.
 
 ### Ways to Contribute
 
-**If you are a developer:**
-- Pick an open issue labeled `good first issue` or `help wanted`
-- Submit a PR with your fix or feature
-- Review someone else's PR — it helps more than you think
+**If you are a developer** then pick an open issue labeled `good first issue` or `help wanted`, submit a PR with your fix or feature, or review someone else's PR because it helps more than you think.
 
-**If you are good at design:**
-- Suggest UI improvements via the Discussions tab
-- Create visual assets for the docs folder
-- Help design the mobile experience
+**If you are good at design** then suggest UI improvements via the Discussions tab, create visual assets for the docs folder, or help design the mobile experience.
 
-**If you understand personality psychology or astrology:**
-- Improve the MBTI type compatibility matrix in `matching_dsa.py`
-- Enhance the astrology compatibility weights in `compatibility.py`
-- Review the MBTI engine logic in `mbti_engine.py`
+**If you understand personality psychology or astrology** then improve the MBTI type compatibility matrix in `matching_dsa.py`, enhance the astrology compatibility weights in `compatibility.py`, or review the MBTI engine logic in `mbti_engine.py`.
 
-**If you are a writer:**
-- Improve this README
-- Write a blog post explaining how the twin agent system works
-- Create onboarding copy that feels human and warm
+**If you are a writer** then improve this README, write a blog post explaining how the twin agent system works, or create onboarding copy that feels human and warm.
 
 ### Getting Started as a Contributor
 
@@ -677,24 +641,19 @@ git push origin feature/your-feature-name
 
 ### Code Standards
 
-- Python: follow PEP 8, use type hints where possible
-- Keep functions focused — one function does one thing
-- Write a docstring for any new function that is not obvious
-- Add a test in `tests/` for any new behavior you introduce
+Python code should follow PEP 8 and use type hints where possible. Keep functions focused so that one function does one thing. Write a docstring for any new function that is not obvious from its name. Add a test in `tests/` for any new behavior you introduce.
 
 ### Communication
 
-- Questions go in [GitHub Discussions](https://github.com/rotric04/Konvo/discussions)
-- Bugs go in [GitHub Issues](https://github.com/rotric04/Konvo/issues)
-- Feature ideas can go in either depending on how formed the idea is
+Questions go in [GitHub Discussions](https://github.com/rotric04/Konvo/discussions). Bugs go in [GitHub Issues](https://github.com/rotric04/Konvo/issues). Feature ideas can go in either depending on how formed the idea is.
 
 Every contribution gets credited. If you significantly improve a module, your name goes in it.
 
----
+<br>
 
 ## 18. License
 
-MIT License — do whatever you want with it, just keep the attribution.
+MIT License. Do whatever you want with it, just keep the attribution.
 
 ```
 Copyright (c) 2026 Konvo Contributors
@@ -710,7 +669,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 ```
 
----
+<br>
 
 <div align="center">
 
@@ -718,6 +677,6 @@ Built with curiosity, a lot of patience, and the honest belief that technology c
 
 **If you made it to the bottom of this README, you already understand Konvo better than most people. That probably means this is your kind of project.**
 
-[Star this repo](https://github.com/rotric04/Konvo) · [Open an issue](https://github.com/rotric04/Konvo/issues) · [Start a discussion](https://github.com/rotric04/Konvo/discussions)
+[Star this repo](https://github.com/rotric04/Konvo) &nbsp;·&nbsp; [Open an issue](https://github.com/rotric04/Konvo/issues) &nbsp;·&nbsp; [Start a discussion](https://github.com/rotric04/Konvo/discussions)
 
 </div>
