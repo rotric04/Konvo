@@ -689,6 +689,64 @@
             }
         }
     </style>
+    <!-- Structured Metadata JSON LD for SEO AEO and GEO search engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://konvo.space/#website",
+          "url": "https://konvo.space/",
+          "name": "Konvo",
+          "description": "Sovereign behavioral representation and compatibility first human connections on the world first agent based dating network",
+          "publisher": {
+            "@id": "https://konvo.space/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://konvo.space/#organization",
+          "name": "Konvo Space",
+          "url": "https://konvo.space/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://konvo.space/static/favicon.svg"
+          },
+          "sameAs": []
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the core matching logic on Konvo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Konvo matches individuals through a Calibration Engine that synthesizes digital twins to pre simulate compatibility chemistry inside isolated virtual dates."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is user identity verification handled?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every user profile is verified using secure OTP device verification. Approximate coordinates are mapped via DIGIPIN grids to protect exact locations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are direct chat messages encrypted?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Direct chat is end to end encrypted. All communication channels are protected with rotating session tokens."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 
@@ -1852,6 +1910,167 @@
             </section>
         </div>
 
+        <!-- Tab Content: System Guide -->
+        <div id="landing-guide" class="landing-tab-content hidden" style="display: none;">
+            <section id="guide" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+                <div class="section-header" style="margin-bottom: 2.5rem;">
+                    <span class="section-tag" style="color: var(--accent-teal);">SYSTEM COMMAND PROTOCOL</span>
+                    <h2 class="section-title">Incubation And Connection Guide</h2>
+                    <p class="section-desc">Unlock authentic connections by following the structured calibration phases. Protect your digital presence while representatives clear the path.</p>
+                </div>
+
+                <div class="problem-grid">
+                    <!-- Phase 1 Card -->
+                    <div class="problem-card" style="border-color: rgba(13, 148, 136, 0.2); background: linear-gradient(180deg, rgba(13, 148, 136, 0.02) 0%, transparent 100%);">
+                        <span class="section-tag" style="color: var(--accent-teal);">PHASE 01</span>
+                        <h4>Mind Incubation</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                            Begin by seeding your behavior parameters. The onboarding calibration maps your communication styles, values, and humor. Detailed descriptions feed the semantic parsing engine to build your coordinate representative.
+                        </p>
+                    </div>
+
+                    <!-- Phase 2 Card -->
+                    <div class="problem-card" style="border-color: rgba(99, 102, 241, 0.2); background: linear-gradient(180deg, rgba(99, 102, 241, 0.02) 0%, transparent 100%);">
+                        <span class="section-tag" style="color: var(--accent-indigo);">PHASE 02</span>
+                        <h4>Twin Synthesis</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                            The network compiles your digital twin representation in secure background layers. An autonomous representative is initialized, complete with custom vector visuals and communication logics reflecting your unique personality archetype.
+                        </p>
+                    </div>
+
+                    <!-- Phase 3 Card -->
+                    <div class="problem-card" style="border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(180deg, rgba(245, 158, 11, 0.02) 0%, transparent 100%);">
+                        <span class="section-tag" style="color: var(--accent-amber);">PHASE 03</span>
+                        <h4>Sandbox Interaction</h4>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                            Representatives discover matching nodes and converse inside secure isolated sandboxes. They pre run dialogues to evaluate synergy. A comprehensive simulation report details conversational harmony before you spend any attention.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-container" style="margin-top: 3rem;">
+                    <!-- Phase 4 -->
+                    <div class="pipeline-step">
+                        <div class="pipeline-num">04</div>
+                        <div class="pipeline-text">
+                            <h4 style="font-size: 1.25rem;">The Double Lock Gateway</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+                                Mutual consent remains a hard rule. Review simulated conversation transcripts. To clear the communication path, both searchers must approve the reports and lock in their ready signals.
+                            </p>
+                        </div>
+                        <div class="pipeline-meta" style="color: var(--accent-amber);">CONSENT SYNCED</div>
+                    </div>
+
+                    <!-- Phase 5 -->
+                    <div class="pipeline-step">
+                        <div class="pipeline-num">05</div>
+                        <div class="pipeline-text">
+                            <h4 style="font-size: 1.25rem;">Direct Cognitive Sync</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+                                A cryptographic direct channel unlocks. Humans converse over fully encrypted tunnels, enjoying genuine alignment without superficial games or small talk fatigue.
+                            </p>
+                        </div>
+                        <div class="pipeline-meta" style="color: var(--accent-teal);">SECURE CONNECTION</div>
+                    </div>
+                </div>
+
+                <!-- Teaser Section for Upcoming Features -->
+                <div style="margin-top: 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2.25rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 80%); pointer-events: none;"></div>
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); text-transform: uppercase; letter-spacing: 0.05em;">COMMUNITY DECK SNEAK PEEK</span>
+                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">Upcoming Platform Additions</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; max-width: 500px; margin: 0.5rem auto 0 auto;">We continuously refine the behavioral network. Explore some of the premium features coming to your dashboard soon.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;" class="grid-2col-responsive">
+                        <div style="border-left: 2px solid var(--accent-indigo); padding-left: 1.25rem;">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Telepathic Sandbox Simulation</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Simulating thousands of response streams per second to locate perfect conversational patterns before initiating match sequences.
+                            </p>
+                        </div>
+                        <div style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem;">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Stellar Compatibility Map</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Integrating birth chart synastry and astrological coordinate calculations into the compatibility scoring algorithms for deeper alignment.
+                            </p>
+                        </div>
+                        <div style="border-left: 2px solid var(--accent-amber); padding-left: 1.25rem;">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">Decentralized Memory Node</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Exporting and holding your entire behavioral history inside encrypted local custody storage, giving you absolute ownership of your representative.
+                            </p>
+                        </div>
+                        <div style="border-left: 2px solid var(--accent-rose); padding-left: 1.25rem;">
+                            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">WebGL Scene Builder</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                High resolution interactive virtual locations where matches can explore together, solving puzzles and playing conversational games.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: About Us -->
+        <div id="landing-about" class="landing-tab-content hidden" style="display: none;">
+            <section id="about" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+                <div class="section-header" style="margin-bottom: 2.5rem;">
+                    <span class="section-tag" style="color: var(--accent-indigo);">THE KONVO ORIGINS</span>
+                    <h2 class="section-title">The Story Behind Conversational Resonance</h2>
+                    <p class="section-desc">We designed a digital sanctuary that values time, respects attention, and relies on computational chemistry rather than superficial loops.</p>
+                </div>
+
+                <div class="dashboard-two-col">
+                    <!-- Column 1: The Story -->
+                    <div class="card" style="padding: 2rem; background-color: var(--bg-card); border-color: var(--border-color); margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h4 style="font-family: var(--font-display); font-size: 1.25rem; color: var(--text-primary); margin-bottom: 1.25rem;">The Birth of Konvo Space</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+                                In an era of digital noise, connection platforms became attention slot machines. Searchers swiped infinitely, chasing brief hits of validation while drowning in small talk fatigue and ghosting. We realized that superficial visual registries were failing humans.
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+                                The name **Konvo** represents the Conversational Resonance Zone. It is the architectural sweet spot where verbal styles, values, and cognitive frameworks overlap. 
+                            </p>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0;">
+                                We built this space to prove that algorithms can support meaningful human discovery by simulating communication beforehand, shielding searchers from repetitive onboarding and filtering out superficial matches.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: The Architecture of the Engine -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <h4 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Cognitive Resonance Architecture</h4>
+
+                        <!-- Calibration Block -->
+                        <div style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem;">
+                            <h5 style="font-size: 1.05rem; margin-bottom: 0.25rem; color: var(--text-primary);">Calibration Sync Protocol</h5>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Translating self descriptions and personality audits into high dimensional semantic representations. This layer builds the core blueprint of your digital representative.
+                            </p>
+                        </div>
+
+                        <!-- Sentiment Block -->
+                        <div style="border-left: 2px solid var(--accent-indigo); padding-left: 1.25rem;">
+                            <h5 style="font-size: 1.05rem; margin-bottom: 0.25rem; color: var(--text-primary);">Sentiment Resonance System</h5>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Measuring vocabulary synergy, emotional states, and verbal vibrations in real time. This system checks communication safety, ensuring mutual respect and positive feedback.
+                            </p>
+                        </div>
+
+                        <!-- Behavior Block -->
+                        <div style="border-left: 2px solid var(--accent-amber); padding-left: 1.25rem;">
+                            <h5 style="font-size: 1.05rem; margin-bottom: 0.25rem; color: var(--text-primary);">Behavioral Resonance Loop</h5>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                Orchestrating match simulations in secure isolated sandbox environments. It tests conflict resolution and lifestyle compatibility, producing clear synergy scores before human chat is unlocked.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <!-- Tab Content 2: Security -->
         <div id="landing-security" class="landing-tab-content hidden" style="display: none;">
             <section id="safety" class="landing-section" style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
@@ -2169,8 +2388,9 @@
                     <h5 style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">Platform</h5>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
                         <li><a href="#how-it-works" style="font-size: 0.85rem; color: var(--text-secondary);">How It Works</a></li>
-                        <li><a href="#resonance-engine" style="font-size: 0.85rem; color: var(--text-secondary);">Resonance Engine</a></li>
-                        <li><a href="#virtual-dates" style="font-size: 0.85rem; color: var(--text-secondary);">Virtual Dates</a></li>
+                        <li><a href="#guide" style="font-size: 0.85rem; color: var(--text-secondary);">System Guide</a></li>
+                        <li><a href="#about" style="font-size: 0.85rem; color: var(--text-secondary);">About Us</a></li>
+                        <li><a href="/blog" style="font-size: 0.85rem; color: var(--text-secondary);">Insights Blog</a></li>
                         <li><a href="#" onclick="event.preventDefault(); document.getElementById('auth-modal').classList.add('active'); document.getElementById('tab-register').click();" style="font-size: 0.85rem; color: var(--text-secondary);">Create AI Twin</a></li>
                         <li><a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback" style="font-size: 0.85rem; color: var(--accent-teal);">💬 Feedback &amp; Bug Report</a></li>
                     </ul>
