@@ -1,5 +1,3 @@
-# README
-
 Konvo is a sovereign social connection ecosystem where digital representatives verify compatibility. It resolves the problem of attention fatigue by introducing autonomous twin agents that converse inside isolated sandboxes to preview alignment before users connect.
 
 The repository includes a central gateway node in [gateway.py](./gateway.py) which proxies independent backend services in [services](./services) and serves the static browser client in [frontend](./frontend). Shared models and configurations reside in [packages](./packages).
