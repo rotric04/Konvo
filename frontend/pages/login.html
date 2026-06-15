@@ -256,10 +256,17 @@
         /* ── Form Panel (Right) ── */
         .auth-form-panel {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 3rem;
             background-color: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        .btn-suggest-username {
+            margin-top: 0.75rem;
+            white-space: nowrap;
         }
 
         .auth-form-inner {
@@ -420,15 +427,22 @@
             }
 
             .auth-form-panel {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
                 padding: 2rem 1.25rem;
                 min-height: 100vh;
-                align-items: flex-start;
-                padding-top: 4rem;
+                padding-top: 3rem;
             }
         }
 
         @media (max-width: 768px) {
             .auth-form-panel {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
                 padding: 1.5rem 1rem !important;
                 padding-top: 2rem !important;
                 min-height: 100vh;
@@ -477,7 +491,7 @@
             }
 
             .btn-suggest-username {
-                margin-top: 0.5rem !important;
+                margin-top: 0.35rem !important;
                 padding: 0.15rem 0.5rem !important;
                 font-size: 0.625rem !important;
             }
@@ -694,7 +708,7 @@
                                     <p id="username-msg" class="validation-msg" style="margin-top: 0.3rem;"></p>
                                 </div>
                                 <button type="button" class="btn-suggest-username" id="btn-suggest-username"
-                                    style="margin-top: 0.75rem; white-space: nowrap;">✨ Suggest</button>
+                                    style="white-space: nowrap;">✨ Suggest</button>
                             </div>
                         </div>
 
@@ -771,11 +785,11 @@
                             </div>
                         </div>
 
-                        <div style="margin-bottom: 1.25rem;">
-                            <label
-                                style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; user-select: none; font-family: var(--font-sans); text-transform: none; letter-spacing: 0; font-size: 0.82rem; color: var(--text-secondary);">
-                                <input type="checkbox" id="reg-tos-agree" name="tos"
-                                    style="margin-top: 3px; width: auto; cursor: pointer;" required />
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1.25rem;">
+                            <input type="checkbox" id="reg-tos-agree" name="tos"
+                                style="margin-top: 3px; width: auto; cursor: pointer;" required />
+                            <label for="reg-tos-agree"
+                                style="cursor: pointer; user-select: none; font-family: var(--font-sans); text-transform: none; letter-spacing: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4;">
                                 I agree to the <a href="/terms-of-service" target="_blank"
                                     style="color: var(--accent-amber); text-decoration: underline;">Terms of Service</a>
                                 and <a href="/privacy-policy" target="_blank"
