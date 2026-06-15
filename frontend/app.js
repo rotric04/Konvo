@@ -1390,9 +1390,9 @@ function initSwipePage(targetContainerId) {
             deckContainer.innerHTML = `
                 <div class="card swipe-card" style="width:400px; padding:3rem;">
                     <div style="font-size: 3rem; margin-bottom: 1.5rem;">🌌</div>
-                    <h3 style="font-family: var(--font-serif); font-size:1.5rem; margin-bottom: 0.75rem;">End of Local Network</h3>
+                    <h3 style="font-family: var(--font-serif); font-size:1.5rem; margin-bottom: 0.75rem;">Resonance Limits Reached</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem; line-height:1.5;">
-                        You have swiped through all local recommendations today. Daily limits are server-enforced in our high-speed database layer. Check back tomorrow!
+                        You have reviewed all compatible profiles in your local grid area today. The Resonance Engine will recalibrate and update your directory recommendations tomorrow morning. Check back then to discover new connection dynamics!
                     </p>
                 </div>
             `;
