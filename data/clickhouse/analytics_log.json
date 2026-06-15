@@ -462,3 +462,31 @@
 {"timestamp": 1781552718.473105, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
 {"timestamp": 1781552718.4872577, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
 {"timestamp": 1781552718.498807, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781555539.983691, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-595D9"}}
+{"timestamp": 1781555540.1878617, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781555540.1893845, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781555540.7113936, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-08B52"}}
+{"timestamp": 1781555540.7986019, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781555540.7996023, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781555541.4105802, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-A4A4C"}}
+{"timestamp": 1781555541.456104, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781555541.4571211, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781555541.831258, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-6F9DB"}}
+{"timestamp": 1781555541.8646502, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781555541.8656433, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781555542.653035, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-95494"}}
+{"timestamp": 1781555542.709563, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781555542.71058, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781555542.7782798, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781555542.8181117, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781555543.48708, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781555543.4880798, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 94.2}}
+{"timestamp": 1781555543.5114427, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781555543.549677, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781555543.60429, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781555543.6069233, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 93.1}}
+{"timestamp": 1781555543.626676, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781555543.648206, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781555543.678667, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781555543.713194, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781555543.7378914, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}

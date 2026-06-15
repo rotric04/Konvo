@@ -15,7 +15,7 @@ sys.path.append(os.path.join(_root, "packages", "shared-utils"))
 sys.path.append(os.path.join(_root, "packages", "shared-schemas"))
 
 from redis_client import redis_client
-from database import Base, engine, get_db
+from database import Base, engine, get_db, apply_db_migrations
 from sqlalchemy.orm import Session
 import models
 import base64
@@ -42,6 +42,8 @@ from websocket_manager import manager
 
 # Create tables in SQLite/Postgres
 Base.metadata.create_all(bind=engine)
+apply_db_migrations(engine)
+
 
 # Initialize master FastAPI app
 app = FastAPI(
@@ -147,7 +149,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com; "
             "img-src 'self' data: blob: https://unpkg.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
-            "connect-src 'self' ws: wss: https://unpkg.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
+            "connect-src 'self' ws: wss: https://formsubmit.co https://unpkg.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
             "worker-src 'self' blob:; "
             "child-src 'self' blob:; "
             "frame-ancestors 'none';"

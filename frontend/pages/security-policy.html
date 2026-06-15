@@ -3,154 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Security & System Architecture | Konvo</title>
+    <title>Security & System Guide | Konvo — How We Keep You Safe</title>
+    <meta name="description" content="Konvo Security Guide — a humorous and thorough walkthrough of how we protect your data using vectors, cryptography, and AI sandboxes.">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/theme.css">
     <script src="/static/src/theme-manager.js"></script>
     <style>
-        .policy-container {
-            max-width: 840px;
-            margin: 6rem auto;
-            padding: 3rem;
-            background-color: var(--bg-card, #121214);
-            border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        body {
+            background-color: var(--bg-primary, #0b0b0c);
+            color: var(--text-primary, #f4f4f5);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            margin: 0;
         }
-        .policy-title {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
+
+        .policy-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--header-bg, rgba(11,11,12,0.85));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-primary, rgba(255,255,255,0.07));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .policy-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
             color: var(--text-primary);
-            margin-bottom: 1rem;
-            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.04em;
         }
+
+        .policy-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .policy-nav a, .policy-nav button {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-secondary, #a1a1aa);
+            padding: 0.4rem 0.85rem;
+            border: 1px solid var(--border-primary, rgba(255,255,255,0.08));
+            border-radius: 6px;
+            text-decoration: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .policy-nav a:hover, .policy-nav button:hover {
+            color: var(--text-primary);
+            border-color: var(--accent-teal, #14b8a6);
+        }
+
+        .policy-page-wrapper {
+            max-width: 880px;
+            margin: 4rem auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .policy-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent-teal, #14b8a6);
+            margin-bottom: 1rem;
+        }
+
+        .policy-page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary, #fff) 40%, rgba(255,255,255,0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .policy-subtitle {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 3rem;
+            font-size: 1.05rem;
+            color: var(--text-secondary, #a1a1aa);
+            margin-bottom: 0.5rem;
             font-style: italic;
         }
+
+        .policy-updated {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted, #71717a);
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-primary, rgba(255,255,255,0.07));
+        }
+
+        .policy-container {
+            background: var(--bg-card, rgba(18,18,20,0.75));
+            border: 1px solid var(--border-primary, rgba(255,255,255,0.07));
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
         .policy-section {
             margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-primary, rgba(255,255,255,0.05));
         }
+
+        .policy-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
         .policy-section h2 {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            color: var(--accent-amber);
-            margin-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-teal, #14b8a6);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
+
+        .policy-section h2::before {
+            content: attr(data-num);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            background: rgba(20,184,166,0.1);
+            border: 1px solid rgba(20,184,166,0.2);
+            border-radius: 4px;
+            padding: 0.2rem 0.5rem;
+            color: var(--accent-teal, #14b8a6);
+        }
+
         .policy-section p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
+            color: var(--text-secondary, #a1a1aa);
+            font-size: 0.97rem;
+            line-height: 1.75;
             margin-bottom: 1rem;
         }
-        
-        /* Visual flowchart architecture styling */
-        .architecture-box {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed rgba(255, 255, 255, 0.12);
-            border-radius: 12px;
+
+        /* Architecture Flowchart */
+        .architecture-flow {
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 16px;
             padding: 2rem;
             margin: 2rem 0;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--accent-teal);
             overflow-x: auto;
-            line-height: 1.5;
         }
 
         .flow-step {
-            border: 1px solid rgba(20, 184, 166, 0.3);
-            background: rgba(20, 184, 166, 0.05);
-            padding: 0.75rem;
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(20,184,166,0.08), rgba(99,102,241,0.08));
+            border: 1px solid rgba(20,184,166,0.25);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
             margin: 0.5rem 0;
-            text-align: center;
-            color: #ffffff;
-            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .flow-step-num {
+            background: rgba(20,184,166,0.15);
+            border: 1px solid rgba(20,184,166,0.3);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-teal, #14b8a6);
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        .flow-step-content h4 {
+            color: var(--text-primary, #fff);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0 0 0.2rem;
+        }
+
+        .flow-step-content p {
+            color: var(--text-muted, #71717a) !important;
+            font-size: 0.8rem !important;
+            line-height: 1.4 !important;
+            margin: 0 !important;
         }
 
         .flow-arrow {
             text-align: center;
-            color: #71717a;
-            font-size: 1.2rem;
-            margin: 0.25rem 0;
+            color: rgba(255,255,255,0.15);
+            font-size: 1.1rem;
+            padding: 0.15rem 0;
         }
 
-        .btn-back {
-            display: block;
-            width: fit-content;
-            margin: 3rem auto 0 auto;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--accent-teal);
-            color: white;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-            text-align: center;
+        .security-badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
         }
-        .btn-back:hover {
-            background-color: var(--accent-cyan);
-            transform: translateY(-2px);
+
+        .security-badge {
+            background: rgba(20,184,166,0.06);
+            border: 1px solid rgba(20,184,166,0.2);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.82rem;
+            color: var(--accent-teal, #14b8a6);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .humor-callout {
+            background: rgba(217,119,6,0.05);
+            border: 1px solid rgba(217,119,6,0.15);
+            border-left: 3px solid var(--accent-amber, #d97706);
+            border-radius: 0 10px 10px 0;
+            padding: 1rem 1.25rem;
+            font-size: 0.92rem;
+            color: var(--text-secondary, #a1a1aa);
+            line-height: 1.65;
+            margin: 1.25rem 0;
+            font-style: italic;
+        }
+
+        .policy-footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-primary, rgba(255,255,255,0.07));
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted, #71717a);
+        }
+
+        .policy-footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .policy-footer-links a, .policy-footer-links button {
+            color: var(--text-muted, #71717a);
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: color 0.2s ease;
+        }
+
+        .policy-footer-links a:hover, .policy-footer-links button:hover {
+            color: var(--accent-teal, #14b8a6);
+        }
+
+        @media (max-width: 640px) {
+            .policy-page-title { font-size: 2rem; }
+            .policy-container { padding: 2rem 1.5rem; }
+            .policy-header { padding: 1rem; }
+            .flow-step { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
-<body style="background-color: var(--bg-main, #0b0b0c); color: var(--text-primary);">
-    <div class="policy-container">
-        <h1 class="policy-title">Security & System Guide</h1>
-        <p class="policy-subtitle">How we shield your digital self (in English and pure math)</p>
-        
-        <!-- Commitment Section -->
-        <div class="policy-section">
-            <h2>1. Security Disclosure Policy</h2>
-            <p>We actively coordinate with ethical developers and security researchers. If you identify a flaw, write to us at <strong>security@konvo.space</strong>. We promise to investigate it within 48 hours. No legal actions will be taken against researchers working in good faith.</p>
-        </div>
+<body>
+    <!-- Sticky Header -->
+    <header class="policy-header">
+        <a href="/" class="policy-brand">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:26px;height:26px;">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-primary,rgba(255,255,255,0.15))" stroke-width="2" stroke-dasharray="4 4"/>
+                <circle cx="32" cy="50" r="12" fill="var(--accent-teal,#14b8a6)" opacity="0.85"/>
+                <circle cx="68" cy="50" r="12" fill="var(--accent-indigo,#6366f1)" opacity="0.85"/>
+            </svg>
+            KONVO
+        </a>
+        <nav class="policy-nav">
+            <button id="btn-theme-toggle" onclick="(function(){const t=document.documentElement.getAttribute('data-theme')||'dark';const n=t==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('konvo_theme',n);})()">🌓 Theme</button>
+            <a href="javascript:history.back()">← Back</a>
+            <a href="/">Home ↗</a>
+        </nav>
+    </header>
 
-        <!-- Humorous layman guide -->
-        <div class="policy-section">
-            <h2>2. The Layman Guide: How Konvo Works</h2>
-            <p>Most connection apps dump your raw profile, messages, and coordinates in cleartext databases. Here at Konvo, we believe that is a recipe for social embarrassment. Instead, we convert your very existence into math. Here is the lifecycle of your data:</p>
-            
-            <div class="architecture-box">
-                <div class="flow-step">1. AUTHENTICATION (OTP + HASH)</div>
-                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Hashed with Argon2. Verified via Resend API OTP. Hacker-proof.</div>
-                
-                <div class="flow-arrow">↓</div>
-                
-                <div class="flow-step">2. COGNITIVE CALIBRATION</div>
-                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Gemini presents Scenarios & Tradeoffs. Measures latency & writing style.</div>
-                
-                <div class="flow-arrow">↓</div>
-                
-                <div class="flow-step">3. 128-DIMENSIONAL VECTOR SYNTHESIS</div>
-                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Converted to 8 domain matrices of 128 floats. Raw text answers are discarded.</div>
-                
-                <div class="flow-arrow">↓</div>
-                
-                <div class="flow-step">4. COGNITIVE TWIN ACTIVATION (SANDBOX)</div>
-                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Your AI Agent Twin negotiates dates inside secure, private virtual instances.</div>
-                
-                <div class="flow-arrow">↓</div>
-                
-                <div class="flow-step">5. MUTUAL HUMAN ALIGNMENT</div>
-                <div style="font-size:0.75rem; color:#71717a; text-align:center;">Only when twins report compatibility > 60% do we unlock direct human chat.</div>
+    <!-- Main Content -->
+    <div class="policy-page-wrapper">
+        <div class="policy-eyebrow">Security · System Architecture Guide</div>
+        <h1 class="policy-page-title">Security & System Guide</h1>
+        <p class="policy-subtitle">How we shield your digital self (in English, math, and occasional humor)</p>
+        <div class="policy-updated">Last updated: June 15, 2026 · Honestly, this is the most entertaining security page you'll ever read</div>
+
+        <div class="policy-container">
+
+            <!-- Section 1: Disclosure -->
+            <div class="policy-section">
+                <h2 data-num="01">Security Disclosure Policy</h2>
+                <p>We actively coordinate with ethical developers and security researchers. If you identify a flaw, write to us at <strong>security@konvo.space</strong>. We promise to investigate it within 48 hours.</p>
+                <p>No legal actions will be taken against researchers working in good faith. We believe the internet is safer when smart people point out problems instead of exploiting them.</p>
+                <div class="security-badge-row">
+                    <div class="security-badge">✦ 48hr Response SLA</div>
+                    <div class="security-badge">✦ Good Faith Protection</div>
+                    <div class="security-badge">✦ Coordinated Disclosure</div>
+                    <div class="security-badge">✦ Bug Bounty (Coming Soon)</div>
+                </div>
             </div>
-        </div>
 
-        <!-- Security safeguards explained humorously -->
-        <div class="policy-section">
-            <h2>3. Cryptographic Safeguards (The Funny Details)</h2>
-            <p><strong>Argon2 Password Hash:</strong> We scramble your password into a mathematical mush. Even if a supercomputer tries to crack it, the computer will get bored and melt first.</p>
-            <p><strong>Vectorization Anonymity:</strong> Because we only store 128-dimensional floats (like <code>[0.12, -0.45, 0.89...]</code>) in our Supabase databases, an intruder looking at your record would just see an abstract spreadsheet. You are essentially a series of 1,024 floating points. Good luck deciphering what your Friday night mood implies from that!</p>
-            <p><strong>Geospatial DIGIPIN Segmenting:</strong> Instead of transmitting your exact location, we map you to a broad alphanumeric segment grid using India Post's DIGIPIN. We know you are close by, but we don't know if you're in the living room or the kitchen.</p>
-        </div>
+            <!-- Section 2: Visual Architecture -->
+            <div class="policy-section">
+                <h2 data-num="02">The Layman Guide: How Konvo Works</h2>
+                <p>Most connection apps dump your raw profile, messages, and coordinates in cleartext databases. Here at Konvo, we believe that is a recipe for social embarrassment and potential identity theft. Instead, we convert your very existence into math. Here's the full lifecycle of your data:</p>
 
-        <button onclick="window.history.back()" class="btn-back">Go Back</button>
+                <div class="architecture-flow">
+                    <div class="flow-step">
+                        <div class="flow-step-num">1</div>
+                        <div class="flow-step-content">
+                            <h4>Authentication (OTP + Hash)</h4>
+                            <p>Your password is hashed with Argon2. Identity verified via Resend API OTP. Session tokens stored in Redis with TTL. Hacker-proof, and also hacker-bored.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">2</div>
+                        <div class="flow-step-content">
+                            <h4>Cognitive Calibration (Gemini AI Engine)</h4>
+                            <p>Gemini presents dynamic scenarios & philosophical tradeoffs. Measures response latency & writing style. It's like a personality test that doesn't feel like one.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">3</div>
+                        <div class="flow-step-content">
+                            <h4>128-Dimensional Vector Synthesis</h4>
+                            <p>Your responses are converted to 8 domain matrices of 128 floats each. Raw text answers are immediately discarded. You are now beautiful mathematics.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">4</div>
+                        <div class="flow-step-content">
+                            <h4>Cognitive Twin Activation (Sandbox)</h4>
+                            <p>Your AI Agent Twin enters the global resonance grid and negotiates virtual dates inside secure, isolated, private sandbox instances. No raw identity exposed.</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <div class="flow-step-num">5</div>
+                        <div class="flow-step-content">
+                            <h4>Mutual Human Alignment</h4>
+                            <p>Only when both twins report compatibility &gt; 60% do we unlock direct human chat. No awkward intros. The math did the hard work already.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="humor-callout">
+                    "Think of it this way: you sent a very sophisticated math version of yourself to do the dating legwork. If the numbers vibe, you show up. If they don't — your math twin takes the rejection so you don't have to. Truly the future we deserve."
+                </div>
+            </div>
+
+            <!-- Section 3: Cryptographic Safeguards -->
+            <div class="policy-section">
+                <h2 data-num="03">Cryptographic Safeguards (The Funny Details)</h2>
+
+                <p><strong style="color:var(--text-primary)">Argon2 Password Hashing:</strong> We scramble your password into a mathematical mush so dense that even a GPU farm trying to crack it would submit its resignation letter first. Argon2 is memory-hard by design — hackers need RAM they don't have.</p>
+
+                <div class="humor-callout">
+                    "A hacker looking at your Argon2 hash would just see: <code style="font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.06);padding:0.1rem 0.4rem;border-radius:4px;">$argon2id$v=19$m=65536,t=3,p=4$...</code>. They'd probably close the laptop and go touch grass."
+                </div>
+
+                <p><strong style="color:var(--text-primary)">Vectorization Anonymity:</strong> Because we only store 128-dimensional floats (like <code style="font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.06);padding:0.1rem 0.4rem;border-radius:4px;">[0.12, -0.45, 0.89...]</code>) in our databases, an intruder looking at your record would see an abstract spreadsheet. You are essentially a series of 1,024 floating point numbers. Good luck figuring out what your Friday night mood implies from that.</p>
+
+                <p><strong style="color:var(--text-primary)">Geospatial DIGIPIN Segmenting:</strong> Instead of transmitting your exact location, we map you to a broad alphanumeric segment grid using India Post's DIGIPIN. We know you're nearby, but we don't know if you're in the living room or the kitchen — and we prefer it that way.</p>
+
+                <p><strong style="color:var(--text-primary)">JWT Session Tokens:</strong> All API calls use short-lived JWT tokens rotated per session. Even if someone intercepted a token, it expires before they finish reading it.</p>
+
+                <div class="security-badge-row">
+                    <div class="security-badge">✦ Argon2 Hashing</div>
+                    <div class="security-badge">✦ JWT Auth Tokens</div>
+                    <div class="security-badge">✦ Redis Token Cache</div>
+                    <div class="security-badge">✦ RLS Database Policies</div>
+                    <div class="security-badge">✦ CSP Headers</div>
+                    <div class="security-badge">✦ Rate Limiting</div>
+                    <div class="security-badge">✦ DIGIPIN Anonymization</div>
+                    <div class="security-badge">✦ Vector-Only Storage</div>
+                </div>
+            </div>
+
+            <!-- Section 4: Contact -->
+            <div class="policy-section">
+                <h2 data-num="04">Report a Vulnerability</h2>
+                <p>Found something suspicious? We'd love to know. Email us at <strong>security@konvo.space</strong> with details of your finding. We will:</p>
+                <ul style="color: var(--text-secondary); font-size: 0.97rem; line-height: 1.75; padding-left: 1.5rem;">
+                    <li>Acknowledge your report within 48 hours</li>
+                    <li>Investigate and patch within a responsible timeframe</li>
+                    <li>Credit you in our Hall of Fame (if you consent)</li>
+                    <li>Not sue you (we're not monsters)</li>
+                </ul>
+                <div class="humor-callout">
+                    "We'd offer a bug bounty, but we're a startup and we're running on caffeine and cosmic ambition. A heartfelt thank-you note and Hall of Fame shoutout will have to do for now. We'll get there."
+                </div>
+            </div>
+
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="policy-footer">
+        <div class="policy-footer-links">
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/terms-of-service">Terms of Service</a>
+            <a href="/security-policy">Security Guide</a>
+            <a href="/hall-of-fame">Hall of Fame</a>
+            <a href="/blog">Blog</a>
+            <a href="/feedback">Feedback</a>
+            <button onclick="if(window.konvoShowCookieSettings){window.konvoShowCookieSettings();}">Cookie Settings</button>
+        </div>
+        <div>© 2026 Konvo.Space — Math keeps secrets. People don't. We chose math.</div>
+    </footer>
+
+    <script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
 </html>

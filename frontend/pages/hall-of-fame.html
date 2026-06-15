@@ -315,6 +315,19 @@
 
     </div>
 
+    <!-- Page Footer -->
+    <footer style="text-align:center;padding:2rem 2rem 2.5rem;margin-top:2.5rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text-muted,#71717a);">
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.4rem 1.25rem;margin-bottom:0.85rem;">
+            <a href="/privacy-policy" style="color:var(--text-muted,#71717a);text-decoration:none;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Privacy Policy</a>
+            <a href="/terms-of-service" style="color:var(--text-muted,#71717a);text-decoration:none;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Terms of Service</a>
+            <a href="/security-policy" style="color:var(--text-muted,#71717a);text-decoration:none;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Security</a>
+            <a href="/blog" style="color:var(--text-muted,#71717a);text-decoration:none;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Blog</a>
+            <a href="/feedback" style="color:var(--text-muted,#71717a);text-decoration:none;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Feedback</a>
+            <button onclick="if(window.konvoShowCookieSettings){window.konvoShowCookieSettings();}" style="color:var(--text-muted,#71717a);background:none;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:0.72rem;" onmouseover="this.style.color='#14b8a6'" onmouseout="this.style.color=''">Cookie Settings</button>
+        </div>
+        <div>© 2026 Konvo.Space</div>
+    </footer>
+
     <!-- Theme manager listener -->
     <script>
         const btnTheme = document.getElementById('btn-theme-toggle');
@@ -341,5 +354,7 @@
             });
         }
     </script>
+    <script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
 </html>
+

@@ -6,6 +6,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     konvo_id VARCHAR(50) UNIQUE NOT NULL,
     role VARCHAR(50) DEFAULT 'user',
@@ -13,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(50),
     otp_code VARCHAR(10),
     otp_verified BOOLEAN DEFAULT FALSE,
+    otp_created_at TIMESTAMP WITH TIME ZONE,
     premium_user BOOLEAN DEFAULT FALSE,
     refresh_token_hash VARCHAR(255)
 );
@@ -128,6 +130,15 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    type VARCHAR(50) DEFAULT 'info',
+    read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS communities (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -206,6 +217,7 @@ CREATE TABLE IF NOT EXISTS feedback_entries (
 
 -- 2. Query Optimization Indexes for High Simultaneous Concurrency (1000+ users)
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 CREATE INDEX IF NOT EXISTS idx_users_konvo_id ON users(konvo_id);
 CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
 CREATE INDEX IF NOT EXISTS idx_behavioral_fingerprints_user_id ON behavioral_fingerprints(user_id);
@@ -214,6 +226,7 @@ CREATE INDEX IF NOT EXISTS idx_agents_creator_id ON agents(creator_id);
 CREATE INDEX IF NOT EXISTS idx_agents_agent_id ON agents(agent_id);
 CREATE INDEX IF NOT EXISTS idx_swipes_swiper_swipee ON swipes(swiper_id, swipee_id);
 CREATE INDEX IF NOT EXISTS idx_chat_messages_sender_receiver ON chat_messages(sender_id, receiver_id, timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_posts_author ON posts(author_id);
 CREATE INDEX IF NOT EXISTS idx_posts_community ON posts(community_id);
 CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id);
@@ -230,6 +243,7 @@ ALTER TABLE agents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE swipes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE agent_date_simulations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feedback_entries ENABLE ROW LEVEL SECURITY;
@@ -306,6 +320,15 @@ CREATE POLICY chat_read_own ON chat_messages
 DROP POLICY IF EXISTS chat_insert_own ON chat_messages;
 CREATE POLICY chat_insert_own ON chat_messages 
     FOR INSERT WITH CHECK (auth.uid()::text = sender_id::text);
+
+-- Notifications Policies
+DROP POLICY IF EXISTS notification_read_own ON notifications;
+CREATE POLICY notification_read_own ON notifications 
+    FOR SELECT USING (auth.uid()::text = user_id::text);
+
+DROP POLICY IF EXISTS notification_write_own ON notifications;
+CREATE POLICY notification_write_own ON notifications 
+    FOR ALL USING (auth.uid()::text = user_id::text);
 
 -- Posts Policies
 DROP POLICY IF EXISTS posts_read_all ON posts;

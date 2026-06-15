@@ -286,8 +286,17 @@
 
     <!-- Footer -->
     <footer style="text-align:center;padding:2rem;border-top:1px solid var(--border-color);margin-top:3rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.5rem 1.5rem;margin-bottom:1rem;">
+            <a href="/privacy-policy" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+            <a href="/terms-of-service" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Terms of Service</a>
+            <a href="/security-policy" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Security Guide</a>
+            <a href="/hall-of-fame" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Hall of Fame</a>
+            <a href="/blog" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Blog</a>
+            <button onclick="if(window.konvoShowCookieSettings){window.konvoShowCookieSettings();}" style="color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:0.75rem;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Cookie Settings</button>
+        </div>
         <div>© 2026 Konvo. <a href="/" style="color:var(--text-muted);">Return to App</a></div>
     </footer>
+
 </div>
 
 <style>
@@ -605,5 +614,7 @@ function resetFeedback() {
     document.querySelectorAll('.feedback-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
 }
 </script>
+<script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
 </html>
+

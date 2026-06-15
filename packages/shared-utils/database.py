@@ -51,3 +51,37 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def apply_db_migrations(engine):
+    from sqlalchemy import inspect, text
+    inspector = inspect(engine)
+    
+    # Check if 'users' table columns need migration
+    if 'users' in inspector.get_table_names():
+        columns = [c['name'] for c in inspector.get_columns('users')]
+        
+        # Add 'username' if missing
+        if 'username' not in columns:
+            print("[MIGRATION] Adding 'username' column to 'users' table...")
+            with engine.begin() as conn:
+                if "postgresql" in str(engine.url):
+                    conn.execute(text("ALTER TABLE users ADD COLUMN username VARCHAR(255) UNIQUE"))
+                else:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN username VARCHAR(255)"))
+                    conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username)"))
+            print("[MIGRATION] 'username' column added successfully.")
+            
+        # Add 'otp_created_at' if missing
+        if 'otp_created_at' not in columns:
+            print("[MIGRATION] Adding 'otp_created_at' column to 'users' table...")
+            with engine.begin() as conn:
+                if "postgresql" in str(engine.url):
+                    conn.execute(text("ALTER TABLE users ADD COLUMN otp_created_at TIMESTAMP WITH TIME ZONE"))
+                else:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN otp_created_at DATETIME"))
+            print("[MIGRATION] 'otp_created_at' column added successfully.")
+
+        # Ensure all existing users have a unique username (if NULL)
+        with engine.begin() as conn:
+            conn.execute(text("UPDATE users SET username = 'user_' || id WHERE username IS NULL"))
+
