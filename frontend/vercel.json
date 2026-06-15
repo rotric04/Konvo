@@ -62,7 +62,7 @@
       "destination": "/txt/llm-full.txt"
     },
     {
-      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy)",
+      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
       "destination": "/pages/$1.html"
     },
     {

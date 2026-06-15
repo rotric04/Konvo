@@ -171,9 +171,6 @@ export function initChatWorkspace() {
                         <button class="btn btn-secondary" id="btn-report-node" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; background: transparent;">Report</button>
                     </div>
                 </div>
-        `;
-
-        updateChatHeaderPresence(partner_id); // Initialize presence indicator
                 
                 <div class="chat-search-row" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; gap: 1rem; align-items: center;">
                     <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">FILTER MESSAGES:</span>
@@ -198,6 +195,8 @@ export function initChatWorkspace() {
                 </form>
             </div>
         `;
+
+        updateChatHeaderPresence(partner_id); // Initialize presence indicator
 
         const msgList = document.getElementById('messages-list-wrapper');
         const historyBox = document.getElementById('chat-history-messages-box');

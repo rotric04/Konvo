@@ -510,10 +510,67 @@ def admin_delete_user(request: AdminDeleteUserRequest, db: Session = Depends(get
         raise HTTPException(status_code=500, detail=f"Deletion failed {err_msg}")
 
 
+# ----------------- CLEAN FRONTEND URL ROUTING -----------------
+# These routes serve clean frontend URLs locally.
+@app.get("/login")
+@app.get("/auth")
+def get_login_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "login.html"))
+
+@app.get("/onboarding")
+def get_onboarding_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "onboarding.html"))
+
+@app.get("/feedback")
+def get_feedback_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "feedback.html"))
+
+@app.get("/hall-of-fame")
+def get_hall_of_fame_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "hall-of-fame.html"))
+
+@app.get("/blog")
+def get_blog_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "blog.html"))
+
+@app.get("/blog/{path:path}")
+def get_blog_subpage(path: str):
+    return FileResponse(os.path.join(_root, "frontend", "pages", "blog.html"))
+
+@app.get("/privacy-policy")
+def get_privacy_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "privacy-policy.html"))
+
+@app.get("/security-policy")
+def get_security_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "security-policy.html"))
+
+@app.get("/terms-of-service")
+def get_terms_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "terms-of-service.html"))
+
+# SPA Routes
+@app.get("/discover")
+@app.get("/chat")
+@app.get("/grid")
+@app.get("/profile")
+@app.get("/settings")
+@app.get("/ai-diagnostics")
+@app.get("/notifications")
+@app.get("/compatibility")
+@app.get("/communities")
+@app.get("/graph")
+@app.get("/virtual-dates")
+@app.get("/agents")
+def get_app_page():
+    return FileResponse(os.path.join(_root, "frontend", "pages", "app.html"))
+
+
 # ----------------- ROOT-LEVEL STATIC FILE SERVING FALLBACK -----------------
 # This serves root-level static assets (e.g. /src/app.js, /style.css) locally.
 # It MUST be mounted at the very end to prevent intercepting other API/HTML routes.
 app.mount("/", StaticFiles(directory=os.path.join(_root, "frontend")), name="root_static")
+
 
 
 if __name__ == "__main__":

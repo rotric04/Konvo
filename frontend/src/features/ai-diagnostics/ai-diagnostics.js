@@ -1,7 +1,7 @@
 import { apiFetch } from '/src/services/api.js';
 import { registerPageInit } from '/src/router/router.js';
 
-async function initAIDiagnosticsPage() {
+export async function initAIDiagnosticsPage() {
     console.log("[AI Diagnostics] Initializing AI Diagnostics Page...");
 
     const updateStatus = (id, status, health, usage) => {

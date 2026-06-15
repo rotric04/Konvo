@@ -5,7 +5,7 @@
 
 import { apiFetch } from '/src/services/api.js';
 
-function initDiscoverTabs() {
+export function initDiscoverTabs() {
     const tabBtns = document.querySelectorAll('.tab-navigation .tab-btn');
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -33,7 +33,7 @@ window.initDiscoverTabs = initDiscoverTabs;
 
 
 
-async function initCommunitiesPage() {
+export async function initCommunitiesPage() {
     const grid = document.getElementById('communities-analytics-grid');
     if (!grid) return;
 
@@ -97,7 +97,7 @@ window.initCommunitiesPage = initCommunitiesPage;
 
 
 
-async function initGraphPage() {
+export async function initGraphPage() {
     const container = document.getElementById('relationship-network');
     if (!container) return;
 
@@ -326,7 +326,7 @@ window.initGraphPage = initGraphPage;
 // ----------------- 5. RESONANCE DISCOVERY MAP (LEAFLET) -----------------
 
 
-async function initMapPage() {
+export async function initMapPage() {
     const mapElement = document.getElementById('discovery-map');
     if (!mapElement) return;
 
