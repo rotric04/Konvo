@@ -7,6 +7,7 @@
 
 // ─── Module State ──────────────────────────────────────────────────────────────
 let landingSugRating = 0;
+let _demoInterval = null;
 
 // ─── Scroll-driven Reveal Animation ──────────────────────────────────────────────
 export function initScrollReveal() {
@@ -417,6 +418,106 @@ export function resetLandingFeedback() {
     });
 }
 
+// ─── Demo Modal Twin Conversation Simulator ──────────────────────────────────────
+export function initDemoModal() {
+    const demoConversation = [
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Initiating compatibility scan… Behavioral profile Alpha loaded.' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Profile Beta confirmed. Running resonance calibration across 14 dimensions.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Detected shared affinity: jazz, late-night bookstores, and deep conversation. Synergy index rising…' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Confirmed. Creative output index: 94%. Emotional availability score: 87%. This is a strong signal.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Running conflict-resolution simulation… Result: both nodes default to calm dialogue. No friction detected.' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Values alignment — honesty, growth, and humor. Compatible MBTI pairing: INFP × ENFJ. Rare resonance.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Compatibility score now at 91% and climbing. Initiating dual-approval handshake protocol…' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Approval request transmitted to human node Beta. Awaiting confirmation.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: '✅ Both nodes have approved. Secure human-to-human chat tunnel is now unlocked. ✨' },
+    ];
+
+    function startDemoAnimation(historyEl) {
+        if (!historyEl) return;
+        historyEl.innerHTML = '';
+        if (_demoInterval) clearInterval(_demoInterval);
+        let idx = 0;
+
+        function appendMessage() {
+            if (idx >= demoConversation.length) {
+                // Pause then restart loop
+                setTimeout(() => {
+                    if (document.getElementById('demo-chat-history')) startDemoAnimation(historyEl);
+                }, 3500);
+                return;
+            }
+            const msg = demoConversation[idx++];
+            const div = document.createElement('div');
+            const isA = msg.role === 'a';
+            div.style.cssText = `
+                display: flex;
+                flex-direction: column;
+                align-items: ${isA ? 'flex-start' : 'flex-end'};
+                margin-bottom: 1rem;
+                animation: fadeInUp 0.4s ease both;
+            `;
+            div.innerHTML = `
+                <div style="font-size:0.7rem;color:${isA ? 'var(--accent-teal)' : 'var(--accent-indigo)'};font-family:var(--font-mono);margin-bottom:0.2rem;">
+                    ${isA ? '🤖' : '🤖'} ${msg.name}
+                </div>
+                <div style="
+                    background: ${isA ? 'rgba(13,148,136,0.12)' : 'rgba(79,70,229,0.12)'};
+                    border: 1px solid ${isA ? 'rgba(13,148,136,0.3)' : 'rgba(79,70,229,0.3)'};
+                    border-radius: ${isA ? '4px 16px 16px 16px' : '16px 4px 16px 16px'};
+                    padding: 0.6rem 0.9rem;
+                    font-size: 0.82rem;
+                    line-height: 1.5;
+                    color: var(--text-primary);
+                    max-width: 85%;
+                    word-break: break-word;
+                ">${msg.text}</div>
+            `;
+            historyEl.appendChild(div);
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            setTimeout(appendMessage, 1800 + Math.random() * 700);
+        }
+
+        // Typing indicator then first message
+        const typingDiv = document.createElement('div');
+        typingDiv.style.cssText = 'display:flex;align-items:center;gap:0.3rem;padding:0.4rem 0.6rem;font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);';
+        typingDiv.innerHTML = '<span style="animation:pulse 1s infinite;">●</span><span style="animation:pulse 1s 0.3s infinite;">●</span><span style="animation:pulse 1s 0.6s infinite;">●</span>&nbsp;Agents initializing…';
+        historyEl.appendChild(typingDiv);
+        setTimeout(() => {
+            typingDiv.remove();
+            appendMessage();
+        }, 1200);
+    }
+
+    // Watch for the demo modal opening
+    const demoModal = document.getElementById('demo-modal');
+    if (!demoModal) return;
+
+    const observer = new MutationObserver(() => {
+        if (demoModal.classList.contains('active')) {
+            const historyEl = document.getElementById('demo-chat-history');
+            if (historyEl && historyEl.childElementCount === 0) {
+                startDemoAnimation(historyEl);
+            }
+        } else {
+            // Stop when modal closes
+            if (_demoInterval) { clearInterval(_demoInterval); _demoInterval = null; }
+        }
+    });
+    observer.observe(demoModal, { attributes: true, attributeFilter: ['class'] });
+
+    // Also support direct open
+    const watchBtn = document.getElementById('btn-watch-demo');
+    if (watchBtn) {
+        watchBtn.addEventListener('click', () => {
+            setTimeout(() => {
+                const historyEl = document.getElementById('demo-chat-history');
+                if (historyEl) startDemoAnimation(historyEl);
+            }, 200);
+        });
+    }
+}
+
 // Make functions available globally for HTML event handlers
 window.toggleLandingTag = toggleLandingTag;
 window.setLandingSugRating = setLandingSugRating;
@@ -424,3 +525,4 @@ window.submitLandingFeedback = submitLandingFeedback;
 window.resetLandingFeedback = resetLandingFeedback;
 window.initLandingPage = initLandingPage;
 window.initAgentLivePreview = initAgentLivePreview;
+window.initDemoModal = initDemoModal;

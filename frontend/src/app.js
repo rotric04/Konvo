@@ -186,10 +186,13 @@ async function bootAuth() {
                 const partnerName = btn.dataset.partnerName || 'Your Match';
                 const { getState } = await import('/src/store/state.js');
                 const partnerId = btn.dataset.partnerId || getState('chatPartnerId');
-                openVirtualDate(loc, {
-                    displayName: window.currentUser?.profile?.display_name || 'You',
-                    partnerName,
-                    partnerId,
+                // Show device recommendation popup first, then launch
+                window.showVirtualDateDeviceWarning(() => {
+                    openVirtualDate(loc, {
+                        displayName: window.currentUser?.profile?.display_name || 'You',
+                        partnerName,
+                        partnerId,
+                    });
                 });
             }
         });

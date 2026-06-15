@@ -401,6 +401,135 @@ window.updateThreeJSTheme = function(theme) {
 
 // ─── Main Virtual Date Launcher ──────────────────────────────────────────────────
 
+/**
+ * showVirtualDateDeviceWarning(onContinue)
+ * Shows a popup recommending tablet/laptop for the best virtual date experience.
+ * Calls onContinue() when user proceeds.
+ */
+function showVirtualDateDeviceWarning(onContinue) {
+    // Only show on small screens (mobile)
+    const isMobile = window.innerWidth < 768;
+    
+    // Remove any existing popup
+    const existing = document.getElementById('vd-device-popup');
+    if (existing) existing.remove();
+
+    const popup = document.createElement('div');
+    popup.id = 'vd-device-popup';
+    popup.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        padding: 1.5rem;
+        animation: fadeIn 0.3s ease;
+    `;
+
+    popup.innerHTML = `
+        <div style="
+            background: var(--bg-card, #111118);
+            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+        ">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🌃</div>
+            <h3 style="
+                font-family: var(--font-display, 'Outfit', sans-serif);
+                font-size: 1.35rem;
+                font-weight: 700;
+                color: var(--text-primary, #fff);
+                margin-bottom: 0.5rem;
+            ">Virtual Date Experience</h3>
+
+            ${isMobile ? `
+            <div style="
+                background: rgba(245, 158, 11, 0.08);
+                border: 1px solid rgba(245, 158, 11, 0.3);
+                border-radius: 10px;
+                padding: 0.85rem 1rem;
+                margin: 1rem 0;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.6rem;
+                text-align: left;
+            ">
+                <span style="font-size:1.2rem;flex-shrink:0;">📱</span>
+                <div>
+                    <div style="font-size:0.82rem;font-weight:600;color:var(--accent-amber,#f59e0b);margin-bottom:0.2rem;">Better on Tablet or Laptop</div>
+                    <div style="font-size:0.78rem;color:var(--text-secondary,rgba(255,255,255,0.6));line-height:1.5;">
+                        The 3D virtual date environment is designed for larger screens. For the full immersive experience with parallax animations and scene controls, we recommend using a tablet or laptop.
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+
+            <p style="font-size:0.88rem;color:var(--text-secondary,rgba(255,255,255,0.6));line-height:1.6;margin-bottom:1.5rem;">
+                ${isMobile 
+                    ? 'You can still enter on mobile, but some visual elements may be limited.'
+                    : 'You\'re about to enter a fully immersive 3D virtual date environment. Choose your scene, chat in real-time, and discover compatibility chemistry.'}
+            </p>
+
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <button id="vd-popup-continue" style="
+                    padding: 0.85rem 2rem;
+                    background: linear-gradient(135deg, #4F46E5, #0D9488);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-family: var(--font-display, 'Outfit', sans-serif);
+                    font-size: 0.95rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: opacity 0.2s;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    🌃 Enter Virtual Date
+                </button>
+                <button id="vd-popup-cancel" style="
+                    padding: 0.6rem;
+                    background: transparent;
+                    color: var(--text-muted, rgba(255,255,255,0.4));
+                    border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+                    border-radius: 8px;
+                    font-size: 0.82rem;
+                    cursor: pointer;
+                ">Cancel</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    popup.querySelector('#vd-popup-continue').addEventListener('click', () => {
+        popup.style.opacity = '0';
+        popup.style.transition = 'opacity 0.25s';
+        setTimeout(() => { popup.remove(); onContinue(); }, 250);
+    });
+
+    popup.querySelector('#vd-popup-cancel').addEventListener('click', () => {
+        popup.style.opacity = '0';
+        popup.style.transition = 'opacity 0.25s';
+        setTimeout(() => popup.remove(), 250);
+    });
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.style.opacity = '0';
+            popup.style.transition = 'opacity 0.25s';
+            setTimeout(() => popup.remove(), 250);
+        }
+    });
+}
+
 async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
     const currentUser = window.currentUser || getState('currentUser');
     if (!currentUser) {
@@ -1469,7 +1598,8 @@ function animateStatCounters() {
 // ─── Export Global API ───────────────────────────────────────────────────────────
 
 window.openVirtualDate = openVirtualDate;
+window.showVirtualDateDeviceWarning = showVirtualDateDeviceWarning;
 window.initRatingPopup = initRatingPopup;
 window.animateStatCounters = animateStatCounters;
 
-export { openVirtualDate, initRatingPopup, animateStatCounters };
+export { openVirtualDate, showVirtualDateDeviceWarning, initRatingPopup, animateStatCounters };
