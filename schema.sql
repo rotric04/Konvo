@@ -240,85 +240,109 @@ ALTER TABLE communities ENABLE ROW LEVEL SECURITY;
 -- Note: Assuming auth.uid() resolves to the authenticated user ID (standard Supabase JWT mapping)
 
 -- Users Policies
+DROP POLICY IF EXISTS user_read_own ON users;
 CREATE POLICY user_read_own ON users 
     FOR SELECT USING (auth.uid()::text = id::text OR role = 'admin');
 
+DROP POLICY IF EXISTS user_update_own ON users;
 CREATE POLICY user_update_own ON users 
     FOR UPDATE USING (auth.uid()::text = id::text OR role = 'admin');
 
 -- User Profiles Policies
+DROP POLICY IF EXISTS profile_read_all ON user_profiles;
 CREATE POLICY profile_read_all ON user_profiles 
     FOR SELECT USING (true); -- profiles are discoverable
 
+DROP POLICY IF EXISTS profile_write_own ON user_profiles;
 CREATE POLICY profile_write_own ON user_profiles 
     FOR ALL USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
 
 -- Behavioral Fingerprints Policies
+DROP POLICY IF EXISTS fingerprint_read_all ON behavioral_fingerprints;
 CREATE POLICY fingerprint_read_all ON behavioral_fingerprints 
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS fingerprint_write_own ON behavioral_fingerprints;
 CREATE POLICY fingerprint_write_own ON behavioral_fingerprints 
     FOR ALL USING (auth.uid()::text = user_id::text);
 
 -- Behavioral Ledger Policies
+DROP POLICY IF EXISTS ledger_read_own ON behavioral_ledger;
 CREATE POLICY ledger_read_own ON behavioral_ledger 
     FOR SELECT USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
 
 -- Agents Policies
+DROP POLICY IF EXISTS agents_read_all ON agents;
 CREATE POLICY agents_read_all ON agents 
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS agents_write_own ON agents;
 CREATE POLICY agents_write_own ON agents 
     FOR ALL USING (auth.uid()::text = creator_id::text);
 
 -- Swipes Policies
+DROP POLICY IF EXISTS swipes_read_own ON swipes;
 CREATE POLICY swipes_read_own ON swipes 
     FOR SELECT USING (auth.uid()::text = swiper_id::text OR auth.uid()::text = swipee_id::text);
 
+DROP POLICY IF EXISTS swipes_insert_own ON swipes;
 CREATE POLICY swipes_insert_own ON swipes 
     FOR INSERT WITH CHECK (auth.uid()::text = swiper_id::text);
 
 -- Agent Date Simulations Policies
+DROP POLICY IF EXISTS sim_read_own ON agent_date_simulations;
 CREATE POLICY sim_read_own ON agent_date_simulations 
     FOR SELECT USING (auth.uid()::text = user_a_id::text OR auth.uid()::text = user_b_id::text);
 
+DROP POLICY IF EXISTS sim_write_own ON agent_date_simulations;
 CREATE POLICY sim_write_own ON agent_date_simulations 
     FOR UPDATE USING (auth.uid()::text = user_a_id::text OR auth.uid()::text = user_b_id::text);
 
 -- Chat Messages Policies
+DROP POLICY IF EXISTS chat_read_own ON chat_messages;
 CREATE POLICY chat_read_own ON chat_messages 
     FOR SELECT USING (auth.uid()::text = sender_id::text OR auth.uid()::text = receiver_id::text);
 
+DROP POLICY IF EXISTS chat_insert_own ON chat_messages;
 CREATE POLICY chat_insert_own ON chat_messages 
     FOR INSERT WITH CHECK (auth.uid()::text = sender_id::text);
 
 -- Posts Policies
+DROP POLICY IF EXISTS posts_read_all ON posts;
 CREATE POLICY posts_read_all ON posts 
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS posts_insert_own ON posts;
 CREATE POLICY posts_insert_own ON posts 
     FOR INSERT WITH CHECK (auth.uid()::text = author_id::text);
 
+DROP POLICY IF EXISTS posts_modify_own ON posts;
 CREATE POLICY posts_modify_own ON posts 
     FOR UPDATE USING (auth.uid()::text = author_id::text);
 
 -- Comments Policies
+DROP POLICY IF EXISTS comments_read_all ON comments;
 CREATE POLICY comments_read_all ON comments 
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS comments_insert_own ON comments;
 CREATE POLICY comments_insert_own ON comments 
     FOR INSERT WITH CHECK (auth.uid()::text = author_id::text);
 
 -- Feedback Entries Policies
+DROP POLICY IF EXISTS feedback_insert_all ON feedback_entries;
 CREATE POLICY feedback_insert_all ON feedback_entries 
     FOR INSERT WITH CHECK (true); -- Allow feedback submission from anyone
 
+DROP POLICY IF EXISTS feedback_read_admin ON feedback_entries;
 CREATE POLICY feedback_read_admin ON feedback_entries 
     FOR SELECT USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
 
 -- Communities Policies
+DROP POLICY IF EXISTS communities_read_all ON communities;
 CREATE POLICY communities_read_all ON communities 
     FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS communities_admin_all ON communities;
 CREATE POLICY communities_admin_all ON communities 
     FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
