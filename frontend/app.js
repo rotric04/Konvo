@@ -843,7 +843,7 @@ function initAuthPage() {
                 
                 if (res) {
                     pendingRegisterEmail = email;
-                    otpModal.classList.add('active');
+                    window.konvoOpenModal('otp-modal');
                     alert("A verification code has been sent to your email address. Enter it to activate your account.");
                 }
             } catch (err) {
@@ -865,7 +865,7 @@ function initAuthPage() {
                     body: JSON.stringify({ email: pendingRegisterEmail, otp_code: otpCode })
                 });
                 if (res && res.success) {
-                    otpModal.classList.remove('active');
+                    window.konvoCloseModal('otp-modal');
                     alert("OTP verified successfully! You can now log in.");
                     tabLogin.click();
                 }
@@ -1519,7 +1519,7 @@ function initProfilePage() {
 
                 if (res) {
                     Telemetry.logEvent('personality_quiz_completed', { mbti_type: res.mbti_type, role_type: res.role_type });
-                    quizModal.classList.remove('active');
+                    window.konvoCloseModal('quiz-modal');
                     localStorage.removeItem('konvo_onboarding_draft');
                     alert(`Success! Calculated Archetype: ${res.mbti_type} (${res.role_type}). Your AI Twin digital representative has been compiled and initialized.`);
                     window.location.reload();
@@ -1548,7 +1548,7 @@ function initProfilePage() {
             quizAnswers = {};
             prepopulateWizard();
             renderWizard();
-            quizModal.classList.add('active');
+            window.konvoOpenModal('quiz-modal');
         });
     }
 
@@ -1677,7 +1677,7 @@ function initSwipePage(targetContainerId) {
                 if (res.match_occurred) {
                     // Match celebration modal trigger
                     const celebModal = document.getElementById('match-celebration-modal');
-                    if (celebModal) celebModal.classList.add('active');
+                    if (celebModal) window.konvoOpenModal('match-celebration-modal');
                 }
                 
                 currentCardIndex++;
@@ -2229,7 +2229,7 @@ function initAgentsPage() {
         document.getElementById('modal-stage-title').textContent = `${activeTwin.name} & ${sim.partner_name}`;
         document.getElementById('modal-stage-subtitle').textContent = `Environment: ${sim.environment}`;
         
-        modal.classList.add('active');
+        window.konvoOpenModal('date-stage-modal');
         anime({
             targets: '#date-stage-modal .modal-content',
             scale: [0.8, 1],
@@ -2261,11 +2261,11 @@ function initAgentsPage() {
                 <button class="btn btn-secondary" id="btn-stage-decline" style="color:var(--accent-rose); border-color:var(--accent-rose);">Decline</button>
             `;
             document.getElementById('btn-stage-approve').addEventListener('click', () => {
-                modal.classList.remove('active');
+                window.konvoCloseModal('date-stage-modal');
                 handleApproval('approved');
             });
             document.getElementById('btn-stage-decline').addEventListener('click', () => {
-                modal.classList.remove('active');
+                window.konvoCloseModal('date-stage-modal');
                 handleApproval('declined');
             });
         } else {
@@ -2764,14 +2764,18 @@ function initChatWorkspace() {
     loadMatches();
 }
 
-// ─── Body scroll lock — single MutationObserver is the sole controller ───────
-// IMPORTANT: Do NOT call lockBodyScroll/unlockBodyScroll manually in other
-// places. The MutationObserver in setupModalClosers is the only authority.
+// ─── Direct Modal System (Open / Close / Scroll Lock) ──────────────────────────
 const _activeModals = new Set();
 let _savedScrollY = 0;
 
-function lockBodyScroll(modalId) {
-    if (!modalId) return;
+window.konvoOpenModal = function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    
+    // 1. Set active class
+    el.classList.add('active');
+    
+    // 2. Lock body scroll
     if (_activeModals.size === 0) {
         _savedScrollY = window.scrollY;
         document.documentElement.style.setProperty('--scroll-y', `-${_savedScrollY}px`);
@@ -2781,97 +2785,90 @@ function lockBodyScroll(modalId) {
         document.body.style.setProperty('top', `-${_savedScrollY}px`);
         document.body.classList.add('modal-open');
     }
-    _activeModals.add(modalId);
-}
-
-function unlockBodyScroll(modalId) {
-    if (!modalId) return;
-    if (!_activeModals.has(modalId)) return;
-    _activeModals.delete(modalId);
-    if (_activeModals.size === 0) {
-        document.body.style.removeProperty('overflow');
-        document.body.style.removeProperty('position');
-        document.body.style.removeProperty('width');
-        document.body.style.removeProperty('top');
-        document.body.classList.remove('modal-open');
-        document.documentElement.style.removeProperty('--scroll-y');
-        window.scrollTo(0, _savedScrollY);
+    _activeModals.add(id);
+    
+    // 3. GSAP Entry Animation (only on content, backdrop is handled purely by CSS transition)
+    if (typeof gsap !== 'undefined') {
+        const content = el.querySelector('.modal-content, .card');
+        if (content && id !== 'date-stage-modal') {
+            gsap.killTweensOf(content);
+            gsap.fromTo(content, { scale: 0.9, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
+        }
     }
-}
+};
+
+window.konvoCloseModal = function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    
+    // Prevent closing onboarding quiz modal if profile is incomplete
+    if (id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser &&
+        (!currentUser.profile || !currentUser.profile.mbti_summary)) {
+        return;
+    }
+    
+    // 1. Remove active class (this allows the CSS transition to fade the backdrop overlay)
+    el.classList.remove('active');
+    
+    // 2. Unlock body scroll
+    if (_activeModals.has(id)) {
+        _activeModals.delete(id);
+        if (_activeModals.size === 0) {
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('position');
+            document.body.style.removeProperty('width');
+            document.body.style.removeProperty('top');
+            document.body.classList.remove('modal-open');
+            document.documentElement.style.removeProperty('--scroll-y');
+            window.scrollTo(0, _savedScrollY);
+        }
+    }
+    
+    // 3. Demo modal specific cleanup
+    if (id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
+        clearInterval(demoSimInterval);
+        demoSimInterval = null;
+    }
+    
+    // 4. GSAP Exit Animation and Cleanup (only on content, not clashing with overlay backdrop opacity)
+    if (typeof gsap !== 'undefined') {
+        const content = el.querySelector('.modal-content, .card');
+        if (content && id !== 'date-stage-modal') {
+            gsap.killTweensOf(content);
+            gsap.to(content, {
+                scale: 0.93,
+                y: 10,
+                duration: 0.2,
+                ease: 'power2.in',
+                onComplete: () => {
+                    gsap.set(content, { clearProps: 'transform,scale' });
+                }
+            });
+        }
+    }
+};
 
 // Close Modal helper
 function setupModalClosers() {
-
-    // The single function to close a modal.
-    // Does NOT call unlockBodyScroll — the MutationObserver below is the
-    // only place that calls it, preventing the double-decrement bug.
-    function closeModal(m) {
-        if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser &&
-            (!currentUser.profile || !currentUser.profile.mbti_summary)) {
-            return; // Onboarding quiz cannot be skipped
-        }
-        m.classList.remove('active');
-        if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
-            clearInterval(demoSimInterval);
-            demoSimInterval = null;
-        }
-    }
-
-    // Expose close helper globally
-    window.konvoCloseModal = function(id) {
-        const el = document.getElementById(id);
-        if (el) closeModal(el);
-    };
-
     // Click-only delegation on each modal overlay.
-    // We do NOT use pointerup here because:
-    //   - pointerup with e.preventDefault() suppresses subsequent click events
-    //     in iOS Safari, which breaks inline onclick handlers on close buttons
-    //   - passive:false on inner elements causes laggy checkboxes / inputs
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', (e) => {
             // Close when clicking the dark backdrop (outside modal-content)
             if (e.target === m) {
-                closeModal(m);
+                window.konvoCloseModal(m.id);
                 return;
             }
             // Close when any .close-modal button is clicked anywhere inside
             if (e.target.closest('.close-modal')) {
-                closeModal(m);
+                window.konvoCloseModal(m.id);
             }
-        });
-    });
-
-    // MutationObserver is the single authority for body scroll lock.
-    // It observes class changes and calls lock/unlock exactly once per event.
-    const scrollLockObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName !== 'class') return;
-            const target = mutation.target;
-            // Only act on elements that have the .modal class
-            if (!target.classList.contains('modal')) return;
-            const wasActive = mutation.oldValue ? mutation.oldValue.split(' ').includes('active') : false;
-            const isActive = target.classList.contains('active');
-            if (isActive && !wasActive) {
-                lockBodyScroll(target.id || 'unnamed-modal');
-            } else if (!isActive && wasActive) {
-                unlockBodyScroll(target.id || 'unnamed-modal');
-            }
-        });
-    });
-
-    document.querySelectorAll('.modal').forEach(m => {
-        scrollLockObserver.observe(m, {
-            attributes: true,
-            attributeFilter: ['class'],
-            attributeOldValue: true   // needed to diff old vs new class list
         });
     });
 
     // Global ESC key — close all active modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal.active').forEach(m => closeModal(m));
+            document.querySelectorAll('.modal.active').forEach(m => window.konvoCloseModal(m.id));
         }
     });
 }
@@ -3423,7 +3420,7 @@ function initLandingPageInteractive() {
     if (demoBtn && demoModal) {
         demoBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            demoModal.classList.add('active');
+            window.konvoOpenModal('demo-modal');
             Telemetry.logEvent('interactive_demo_started');
             startInteractiveDemoSimulation();
         });
@@ -4049,17 +4046,17 @@ function injectFooter() {
                     <div class="footer-col">
                         <h4>Security</h4>
                         <ul>
-                            <li><a href="#" onclick="event.preventDefault();document.getElementById('security-policy-modal')&&document.getElementById('security-policy-modal').classList.add('active');">Security Policy</a></li>
-                            <li><a href="#" onclick="event.preventDefault();document.getElementById('privacy-modal')&&document.getElementById('privacy-modal').classList.add('active');">Data Protection</a></li>
+                            <li><a href="#" onclick="event.preventDefault();window.konvoOpenModal('security-policy-modal');">Security Policy</a></li>
+                            <li><a href="#" onclick="event.preventDefault();window.konvoOpenModal('privacy-modal');">Data Protection</a></li>
                             <li><a href="#" onclick="event.preventDefault();alert('System Status: Operational. All gateway microservices active. High-Speed Memory: Connected. Relational Index: Active.');">● Systems: Operational</a></li>
                         </ul>
                     </div>
                     <div class="footer-col">
                         <h4>Legal</h4>
                         <ul>
-                            <li><a href="#" onclick="event.preventDefault();document.getElementById('privacy-modal')&&document.getElementById('privacy-modal').classList.add('active');">Privacy Policy</a></li>
-                            <li><a href="#" onclick="event.preventDefault();document.getElementById('tos-modal')&&document.getElementById('tos-modal').classList.add('active');">Terms of Service</a></li>
-                            <li><a href="#" onclick="event.preventDefault();document.getElementById('security-policy-modal')&&document.getElementById('security-policy-modal').classList.add('active');">Security Policy</a></li>
+                            <li><a href="#" onclick="event.preventDefault();window.konvoOpenModal('privacy-modal');">Privacy Policy</a></li>
+                            <li><a href="#" onclick="event.preventDefault();window.konvoOpenModal('tos-modal');">Terms of Service</a></li>
+                            <li><a href="#" onclick="event.preventDefault();window.konvoOpenModal('security-policy-modal');">Security Policy</a></li>
                         </ul>
                     </div>
                 </div>
@@ -4067,8 +4064,8 @@ function injectFooter() {
             <div class="footer-bottom-bar">
                 <div>© 2026 Konvo. All rights reserved.</div>
                 <div style="display: flex; gap: 1.5rem; color: var(--text-muted); font-size: 0.75rem;">
-                    <a href="#" style="color:var(--text-muted);" onclick="event.preventDefault();document.getElementById('privacy-modal')&&document.getElementById('privacy-modal').classList.add('active');">Privacy</a>
-                    <a href="#" style="color:var(--text-muted);" onclick="event.preventDefault();document.getElementById('tos-modal')&&document.getElementById('tos-modal').classList.add('active');">Terms</a>
+                    <a href="#" style="color:var(--text-muted);" onclick="event.preventDefault();window.konvoOpenModal('privacy-modal');">Privacy</a>
+                    <a href="#" style="color:var(--text-muted);" onclick="event.preventDefault();window.konvoOpenModal('tos-modal');">Terms</a>
                     <span>v1.0.0</span>
                 </div>
             </div>
@@ -7028,12 +7025,11 @@ function initCookieConsent() {
     // fires the moment .active is added to the modal.
     if (btnPreferences) {
         btnPreferences.addEventListener('click', () => {
-            if (prefModal) prefModal.classList.add('active');
+            window.konvoOpenModal('cookie-preferences-modal');
         });
     }
 
     // Save Preferences — read checkboxes, persist, then close modal.
-    // We remove .active directly; MutationObserver fires unlockBodyScroll automatically.
     if (btnSavePrefs) {
         btnSavePrefs.addEventListener('click', () => {
             const analytics = document.getElementById('cookie-pref-analytics')?.checked ? 'true' : 'false';
@@ -7041,7 +7037,7 @@ function initCookieConsent() {
             localStorage.setItem('konvo_cookies_accepted', 'custom');
             localStorage.setItem('konvo_cookies_analytics', analytics);
             localStorage.setItem('konvo_cookies_functional', functional);
-            if (prefModal) prefModal.classList.remove('active');
+            window.konvoCloseModal('cookie-preferences-modal');
             banner.classList.remove('active');
         });
     }
@@ -7090,66 +7086,7 @@ async function initApp() {
     initCookieConsent();
     initUserGuideTabs();
 
-    // GSAP Modal Animation Observer
-    if (typeof gsap !== 'undefined') {
-        const modals = document.querySelectorAll('.modal');
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    const target = mutation.target;
-                    const isActive = target.classList.contains('active');
-                    const wasActive = target.dataset.wasActive === 'true';
-                    if (isActive !== wasActive) {
-                        target.dataset.wasActive = isActive ? 'true' : 'false';
-                        if (isActive) {
-                            const content = target.querySelector('.modal-content, .card');
-                            if (content) {
-                                gsap.killTweensOf(content);
-                                gsap.killTweensOf(target);
-                                gsap.fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
-                                gsap.fromTo(content, { scale: 0.9, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
-                            }
-                        } else {
-                            if (target.id === 'demo-modal') {
-                                if (typeof demoSimInterval !== 'undefined' && demoSimInterval) {
-                                    clearInterval(demoSimInterval);
-                                    demoSimInterval = null;
-                                }
-                            }
-                            
-                            // Snappy premium exit animation and complete cleanup of GSAP inline styles
-                            const content = target.querySelector('.modal-content, .card');
-                            gsap.killTweensOf(target);
-                            if (content) gsap.killTweensOf(content);
-                            
-                            gsap.to(target, {
-                                opacity: 0,
-                                duration: 0.2,
-                                ease: 'power2.in',
-                                onComplete: () => {
-                                    gsap.set(target, { clearProps: 'opacity' });
-                                }
-                            });
-                            if (content) {
-                                gsap.to(content, {
-                                    scale: 0.93,
-                                    y: 10,
-                                    duration: 0.2,
-                                    ease: 'power2.in',
-                                    onComplete: () => {
-                                        gsap.set(content, { clearProps: 'transform,scale' });
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-            });
-        });
-        modals.forEach(modal => {
-            observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
-        });
-    }
+
     setupLogout();
 
     // Bind Mobile Sidebar Drawer controls
@@ -7207,18 +7144,8 @@ async function initApp() {
     // Global DIGIPIN Helper Modal Trigger Binding
     document.addEventListener('click', (e) => {
         const target = e.target.closest('#btn-know-digipin, #btn-set-know-digipin, #btn-wiz-know-digipin');
-        const modal = document.getElementById('digipin-helper-modal');
-        if (target && modal) {
-            modal.classList.add('active');
-        }
-        
-        const closeTarget = e.target.closest('#btn-close-digipin-modal, #btn-digipin-modal-cancel');
-        if (closeTarget && modal) {
-            modal.classList.remove('active');
-        }
-        
-        if (e.target === modal) {
-            modal.classList.remove('active');
+        if (target) {
+            window.konvoOpenModal('digipin-helper-modal');
         }
     });
 
