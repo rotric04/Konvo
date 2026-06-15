@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" class="preload">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback | Konvo — World's First Agent-Based Date Finder</title>
-    <meta name="description" content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
-    
+    <title>Feedback | Konvo - World's First Agent-Based Date Finder</title>
+    <meta name="description"
+        content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
+
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://konvo.space/feedback">
     <meta property="og:title" content="Feedback | Konvo — World's First Agent-Based Date Finder">
-    <meta property="og:description" content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
+    <meta property="og:description"
+        content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
     <meta property="og:image" content="https://konvo.space/static/og_banner.png">
     <meta property="og:image:secure_url" content="https://konvo.space/static/og_banner.png">
     <meta property="og:image:type" content="image/png">
@@ -22,51 +25,64 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://konvo.space/feedback">
     <meta property="twitter:title" content="Feedback | Konvo — World's First Agent-Based Date Finder">
-    <meta property="twitter:description" content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
+    <meta property="twitter:description"
+        content="Report bugs, suggest features, and share your experience with Konvo — the world's first AI agent-based date finder.">
     <meta property="twitter:image" content="https://konvo.space/static/og_banner.png">
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <!-- Vercel Web Analytics & Speed Insights -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/theme.css">
     <style>
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         @media (max-width: 768px) {
             header {
                 padding: 0.75rem 1rem !important;
             }
+
             .feedback-hero {
                 padding: 2rem 1rem 1.5rem 1rem !important;
             }
+
             .feedback-hero h1 {
                 font-size: 1.85rem !important;
             }
+
             .feedback-hero p {
                 font-size: 0.9rem !important;
             }
+
             .feedback-tabs {
                 gap: 0.5rem !important;
             }
+
             .feedback-tab-btn {
                 padding: 0.5rem 0.75rem !important;
                 font-size: 0.8rem !important;
             }
+
             .feedback-form-container {
                 padding: 1rem !important;
             }
-            .feedback-form-pane > div {
+
+            .feedback-form-pane>div {
                 padding: 1.25rem !important;
             }
+
             footer {
                 padding: 1.5rem 1rem !important;
                 margin-top: 2rem !important;
@@ -75,299 +91,371 @@
     </style>
     <script src="/src/theme-manager.js"></script>
 </head>
+
 <body>
 
-<!-- Aurora background layers -->
-<div style="position:fixed;inset:0;z-index:-1;pointer-events:none;">
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(79,70,229,0.18) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(13,148,136,0.12) 0%,transparent 55%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(236,72,153,0.06) 0%,transparent 55%);"></div>
-</div>
-
-<div class="feedback-page-layout">
-
-    <!-- Header -->
-    <header style="position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-color);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;">
-        <a href="/" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1.1rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:28px;height:28px;">
-                <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4"/>
-                <circle cx="32" cy="50" r="12" fill="var(--accent-teal)" opacity="0.85"/>
-                <circle cx="68" cy="50" r="12" fill="var(--accent-indigo)" opacity="0.85"/>
-                <path d="M 40 50 Q 50 40 60 50" fill="none" stroke="var(--text-primary)" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M 40 50 Q 50 60 60 50" fill="none" stroke="var(--text-primary)" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-            KONVO
-        </a>
-        <nav style="display:flex;gap:1rem;align-items:center;">
-            <a href="/" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);padding:0.4rem 0.85rem;border:1px solid var(--border-color);border-radius:5px;">← Back to App</a>
-        </nav>
-    </header>
-
-    <!-- Hero -->
-    <div class="feedback-hero">
-        <div style="font-family:var(--font-mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-teal);margin-bottom:1rem;">Community Signal</div>
-        <h1 style="font-family:var(--font-display);font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.75rem;color:var(--text-primary);">Your Voice Shapes Konvo</h1>
-        <p style="font-size:1rem;color:var(--text-secondary);max-width:520px;margin:0 auto;line-height:1.6;">
-            Report bugs, request features, or share your experience. Every signal makes the world's first AI agent dating platform better.
-        </p>
-    </div>
-
-    <!-- Tabs -->
-    <div style="max-width:700px;margin:0 auto;padding:0 2rem;">
-        <div class="feedback-tabs" id="feedback-tabs">
-            <button class="feedback-tab-btn active" data-tab="bug" id="tab-bug">🐛 Bug Report</button>
-            <button class="feedback-tab-btn" data-tab="feature" id="tab-feature">✨ Feature Request</button>
-            <button class="feedback-tab-btn" data-tab="suggestion" id="tab-suggestion">💡 Suggestion</button>
+    <!-- Aurora background layers -->
+    <div style="position:fixed;inset:0;z-index:-1;pointer-events:none;">
+        <div
+            style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(79,70,229,0.18) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(13,148,136,0.12) 0%,transparent 55%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(236,72,153,0.06) 0%,transparent 55%);">
         </div>
     </div>
 
-    <!-- Form Container -->
-    <div class="feedback-form-container">
+    <div class="feedback-page-layout">
 
-        <!-- BUG REPORT FORM -->
-        <div id="form-bug" class="feedback-form-pane">
-            <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
-                <h3 style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Bug Report</h3>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Help us squash it. Provide as much detail as possible.</p>
+        <!-- Header -->
+        <header
+            style="position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-color);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;">
+            <a href="/"
+                style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1.1rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:28px;height:28px;">
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-color)" stroke-width="2"
+                        stroke-dasharray="4 4" />
+                    <circle cx="32" cy="50" r="12" fill="var(--accent-teal)" opacity="0.85" />
+                    <circle cx="68" cy="50" r="12" fill="var(--accent-indigo)" opacity="0.85" />
+                    <path d="M 40 50 Q 50 40 60 50" fill="none" stroke="var(--text-primary)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <path d="M 40 50 Q 50 60 60 50" fill="none" stroke="var(--text-primary)" stroke-width="2.5"
+                        stroke-linecap="round" />
+                </svg>
+                KONVO
+            </a>
+            <nav style="display:flex;gap:1rem;align-items:center;">
+                <a href="/"
+                    style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);padding:0.4rem 0.85rem;border:1px solid var(--border-color);border-radius:5px;">←
+                    Back to App</a>
+            </nav>
+        </header>
 
-                <div class="form-group">
-                    <label for="bug-title">Bug Title</label>
-                    <input type="text" id="bug-title" placeholder="e.g. Dark mode doesn't save after page refresh">
-                </div>
-
-                <div class="form-group">
-                    <label>Severity</label>
-                    <div class="severity-btns" id="severity-group">
-                        <button class="severity-btn critical" data-severity="critical">🔴 Critical</button>
-                        <button class="severity-btn major active major" data-severity="major">🟡 Major</button>
-                        <button class="severity-btn minor" data-severity="minor">🟢 Minor</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="bug-desc">Description</label>
-                    <textarea id="bug-desc" rows="4" placeholder="What happened? What did you expect to happen?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="bug-steps">Steps to Reproduce</label>
-                    <textarea id="bug-steps" rows="3" placeholder="1. Go to Settings&#10;2. Toggle dark mode&#10;3. Refresh page&#10;4. See that theme is reset"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="bug-page">Page / Section</label>
-                    <select id="bug-page">
-                        <option value="">Select affected area...</option>
-                        <option>Landing Page</option>
-                        <option>Authentication</option>
-                        <option>Discovery Deck / Swipe</option>
-                        <option>Chat Center</option>
-                        <option>Resonance Grid</option>
-                        <option>Twin DNA / Profile</option>
-                        <option>Virtual Date Mode</option>
-                        <option>Rizz Engine</option>
-                        <option>Settings / Appearance</option>
-                        <option>Admin Dashboard</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="bug-browser">Browser & Device</label>
-                    <input type="text" id="bug-browser" placeholder="e.g. Chrome 124 on Windows 11 / Safari on iPhone 15">
-                </div>
-
-                <div class="form-group">
-                    <label for="bug-email">Your Email (optional)</label>
-                    <input type="email" id="bug-email" placeholder="For follow-up (we respect your privacy)">
-                </div>
-
-                <button class="feedback-submit-btn" onclick="submitFeedback('bug')">Submit Bug Report →</button>
-            </div>
-        </div>
-
-        <!-- FEATURE REQUEST FORM -->
-        <div id="form-feature" class="feedback-form-pane" style="display:none;">
-            <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
-                <h3 style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">Feature Request</h3>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Got a great idea? We love building what our community needs.</p>
-
-                <div class="form-group">
-                    <label for="feat-title">Feature Title</label>
-                    <input type="text" id="feat-title" placeholder="e.g. Voice messages in chat">
-                </div>
-
-                <div class="form-group">
-                    <label>Priority</label>
-                    <div class="severity-btns" id="priority-group">
-                        <button class="severity-btn critical" data-priority="high">🔥 High Impact</button>
-                        <button class="severity-btn major active major" data-priority="medium">⚡ Medium</button>
-                        <button class="severity-btn minor" data-priority="nice">🌸 Nice to Have</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="feat-desc">Describe the Feature</label>
-                    <textarea id="feat-desc" rows="4" placeholder="What should it do? How would it work?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="feat-usecase">Your Use Case / Problem it Solves</label>
-                    <textarea id="feat-usecase" rows="3" placeholder="Why would this be useful? What problem are you facing today?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="feat-category">Feature Category</label>
-                    <select id="feat-category">
-                        <option value="">Select category...</option>
-                        <option>AI Twin Capabilities</option>
-                        <option>Virtual Date Experience</option>
-                        <option>Chat & Messaging</option>
-                        <option>Discovery / Matching</option>
-                        <option>Rizz Engine</option>
-                        <option>Profile & DNA</option>
-                        <option>UI / Design</option>
-                        <option>Safety & Privacy</option>
-                        <option>Mobile Experience</option>
-                        <option>Performance</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="feat-email">Your Email (optional)</label>
-                    <input type="email" id="feat-email" placeholder="We'll notify you when it ships!">
-                </div>
-
-                <button class="feedback-submit-btn" onclick="submitFeedback('feature')">Submit Feature Request →</button>
-            </div>
-        </div>
-
-        <!-- SUGGESTION FORM -->
-        <div id="form-suggestion" class="feedback-form-pane" style="display:none;">
-            <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
-                <h3 style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">General Suggestion</h3>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Share your experience, thoughts, and ideas freely.</p>
-
-                <div class="form-group">
-                    <label for="sug-title">Subject</label>
-                    <input type="text" id="sug-title" placeholder="What's on your mind?">
-                </div>
-
-                <div class="form-group">
-                    <label>Category Tags</label>
-                    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;" id="sug-tags">
-                        <button class="severity-btn" data-tag="ux" onclick="toggleTag(this)">UX/Design</button>
-                        <button class="severity-btn active minor" data-tag="matching" onclick="toggleTag(this)">Matching Algorithm</button>
-                        <button class="severity-btn" data-tag="ai" onclick="toggleTag(this)">AI Twins</button>
-                        <button class="severity-btn" data-tag="safety" onclick="toggleTag(this)">Safety</button>
-                        <button class="severity-btn" data-tag="dating" onclick="toggleTag(this)">Dating Experience</button>
-                        <button class="severity-btn" data-tag="community" onclick="toggleTag(this)">Community</button>
-                        <button class="severity-btn" data-tag="general" onclick="toggleTag(this)">General</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="sug-message">Your Message</label>
-                    <textarea id="sug-message" rows="6" placeholder="Tell us what you think... Your honest feedback makes Konvo better for everyone."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="sug-rating">Overall Experience (1-5)</label>
-                    <div style="display:flex;gap:0.5rem;margin-top:0.25rem;" id="sug-rating-row">
-                        <button class="star-btn" data-val="1" onclick="setSugRating(1)">⭐</button>
-                        <button class="star-btn" data-val="2" onclick="setSugRating(2)">⭐</button>
-                        <button class="star-btn" data-val="3" onclick="setSugRating(3)">⭐</button>
-                        <button class="star-btn" data-val="4" onclick="setSugRating(4)">⭐</button>
-                        <button class="star-btn" data-val="5" onclick="setSugRating(5)">⭐</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="sug-email">Your Email (optional)</label>
-                    <input type="email" id="sug-email" placeholder="Optional — we read every message">
-                </div>
-
-                <button class="feedback-submit-btn" onclick="submitFeedback('suggestion')">Send Suggestion →</button>
-            </div>
-        </div>
-
-        <!-- Success State -->
-        <div class="feedback-success" id="feedback-success">
-            <div style="font-size:4rem;margin-bottom:1rem;animation:bounce-in 0.6s cubic-bezier(0.16,1,0.3,1);">🎉</div>
-            <h2 style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:0.75rem;color:var(--text-primary);">Thank you!</h2>
-            <p style="color:var(--text-secondary);font-size:1rem;line-height:1.6;max-width:400px;margin:0 auto 2rem;">
-                Your feedback has been received. We read every submission and use it to make Konvo better.
+        <!-- Hero -->
+        <div class="feedback-hero">
+            <div
+                style="font-family:var(--font-mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent-teal);margin-bottom:1rem;">
+                Community Signal</div>
+            <h1
+                style="font-family:var(--font-display);font-size:2.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.75rem;color:var(--text-primary);">
+                Your Voice Shapes Konvo</h1>
+            <p style="font-size:1rem;color:var(--text-secondary);max-width:520px;margin:0 auto;line-height:1.6;">
+                Report bugs, request features, or share your experience. Every signal makes the world's first AI agent
+                dating platform better.
             </p>
-            <button class="feedback-submit-btn" style="max-width:300px;margin:0 auto;" onclick="resetFeedback()">Submit Another</button>
         </div>
 
-        <!-- FAQ Footer -->
-        <div style="border-top:1px solid var(--border-color);padding-top:2rem;margin-top:1rem;">
-            <h4 style="font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;">Common Questions</h4>
-            <div style="display:flex;flex-direction:column;gap:0.75rem;">
-                <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;padding:1rem;">
-                    <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:0.3rem;">When will my bug be fixed?</div>
-                    <div style="font-size:0.82rem;color:var(--text-secondary);">Critical bugs are prioritized within 24 hours. Major bugs within 72 hours. We'll email you if you provided your address.</div>
+        <!-- Tabs -->
+        <div style="max-width:700px;margin:0 auto;padding:0 2rem;">
+            <div class="feedback-tabs" id="feedback-tabs">
+                <button class="feedback-tab-btn active" data-tab="bug" id="tab-bug">🐛 Bug Report</button>
+                <button class="feedback-tab-btn" data-tab="feature" id="tab-feature">✨ Feature Request</button>
+                <button class="feedback-tab-btn" data-tab="suggestion" id="tab-suggestion">💡 Suggestion</button>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="feedback-form-container">
+
+            <!-- BUG REPORT FORM -->
+            <div id="form-bug" class="feedback-form-pane">
+                <div
+                    style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
+                    <h3
+                        style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">
+                        Bug Report</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Help us squash it.
+                        Provide as much detail as possible.</p>
+
+                    <div class="form-group">
+                        <label for="bug-title">Bug Title</label>
+                        <input type="text" id="bug-title" placeholder="e.g. Dark mode doesn't save after page refresh">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Severity</label>
+                        <div class="severity-btns" id="severity-group">
+                            <button class="severity-btn critical" data-severity="critical">🔴 Critical</button>
+                            <button class="severity-btn major active major" data-severity="major">🟡 Major</button>
+                            <button class="severity-btn minor" data-severity="minor">🟢 Minor</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bug-desc">Description</label>
+                        <textarea id="bug-desc" rows="4"
+                            placeholder="What happened? What did you expect to happen?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bug-steps">Steps to Reproduce</label>
+                        <textarea id="bug-steps" rows="3"
+                            placeholder="1. Go to Settings&#10;2. Toggle dark mode&#10;3. Refresh page&#10;4. See that theme is reset"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bug-page">Page / Section</label>
+                        <select id="bug-page">
+                            <option value="">Select affected area...</option>
+                            <option>Landing Page</option>
+                            <option>Authentication</option>
+                            <option>Discovery Deck / Swipe</option>
+                            <option>Chat Center</option>
+                            <option>Resonance Grid</option>
+                            <option>Twin DNA / Profile</option>
+                            <option>Virtual Date Mode</option>
+                            <option>Rizz Engine</option>
+                            <option>Settings / Appearance</option>
+                            <option>Admin Dashboard</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bug-browser">Browser & Device</label>
+                        <input type="text" id="bug-browser"
+                            placeholder="e.g. Chrome 124 on Windows 11 / Safari on iPhone 15">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bug-email">Your Email (optional)</label>
+                        <input type="email" id="bug-email" placeholder="For follow-up (we respect your privacy)">
+                    </div>
+
+                    <button class="feedback-submit-btn" onclick="submitFeedback('bug')">Submit Bug Report →</button>
                 </div>
-                <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;padding:1rem;">
-                    <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:0.3rem;">Do you read all feature requests?</div>
-                    <div style="font-size:0.82rem;color:var(--text-secondary);">Yes! Every request is logged and reviewed. Upvoted features get prioritized in our roadmap sprints.</div>
+            </div>
+
+            <!-- FEATURE REQUEST FORM -->
+            <div id="form-feature" class="feedback-form-pane" style="display:none;">
+                <div
+                    style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
+                    <h3
+                        style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">
+                        Feature Request</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Got a great idea? We
+                        love building what our community needs.</p>
+
+                    <div class="form-group">
+                        <label for="feat-title">Feature Title</label>
+                        <input type="text" id="feat-title" placeholder="e.g. Voice messages in chat">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <div class="severity-btns" id="priority-group">
+                            <button class="severity-btn critical" data-priority="high">🔥 High Impact</button>
+                            <button class="severity-btn major active major" data-priority="medium">⚡ Medium</button>
+                            <button class="severity-btn minor" data-priority="nice">🌸 Nice to Have</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feat-desc">Describe the Feature</label>
+                        <textarea id="feat-desc" rows="4"
+                            placeholder="What should it do? How would it work?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feat-usecase">Your Use Case / Problem it Solves</label>
+                        <textarea id="feat-usecase" rows="3"
+                            placeholder="Why would this be useful? What problem are you facing today?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feat-category">Feature Category</label>
+                        <select id="feat-category">
+                            <option value="">Select category...</option>
+                            <option>AI Twin Capabilities</option>
+                            <option>Virtual Date Experience</option>
+                            <option>Chat & Messaging</option>
+                            <option>Discovery / Matching</option>
+                            <option>Rizz Engine</option>
+                            <option>Profile & DNA</option>
+                            <option>UI / Design</option>
+                            <option>Safety & Privacy</option>
+                            <option>Mobile Experience</option>
+                            <option>Performance</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feat-email">Your Email (optional)</label>
+                        <input type="email" id="feat-email" placeholder="We'll notify you when it ships!">
+                    </div>
+
+                    <button class="feedback-submit-btn" onclick="submitFeedback('feature')">Submit Feature Request
+                        →</button>
+                </div>
+            </div>
+
+            <!-- SUGGESTION FORM -->
+            <div id="form-suggestion" class="feedback-form-pane" style="display:none;">
+                <div
+                    style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:2rem;margin-bottom:1.5rem;">
+                    <h3
+                        style="font-family:var(--font-display);font-size:1.25rem;margin-bottom:0.5rem;color:var(--text-primary);">
+                        General Suggestion</h3>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;">Share your
+                        experience, thoughts, and ideas freely.</p>
+
+                    <div class="form-group">
+                        <label for="sug-title">Subject</label>
+                        <input type="text" id="sug-title" placeholder="What's on your mind?">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category Tags</label>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;" id="sug-tags">
+                            <button class="severity-btn" data-tag="ux" onclick="toggleTag(this)">UX/Design</button>
+                            <button class="severity-btn active minor" data-tag="matching"
+                                onclick="toggleTag(this)">Matching Algorithm</button>
+                            <button class="severity-btn" data-tag="ai" onclick="toggleTag(this)">AI Twins</button>
+                            <button class="severity-btn" data-tag="safety" onclick="toggleTag(this)">Safety</button>
+                            <button class="severity-btn" data-tag="dating" onclick="toggleTag(this)">Dating
+                                Experience</button>
+                            <button class="severity-btn" data-tag="community"
+                                onclick="toggleTag(this)">Community</button>
+                            <button class="severity-btn" data-tag="general" onclick="toggleTag(this)">General</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sug-message">Your Message</label>
+                        <textarea id="sug-message" rows="6"
+                            placeholder="Tell us what you think... Your honest feedback makes Konvo better for everyone."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sug-rating">Overall Experience (1-5)</label>
+                        <div style="display:flex;gap:0.5rem;margin-top:0.25rem;" id="sug-rating-row">
+                            <button class="star-btn" data-val="1" onclick="setSugRating(1)">⭐</button>
+                            <button class="star-btn" data-val="2" onclick="setSugRating(2)">⭐</button>
+                            <button class="star-btn" data-val="3" onclick="setSugRating(3)">⭐</button>
+                            <button class="star-btn" data-val="4" onclick="setSugRating(4)">⭐</button>
+                            <button class="star-btn" data-val="5" onclick="setSugRating(5)">⭐</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sug-email">Your Email (optional)</label>
+                        <input type="email" id="sug-email" placeholder="Optional — we read every message">
+                    </div>
+
+                    <button class="feedback-submit-btn" onclick="submitFeedback('suggestion')">Send Suggestion
+                        →</button>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div class="feedback-success" id="feedback-success">
+                <div style="font-size:4rem;margin-bottom:1rem;animation:bounce-in 0.6s cubic-bezier(0.16,1,0.3,1);">🎉
+                </div>
+                <h2
+                    style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:0.75rem;color:var(--text-primary);">
+                    Thank you!</h2>
+                <p
+                    style="color:var(--text-secondary);font-size:1rem;line-height:1.6;max-width:400px;margin:0 auto 2rem;">
+                    Your feedback has been received. We read every submission and use it to make Konvo better.
+                </p>
+                <button class="feedback-submit-btn" style="max-width:300px;margin:0 auto;"
+                    onclick="resetFeedback()">Submit Another</button>
+            </div>
+
+            <!-- FAQ Footer -->
+            <div style="border-top:1px solid var(--border-color);padding-top:2rem;margin-top:1rem;">
+                <h4
+                    style="font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.25rem;">
+                    Common Questions</h4>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div
+                        style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;padding:1rem;">
+                        <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:0.3rem;">
+                            When will my bug be fixed?</div>
+                        <div style="font-size:0.82rem;color:var(--text-secondary);">Critical bugs are prioritized within
+                            24 hours. Major bugs within 72 hours. We'll email you if you provided your address.</div>
+                    </div>
+                    <div
+                        style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;padding:1rem;">
+                        <div style="font-size:0.9rem;color:var(--text-primary);font-weight:500;margin-bottom:0.3rem;">Do
+                            you read all feature requests?</div>
+                        <div style="font-size:0.82rem;color:var(--text-secondary);">Yes! Every request is logged and
+                            reviewed. Upvoted features get prioritized in our roadmap sprints.</div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer
+            style="text-align:center;padding:2rem;border-top:1px solid var(--border-color);margin-top:3rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">
+            <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.5rem 1.5rem;margin-bottom:1rem;">
+                <a href="/privacy-policy" style="color:var(--text-muted);text-decoration:none;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+                <a href="/terms-of-service" style="color:var(--text-muted);text-decoration:none;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Terms of Service</a>
+                <a href="/security-policy" style="color:var(--text-muted);text-decoration:none;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Security Guide</a>
+                <a href="/hall-of-fame" style="color:var(--text-muted);text-decoration:none;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Hall of Fame</a>
+                <a href="/blog" style="color:var(--text-muted);text-decoration:none;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Blog</a>
+                <button onclick="if(window.konvoShowCookieSettings){window.konvoShowCookieSettings();}"
+                    style="color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:0.75rem;"
+                    onmouseover="this.style.color='var(--accent-teal)'"
+                    onmouseout="this.style.color='var(--text-muted)'">Cookie Settings</button>
+            </div>
+            <div>© 2026 Konvo. <a href="/" style="color:var(--text-muted);">Return to App</a></div>
+        </footer>
+
     </div>
 
-    <!-- Footer -->
-    <footer style="text-align:center;padding:2rem;border-top:1px solid var(--border-color);margin-top:3rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">
-        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:0.5rem 1.5rem;margin-bottom:1rem;">
-            <a href="/privacy-policy" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
-            <a href="/terms-of-service" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Terms of Service</a>
-            <a href="/security-policy" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Security Guide</a>
-            <a href="/hall-of-fame" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Hall of Fame</a>
-            <a href="/blog" style="color:var(--text-muted);text-decoration:none;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Blog</a>
-            <button onclick="if(window.konvoShowCookieSettings){window.konvoShowCookieSettings();}" style="color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:0.75rem;" onmouseover="this.style.color='var(--accent-teal)'" onmouseout="this.style.color='var(--text-muted)'">Cookie Settings</button>
-        </div>
-        <div>© 2026 Konvo. <a href="/" style="color:var(--text-muted);">Return to App</a></div>
-    </footer>
+    <style>
+        @keyframes bounce-in {
+            from {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
 
-</div>
-
-<style>
-@keyframes bounce-in {
-    from { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-    to { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-</style>
-
-<script>
-// PREMIUM CUSTOM ALERT SYSTEM (Replaces Default Browser popups)
-(function() {
-    let alertQueue = [];
-    let activeAlertModal = null;
-
-    window.alert = function(message) {
-        if (message === undefined || message === null) return;
-        const msgStr = String(message);
-        
-        // Push message to queue
-        alertQueue.push(msgStr);
-        
-        if (!activeAlertModal) {
-            processNextAlert();
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
-    };
+    </style>
 
-    function processNextAlert() {
-        if (alertQueue.length === 0) {
-            activeAlertModal = null;
-            return;
-        }
+    <script>
+        // PREMIUM CUSTOM ALERT SYSTEM (Replaces Default Browser popups)
+        (function () {
+            let alertQueue = [];
+            let activeAlertModal = null;
 
-        const message = alertQueue.shift();
-        
-        // Create modal container
-        const modal = document.createElement('div');
-        modal.className = 'konvo-custom-alert-overlay';
-        modal.style.cssText = `
+            window.alert = function (message) {
+                if (message === undefined || message === null) return;
+                const msgStr = String(message);
+
+                // Push message to queue
+                alertQueue.push(msgStr);
+
+                if (!activeAlertModal) {
+                    processNextAlert();
+                }
+            };
+
+            function processNextAlert() {
+                if (alertQueue.length === 0) {
+                    activeAlertModal = null;
+                    return;
+                }
+
+                const message = alertQueue.shift();
+
+                // Create modal container
+                const modal = document.createElement('div');
+                modal.className = 'konvo-custom-alert-overlay';
+                modal.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
@@ -384,9 +472,9 @@
             transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         `;
 
-        // Create card content
-        const card = document.createElement('div');
-        card.style.cssText = `
+                // Create card content
+                const card = document.createElement('div');
+                card.style.cssText = `
             background: var(--bg-card, #141416);
             border: 1px solid var(--border-color, #27272A);
             border-radius: 16px;
@@ -401,9 +489,9 @@
             overflow: hidden;
         `;
 
-        // Add a subtle top border gradient glow line
-        const glowLine = document.createElement('div');
-        glowLine.style.cssText = `
+                // Add a subtle top border gradient glow line
+                const glowLine = document.createElement('div');
+                glowLine.style.cssText = `
             position: absolute;
             top: 0;
             left: 0;
@@ -411,18 +499,18 @@
             height: 3px;
             background: linear-gradient(90deg, var(--accent-teal, #0D9488), var(--accent-amber, #D97706), var(--accent-indigo, #06B6D4));
         `;
-        card.appendChild(glowLine);
+                card.appendChild(glowLine);
 
-        // Header/Icon section
-        const header = document.createElement('div');
-        header.style.cssText = `
+                // Header/Icon section
+                const header = document.createElement('div');
+                header.style.cssText = `
             display: flex;
             justify-content: center;
             margin-bottom: 1.25rem;
         `;
-        
-        // Premium brand-like pulsing icon
-        header.innerHTML = `
+
+                // Premium brand-like pulsing icon
+                header.innerHTML = `
             <div style="background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.25); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--accent-amber, #D97706); font-size: 1.5rem; animation: pulseGlow 2s infinite ease-in-out;">
                 ✦
             </div>
@@ -433,11 +521,11 @@
                 }
             </style>
         `;
-        card.appendChild(header);
+                card.appendChild(header);
 
-        // Message text
-        const text = document.createElement('div');
-        text.style.cssText = `
+                // Message text
+                const text = document.createElement('div');
+                text.style.cssText = `
             color: var(--text-primary, #FAF9F6);
             font-family: var(--font-sans, system-ui);
             font-size: 0.95rem;
@@ -446,19 +534,19 @@
             word-break: break-word;
             text-align: center;
         `;
-        text.textContent = message;
-        card.appendChild(text);
+                text.textContent = message;
+                card.appendChild(text);
 
-        // Button Container & Styled Button
-        const btnContainer = document.createElement('div');
-        btnContainer.style.cssText = `
+                // Button Container & Styled Button
+                const btnContainer = document.createElement('div');
+                btnContainer.style.cssText = `
             display: flex;
             justify-content: center;
         `;
 
-        const btn = document.createElement('button');
-        btn.textContent = 'Acknowledge';
-        btn.style.cssText = `
+                const btn = document.createElement('button');
+                btn.textContent = 'Acknowledge';
+                btn.style.cssText = `
             background: var(--accent-amber, #D97706);
             color: #09090B;
             border: 1px solid var(--accent-amber, #D97706);
@@ -475,178 +563,178 @@
             box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
         `;
 
-        // Hover animations
-        btn.onmouseover = () => {
-            btn.style.background = 'transparent';
-            btn.style.color = 'var(--accent-amber, #D97706)';
-            btn.style.boxShadow = 'none';
-        };
-        btn.onmouseout = () => {
-            btn.style.background = 'var(--accent-amber, #D97706)';
-            btn.style.color = '#09090B';
-            btn.style.boxShadow = '0 4px 12px rgba(217, 119, 6, 0.15)';
-        };
+                // Hover animations
+                btn.onmouseover = () => {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--accent-amber, #D97706)';
+                    btn.style.boxShadow = 'none';
+                };
+                btn.onmouseout = () => {
+                    btn.style.background = 'var(--accent-amber, #D97706)';
+                    btn.style.color = '#09090B';
+                    btn.style.boxShadow = '0 4px 12px rgba(217, 119, 6, 0.15)';
+                };
 
-        btnContainer.appendChild(btn);
-        card.appendChild(btnContainer);
-        modal.appendChild(card);
-        document.body.appendChild(modal);
+                btnContainer.appendChild(btn);
+                card.appendChild(btnContainer);
+                modal.appendChild(card);
+                document.body.appendChild(modal);
 
-        activeAlertModal = modal;
+                activeAlertModal = modal;
 
-        // Animate open
-        requestAnimationFrame(() => {
-            modal.style.opacity = '1';
-            card.style.transform = 'scale(1) translateY(0)';
+                // Animate open
+                requestAnimationFrame(() => {
+                    modal.style.opacity = '1';
+                    card.style.transform = 'scale(1) translateY(0)';
+                });
+
+                // Close functions
+                const closeAlert = () => {
+                    modal.style.opacity = '0';
+                    card.style.transform = 'scale(0.92) translateY(15px)';
+
+                    // Clean up event listeners
+                    window.removeEventListener('keydown', handleKeyDown);
+
+                    setTimeout(() => {
+                        modal.remove();
+                        // Process next in queue
+                        processNextAlert();
+                    }, 250);
+                };
+
+                // Event listener for close button click
+                btn.addEventListener('click', closeAlert);
+
+                // Keydown listener for Esc or Enter
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Escape' || e.key === 'Enter') {
+                        e.preventDefault();
+                        closeAlert();
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+            }
+        })();
+
+        let sugRating = 0;
+        let activeSeverity = 'major';
+
+        // Tab switching
+        document.getElementById('feedback-tabs').addEventListener('click', (e) => {
+            const btn = e.target.closest('.feedback-tab-btn');
+            if (!btn) return;
+            const tab = btn.dataset.tab;
+            document.querySelectorAll('.feedback-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.feedback-form-pane').forEach(f => f.style.display = 'none');
+            document.getElementById('form-' + tab).style.display = 'block';
         });
 
-        // Close functions
-        const closeAlert = () => {
-            modal.style.opacity = '0';
-            card.style.transform = 'scale(0.92) translateY(15px)';
-            
-            // Clean up event listeners
-            window.removeEventListener('keydown', handleKeyDown);
-            
-            setTimeout(() => {
-                modal.remove();
-                // Process next in queue
-                processNextAlert();
-            }, 250);
-        };
+        // Severity buttons
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.severity-btn[data-severity], .severity-btn[data-priority]');
+            if (!btn) return;
+            const group = btn.closest('#severity-group, #priority-group');
+            if (!group) return;
+            group.querySelectorAll('.severity-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
 
-        // Event listener for close button click
-        btn.addEventListener('click', closeAlert);
-
-        // Keydown listener for Esc or Enter
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape' || e.key === 'Enter') {
-                e.preventDefault();
-                closeAlert();
+        function toggleTag(btn) {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                btn.classList.add('minor');
+            } else {
+                btn.classList.remove('minor');
             }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-    }
-})();
-
-let sugRating = 0;
-let activeSeverity = 'major';
-
-// Tab switching
-document.getElementById('feedback-tabs').addEventListener('click', (e) => {
-    const btn = e.target.closest('.feedback-tab-btn');
-    if (!btn) return;
-    const tab = btn.dataset.tab;
-    document.querySelectorAll('.feedback-tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.feedback-form-pane').forEach(f => f.style.display = 'none');
-    document.getElementById('form-' + tab).style.display = 'block';
-});
-
-// Severity buttons
-document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.severity-btn[data-severity], .severity-btn[data-priority]');
-    if (!btn) return;
-    const group = btn.closest('#severity-group, #priority-group');
-    if (!group) return;
-    group.querySelectorAll('.severity-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-});
-
-function toggleTag(btn) {
-    btn.classList.toggle('active');
-    if (btn.classList.contains('active')) {
-        btn.classList.add('minor');
-    } else {
-        btn.classList.remove('minor');
-    }
-}
-
-function setSugRating(val) {
-    sugRating = val;
-    document.querySelectorAll('#sug-rating-row .star-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', i < val);
-    });
-}
-
-function submitFeedback(type) {
-    // Collect data
-    const data = { type, timestamp: new Date().toISOString() };
-    if (type === 'bug') {
-        data.title = document.getElementById('bug-title').value;
-        data.severity = document.querySelector('#severity-group .active')?.dataset.severity || 'major';
-        data.description = document.getElementById('bug-desc').value;
-        data.steps = document.getElementById('bug-steps').value;
-        data.page = document.getElementById('bug-page').value;
-        data.browser = document.getElementById('bug-browser').value;
-        data.email = document.getElementById('bug-email').value;
-        if (!data.title || !data.description) { alert('Please fill in the title and description.'); return; }
-    } else if (type === 'feature') {
-        data.title = document.getElementById('feat-title').value;
-        data.priority = document.querySelector('#priority-group .active')?.dataset.priority || 'medium';
-        data.description = document.getElementById('feat-desc').value;
-        data.usecase = document.getElementById('feat-usecase').value;
-        data.category = document.getElementById('feat-category').value;
-        data.email = document.getElementById('feat-email').value;
-        if (!data.title || !data.description) { alert('Please fill in the title and description.'); return; }
-    } else {
-        data.title = document.getElementById('sug-title').value;
-        data.tags = Array.from(document.querySelectorAll('#sug-tags .severity-btn.active')).map(b => b.dataset.tag);
-        data.message = document.getElementById('sug-message').value;
-        data.rating = sugRating;
-        data.email = document.getElementById('sug-email').value;
-        if (!data.message) { alert('Please write your suggestion.'); return; }
-    }
-
-    // Save to localStorage (backup)
-    const stored = JSON.parse(localStorage.getItem('konvo_feedback') || '[]');
-    stored.push(data);
-    localStorage.setItem('konvo_feedback', JSON.stringify(stored));
-
-    // Submit to backend API
-    try {
-        const token = localStorage.getItem('konvo_token');
-        const url = token ? '/api/feedback' : '/api/feedback/anonymous';
-        const headers = { 'Content-Type': 'application/json' };
-        if (token) {
-            headers['Authorization'] = 'Bearer ' + token;
         }
-        fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(data)
-        }).catch((err) => console.warn('API feedback submission failed:', err));
-    } catch (e) {}
 
-    // Submit to FormSubmit.co (mohit.info.83@gmail.com) via AJAX
-    try {
-        fetch('https://formsubmit.co/ajax/mohit.info.83@gmail.com', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                _subject: `Konvo Feedback [${type.toUpperCase()}] - ${data.title || 'General Suggestion'}`,
-                ...data
-            })
-        }).catch((err) => console.warn('FormSubmit integration error:', err));
-    } catch (e) {}
+        function setSugRating(val) {
+            sugRating = val;
+            document.querySelectorAll('#sug-rating-row .star-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i < val);
+            });
+        }
 
-    // Show success
-    document.querySelectorAll('.feedback-form-pane').forEach(f => f.style.display = 'none');
-    const successEl = document.getElementById('feedback-success');
-    successEl.classList.add('show');
-    successEl.scrollIntoView({ behavior: 'smooth' });
-}
+        function submitFeedback(type) {
+            // Collect data
+            const data = { type, timestamp: new Date().toISOString() };
+            if (type === 'bug') {
+                data.title = document.getElementById('bug-title').value;
+                data.severity = document.querySelector('#severity-group .active')?.dataset.severity || 'major';
+                data.description = document.getElementById('bug-desc').value;
+                data.steps = document.getElementById('bug-steps').value;
+                data.page = document.getElementById('bug-page').value;
+                data.browser = document.getElementById('bug-browser').value;
+                data.email = document.getElementById('bug-email').value;
+                if (!data.title || !data.description) { alert('Please fill in the title and description.'); return; }
+            } else if (type === 'feature') {
+                data.title = document.getElementById('feat-title').value;
+                data.priority = document.querySelector('#priority-group .active')?.dataset.priority || 'medium';
+                data.description = document.getElementById('feat-desc').value;
+                data.usecase = document.getElementById('feat-usecase').value;
+                data.category = document.getElementById('feat-category').value;
+                data.email = document.getElementById('feat-email').value;
+                if (!data.title || !data.description) { alert('Please fill in the title and description.'); return; }
+            } else {
+                data.title = document.getElementById('sug-title').value;
+                data.tags = Array.from(document.querySelectorAll('#sug-tags .severity-btn.active')).map(b => b.dataset.tag);
+                data.message = document.getElementById('sug-message').value;
+                data.rating = sugRating;
+                data.email = document.getElementById('sug-email').value;
+                if (!data.message) { alert('Please write your suggestion.'); return; }
+            }
 
-function resetFeedback() {
-    document.getElementById('feedback-success').classList.remove('show');
-    document.getElementById('form-bug').style.display = 'block';
-    document.querySelectorAll('.feedback-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
-}
-</script>
-<script type="module" src="/src/components/cookie-consent.js"></script>
+            // Save to localStorage (backup)
+            const stored = JSON.parse(localStorage.getItem('konvo_feedback') || '[]');
+            stored.push(data);
+            localStorage.setItem('konvo_feedback', JSON.stringify(stored));
+
+            // Submit to backend API
+            try {
+                const token = localStorage.getItem('konvo_token');
+                const url = token ? '/api/feedback' : '/api/feedback/anonymous';
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) {
+                    headers['Authorization'] = 'Bearer ' + token;
+                }
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                }).catch((err) => console.warn('API feedback submission failed:', err));
+            } catch (e) { }
+
+            // Submit to FormSubmit.co (mohit.info.83@gmail.com) via AJAX
+            try {
+                fetch('https://formsubmit.co/ajax/mohit.info.83@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        _subject: `Konvo Feedback [${type.toUpperCase()}] - ${data.title || 'General Suggestion'}`,
+                        ...data
+                    })
+                }).catch((err) => console.warn('FormSubmit integration error:', err));
+            } catch (e) { }
+
+            // Show success
+            document.querySelectorAll('.feedback-form-pane').forEach(f => f.style.display = 'none');
+            const successEl = document.getElementById('feedback-success');
+            successEl.classList.add('show');
+            successEl.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetFeedback() {
+            document.getElementById('feedback-success').classList.remove('show');
+            document.getElementById('form-bug').style.display = 'block';
+            document.querySelectorAll('.feedback-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+        }
+    </script>
+    <script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
-</html>
 
+</html>
