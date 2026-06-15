@@ -42,27 +42,31 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://konvo-u5qb.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://konvo-u5qb.onrender.com/api/:path*"
     },
     {
-      "source": "/static/(.*)",
-      "destination": "/$1"
+      "source": "/static/:path*",
+      "destination": "/:path*"
     },
     {
-      "source": "/(robots\\.txt|security\\.txt|pgp-key\\.txt|llms\\.txt|llm-full\\.txt)",
-      "destination": "/txt/$1"
+      "source": "/:file(robots\\.txt|security\\.txt|pgp-key\\.txt|llms\\.txt|llm-full\\.txt)",
+      "destination": "/txt/:file"
     },
     {
-      "source": "/\\.well-known/security\\.txt",
+      "source": "/\\.well-known/security.txt",
       "destination": "/txt/security.txt"
     },
     {
-      "source": "/llms-full\\.txt",
+      "source": "/llms-full.txt",
       "destination": "/txt/llm-full.txt"
     },
     {
-      "source": "/(auth|login)",
+      "source": "/auth",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/login",
       "destination": "/pages/login.html"
     },
     {
@@ -70,20 +74,24 @@
       "destination": "/pages/onboarding.html"
     },
     {
-      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)?",
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)?",
       "destination": "/pages/app.html"
     },
     {
-      "source": "/blog(/.*)?",
+      "source": "/blog/:subpath*",
       "destination": "/pages/blog.html"
     },
     {
-      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
-      "destination": "/pages/$1.html"
+      "source": "/blog",
+      "destination": "/pages/blog.html"
     },
     {
-      "source": "/([A-Za-z0-9-_]+)",
-      "destination": "/pages/$1.html"
+      "source": "/:page(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
+      "destination": "/pages/:page.html"
+    },
+    {
+      "source": "/:page([A-Za-z0-9-_]+)",
+      "destination": "/pages/:page.html"
     },
     {
       "source": "/",
