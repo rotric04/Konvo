@@ -426,6 +426,7 @@
                             <th>DIGIPIN</th>
                             <th>OTP Status</th>
                             <th>Premium</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="users-table-body">
@@ -457,6 +458,8 @@
 
         // Trigger fetch
         fetchEncryptedData();
+
+        let decryptedPassphrase = "";
 
         // Decryption handler
         document.getElementById("decrypt-btn").addEventListener("click", performDecryption);
@@ -500,6 +503,7 @@
 
                 // Parse decrypted JSON
                 const result = JSON.parse(decryptedText);
+                decryptedPassphrase = passphrase;
                 
                 // Load metrics
                 document.getElementById("metric-total").innerText = result.metrics.total_users;
@@ -551,9 +555,104 @@
                     <td style="font-family: monospace; font-size: 0.85rem; color: #3b82f6;">${u.digipin ? escapeHtml(u.digipin) : "N/A"}</td>
                     <td><span class="status-badge ${u.otp_verified ? 'verified' : 'pending'}">${u.otp_verified ? 'Verified' : 'Pending'}</span></td>
                     <td><span class="status-badge ${u.premium_user ? 'premium' : 'regular'}">${u.premium_user ? 'Premium' : 'Regular'}</span></td>
+                    <td>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <button onclick="toggleUserPremium(${u.id}, ${u.premium_user})" class="admin-action-btn premium-btn" style="padding: 0.35rem 0.6rem; background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.3); color: #a78bfa; border-radius: 6px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s;">
+                                ${u.premium_user ? "Revoke Premium" : "Grant Premium"}
+                            </button>
+                            <button onclick="toggleUserRole(${u.id}, '${u.role}')" class="admin-action-btn role-btn" style="padding: 0.35rem 0.6rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; border-radius: 6px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s;">
+                                ${u.role === 'admin' ? "Demote to User" : "Promote to Admin"}
+                            </button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        // Perks administration AJAX requests
+        async function toggleUserPremium(userId, isCurrentlyPremium) {
+            const newPremiumState = !isCurrentlyPremium;
+            const user = globalUsersList.find(u => u.id === userId);
+            if (!user) return;
+
+            try {
+                const res = await fetch("/api/admin/update-perks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        premium_user: newPremiumState,
+                        role: user.role,
+                        passphrase: decryptedPassphrase
+                    })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.detail || "Failed to update user perks");
+                }
+
+                user.premium_user = newPremiumState;
+                
+                // Update local metrics and table rows
+                const totalPremium = globalUsersList.filter(u => u.premium_user).length;
+                document.getElementById("metric-premium").innerText = totalPremium;
+
+                const searchVal = document.getElementById("table-search").value.toLowerCase();
+                const filtered = globalUsersList.filter(u => 
+                    u.display_name.toLowerCase().includes(searchVal) ||
+                    u.email.toLowerCase().includes(searchVal) ||
+                    u.mbti.toLowerCase().includes(searchVal) ||
+                    (u.digipin && u.digipin.toLowerCase().includes(searchVal)) ||
+                    u.konvo_id.toLowerCase().includes(searchVal)
+                );
+                renderTableRows(filtered);
+            } catch (err) {
+                alert(`Error toggling premium: ${err.message}`);
+            }
+        }
+
+        async function toggleUserRole(userId, currentRole) {
+            const newRole = currentRole === "admin" ? "user" : "admin";
+            const user = globalUsersList.find(u => u.id === userId);
+            if (!user) return;
+
+            try {
+                const res = await fetch("/api/admin/update-perks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        premium_user: user.premium_user,
+                        role: newRole,
+                        passphrase: decryptedPassphrase
+                    })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.detail || "Failed to update user role");
+                }
+
+                user.role = newRole;
+                
+                const searchVal = document.getElementById("table-search").value.toLowerCase();
+                const filtered = globalUsersList.filter(u => 
+                    u.display_name.toLowerCase().includes(searchVal) ||
+                    u.email.toLowerCase().includes(searchVal) ||
+                    u.mbti.toLowerCase().includes(searchVal) ||
+                    (u.digipin && u.digipin.toLowerCase().includes(searchVal)) ||
+                    u.konvo_id.toLowerCase().includes(searchVal)
+                );
+                renderTableRows(filtered);
+            } catch (err) {
+                alert(`Error changing user role: ${err.message}`);
+            }
         }
 
         // Filtering

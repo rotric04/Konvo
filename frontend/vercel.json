@@ -11,8 +11,12 @@
       "destination": "/$1"
     },
     {
-      "source": "/(feedback|auth|admin_dashboard)",
+      "source": "/(feedback|auth|admin_dashboard|blog)",
       "destination": "/$1.html"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "/blog.html"
     },
     {
       "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)",

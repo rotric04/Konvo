@@ -150,24 +150,59 @@
             <div class="form-group">
                 <label for="reg-email">Network Email</label>
                 <input type="email" id="reg-email" required placeholder="name@konvo.app">
+                <div id="email-validation-msg" class="validation-msg"></div>
             </div>
 
             <div class="form-group">
-                <label for="reg-password">Password (Cryptographically Hashed)</label>
+                <label for="reg-password">Password</label>
                 <input type="password" id="reg-password" required placeholder="••••••••">
+                <div class="password-strength-wrapper">
+                    <div class="password-strength-bar-container">
+                        <div id="password-strength-fill" class="password-strength-fill"></div>
+                    </div>
+                    <div id="password-strength-feedback" class="password-strength-feedback">Strength: Empty</div>
+                    <div class="password-reqs">
+                        <span id="req-len" class="req-item">❌ Min 8 chars</span>
+                        <span id="req-num" class="req-item">❌ Number</span>
+                        <span id="req-spec" class="req-item">❌ Special char</span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="reg-name">Display Name</label>
-                <input type="text" id="reg-name" required placeholder="e.g. Dr. Evelyn Vance">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                    <label for="reg-name" style="margin-bottom: 0;">Username</label>
+                    <button type="button" class="btn-suggest-username" id="btn-suggest-username">✨ Suggest Username</button>
+                </div>
+                <input type="text" id="reg-name" required placeholder="lowercase, no spaces, only letters/numbers/special chars" style="text-transform: lowercase;">
+                <div id="username-validation-msg" class="validation-msg"></div>
             </div>
 
             <div class="form-group">
-                <label for="reg-phone">Phone Number (For OTP Verification)</label>
-                <input type="tel" id="reg-phone" required placeholder="e.g. +16175550192">
+                <label for="reg-phone-input">Phone Number (For OTP Verification)</label>
+                <div class="phone-input-wrapper">
+                    <div class="country-select-container">
+                        <button type="button" class="country-select-btn" id="country-btn">🇮🇳 +91</button>
+                        <div class="country-dropdown-list hidden" id="country-dropdown-list">
+                            <div class="country-item active" data-code="+91" data-flag="🇮🇳">🇮🇳 India (+91)</div>
+                            <div class="country-item" data-code="+1" data-flag="🇺🇸">🇺🇸 United States (+1)</div>
+                            <div class="country-item" data-code="+44" data-flag="🇬🇧">🇬🇧 United Kingdom (+44)</div>
+                            <div class="country-item" data-code="+1" data-flag="🇨🇦">🇨🇦 Canada (+1)</div>
+                            <div class="country-item" data-code="+61" data-flag="🇦🇺">🇦🇺 Australia (+61)</div>
+                            <div class="country-item" data-code="+971" data-flag="🇦🇪">🇦🇪 UAE (+971)</div>
+                            <div class="country-item" data-code="+65" data-flag="🇸🇬">🇸🇬 Singapore (+65)</div>
+                            <div class="country-item" data-code="+49" data-flag="🇩🇪">🇩🇪 Germany (+49)</div>
+                            <div class="country-item" data-code="+33" data-flag="🇫🇷">🇫🇷 France (+33)</div>
+                            <div class="country-item" data-code="+81" data-flag="🇯🇵">🇯🇵 Japan (+81)</div>
+                        </div>
+                    </div>
+                    <input type="tel" id="reg-phone-input" required placeholder="98765 43210" style="flex: 1;">
+                </div>
+                <input type="hidden" id="reg-phone" name="phone">
+                <div id="phone-validation-msg" class="validation-msg"></div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Synergy Account</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Create Synergy Account</button>
         </form>
     </div>
 

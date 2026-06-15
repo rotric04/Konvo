@@ -1128,6 +1128,146 @@ svg.graph-svg {
     display: none !important;
 }
 
+/* Enhanced Auth Validation & Flags Styles */
+.validation-msg {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    margin-top: 0.4rem;
+    transition: all 0.2s ease;
+}
+.validation-msg.error {
+    color: var(--accent-rose, #e11d48);
+}
+.validation-msg.success {
+    color: var(--accent-teal, #0d9488);
+}
+
+/* Suggest Username Button */
+.btn-suggest-username {
+    background: transparent;
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    color: var(--accent-amber, #d97706);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-suggest-username:hover {
+    background: rgba(217, 119, 6, 0.08);
+    border-color: var(--accent-amber);
+    transform: translateY(-1px);
+}
+
+/* Password Strength Indicator */
+.password-strength-wrapper {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+.password-strength-bar-container {
+    height: 4px;
+    background: var(--bg-main);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+}
+.password-strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+.password-strength-feedback {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+.password-reqs {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.req-item {
+    font-size: 0.65rem;
+    font-family: var(--font-sans);
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+.req-item.valid {
+    color: var(--accent-teal, #0d9488);
+}
+
+/* Phone Input with Flags Selector */
+.phone-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.country-select-container {
+    position: relative;
+    user-select: none;
+}
+.country-select-btn {
+    height: 42px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: all 0.2s ease;
+}
+.country-select-btn:hover {
+    border-color: var(--text-muted);
+}
+.country-dropdown-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 220px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem 0;
+}
+.country-dropdown-list.hidden {
+    display: none !important;
+}
+.country-item {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    transition: all 0.15s ease;
+}
+.country-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+.country-item.active {
+    background-color: rgba(217, 119, 6, 0.08);
+    color: var(--accent-amber);
+    font-weight: 600;
+}
+
 /* Sidebar Backdrop Overlay */
 .sidebar-backdrop {
     display: none;
@@ -5242,12 +5382,27 @@ body::before {
 }
 
 /* Responsive Grid Utilities to prevent overlaps */
+.guide-grid-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+}
+@media (max-width: 900px) {
+    .guide-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    #virtual-dates {
+        height: auto !important;
+    }
+}
+
 .grid-2col-responsive {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .grid-2col-responsive {
         grid-template-columns: 1fr;
     }
@@ -5260,7 +5415,7 @@ body::before {
     justify-content: space-between;
     gap: 2rem;
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .flex-row-responsive {
         flex-direction: column;
         align-items: stretch;

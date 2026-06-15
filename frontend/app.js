@@ -447,6 +447,224 @@ function initAuthPage() {
     const btnSubmitOtp = document.getElementById('btn-submit-otp');
     let pendingRegisterEmail = '';
 
+    // Advanced Registration Form Validation & Dropdown Logic
+    const regEmail = document.getElementById('reg-email');
+    const regPassword = document.getElementById('reg-password');
+    const regName = document.getElementById('reg-name');
+    const regPhoneInput = document.getElementById('reg-phone-input');
+    const regPhoneHidden = document.getElementById('reg-phone');
+    const countryBtn = document.getElementById('country-btn');
+    const countryDropdownList = document.getElementById('country-dropdown-list');
+    const btnSuggestUsername = document.getElementById('btn-suggest-username');
+
+    if (regEmail) {
+        const emailMsg = document.getElementById('email-validation-msg');
+        regEmail.addEventListener('input', () => {
+            const email = regEmail.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                emailMsg.textContent = '';
+                emailMsg.className = 'validation-msg';
+            } else if (emailRegex.test(email)) {
+                emailMsg.textContent = '✓ Valid email format';
+                emailMsg.className = 'validation-msg success';
+            } else {
+                emailMsg.textContent = '✗ Invalid email format';
+                emailMsg.className = 'validation-msg error';
+            }
+        });
+    }
+
+    if (regName) {
+        const usernameMsg = document.getElementById('username-validation-msg');
+        regName.addEventListener('input', (e) => {
+            let start = regName.selectionStart;
+            let end = regName.selectionEnd;
+            let val = regName.value.toLowerCase();
+            
+            const originalLength = val.length;
+            val = val.replace(/[^a-z0-9_\-\.]/g, '');
+            
+            regName.value = val;
+            
+            const diff = originalLength - val.length;
+            if (diff > 0) {
+                regName.setSelectionRange(start - diff, end - diff);
+            }
+
+            if (!val) {
+                usernameMsg.textContent = '';
+                usernameMsg.className = 'validation-msg';
+            } else {
+                usernameMsg.textContent = '✓ Username looks good';
+                usernameMsg.className = 'validation-msg success';
+            }
+        });
+    }
+
+    if (btnSuggestUsername && regName) {
+        const adjectives = ['vibe', 'neon', 'hyper', 'pixel', 'cyber', 'glow', 'meta', 'spicy', 'luna', 'wired', 'retro', 'stellar', 'drip', 'omega', 'slay'];
+        const nouns = ['byte', 'soul', 'twin', 'rizz', 'coder', 'avatar', 'pulse', 'aura', 'ghost', 'hacker', 'wave', 'spark', 'glitch', 'nomad', 'flux'];
+        
+        btnSuggestUsername.addEventListener('click', () => {
+            let username = '';
+            if (regEmail && regEmail.value.includes('@')) {
+                const prefix = regEmail.value.split('@')[0].toLowerCase().replace(/[^a-z0-9_\-\.]/g, '');
+                if (prefix.length > 2) {
+                    const suffixes = ['_rizz', '_twin', '_x', '99', '42', '_byte', '_soul'];
+                    const randomSuffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+                    username = prefix + randomSuffix;
+                }
+            }
+            
+            if (!username || Math.random() < 0.4) {
+                const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const noun = nouns[Math.floor(Math.random() * nouns.length)];
+                const num = Math.floor(Math.random() * 90) + 10;
+                username = `${adj}_${noun}${num}`;
+            }
+            
+            regName.value = username;
+            regName.dispatchEvent(new Event('input'));
+        });
+    }
+
+    if (regPassword) {
+        const strengthFill = document.getElementById('password-strength-fill');
+        const strengthFeedback = document.getElementById('password-strength-feedback');
+        const reqLen = document.getElementById('req-len');
+        const reqNum = document.getElementById('req-num');
+        const reqSpec = document.getElementById('req-spec');
+
+        regPassword.addEventListener('input', () => {
+            const pass = regPassword.value;
+            if (!pass) {
+                strengthFill.style.width = '0%';
+                strengthFill.style.backgroundColor = 'transparent';
+                strengthFeedback.textContent = 'Strength: Empty';
+                reqLen.innerHTML = '❌ Min 8 chars';
+                reqLen.className = 'req-item';
+                reqNum.innerHTML = '❌ Number';
+                reqNum.className = 'req-item';
+                reqSpec.innerHTML = '❌ Special char';
+                reqSpec.className = 'req-item';
+                return;
+            }
+
+            const hasLen = pass.length >= 8;
+            const hasNum = /\d/.test(pass);
+            const hasSpec = /[^A-Za-z0-9]/.test(pass);
+
+            if (hasLen) {
+                reqLen.innerHTML = '✓ Min 8 chars';
+                reqLen.className = 'req-item valid';
+            } else {
+                reqLen.innerHTML = '❌ Min 8 chars';
+                reqLen.className = 'req-item';
+            }
+
+            if (hasNum) {
+                reqNum.innerHTML = '✓ Number';
+                reqNum.className = 'req-item valid';
+            } else {
+                reqNum.innerHTML = '❌ Number';
+                reqNum.className = 'req-item';
+            }
+
+            if (hasSpec) {
+                reqSpec.innerHTML = '✓ Special char';
+                reqSpec.className = 'req-item valid';
+            } else {
+                reqSpec.innerHTML = '❌ Special char';
+                reqSpec.className = 'req-item';
+            }
+
+            let score = 0;
+            if (pass.length > 0) score += 1;
+            if (hasLen) score += 1;
+            if (hasNum) score += 1;
+            if (hasSpec) score += 1;
+            if (pass.length >= 12) score += 1;
+
+            let width = '0%';
+            let color = 'transparent';
+            let label = 'Strength: Weak';
+
+            if (score === 1 || score === 2) {
+                width = '33%';
+                color = 'var(--accent-rose, #e11d48)';
+                label = 'Strength: Weak (Too simple)';
+            } else if (score === 3 || score === 4) {
+                width = '66%';
+                color = 'var(--accent-amber, #d97706)';
+                label = 'Strength: Medium (Good)';
+            } else if (score >= 5) {
+                width = '100%';
+                color = 'var(--accent-teal, #0d9488)';
+                label = 'Strength: Strong (Excellent)';
+            }
+
+            strengthFill.style.width = width;
+            strengthFill.style.backgroundColor = color;
+            strengthFeedback.textContent = label;
+        });
+    }
+
+    let activeCountryCode = '+91';
+    if (countryBtn && countryDropdownList) {
+        countryBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            countryDropdownList.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', () => {
+            countryDropdownList.classList.add('hidden');
+        });
+
+        const countryItems = countryDropdownList.querySelectorAll('.country-item');
+        countryItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const code = item.getAttribute('data-code');
+                const flag = item.getAttribute('data-flag');
+                
+                activeCountryCode = code;
+                countryBtn.textContent = `${flag} ${code}`;
+                
+                countryItems.forEach(ci => ci.classList.remove('active'));
+                item.classList.add('active');
+                
+                countryDropdownList.classList.add('hidden');
+                updatePhoneHidden();
+            });
+        });
+    }
+
+    const updatePhoneHidden = () => {
+        if (regPhoneInput && regPhoneHidden) {
+            const num = regPhoneInput.value.replace(/\D/g, '');
+            const phoneMsg = document.getElementById('phone-validation-msg');
+            
+            if (num) {
+                regPhoneHidden.value = activeCountryCode + num;
+                if (num.length >= 7 && num.length <= 15) {
+                    phoneMsg.textContent = '✓ Phone number looks valid';
+                    phoneMsg.className = 'validation-msg success';
+                } else {
+                    phoneMsg.textContent = '✗ Phone number length is abnormal';
+                    phoneMsg.className = 'validation-msg error';
+                }
+            } else {
+                regPhoneHidden.value = '';
+                phoneMsg.textContent = '';
+                phoneMsg.className = 'validation-msg';
+            }
+        }
+    };
+
+    if (regPhoneInput) {
+        regPhoneInput.addEventListener('input', updatePhoneHidden);
+    }
+
     const linkForgotPass = document.getElementById('link-forgot-pass');
     const formForgot = document.getElementById('form-forgot');
     const formReset = document.getElementById('form-reset');

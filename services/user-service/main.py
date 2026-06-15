@@ -225,3 +225,28 @@ def get_fingerprint_ledger(
         for item in ledger
     ]
 
+
+from pydantic import BaseModel
+
+class AdminUpdateUserPerksRequest(BaseModel):
+    user_id: int
+    premium_user: bool
+    role: str
+    passphrase: str
+
+@app.post("/api/admin/update-perks")
+def update_user_perks(request: AdminUpdateUserPerksRequest, db: Session = Depends(get_db)):
+    stored_pass = os.getenv("ADMIN_PASSPHRASE", "supersecureadminpass123")
+    if request.passphrase != stored_pass:
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid security passphrase")
+        
+    user = db.query(models.User).filter(models.User.id == request.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User node not found")
+        
+    user.premium_user = request.premium_user
+    user.role = request.role
+    db.commit()
+    
+    return {"success": True, "message": f"User {user.email} perks updated successfully."}
+

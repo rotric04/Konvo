@@ -250,6 +250,11 @@ def get_auth_html():
 def get_feedback_html():
     return FileResponse(os.path.join(_root, "frontend", "feedback.html"))
 
+@app.get("/blog")
+@app.get("/blog/{post_id}")
+def get_blog_html():
+    return FileResponse(os.path.join(_root, "frontend", "blog.html"))
+
 # ----------------- SEO & SECURITY SPECIFICATIONS -----------------
 
 @app.get("/robots.txt")
