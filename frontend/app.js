@@ -2768,14 +2768,35 @@ function initChatWorkspace() {
 function setupModalClosers() {
     document.querySelectorAll('.modal').forEach(m => {
         m.addEventListener('click', (e) => {
-            if (e.target === m || e.target.classList.contains('close-modal')) {
-                if (m.id === 'quiz-modal' && currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
+            if (e.target === m || e.target.closest('.close-modal')) {
+                if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
                     // Prevent closing quiz modal if user needs calibration
                     return;
                 }
                 m.classList.remove('active');
+                if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
+                    clearInterval(demoSimInterval);
+                    demoSimInterval = null;
+                }
             }
         });
+    });
+
+    // Global ESC key modal closer
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.active').forEach(m => {
+                if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
+                    // Prevent closing quiz modal if user needs calibration
+                    return;
+                }
+                m.classList.remove('active');
+                if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
+                    clearInterval(demoSimInterval);
+                    demoSimInterval = null;
+                }
+            });
+        }
     });
 }
 
@@ -6984,12 +7005,25 @@ async function initApp() {
                 if (mutation.attributeName === 'class') {
                     const target = mutation.target;
                     const isActive = target.classList.contains('active');
-                    const content = target.querySelector('.modal-content, .card');
-                    if (isActive && content) {
-                        gsap.killTweensOf(content);
-                        gsap.killTweensOf(target);
-                        gsap.fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
-                        gsap.fromTo(content, { scale: 0.9, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
+                    const wasActive = target.dataset.wasActive === 'true';
+                    if (isActive !== wasActive) {
+                        target.dataset.wasActive = isActive ? 'true' : 'false';
+                        if (isActive) {
+                            const content = target.querySelector('.modal-content, .card');
+                            if (content) {
+                                gsap.killTweensOf(content);
+                                gsap.killTweensOf(target);
+                                gsap.fromTo(target, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                                gsap.fromTo(content, { scale: 0.9, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.7)' });
+                            }
+                        } else {
+                            if (target.id === 'demo-modal') {
+                                if (typeof demoSimInterval !== 'undefined' && demoSimInterval) {
+                                    clearInterval(demoSimInterval);
+                                    demoSimInterval = null;
+                                }
+                            }
+                        }
                     }
                 }
             });

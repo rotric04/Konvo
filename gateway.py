@@ -357,6 +357,79 @@ def get_admin_dashboard():
     return FileResponse(os.path.join(_root, "frontend", "admin_dashboard.html"))
 
 
+from pydantic import BaseModel
+
+class AdminAddUserRequest(BaseModel):
+    email: str
+    password: str
+    display_name: str
+    phone: str
+    gender: str = "Unknown"
+    relationship_intent: str = "Long Term"
+    passphrase: str
+
+def sanitize_msg(msg: str) -> str:
+    return msg.replace("-", " ")
+
+@app.post("/api/admin/adduser")
+def admin_add_user(request: AdminAddUserRequest, db: Session = Depends(get_db)):
+    import crud
+    import schemas
+    stored_pass = os.getenv("ADMIN_PASSPHRASE", "supersecureadminpass123")
+    if request.passphrase != stored_pass:
+        raise HTTPException(status_code=401, detail="Unauthorized invalid security passphrase")
+        
+    existing = crud.get_user_by_email(db, request.email)
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered in system")
+        
+    reg_data = schemas.UserRegister(
+        email=request.email,
+        password=request.password,
+        display_name=request.display_name,
+        phone=request.phone,
+        gender=request.gender,
+        relationship_intent=request.relationship_intent,
+        interests=[],
+        goals=[]
+    )
+    
+    try:
+        new_user = crud.create_user(db, reg_data)
+        new_user.otp_verified = True
+        db.commit()
+        return {"success": True, "user_id": new_user.id}
+    except Exception as e:
+        db.rollback()
+        err_msg = sanitize_msg(str(e))
+        raise HTTPException(status_code=500, detail=f"Database insertion failed {err_msg}")
+
+
+class AdminDeleteUserRequest(BaseModel):
+    user_id: int
+    passphrase: str
+
+@app.post("/api/admin/deleteuser")
+def admin_delete_user(request: AdminDeleteUserRequest, db: Session = Depends(get_db)):
+    stored_pass = os.getenv("ADMIN_PASSPHRASE", "supersecureadminpass123")
+    if request.passphrase != stored_pass:
+        raise HTTPException(status_code=401, detail="Unauthorized invalid security passphrase")
+        
+    user = db.query(models.User).filter(models.User.id == request.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    try:
+        db.delete(user)
+        db.commit()
+        return {"success": True, "message": "User deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        err_msg = sanitize_msg(str(e))
+        raise HTTPException(status_code=500, detail=f"Deletion failed {err_msg}")
+
+
+
 if __name__ == "__main__":
     print("\n-----------------------------------------------------------")
     print("Initializing KONVO™ local gateway server on http://localhost:8000")
