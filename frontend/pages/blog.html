@@ -241,15 +241,51 @@
             color: var(--accent-amber);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            .blog-header {
+                padding: 0.75rem 1rem !important;
+            }
+            .blog-container {
+                padding: 1.5rem 1rem 3rem 1rem !important;
+            }
+            .blog-hero {
+                margin-bottom: 2rem !important;
+            }
             .blog-hero h1 {
-                font-size: 2.25rem;
+                font-size: 2rem !important;
+            }
+            .blog-hero p {
+                font-size: 0.95rem !important;
             }
             .blog-card {
-                padding: 1.5rem;
+                padding: 1.25rem !important;
             }
             .blog-card h2 {
-                font-size: 1.4rem;
+                font-size: 1.35rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            .blog-excerpt {
+                font-size: 0.9rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 1rem !important;
+            }
+            .blog-full-content {
+                font-size: 0.92rem !important;
+                line-height: 1.7 !important;
+                padding-top: 1rem !important;
+                margin-top: 1rem !important;
+            }
+            .blog-meta {
+                font-size: 0.72rem !important;
+                margin-bottom: 0.75rem !important;
+                gap: 0.5rem !important;
+            }
+            footer {
+                padding: 1.5rem 1rem !important;
+                margin-top: 2.5rem !important;
+            }
+            footer div:first-child {
+                gap: 0.5rem 1rem !important;
             }
         }
     </style>

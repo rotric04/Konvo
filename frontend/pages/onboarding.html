@@ -22,13 +22,16 @@
             background-color: #0b0b0c;
             color: #f4f4f5;
             font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0;
             padding: 1.5rem;
             overflow-x: hidden;
+            overflow-y: auto;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
             background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
                               radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
         }
@@ -48,6 +51,26 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+            .glass-hud {
+                max-width: none;
+                min-height: 100dvh;
+                border-radius: 0;
+                border: none;
+                padding: 1.25rem;
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+            }
         }
 
         .hud-glow {
@@ -101,21 +124,22 @@
         }
 
         .calibration-title {
-            font-size: 2.25rem;
-            font-weight: 600;
-            line-height: 1.25;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ffffff 50%, #a1a1aa);
+            font-size: clamp(1.6rem, 5vw, 2.25rem);
+            font-weight: 650;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .calibration-desc {
-            font-size: 1.1rem;
-            line-height: 1.7;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            line-height: 1.75;
             color: #a1a1aa;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            max-width: 55ch;
         }
 
         /* Buttons */
@@ -124,12 +148,13 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: #ffffff;
             font-family: inherit;
-            font-size: 1.05rem;
-            font-weight: 500;
-            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            min-height: 56px;
+            padding: 1rem 1.25rem;
             border-radius: 14px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -139,14 +164,17 @@
         }
 
         .btn-calibration:hover {
-            background: #ffffff;
-            color: #0b0b0c;
+            background: rgba(255, 255, 255, 0.12);
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05);
         }
 
         .btn-calibration:active {
             transform: translateY(0);
+        }
+
+        .btn-calibration:focus-visible {
+            outline: 2px solid #14b8a6;
+            outline-offset: 2px;
         }
 
         .btn-accent {
@@ -447,13 +475,13 @@
             <div class="brand-logo"><span class="brand-dot"></span>calibration</div>
             <h2 class="calibration-title">Ready?</h2>
             <p class="calibration-desc">Let's figure out your vibe.</p>
-            <button class="btn-calibration btn-accent" id="btn-s4-next">Begin Identity Sync</button>
+            <button class="btn-calibration btn-accent" id="btn-s4-next">Create My AI Twin</button>
         </div>
 
         <!-- ── Identity Sync ── -->
         <div class="screen-view" id="screen-identity-sync">
-            <div class="brand-logo"><span class="brand-dot"></span>identity sync</div>
-            <h2 class="calibration-title">Identity Sync</h2>
+            <div class="brand-logo"><span class="brand-dot"></span>AI Twin Calibration</div>
+            <h2 class="calibration-title">Let's build your AI Twin</h2>
             <p class="calibration-desc" style="margin-bottom: 2rem;">Help us tune your calibration parameters.</p>
 
             <form id="identitySyncForm" onsubmit="return false;">

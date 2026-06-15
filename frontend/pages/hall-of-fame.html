@@ -237,6 +237,73 @@
         .btn-theme:hover {
             color: var(--text-primary, #ffffff);
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0 !important;
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+            }
+            .profile-hud {
+                max-width: none !important;
+                min-height: 100dvh !important;
+                border-radius: 0 !important;
+                border: none !important;
+                padding: 1.5rem 1.25rem !important;
+                box-shadow: none !important;
+                display: flex;
+                flex-direction: column;
+            }
+            .header-section {
+                margin-bottom: 1.5rem !important;
+                padding-bottom: 1rem !important;
+            }
+            .avatar-wrap {
+                margin-bottom: 1.5rem !important;
+                gap: 1rem !important;
+            }
+            .avatar-frame {
+                width: 70px !important;
+                height: 70px !important;
+                font-size: 2rem !important;
+            }
+            .profile-title-group h1 {
+                font-size: 1.75rem !important;
+            }
+            .polymath-desc {
+                font-size: 0.95rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .stat-grid {
+                gap: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .stat-card {
+                padding: 1rem !important;
+            }
+            .stat-value {
+                font-size: 1.2rem !important;
+            }
+            .skills-row {
+                margin-bottom: 1.5rem !important;
+                gap: 0.5rem !important;
+            }
+            .skill-badge {
+                padding: 0.4rem 0.85rem !important;
+                font-size: 0.8rem !important;
+            }
+            .links-row {
+                padding-top: 1.5rem !important;
+                margin-top: auto !important;
+            }
+            footer {
+                padding: 1.5rem 1rem !important;
+                margin-top: 2rem !important;
+            }
+            footer div:first-child {
+                gap: 0.5rem 1rem !important;
+            }
+        }
     </style>
 </head>
 <body>
