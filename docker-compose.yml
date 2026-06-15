@@ -295,7 +295,7 @@ services:
       - "8000:80"
     volumes:
       - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./apps/web:/usr/share/nginx/html:ro
+      - ./frontend:/usr/share/nginx/html:ro
     depends_on:
       - auth-service
       - community-service

@@ -8,15 +8,15 @@
     },
     {
       "source": "/static/(.*)",
-      "destination": "/apps/web/$1"
+      "destination": "/$1"
     },
     {
       "source": "/(feedback|auth|admin_dashboard)",
-      "destination": "/apps/web/$1.html"
+      "destination": "/$1.html"
     },
     {
       "source": "/(.*)",
-      "destination": "/apps/web/$1"
+      "destination": "/$1"
     }
   ]
 }

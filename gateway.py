@@ -207,43 +207,43 @@ include_service_routes(app, "feedback-service")
 # ----------------- STATIC FRONTEND PAGES -----------------
 
 # Mount static directory to the Vanilla web directory
-app.mount("/static", StaticFiles(directory=os.path.join(_root, "apps", "web")), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(_root, "frontend")), name="static")
 
 @app.get("/")
 def get_index_html():
-    return FileResponse(os.path.join(_root, "apps", "web", "index.html"))
+    return FileResponse(os.path.join(_root, "frontend", "index.html"))
 
 @app.get("/auth")
 def get_auth_html():
-    return FileResponse(os.path.join(_root, "apps", "web", "auth.html"))
+    return FileResponse(os.path.join(_root, "frontend", "auth.html"))
 
 @app.get("/feedback")
 def get_feedback_html():
-    return FileResponse(os.path.join(_root, "apps", "web", "feedback.html"))
+    return FileResponse(os.path.join(_root, "frontend", "feedback.html"))
 
 # ----------------- SEO & SECURITY SPECIFICATIONS -----------------
 
 @app.get("/robots.txt")
 def get_robots_txt():
-    return FileResponse(os.path.join(_root, "apps", "web", "robots.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "robots.txt"), media_type="text/plain")
 
 @app.get("/sitemap.xml")
 def get_sitemap_xml():
-    return FileResponse(os.path.join(_root, "apps", "web", "sitemap.xml"), media_type="application/xml")
+    return FileResponse(os.path.join(_root, "frontend", "sitemap.xml"), media_type="application/xml")
 
 @app.get("/.well-known/security.txt")
 @app.get("/security.txt")
 def get_security_txt():
-    return FileResponse(os.path.join(_root, "apps", "web", "security.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "security.txt"), media_type="text/plain")
 
 @app.get("/llms.txt")
 def get_llms_txt():
-    return FileResponse(os.path.join(_root, "apps", "web", "llms.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "llms.txt"), media_type="text/plain")
 
 @app.get("/llm-full.txt")
 @app.get("/llms-full.txt")
 def get_llms_full_txt():
-    return FileResponse(os.path.join(_root, "apps", "web", "llm-full.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "llm-full.txt"), media_type="text/plain")
 
 
 # ----------------- SECURE ENCRYPTED ADMIN DATA ROUTING -----------------
@@ -304,7 +304,7 @@ def get_admin_data(db: Session = Depends(get_db)):
 
 @app.get("/" + os.getenv("ADMIN_ROUTE_PATH", "admin-portal-secured"))
 def get_admin_dashboard():
-    return FileResponse(os.path.join(_root, "apps", "web", "admin_dashboard.html"))
+    return FileResponse(os.path.join(_root, "frontend", "admin_dashboard.html"))
 
 
 if __name__ == "__main__":
