@@ -1,0 +1,436 @@
+{"timestamp": 1781054701.7994132, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.space", "konvo_id": "KON-INTJ-7A0AA"}}
+{"timestamp": 1781054701.8374043, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054701.8384044, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781054702.0709376, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.space", "konvo_id": "KON-INTJ-377B0"}}
+{"timestamp": 1781054702.1022124, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054702.1027346, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781054702.4299827, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.space", "konvo_id": "KON-INTJ-46D1D"}}
+{"timestamp": 1781054702.4621003, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054702.4626272, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781054702.7380686, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.space", "konvo_id": "KON-INTJ-35AF1"}}
+{"timestamp": 1781054702.7600973, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054702.7616355, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781054703.0464299, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.space", "konvo_id": "KON-INTJ-A0A4C"}}
+{"timestamp": 1781054703.082458, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054703.0846243, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781054703.1604464, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781054703.177888, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781054718.6904476, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.space", "konvo_id": "KON-INTJ-1AF00"}}
+{"timestamp": 1781054718.7401927, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054718.7401927, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781054718.9699173, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.space", "konvo_id": "KON-INTJ-60F7C"}}
+{"timestamp": 1781054719.0097954, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054719.010911, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781054719.24837, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.space", "konvo_id": "KON-INTJ-33CCA"}}
+{"timestamp": 1781054719.2948165, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054719.2958496, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781054719.9625692, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.space", "konvo_id": "KON-INTJ-7A59C"}}
+{"timestamp": 1781054720.0026, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054720.0042357, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781054720.1968749, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.space", "konvo_id": "KON-INTJ-867D8"}}
+{"timestamp": 1781054720.2303553, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781054720.235279, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781054720.2777686, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781054720.2915306, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781054720.3188076, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781054720.319816, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 87.5}}
+{"timestamp": 1781054720.331737, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781054720.3436046, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781054720.364064, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781054720.3651013, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 83.9}}
+{"timestamp": 1781054720.376825, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781054720.3943038, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781054720.4420667, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781054720.4602518, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781054720.4826708, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056133.064182, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.space", "konvo_id": "KON-INTJ-4CED9"}}
+{"timestamp": 1781056133.0857687, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056133.0867941, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781056133.1989727, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.space", "konvo_id": "KON-INTJ-0E9B1"}}
+{"timestamp": 1781056133.2200365, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056133.2210376, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781056133.341599, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.space", "konvo_id": "KON-INTJ-35E9B"}}
+{"timestamp": 1781056133.3537233, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056133.3547347, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781056133.478903, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.space", "konvo_id": "KON-INTJ-F4E1C"}}
+{"timestamp": 1781056133.4925847, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056133.4925847, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781056133.6080642, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.space", "konvo_id": "KON-INTJ-21517"}}
+{"timestamp": 1781056133.621684, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056133.6226785, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781056133.6412833, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781056133.650946, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781056133.6654868, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781056133.6654868, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 92.9}}
+{"timestamp": 1781056133.6730328, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781056133.6806383, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781056133.6906645, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781056133.6906645, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 94.8}}
+{"timestamp": 1781056133.6981828, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781056133.705209, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781056133.720813, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056133.7279334, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056133.7349114, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056499.94725, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.space", "konvo_id": "KON-INTJ-90AE0"}}
+{"timestamp": 1781056499.9822361, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056499.9832675, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781056500.3676775, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.space", "konvo_id": "KON-INTJ-34E83"}}
+{"timestamp": 1781056500.394231, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056500.3952353, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781056500.7003403, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.space", "konvo_id": "KON-INTJ-DAF81"}}
+{"timestamp": 1781056500.7361224, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056500.7371335, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781056501.0157206, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.space", "konvo_id": "KON-INTJ-6F44D"}}
+{"timestamp": 1781056501.044301, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056501.0453596, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781056501.3101375, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.space", "konvo_id": "KON-INTJ-A0FAE"}}
+{"timestamp": 1781056501.3309388, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781056501.3319366, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781056501.3721874, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781056501.387444, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781056501.4186742, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781056501.4196756, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 87.5}}
+{"timestamp": 1781056501.4344287, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781056501.453378, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781056501.478367, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781056501.479366, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 91.6}}
+{"timestamp": 1781056501.4898322, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781056501.501167, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781056501.527253, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056501.5403986, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056501.5549212, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781056672.3753586, "event_type": "UserRegistered", "details": {"email": "mohitassudani.3@gmail.com", "konvo_id": "KON-INTJ-15B24"}}
+{"timestamp": 1781056705.7061756, "event_type": "UserOTPVerified", "details": {"email": "mohitassudani.3@gmail.com"}}
+{"timestamp": 1781057596.5746737, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-ECB15"}}
+{"timestamp": 1781057596.6247547, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057596.625752, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781057596.831205, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-9A85A"}}
+{"timestamp": 1781057596.8680263, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057596.8690226, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781057597.0569606, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-DECB3"}}
+{"timestamp": 1781057597.087434, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057597.0884705, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781057597.2787356, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-B97E7"}}
+{"timestamp": 1781057597.3528552, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057597.355284, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781057597.5560262, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-9A33F"}}
+{"timestamp": 1781057597.5855985, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057597.5866222, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781057597.6519744, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781057597.6830845, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781057597.7479858, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781057597.748967, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 94.7}}
+{"timestamp": 1781057597.7724342, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781057597.7954328, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781057597.8354478, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781057597.8364756, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 93.6}}
+{"timestamp": 1781057597.859516, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781057597.8847008, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781057597.9252617, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781057597.94692, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781057597.9679894, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781057831.8920064, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-3FFD1"}}
+{"timestamp": 1781057831.9453554, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057831.9463801, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781057832.1528294, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-95948"}}
+{"timestamp": 1781057832.1880252, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057832.1900373, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781057832.425582, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-C305C"}}
+{"timestamp": 1781057832.4606009, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057832.4606009, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781057832.7072504, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-4A30B"}}
+{"timestamp": 1781057832.7497663, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057832.7507854, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781057832.9974077, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-BDE40"}}
+{"timestamp": 1781057833.035898, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781057833.0378048, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781057833.112463, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781057833.154988, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781057833.2645385, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781057833.2655563, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 88.4}}
+{"timestamp": 1781057833.2921321, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781057833.324955, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781057833.507621, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781057833.528697, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 93.8}}
+{"timestamp": 1781057833.6796813, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781057833.7703202, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781057833.8941655, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781057834.019281, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781057834.0607271, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781218400.8499563, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-CCF0D"}}
+{"timestamp": 1781218400.9432871, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781218400.9718544, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781218401.158389, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-F9EEB"}}
+{"timestamp": 1781218401.1812313, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781218401.1974988, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781218401.3694887, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-2DB4D"}}
+{"timestamp": 1781218401.3926444, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781218401.4119883, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781218401.570918, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-AAC90"}}
+{"timestamp": 1781218401.6199596, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781218401.6459134, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781218401.8123739, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-D4D22"}}
+{"timestamp": 1781218401.8409984, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781218401.857898, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781218401.9234912, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781218401.963045, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781218402.1630332, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781218402.1822147, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 88.2}}
+{"timestamp": 1781218402.2163732, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781218402.237779, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781218402.30584, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781218402.3188512, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 90.3}}
+{"timestamp": 1781218402.3573074, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781218402.4281287, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781218402.489765, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781218402.565168, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781218402.6076078, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781219081.263194, "event_type": "SentimentMetric", "details": {"text_length": 28, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781220332.377406, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-5E92C"}}
+{"timestamp": 1781220332.4233172, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781220332.4410758, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781220332.6222084, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-B12BB"}}
+{"timestamp": 1781220332.6974535, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781220332.8099916, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781220333.0018954, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-26464"}}
+{"timestamp": 1781220333.0419095, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781220333.0626006, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781220333.3085122, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-F9A35"}}
+{"timestamp": 1781220333.3419564, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781220333.364366, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781220333.5793943, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-37C8D"}}
+{"timestamp": 1781220333.6013527, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781220333.611862, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781220333.7190742, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781220333.7589555, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781220333.9084654, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781220333.9160988, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 92.7}}
+{"timestamp": 1781220333.940382, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781220333.9590838, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781220334.0366976, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781220334.0621347, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 90.8}}
+{"timestamp": 1781220334.1653383, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781220334.2106066, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781220334.2562983, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781220334.321767, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781220334.3629181, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781220891.9196208, "event_type": "SentimentMetric", "details": {"text_length": 23, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781267302.6446886, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-674A7"}}
+{"timestamp": 1781267302.725901, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781267302.781767, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781267302.954919, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-47C19"}}
+{"timestamp": 1781267303.049284, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781267303.1236684, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781267303.3198364, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-025BA"}}
+{"timestamp": 1781267303.3655736, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781267303.3926888, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781267303.6457024, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-77792"}}
+{"timestamp": 1781267303.671656, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781267303.7109025, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781267303.9329116, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-091BD"}}
+{"timestamp": 1781267303.968514, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781267303.9938018, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781267304.1047342, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781267304.1919062, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781267304.4347982, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781267304.454282, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 95.0}}
+{"timestamp": 1781267304.4929547, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781267304.5530913, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781267304.7381263, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781267304.757774, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 89.4}}
+{"timestamp": 1781267304.7923963, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781267304.8238006, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781267304.8676836, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781267305.0061598, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781267305.1058087, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781268029.856008, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 1, "type": "pass"}}
+{"timestamp": 1781268031.1950653, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 3, "type": "pass"}}
+{"timestamp": 1781268032.1621244, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781269654.9193375, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-C0C0E"}}
+{"timestamp": 1781269654.9552417, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781269654.9562373, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781269655.0948741, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-E6C49"}}
+{"timestamp": 1781269655.1154122, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781269655.1154122, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781269655.2335193, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-E3E85"}}
+{"timestamp": 1781269655.249533, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781269655.2505283, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781269655.3638234, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-68904"}}
+{"timestamp": 1781269655.3785527, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781269655.3799655, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781269655.496885, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-4F8BF"}}
+{"timestamp": 1781269655.5129635, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781269655.513959, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781269655.5458214, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781269655.558259, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781269655.5851653, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781269655.586161, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 87.5}}
+{"timestamp": 1781269655.5949852, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781269655.6071928, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781269655.626225, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781269655.6272264, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 94.7}}
+{"timestamp": 1781269655.6408014, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781269655.650907, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781269655.6747563, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781269655.684863, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781269655.6971796, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274431.1177173, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-50A7E"}}
+{"timestamp": 1781274431.1402724, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274431.1412804, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781274431.257144, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-8B4B5"}}
+{"timestamp": 1781274431.2737172, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274431.2737172, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781274431.4006457, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-D75E3"}}
+{"timestamp": 1781274431.4181, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274431.4181, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781274431.5446303, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-06EE1"}}
+{"timestamp": 1781274431.558899, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274431.5599022, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781274431.6842253, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-7A9F4"}}
+{"timestamp": 1781274431.6997545, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274431.6997545, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781274431.721407, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781274431.7294104, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781274431.7453074, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781274431.7453074, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 88.7}}
+{"timestamp": 1781274431.752811, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781274431.7593584, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781274431.7721133, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781274431.7721133, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 92.6}}
+{"timestamp": 1781274431.778656, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781274431.785945, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781274431.8028333, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274431.810579, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274431.8179493, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274900.431698, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-9B8B8"}}
+{"timestamp": 1781274900.4544828, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274900.455, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781274900.5689251, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-2B810"}}
+{"timestamp": 1781274900.582117, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274900.582117, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781274900.694532, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-65E9F"}}
+{"timestamp": 1781274900.7095962, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274900.7095962, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781274900.8558683, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-2C200"}}
+{"timestamp": 1781274900.8742137, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274900.8742137, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781274900.9991436, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-58999"}}
+{"timestamp": 1781274901.0150113, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781274901.0150113, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781274901.038251, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781274901.0467703, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781274901.0646138, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781274901.0646138, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 91.0}}
+{"timestamp": 1781274901.0726385, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781274901.0796416, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781274901.092724, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781274901.092724, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 90.8}}
+{"timestamp": 1781274901.100758, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781274901.1109767, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781274901.136026, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274901.1512456, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781274901.163491, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275503.5986757, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-5BC1F"}}
+{"timestamp": 1781275503.6485465, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275503.689177, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781275503.899321, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-6F31A"}}
+{"timestamp": 1781275503.9267225, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275503.940606, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781275504.1185162, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-682EE"}}
+{"timestamp": 1781275504.1715767, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275504.1953597, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781275504.3687882, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-A14FC"}}
+{"timestamp": 1781275504.4010637, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275504.4298162, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781275504.6562252, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-E50D0"}}
+{"timestamp": 1781275504.715971, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275504.752983, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781275504.8900697, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781275504.9253047, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781275505.0475178, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781275505.0728014, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 90.3}}
+{"timestamp": 1781275505.127425, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781275505.1754541, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781275505.296854, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781275505.307475, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 92.7}}
+{"timestamp": 1781275505.340536, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781275505.3658578, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781275505.409274, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275505.4763253, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275505.5506263, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275611.6481237, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-B512E"}}
+{"timestamp": 1781275611.6790893, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275611.69955, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781275611.9154959, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-DEF33"}}
+{"timestamp": 1781275611.944622, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275611.9539726, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781275612.2671075, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-01FE7"}}
+{"timestamp": 1781275612.2955067, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275612.309079, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781275612.505044, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-8A520"}}
+{"timestamp": 1781275612.535161, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275612.5622666, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781275612.7257218, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-EE0EE"}}
+{"timestamp": 1781275612.7511227, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781275612.7765954, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781275612.8857358, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781275612.9304943, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781275613.085237, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781275613.1008697, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 87.7}}
+{"timestamp": 1781275613.1415148, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781275613.1911972, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781275613.3332882, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781275613.3491337, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 88.3}}
+{"timestamp": 1781275613.384632, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781275613.4087217, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781275613.4554658, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275613.512862, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781275613.638826, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781314010.5831468, "event_type": "UserRegistered", "details": {"email": "test@test.com", "konvo_id": "KON-INTJ-D293B"}}
+{"timestamp": 1781314019.8773625, "event_type": "UserRegistered", "details": {"email": "bob@konvo.app", "konvo_id": "KON-INTJ-957D9"}}
+{"timestamp": 1781319270.9399104, "event_type": "UserRegistered", "details": {"email": "test@konvo.app", "konvo_id": "KON-INTJ-1613A"}}
+{"timestamp": 1781319610.8996577, "event_type": "UserRegistered", "details": {"email": "debugtest@konvo.app", "konvo_id": "KON-INTJ-D0EBE"}}
+{"timestamp": 1781319889.195481, "event_type": "UserOTPVerified", "details": {"email": "debugtest@konvo.app"}}
+{"timestamp": 1781320951.1358213, "event_type": "UserRegistered", "details": {"email": "verify_test@konvo.app", "konvo_id": "KON-INTJ-2001F"}}
+{"timestamp": 1781328821.487383, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781328822.926503, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781328823.8262386, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 5, "type": "interest"}}
+{"timestamp": 1781328823.9727507, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-2", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781328823.974107, "event_type": "AgentDateSimulated", "details": {"simulation_id": 3, "compatibility": 90.7}}
+{"timestamp": 1781343441.5192175, "event_type": "UserRegistered", "details": {"email": "testuser@konvo.app", "konvo_id": "KON-INTJ-19757"}}
+{"timestamp": 1781343511.327611, "event_type": "UserRegistered", "details": {"email": "testuser2@konvo.app", "konvo_id": "KON-INTJ-11723"}}
+{"timestamp": 1781346167.3198845, "event_type": "UserRegistered", "details": {"email": "evelyn@konvo.app", "konvo_id": "KON-INTJ-586BF"}}
+{"timestamp": 1781346167.3630147, "event_type": "BehavioralMetric", "details": {"user_id": 1, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781346167.3630147, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 1, "mbti": "INFJ"}}
+{"timestamp": 1781346167.5393133, "event_type": "UserRegistered", "details": {"email": "marcus@konvo.app", "konvo_id": "KON-INTJ-04C43"}}
+{"timestamp": 1781346167.5654001, "event_type": "BehavioralMetric", "details": {"user_id": 2, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781346167.5674353, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 2, "mbti": "INTJ"}}
+{"timestamp": 1781346167.7949781, "event_type": "UserRegistered", "details": {"email": "sophia@konvo.app", "konvo_id": "KON-INTJ-FC514"}}
+{"timestamp": 1781346167.8267214, "event_type": "BehavioralMetric", "details": {"user_id": 3, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781346167.8287175, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 3, "mbti": "ENFP"}}
+{"timestamp": 1781346168.107612, "event_type": "UserRegistered", "details": {"email": "lucas@konvo.app", "konvo_id": "KON-INTJ-570B1"}}
+{"timestamp": 1781346168.1328979, "event_type": "BehavioralMetric", "details": {"user_id": 4, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781346168.1354365, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 4, "mbti": "INFP"}}
+{"timestamp": 1781346168.3571353, "event_type": "UserRegistered", "details": {"email": "naomi@konvo.app", "konvo_id": "KON-INTJ-D1A42"}}
+{"timestamp": 1781346168.379865, "event_type": "BehavioralMetric", "details": {"user_id": 5, "metric": "MBTI_Type", "old_value": 0.0, "new_value": 1.0}}
+{"timestamp": 1781346168.379865, "event_type": "PersonalityAssessmentCompleted", "details": {"user_id": 5, "mbti": "ISTJ"}}
+{"timestamp": 1781346168.422517, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 3, "type": "interest"}}
+{"timestamp": 1781346168.4414043, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781346168.4916449, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-3", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781346168.4936352, "event_type": "AgentDateSimulated", "details": {"simulation_id": 1, "compatibility": 94.7}}
+{"timestamp": 1781346168.5071626, "event_type": "SwipeAction", "details": {"swiper_id": 1, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781346168.5292015, "event_type": "SwipeAction", "details": {"swiper_id": 4, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781346168.5528364, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-4", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781346168.5528364, "event_type": "AgentDateSimulated", "details": {"simulation_id": 2, "compatibility": 90.3}}
+{"timestamp": 1781346168.5625973, "event_type": "SwipeAction", "details": {"swiper_id": 5, "swipee_id": 2, "type": "interest"}}
+{"timestamp": 1781346168.5731268, "event_type": "SwipeAction", "details": {"swiper_id": 3, "swipee_id": 5, "type": "pass"}}
+{"timestamp": 1781346168.5978067, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781346168.6104136, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781346168.62336, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781346282.1816747, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 1, "type": "interest"}}
+{"timestamp": 1781346283.3375921, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 4, "type": "interest"}}
+{"timestamp": 1781346284.2212856, "event_type": "SwipeAction", "details": {"swiper_id": 2, "swipee_id": 5, "type": "interest"}}
+{"timestamp": 1781346284.257836, "event_type": "AgentAnalytics", "details": {"agent_id": "AGENT-TWIN-2", "prompt_length": 100, "response_length": 300}}
+{"timestamp": 1781346284.2602007, "event_type": "AgentDateSimulated", "details": {"simulation_id": 3, "compatibility": 89.7}}
+{"timestamp": 1781390008.3218875, "event_type": "DateApproved", "details": {"simulation_id": 3, "user_id": 2, "action": "approved"}}
+{"timestamp": 1781393740.0217001, "event_type": "UserRegistered", "details": {"email": "test2933@konvo.app", "konvo_id": "KON-INTJ-5533E"}}

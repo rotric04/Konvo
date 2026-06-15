@@ -1,0 +1,53 @@
+{
+    "nodes": [
+        3,
+        2,
+        4,
+        1,
+        5
+    ],
+    "edges": [
+        {
+            "source": 3,
+            "target": 2,
+            "type": "HumanRelationship",
+            "weight": 99.0
+        },
+        {
+            "source": 3,
+            "target": 2,
+            "type": "StartupRelationship",
+            "weight": 50.0
+        },
+        {
+            "source": 4,
+            "target": 1,
+            "type": "HumanRelationship",
+            "weight": 90.3
+        },
+        {
+            "source": 4,
+            "target": 1,
+            "type": "StartupRelationship",
+            "weight": 50.0
+        },
+        {
+            "source": 2,
+            "target": 3,
+            "type": "HumanRelationship",
+            "weight": 99.0
+        },
+        {
+            "source": 2,
+            "target": 5,
+            "type": "HumanRelationship",
+            "weight": 89.7
+        },
+        {
+            "source": 2,
+            "target": 5,
+            "type": "StartupRelationship",
+            "weight": 50.0
+        }
+    ]
+}

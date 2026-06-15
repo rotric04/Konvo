@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local Databases
+*.db
+*.sqlite
+
+# Environments
+.env
+.env.local
+.env.development
+.env.production
+
+# Pytest cache
+.pytest_cache/
+
+# Docker volumes
+pgdata/
+redisdata/
+
+# Celery
+celerybeat-schedule*

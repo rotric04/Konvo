@@ -1,0 +1,313 @@
+# docker-compose.yml — Konvo App
+
+services:
+  # ─── Databases ───────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: konvo-db
+    environment:
+      POSTGRES_USER: konvo_user
+      POSTGRES_PASSWORD: konvo_password
+      POSTGRES_DB: konvodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U konvo_user -d konvodb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: konvo-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ─── Search Engine ────────────────────────────────────────
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: konvo-meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY:-konvo_meili_dev_key}
+      MEILI_ENV: development
+    volumes:
+      - meilisearch_data:/meili_data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:7700/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  # ─── Backend Microservices ────────────────────────────────
+  auth-service:
+    build: .
+    container_name: auth-service
+    command: uvicorn services.auth-service.main:app --host 0.0.0.0 --port 8001 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  user-service:
+    build: .
+    container_name: user-service
+    command: uvicorn services.user-service.main:app --host 0.0.0.0 --port 8002 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  behavior-engine:
+    build: .
+    container_name: behavior-engine
+    command: uvicorn services.behavior-engine.main:app --host 0.0.0.0 --port 8003 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  sentiment-engine:
+    build: .
+    container_name: sentiment-engine
+    command: uvicorn services.sentiment-engine.main:app --host 0.0.0.0 --port 8004 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+
+  ai-agent-service:
+    build: .
+    container_name: ai-agent-service
+    command: uvicorn services.ai-agent-service.main:app --host 0.0.0.0 --port 8005 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  messaging-service:
+    build: .
+    container_name: messaging-service
+    command: uvicorn services.messaging-service.main:app --host 0.0.0.0 --port 8009 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  graph-service:
+    build: .
+    container_name: graph-service
+    command: uvicorn services.graph-service.main:app --host 0.0.0.0 --port 8008 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+
+  search-service:
+    build: .
+    container_name: search-service
+    command: uvicorn services.search-service.main:app --host 0.0.0.0 --port 8010 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - MEILISEARCH_URL=http://meilisearch:7700
+    depends_on:
+      db:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+
+  community-service:
+    build: .
+    container_name: community-service
+    command: uvicorn services.community-service.main:app --host 0.0.0.0 --port 8006 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+
+  feedback-service:
+    build: .
+    container_name: feedback-service
+    command: uvicorn services.feedback-service.main:app --host 0.0.0.0 --port 8007 --reload
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ─── Background Workers ───────────────────────────────────
+  celery-worker:
+    build: .
+    container_name: konvo-celery-worker
+    command: celery -A services.worker_service.celery_app worker --loglevel=info --concurrency=4
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://konvo_user:konvo_password@db:5432/konvodb
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+
+  celery-beat:
+    build: .
+    container_name: konvo-celery-beat
+    command: celery -A services.worker_service.celery_app beat --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  flower:
+    build: .
+    container_name: konvo-flower
+    command: celery -A services.worker_service.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # ─── Gateway ──────────────────────────────────────────────
+  gateway:
+    image: nginx:alpine
+    container_name: konvo-gateway
+    ports:
+      - "8000:80"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./apps/web:/usr/share/nginx/html:ro
+    depends_on:
+      - auth-service
+      - community-service
+      - user-service
+      - behavior-engine
+      - sentiment-engine
+      - ai-agent-service
+      - messaging-service
+      - graph-service
+      - search-service
+
+volumes:
+  postgres_data:
+  redis_data:
+  meilisearch_data:

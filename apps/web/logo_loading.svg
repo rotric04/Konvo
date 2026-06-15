@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    .spin {
+      transform-origin: 50px 50px;
+      animation: spin-anim 3s linear infinite;
+    }
+    .pulse {
+      transform-origin: 50px 50px;
+      animation: pulse-anim 2s ease-in-out infinite;
+    }
+    .res-wave {
+      stroke-dasharray: 4;
+      animation: dash-anim 1.5s linear infinite;
+    }
+    @keyframes spin-anim {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse-anim {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    @keyframes dash-anim {
+      to {
+        stroke-dashoffset: -8;
+      }
+    }
+  </style>
+  <circle cx="50" cy="50" r="38" fill="none" stroke="#1F1F2A" stroke-width="1.5" stroke-dasharray="4 4" class="spin" />
+  
+  <g class="pulse">
+    <circle cx="35" cy="50" r="6" fill="#0D9488" />
+    <circle cx="65" cy="50" r="6" fill="#4F46E5" />
+    
+    <path class="res-wave" d="M 41 50 C 45 42, 55 42, 59 50" fill="none" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" />
+    <path class="res-wave" d="M 41 50 C 45 58, 55 58, 59 50" fill="none" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" />
+    
+    <circle cx="50" cy="50" r="2.5" fill="#D97706" />
+  </g>
+</svg>

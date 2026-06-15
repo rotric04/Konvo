@@ -1,0 +1,41 @@
+fastapi==0.110.0
+uvicorn[standard]==0.28.0
+sqlalchemy==2.0.28
+psycopg2-binary==2.9.9
+argon2-cffi==23.1.0
+pyjwt==2.8.0
+pydantic==2.6.4
+redis==5.0.3
+websockets==12.0
+python-multipart==0.0.9
+pytest==8.1.1
+httpx==0.27.0
+email-validator>=2.0.0
+cryptography>=42.0.0
+python-dotenv==1.0.1
+
+# Background Tasks & Job Queue
+celery[redis]==5.3.6
+flower==2.0.1
+
+# Search Engine
+meilisearch==0.31.0
+
+# Rate Limiting
+slowapi==0.1.9
+
+# Observability & Error Tracking
+sentry-sdk[fastapi]==1.45.0
+prometheus-fastapi-instrumentator==6.1.0
+
+# File I/O
+aiofiles==23.2.1
+
+# gRPC Internal Services
+grpcio==1.62.1
+grpcio-tools==1.62.1
+protobuf==4.25.3
+
+# Security Auditing (dev)
+pip-audit==2.7.3
+bandit==1.7.8

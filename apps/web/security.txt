@@ -1,0 +1,6 @@
+Contact: mailto:security@konvo.space
+Expires: 2027-06-12T00:00:00.000Z
+Encryption: https://konvo.space/pgp-key.txt
+Acknowledgements: https://konvo.space/hall-of-fame.html
+Preferred-Languages: en
+Policy: https://konvo.space/security-policy.html

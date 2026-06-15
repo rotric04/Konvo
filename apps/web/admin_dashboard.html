@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Konvo — Agent-Based Date Finder</title>
+    
+    <!-- SEO Metadata -->
+    <meta name="description" content="Access the administrative user node dashboard to inspect seed registries and user accounts.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- CryptoJS CDN for Client-Side Decryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #0a0a0f;
+            --bg-surface: rgba(255, 255, 255, 0.03);
+            --border-glow: rgba(124, 58, 237, 0.15);
+            --border-dim: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-glow: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            --error: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 70%);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Access Barrier Overlay */
+        #barrier-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(24px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .barrier-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid var(--border-glow);
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(124, 58, 237, 0.1);
+        }
+
+        .barrier-card h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: var(--accent-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .barrier-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .barrier-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-dim);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .barrier-input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .barrier-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-glow);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .barrier-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* Dashboard Wrapper */
+        #dashboard-wrapper {
+            width: 90%;
+            max-width: 1200px;
+            padding: 3rem 0;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-dim);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            background: var(--accent-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-secure {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dim);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-glow);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-title {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Main Registry Container */
+        .registry-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dim);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+        }
+
+        .registry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .registry-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+        }
+
+        .search-bar {
+            padding: 0.8rem 1.2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-dim);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            width: 100%;
+            max-width: 320px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: #7c3aed;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.5);
+        }
+
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+            border-radius: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        td {
+            padding: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.015);
+        }
+
+        /* Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.verified {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-badge.pending {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .status-badge.premium {
+            background: rgba(124, 58, 237, 0.1);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .status-badge.regular {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-dim);
+        }
+
+        .status-badge.role-admin {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .status-badge.role-user {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barrier overlay -->
+    <div id="barrier-overlay">
+        <div class="barrier-card">
+            <h1>DECRYPTION KEY REQUIRED</h1>
+            <p>Enter the administrative key to decrypt the payload on the client side.</p>
+            <input type="password" id="passphrase-input" class="barrier-input" placeholder="Enter security passphrase" autofocus>
+            <button id="decrypt-btn" class="barrier-btn">Decrypt Interface</button>
+            <div id="error-alert" class="error-msg">Incorrect passphrase. Decryption failed.</div>
+        </div>
+    </div>
+
+    <!-- Dashboard Main -->
+    <div id="dashboard-wrapper">
+        <header>
+            <h1>KONVO™</h1>
+            <div class="badge-secure">AES-256 SECURED CLIENT SESSION</div>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Total Seeding Registers</div>
+                <div id="metric-total" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">OTP Verified Users</div>
+                <div id="metric-verified" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Premium Nodes</div>
+                <div id="metric-premium" class="metric-value">0</div>
+            </div>
+        </div>
+
+        <div class="registry-container">
+            <div class="registry-header">
+                <h2>Administrative User Directory</h2>
+                <input type="text" id="table-search" class="search-bar" placeholder="Search display name, email, or MBTI...">
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Display Name</th>
+                            <th>Email Address</th>
+                            <th>Konvo ID</th>
+                            <th>Role</th>
+                            <th>MBTI</th>
+                            <th>DIGIPIN</th>
+                            <th>OTP Status</th>
+                            <th>Premium</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let rawEncryptedData = "";
+        let fetchFailed = false;
+
+        // Fetch encrypted payload from server on page load
+        async function fetchEncryptedData() {
+            try {
+                const res = await fetch("/api/admin/data");
+                if (!res.ok) throw new Error("Failed to reach administrative endpoints");
+                const body = await res.json();
+                rawEncryptedData = body.data;
+            } catch (err) {
+                console.error(err);
+                fetchFailed = true;
+                document.getElementById("error-alert").innerText = "Server communication failed. Please ensure gateway.py or docker compose is running.";
+                document.getElementById("error-alert").style.display = "block";
+            }
+        }
+
+        // Trigger fetch
+        fetchEncryptedData();
+
+        // Decryption handler
+        document.getElementById("decrypt-btn").addEventListener("click", performDecryption);
+        document.getElementById("passphrase-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") performDecryption();
+        });
+
+        function performDecryption() {
+            const passphrase = document.getElementById("passphrase-input").value;
+            if (!passphrase) return;
+            if (!rawEncryptedData) {
+                if (fetchFailed) {
+                    document.getElementById("error-alert").innerText = "Decryption failed because the server is offline or the database tables do not exist.";
+                } else {
+                    document.getElementById("error-alert").innerText = "Still fetching server payload... Try again in a moment.";
+                }
+                document.getElementById("error-alert").style.display = "block";
+                return;
+            }
+
+            try {
+                // Parse encrypted format (contains iv and ciphertext)
+                const payload = JSON.parse(rawEncryptedData);
+                const iv = CryptoJS.enc.Base64.parse(payload.iv);
+                const ciphertext = CryptoJS.enc.Base64.parse(payload.ciphertext);
+
+                // Derive key using SHA-256 matching Python backend logic
+                const key = CryptoJS.SHA256(passphrase);
+
+                // Decrypt
+                const decrypted = CryptoJS.AES.decrypt(
+                    { ciphertext: ciphertext },
+                    key,
+                    { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+                );
+
+                const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+                if (!decryptedText) {
+                    throw new Error("Invalid password");
+                }
+
+                // Parse decrypted JSON
+                const result = JSON.parse(decryptedText);
+                
+                // Load metrics
+                document.getElementById("metric-total").innerText = result.metrics.total_users;
+                document.getElementById("metric-verified").innerText = result.metrics.verified_users;
+                document.getElementById("metric-premium").innerText = result.metrics.premium_users;
+
+                // Load users table
+                loadUsersTable(result.users);
+
+                // Reveal dashboard with animation
+                document.body.style.display = "block";
+                document.body.style.background = "radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 100%)";
+                document.getElementById("barrier-overlay").style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById("barrier-overlay").style.display = "none";
+                    document.getElementById("dashboard-wrapper").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("dashboard-wrapper").style.opacity = 1;
+                    }, 50);
+                }, 500);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById("error-alert").innerText = "Incorrect key: Decryption integrity verification failed.";
+                document.getElementById("error-alert").style.display = "block";
+            }
+        }
+
+        // Table renderer
+        let globalUsersList = [];
+        function loadUsersTable(users) {
+            globalUsersList = users;
+            renderTableRows(users);
+        }
+
+        function renderTableRows(users) {
+            const tbody = document.getElementById("users-table-body");
+            tbody.innerHTML = "";
+
+            users.forEach(u => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${u.id}</td>
+                    <td style="font-weight: 600;">${escapeHtml(u.display_name)}</td>
+                    <td style="color: var(--text-secondary);">${escapeHtml(u.email)}</td>
+                    <td style="font-family: 'Space Grotesk', monospace; font-size: 0.85rem;">${escapeHtml(u.konvo_id)}</td>
+                    <td><span class="status-badge role-${u.role}">${escapeHtml(u.role)}</span></td>
+                    <td style="font-weight: 600; color: #a78bfa;">${escapeHtml(u.mbti)}</td>
+                    <td style="font-family: monospace; font-size: 0.85rem; color: #3b82f6;">${u.digipin ? escapeHtml(u.digipin) : "N/A"}</td>
+                    <td><span class="status-badge ${u.otp_verified ? 'verified' : 'pending'}">${u.otp_verified ? 'Verified' : 'Pending'}</span></td>
+                    <td><span class="status-badge ${u.premium_user ? 'premium' : 'regular'}">${u.premium_user ? 'Premium' : 'Regular'}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filtering
+        document.getElementById("table-search").addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = globalUsersList.filter(u => 
+                u.display_name.toLowerCase().includes(query) ||
+                u.email.toLowerCase().includes(query) ||
+                u.mbti.toLowerCase().includes(query) ||
+                (u.digipin && u.digipin.toLowerCase().includes(query)) ||
+                u.konvo_id.toLowerCase().includes(query)
+            );
+            renderTableRows(filtered);
+        });
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>

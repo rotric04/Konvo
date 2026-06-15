@@ -1,0 +1,6 @@
+{
+  "extraPaths": [
+    "packages/shared-utils",
+    "packages/shared-schemas"
+  ]
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package twin;
+
+service TwinService {
+    rpc SimulateDate (TwinSimulateRequest) returns (TwinSimulateResponse);
+}
+
+message TwinSimulateRequest {
+    int32 user_a_id = 1;
+    int32 user_b_id = 2;
+    double compatibility_score = 3;
+}
+
+message TwinSimulateResponse {
+    string environment = 1;
+    string dialogue_log_json = 2;
+    string match_detail_json = 3;
+}

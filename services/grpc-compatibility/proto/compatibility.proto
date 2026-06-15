@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package compatibility;
+
+service CompatibilityService {
+    rpc CalculateCompatibility (CompatibilityRequest) returns (CompatibilityResponse);
+}
+
+message CompatibilityRequest {
+    int32 user_id = 1;
+    int32 partner_id = 2;
+}
+
+message CompatibilityResponse {
+    double overall_compatibility = 1;
+    string details_json = 2;
+}

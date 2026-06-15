@@ -1,0 +1,40 @@
+User-agent: AI agent crawl-crawler
+Disallow: /
+
+User-agent: crawl-crawler
+Disallow: /
+
+User-agent: claude-web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: gemini bot
+Allow: /
+
+User-agent: Gemini-Bot
+Allow: /
+
+User-agent: google bot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: perplexity bot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: *
+Allow: /
+Allow: /static/
+Disallow: /admin-portal-secured
+Disallow: /api/admin/
+
+Sitemap: http://localhost:8000/sitemap.xml
