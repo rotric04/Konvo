@@ -224,12 +224,11 @@ def health_check(db: Session = Depends(get_db)):
         health_status["database_error"] = str(e)
         
     # 2. Test Redis connection
-    try:
-        if redis_client.client.ping():
-            health_status["redis"] = "connected"
-    except Exception as e:
+    if redis_client.connected:
+        health_status["redis"] = "connected"
+    else:
         health_status["status"] = "unhealthy"
-        health_status["redis_error"] = str(e)
+        health_status["redis_error"] = "Redis client not connected (using local in-memory fallback cache)"
         
     return health_status
 
