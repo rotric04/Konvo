@@ -215,6 +215,12 @@ CREATE TABLE IF NOT EXISTS feedback_entries (
 );
 
 
+-- 1.5. Database Schema Upgrades for Existing Deployments
+ALTER TABLE users ADD COLUMN IF NOT EXISTS username VARCHAR(255) UNIQUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS otp_created_at TIMESTAMP WITH TIME ZONE;
+UPDATE users SET username = 'user_' || id WHERE username IS NULL;
+
+
 -- 2. Query Optimization Indexes for High Simultaneous Concurrency (1000+ users)
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
