@@ -73,7 +73,7 @@
       "destination": "/pages/onboarding.html"
     },
     {
-      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)? ",
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)?",
       "destination": "/pages/app.html"
     },
     {
