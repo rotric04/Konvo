@@ -2863,20 +2863,20 @@
                     </div>
                     <input type="checkbox" checked disabled style="margin-top: 0.2rem;">
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <label for="cookie-pref-analytics" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; cursor: pointer; user-select: none;">
                     <div>
                         <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Observability & Analytics</h4>
                         <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Enables PostHog telemetry and Sentry exception logs to debug errors.</p>
                     </div>
-                    <input type="checkbox" id="cookie-pref-analytics" checked style="margin-top: 0.2rem;">
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                    <input type="checkbox" id="cookie-pref-analytics" checked style="margin-top: 0.2rem; cursor: pointer;">
+                </label>
+                <label for="cookie-pref-functional" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; cursor: pointer; user-select: none;">
                     <div>
                         <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Functional Performance</h4>
                         <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Stores theme settings and map view coordinates locally.</p>
                     </div>
-                    <input type="checkbox" id="cookie-pref-functional" checked style="margin-top: 0.2rem;">
-                </div>
+                    <input type="checkbox" id="cookie-pref-functional" checked style="margin-top: 0.2rem; cursor: pointer;">
+                </label>
             </div>
             <div style="display: flex; gap: 1rem;">
                 <button type="button" class="btn btn-secondary" onclick="window.konvoCloseModal('cookie-preferences-modal')" style="flex: 1;">Cancel</button>

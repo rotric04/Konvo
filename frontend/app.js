@@ -2767,22 +2767,32 @@ function initChatWorkspace() {
 // ─── Body scroll lock — single MutationObserver is the sole controller ───────
 // IMPORTANT: Do NOT call lockBodyScroll/unlockBodyScroll manually in other
 // places. The MutationObserver in setupModalClosers is the only authority.
-let _scrollLockCount = 0;
+const _activeModals = new Set();
 let _savedScrollY = 0;
 
-function lockBodyScroll() {
-    _scrollLockCount++;
-    if (_scrollLockCount === 1) {
+function lockBodyScroll(modalId) {
+    if (!modalId) return;
+    if (_activeModals.size === 0) {
         _savedScrollY = window.scrollY;
         document.documentElement.style.setProperty('--scroll-y', `-${_savedScrollY}px`);
+        document.body.style.setProperty('overflow', 'hidden', 'important');
+        document.body.style.setProperty('position', 'fixed', 'important');
+        document.body.style.setProperty('width', '100%', 'important');
+        document.body.style.setProperty('top', `-${_savedScrollY}px`);
         document.body.classList.add('modal-open');
     }
+    _activeModals.add(modalId);
 }
 
-function unlockBodyScroll() {
-    if (_scrollLockCount <= 0) return;
-    _scrollLockCount--;
-    if (_scrollLockCount === 0) {
+function unlockBodyScroll(modalId) {
+    if (!modalId) return;
+    if (!_activeModals.has(modalId)) return;
+    _activeModals.delete(modalId);
+    if (_activeModals.size === 0) {
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('position');
+        document.body.style.removeProperty('width');
+        document.body.style.removeProperty('top');
         document.body.classList.remove('modal-open');
         document.documentElement.style.removeProperty('--scroll-y');
         window.scrollTo(0, _savedScrollY);
@@ -2837,9 +2847,9 @@ function setupModalClosers() {
             const wasActive = mutation.oldValue ? mutation.oldValue.split(' ').includes('active') : false;
             const isActive = target.classList.contains('active');
             if (isActive && !wasActive) {
-                lockBodyScroll();
+                lockBodyScroll(target.id || 'unnamed-modal');
             } else if (!isActive && wasActive) {
-                unlockBodyScroll();
+                unlockBodyScroll(target.id || 'unnamed-modal');
             }
         });
     });
@@ -7099,6 +7109,31 @@ async function initApp() {
                                     clearInterval(demoSimInterval);
                                     demoSimInterval = null;
                                 }
+                            }
+                            
+                            // Snappy premium exit animation and complete cleanup of GSAP inline styles
+                            const content = target.querySelector('.modal-content, .card');
+                            gsap.killTweensOf(target);
+                            if (content) gsap.killTweensOf(content);
+                            
+                            gsap.to(target, {
+                                opacity: 0,
+                                duration: 0.2,
+                                ease: 'power2.in',
+                                onComplete: () => {
+                                    gsap.set(target, { clearProps: 'opacity' });
+                                }
+                            });
+                            if (content) {
+                                gsap.to(content, {
+                                    scale: 0.93,
+                                    y: 10,
+                                    duration: 0.2,
+                                    ease: 'power2.in',
+                                    onComplete: () => {
+                                        gsap.set(content, { clearProps: 'transform,scale' });
+                                    }
+                                });
                             }
                         }
                     }
