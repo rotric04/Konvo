@@ -6,7 +6,7 @@
 
 ### Meet your match before you ever say hello.
 
-**Konvo is an AI-powered social connection platform where your digital twin speaks first — so you only connect with people you already vibe with.**
+**Konvo is an AI-powered social connection platform where your digital twin speaks first , so you only connect with people you already vibe with.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](./LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
