@@ -2903,13 +2903,7 @@
             allReveal.forEach(function(el) { observer.observe(el); });
         })();
 
-        // konvoCloseModal — global shim called by inline onclick on all close buttons.
-        // Removing .active triggers the MutationObserver in setupModalClosers which
-        // handles scroll unlock automatically. Do NOT add manual unlock calls here.
-        window.konvoCloseModal = function(id) {
-            var el = document.getElementById(id);
-            if (el) el.classList.remove('active');
-        };
+
 
         // Premium card mouse-tracking glow effect
         document.querySelectorAll('.premium-glow-card').forEach(function(card) {
