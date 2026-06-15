@@ -38,10 +38,9 @@
 12. [Getting Started](#12-getting-started)
 13. [Environment Variables](#13-environment-variables)
 14. [API Reference](#14-api-reference)
-15. [How to Index This Repo on GitHub](#15-how-to-index-this-repo-on-github)
-16. [What is Coming Next](#16-what-is-coming-next)
-17. [How to Collaborate](#17-how-to-collaborate)
-18. [License](#18-license)
+15. [What is Coming Next](#15-what-is-coming-next)
+16. [How to Collaborate](#16-how-to-collaborate)
+17. [License](#17-license)
 
 <br>
 
@@ -241,38 +240,7 @@ The compatibility algorithm also accounts for:
 
 ![System Architecture](./docs/konvo_architecture.png)
 
-```
-                        ┌─────────────────────────────────┐
-                        │  Browser Client (Vanilla JS)    │
-                        │  Three.js  MapLibre  GSAP       │
-                        └────────────────┬────────────────┘
-                                         │ HTTP and WebSocket
-                        ┌────────────────▼────────────────┐
-                        │      FastAPI Gateway             │
-                        │   gateway.py     Port 8000      │
-                        │  Rate Limiting   CSP Headers     │
-                        │  Prometheus   Sentry   CORS      │
-                        └────┬──────────────────────┬──────┘
-                             │ Dynamic route loading │
-          ┌──────────────────▼──────┐   ┌───────────▼──────────────┐
-          │  Auth Service  8001     │   │  User Service  8002       │
-          │  Messaging     8009     │   │  Behavior Engine 8003     │
-          │  AI Agent      8005     │   │  Sentiment Engine 8004    │
-          │  Graph         8008     │   │  Community  8006          │
-          │  Search        8010     │   │  Feedback   8007          │
-          └──────────────────┬──────┘   └───────────┬──────────────┘
-                             │                       │
-                    ┌────────▼───────────────────────▼──────┐
-                    │              Data Layer                │
-                    │  PostgreSQL   Redis   MeiliSearch      │
-                    └────────────────────────────────────────┘
-                             │
-                    ┌────────▼──────────────────────┐
-                    │     Background Workers         │
-                    │  Celery Worker  Celery Beat    │
-                    │  Flower Dashboard  5555        │
-                    └────────────────────────────────┘
-```
+The image above shows the full service layout. In short: the browser talks to the FastAPI gateway on port 8000. The gateway dynamically loads all ten microservices and merges their routes. All services share PostgreSQL, Redis, and MeiliSearch at the data layer. Celery workers handle background tasks like avatar generation.
 
 The gateway does not use traditional microservice mounting with ASGI sub-mounts. Instead it dynamically loads each service module and copies all routes directly into the main app. This means one unified API surface, one set of middleware, and zero issues with hot reload.
 
@@ -504,110 +472,74 @@ RESEND_API_KEY=your_resend_api_key
 
 The full interactive API documentation is auto-generated and available at `/docs` (Swagger UI) or `/redoc` when the server is running.
 
-### Key Endpoints
+### Auth and Users
 
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/auth/register` | POST | Create a new account |
-| `/api/auth/login` | POST | Login and receive JWT tokens |
-| `/api/auth/verify-otp` | POST | Verify OTP for account activation |
-| `/api/agents/twin` | GET | Get your AI twin profile |
-| `/api/agents/twin` | PUT | Update your twin's style and preferences |
-| `/api/agents/twin/avatar/generate` | POST | Generate a visual avatar async |
-| `/api/agents/simulations` | GET | List all your virtual date simulations |
-| `/api/agents/simulations/{id}` | GET | Get a specific simulation transcript |
-| `/api/agents/simulations/{id}/approve` | POST | Approve or decline a match |
-| `/api/compatibility/discovery` | GET | Get your sorted discovery feed |
-| `/api/compatibility/calculate/{id}` | GET | Calculate compatibility with a user |
-| `/api/compatibility/swipe` | POST | Swipe pass or interest on a user |
-| `/api/chat/messages` | GET | Get chat messages with a user |
-| `/api/sentiment/live-ratios` | GET | Get platform wide sentiment stats |
-| `/api/search` | GET | Full text search for users |
-| `/api/health` | GET | Service health check |
-
-WebSocket endpoints:
-
-| Endpoint | Description |
+| Endpoint | What it does |
 |---|---|
-| `/ws/realtime` | Real time notifications and presence |
-| `/api/sentiment/ws/live-sentiment` | Live sentiment stream |
+| `POST /api/auth/register` | Create a new account |
+| `POST /api/auth/login` | Login and get JWT tokens |
+| `POST /api/auth/verify-otp` | Verify OTP to activate account |
+| `GET /api/agents/twin` | Get your AI twin profile |
+| `PUT /api/agents/twin` | Update your twin style and preferences |
+| `POST /api/agents/twin/avatar/generate` | Generate a visual avatar in the background |
+
+### Compatibility and Discovery
+
+| Endpoint | What it does |
+|---|---|
+| `GET /api/compatibility/discovery` | Get your sorted discovery feed |
+| `GET /api/compatibility/calculate/{id}` | Calculate compatibility with a user |
+| `POST /api/compatibility/swipe` | Swipe pass or interest on a user |
+
+### Virtual Dates and Chat
+
+| Endpoint | What it does |
+|---|---|
+| `GET /api/agents/simulations` | List all your date simulations |
+| `GET /api/agents/simulations/{id}` | View a simulation transcript |
+| `POST /api/agents/simulations/{id}/approve` | Approve or decline a match |
+| `GET /api/chat/messages` | Get chat messages with a user |
+
+### Utility
+
+| Endpoint | What it does |
+|---|---|
+| `GET /api/sentiment/live-ratios` | Platform wide sentiment stats |
+| `GET /api/search` | Full text search for users |
+| `GET /api/health` | Service health check |
+| `WS /ws/realtime` | Real time notifications and presence |
+| `WS /api/sentiment/ws/live-sentiment` | Live sentiment stream |
 
 <br>
 
-## 15. How to Index This Repo on GitHub
-
-If you want GitHub search, topic filtering, and the GitHub explore algorithm to find this repo more easily, here are the steps to do it properly.
-
-### Step 1 Add Repository Topics
-
-Go to your repo page, click the gear icon next to "About" and add these topics:
-
-```
-ai-agent  mbti  compatibility  social-platform  fastapi  python  
-dating-app  personality  digital-twin  microservices  websockets  
-three-js  redis  postgresql  gale-shapley  sentiment-analysis
-```
-
-### Step 2 Set the About Description
-
-Keep it under 350 characters. Something like this:
-
-> AI-powered social platform where digital twin agents converse to preview compatibility before humans connect. Built with FastAPI microservices, MBTI engine, Gale Shapley matching, and Three.js virtual environments.
-
-### Step 3 Enable Features
-
-In Settings, make sure these are turned on: Issues so people can report bugs, Discussions for community questions, Projects if you want a public roadmap, and Wikis which is optional for extended documentation.
-
-### Step 4 Add a License
-
-Create a file called LICENSE in the root of the repo with MIT license text. GitHub has a built-in tool to do this from the repo UI.
-
-### Step 5 Pin this Repo on Your Profile
-
-Go to your GitHub profile, click "Customize your pins" and add this repo so it shows up front and center.
-
-### Step 6 Create a GitHub Social Preview Image
-
-Go to repo Settings, then Social preview, and upload the `docs/konvo_architecture.png` file. This image appears when someone shares your repo link on Twitter, Discord, and other platforms.
-
-### Step 7 Add Issue Templates
-
-Create `.github/ISSUE_TEMPLATE/bug_report.md` and `feature_request.md` so contribution feels welcoming and organized for anyone who wants to help.
-
-### Step 8 Cross Link and Share
-
-Post on r/Python, r/webdev, or r/MachineLearning with a short write up. Share on Hacker News under "Show HN." Add to awesome lists like awesome-python and awesome-fastapi. Link in your portfolio and LinkedIn profile.
-
-<br>
-
-## 16. What is Coming Next
+## 15. What is Coming Next
 
 Here is what the roadmap looks like. If any of these excite you, jump into the issues tab and claim one.
 
 ### Near Term
 
-- [ ] **Voice Twin** — Your agent speaks using your voice style with text to speech
-- [ ] **MBTI Growth Mode** — Weekly challenges based on your type's growth areas
-- [ ] **Compatibility Timeline** — See how your compatibility with matched users changes over time
-- [ ] **Mobile PWA Polish** — Full offline capability and push notification support
-- [ ] **Mutual Friend Graph** — See how you are connected through shared communities
+- [ ] **Voice Twin** Your agent speaks using your voice style with text to speech
+- [ ] **MBTI Growth Mode** Weekly challenges based on your type's growth areas
+- [ ] **Compatibility Timeline** See how your compatibility with matched users changes over time
+- [ ] **Mobile PWA Polish** Full offline capability and push notification support
+- [ ] **Mutual Friend Graph** See how you are connected through shared communities
 
 ### Medium Term
 
-- [ ] **Twin vs Twin Debate Mode** — Structured debates between agents on topics you both pick
-- [ ] **Konvo Circles** — Small group experiences for 3 to 5 people covering friendships, study groups, or team matching
-- [ ] **AI Relationship Coach** — Post match insights about what made connections work or not
-- [ ] **Multi language Support** — Agents that converse in the user's native language
+- [ ] **Twin vs Twin Debate Mode** Structured debates between agents on topics you both pick
+- [ ] **Konvo Circles** Small group experiences for 3 to 5 people covering friendships, study groups, or team matching
+- [ ] **AI Relationship Coach** Post match insights about what made connections work or not
+- [ ] **Multi language Support** Agents that converse in the user's native language
 
 ### Long Term
 
-- [ ] **Open Twin Protocol** — Let other apps request a Konvo twin for compatibility checking
-- [ ] **B2B Integration** — Team compatibility for hiring and co-founder matching
-- [ ] **Privacy preserving ML** — Train personalization models without ever seeing raw user data
+- [ ] **Open Twin Protocol** Let other apps request a Konvo twin for compatibility checking
+- [ ] **B2B Integration** Team compatibility for hiring and co-founder matching
+- [ ] **Privacy preserving ML** Train personalization models without ever seeing raw user data
 
 <br>
 
-## 17. How to Collaborate
+## 16. How to Collaborate
 
 Konvo is built in public and welcomes contributors at every skill level.
 
@@ -651,7 +583,7 @@ Every contribution gets credited. If you significantly improve a module, your na
 
 <br>
 
-## 18. License
+## 17. License
 
 MIT License. Do whatever you want with it, just keep the attribution.
 
