@@ -204,6 +204,36 @@ include_service_routes(app, "search-service")
 include_service_routes(app, "feedback-service")
 
 
+# ----------------- HEALTH CHECK ENDPOINT -----------------
+@app.get("/api/health")
+def health_check(db: Session = Depends(get_db)):
+    from sqlalchemy import text
+    health_status = {
+        "status": "healthy",
+        "database": "disconnected",
+        "redis": "disconnected",
+        "env": os.getenv("ENV", "development")
+    }
+    
+    # 1. Test Supabase Database connection
+    try:
+        db.execute(text("SELECT 1"))
+        health_status["database"] = "connected"
+    except Exception as e:
+        health_status["status"] = "unhealthy"
+        health_status["database_error"] = str(e)
+        
+    # 2. Test Redis connection
+    try:
+        if redis_client.client.ping():
+            health_status["redis"] = "connected"
+    except Exception as e:
+        health_status["status"] = "unhealthy"
+        health_status["redis_error"] = str(e)
+        
+    return health_status
+
+
 # ----------------- STATIC FRONTEND PAGES -----------------
 
 # Mount static directory to the Vanilla web directory
