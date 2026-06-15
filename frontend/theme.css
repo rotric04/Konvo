@@ -166,7 +166,7 @@ html[data-theme="light"] {
 
 /* ── Logo swap: shows logo_light in light mode ── */
 html[data-theme="light"] .konvo-logo-img[src*="logo_dark"] {
-    content: url('/static/logo_light.svg');
+    content: url('/logo_light.svg');
 }
 
 /* ── Input, textarea, select — themed backgrounds ── */

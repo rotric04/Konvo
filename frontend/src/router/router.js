@@ -95,7 +95,7 @@ async function handleRouting(path) {
 
     // Auth guard: redirect to /auth if route requires auth and user is not authenticated
     if (route.auth) {
-        const { getAuthState } = await import('/static/src/store/state.js');
+        const { getAuthState } = await import('/src/store/state.js');
         const state = getAuthState();
         if (!state.isAuthenticated) {
             navigateTo('/auth');
@@ -105,7 +105,7 @@ async function handleRouting(path) {
 
     // Guest-only guard: redirect to / if already authenticated
     if (route.guestOnly) {
-        const { getAuthState } = await import('/static/src/store/state.js');
+        const { getAuthState } = await import('/src/store/state.js');
         const state = getAuthState();
         if (state.isAuthenticated) {
             navigateTo('/');
@@ -115,7 +115,7 @@ async function handleRouting(path) {
 
     // Incomplete profile guard: redirect to onboarding after login
     if (route.auth && cleanPath !== '/onboarding' && cleanPath !== '/profile') {
-        const { getAuthState } = await import('/static/src/store/state.js');
+        const { getAuthState } = await import('/src/store/state.js');
         const state = getAuthState();
         if (state.isAuthenticated && state.currentUser) {
             const needsOnboarding = !state.currentUser.profile || !state.currentUser.profile.mbti_summary;

@@ -15,12 +15,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
     <!-- Design System -->
-    <link rel="stylesheet" href="/static/src/styles/tokens.css" />
-    <link rel="stylesheet" href="/static/src/styles/animations.css" />
-    <link rel="stylesheet" href="/static/src/styles/components.css" />
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/styles/animations.css" />
+    <link rel="stylesheet" href="/src/styles/components.css" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Theme Manager: runs before body renders to prevent flash -->
     <script>
@@ -708,7 +708,7 @@
 
 <!-- Initialize theme and load modular auth logic -->
 <script type="module">
-    import { initAuthPage } from '/static/src/features/auth/auth.js';
+    import { initAuthPage } from '/src/features/auth/auth.js';
 
     // Hook up theme toggle
     const btnTheme = document.getElementById('btn-theme-toggle');
