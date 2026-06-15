@@ -56,7 +56,22 @@ def update_profile(
 ):
     prof = current_user.profile
     if not prof:
-        raise HTTPException(status_code=404, detail="Profile not found")
+        prof = models.UserProfile(
+            user_id=current_user.id,
+            display_name=request.display_name or current_user.email.split("@")[0],
+            gender=request.gender or "Unknown",
+            bio=request.bio or "",
+            relationship_intent=request.relationship_intent or "Long Term",
+            sun_sign="Aries",
+            moon_sign="Aries",
+            ascendant="Aries",
+            interests=[],
+            goals=[]
+        )
+        db.add(prof)
+        db.commit()
+        db.refresh(current_user)
+        prof = current_user.profile
         
     prof.display_name = request.display_name
     prof.bio = request.bio
@@ -71,11 +86,20 @@ def update_profile(
     
     # Recalculate horoscope signs if birth date/location updated
     if request.birth_date and request.birth_location:
-        b_time = request.birth_time or prof.birth_time or time(12, 0)
-        astro = calculate_astrology(request.birth_date, b_time, request.birth_location)
-        prof.sun_sign = astro["sun_sign"]
-        prof.moon_sign = astro["moon_sign"]
-        prof.ascendant = astro["ascendant"]
+        try:
+            b_time = request.birth_time or prof.birth_time or time(12, 0)
+            astro = calculate_astrology(request.birth_date, b_time, request.birth_location)
+            prof.sun_sign = astro["sun_sign"]
+            prof.moon_sign = astro["moon_sign"]
+            prof.ascendant = astro["ascendant"]
+        except Exception as e:
+            print(f"[Horoscope Error] Failed to calculate astrology: {e}")
+            if not prof.sun_sign:
+                prof.sun_sign = "Aries"
+            if not prof.moon_sign:
+                prof.moon_sign = "Aries"
+            if not prof.ascendant:
+                prof.ascendant = "Aries"
         
     db.commit()
     return {"success": True, "message": "Profile updated successfully."}
@@ -96,8 +120,22 @@ def read_user_astrology(
     if not prof or not prof.birth_date or not prof.birth_location:
         raise HTTPException(status_code=400, detail="Birth Date and Birth Location are required for Horoscope calculation.")
         
-    b_time = prof.birth_time or time(12, 0)
-    res = calculate_astrology(prof.birth_date, b_time, prof.birth_location)
+    try:
+        b_time = prof.birth_time or time(12, 0)
+        res = calculate_astrology(prof.birth_date, b_time, prof.birth_location)
+    except Exception as e:
+        print(f"[Horoscope Error] Failed to calculate astrology in read_user_astrology: {e}")
+        res = {
+            "sun_sign": prof.sun_sign or "Aries",
+            "moon_sign": prof.moon_sign or "Aries",
+            "ascendant": prof.ascendant or "Aries",
+            "location": prof.birth_location or "Unknown",
+            "personality_insights": "Astrology compilation is currently calibrating. Please verify birth details.",
+            "communication_tendencies": "Analysis pending profile alignment.",
+            "emotional_dna": "Vulnerability matrix processing.",
+            "life_pattern_report": "Horoscope report queued.",
+            "disclaimer": "Provided for social resonance calibration only."
+        }
     return {
         "sun_sign": res["sun_sign"],
         "moon_sign": res["moon_sign"],

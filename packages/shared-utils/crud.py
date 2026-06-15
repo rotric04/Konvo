@@ -201,7 +201,7 @@ Keys:
 - role_type (str) (e.g., "The Strategist", "The Dreamer", "The Challenger", "The Companion", "The Builder", "The Explorer")
 """
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -229,8 +229,25 @@ Keys:
 
 def submit_personality_assessment(db: Session, user_id: int, answers: dict, custom_inputs: dict = None):
     user = get_user_by_id(db, user_id)
-    if not user or not user.profile:
+    if not user:
         return None
+    if not user.profile:
+        # Dynamically create profile
+        prof = models.UserProfile(
+            user_id=user_id,
+            display_name=user.email.split("@")[0],
+            gender="Unknown",
+            bio="",
+            relationship_intent="Long Term",
+            sun_sign="Aries",
+            moon_sign="Aries",
+            ascendant="Aries",
+            interests=[],
+            goals=[]
+        )
+        db.add(prof)
+        db.commit()
+        db.refresh(user)
         
     prof = user.profile
     
@@ -301,7 +318,7 @@ def generate_avatar_via_gemini(role_type: str, display_name: str, mbti_type: str
         f"Do NOT wrap the response in markdown blocks. Return only raw JSON. Do not include outer markdown tags."
     )
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],

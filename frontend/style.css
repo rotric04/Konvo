@@ -1194,12 +1194,12 @@ svg.graph-svg {
 }
 .req-item {
     font-size: 0.65rem;
-    font-family: var(--font-sans);
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    color: var(--text-muted);
     transition: color 0.2s ease;
 }
 .req-item.valid {
-    color: var(--accent-teal, #0d9488);
+    color: var(--accent-success);
 }
 
 /* Phone Input with Flags Selector */

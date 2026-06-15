@@ -172,20 +172,80 @@ function validateStep(stepIdx) {
 
 // ─── Interest Tags ─────────────────────────────────────────────────────────
 function setupInterestTags() {
-    const tags = document.querySelectorAll('#wiz-interests-grid .interest-tag-btn');
+    const searchInput = document.getElementById('interest-search-input');
+    const addCustomBtn = document.getElementById('btn-add-custom-interest');
+    const interestsGrid = document.getElementById('wiz-interests-grid');
+
+    const filterInterests = () => {
+        const query = searchInput?.value.trim().toLowerCase() || '';
+        const tags = interestsGrid?.querySelectorAll('.interest-tag-btn') || [];
+        let matchedAny = false;
+
+        tags.forEach(btn => {
+            const text = btn.textContent.toLowerCase();
+            const val = btn.dataset.interest.toLowerCase();
+            const visible = text.includes(query) || val.includes(query);
+            btn.style.display = visible ? 'block' : 'none';
+            if (visible) matchedAny = true;
+        });
+
+        if (addCustomBtn) {
+            const exactMatch = Array.from(tags).some(btn => btn.dataset.interest.toLowerCase() === query || btn.textContent.replace(/[^a-zA-Z0-9 ]/g, '').trim().toLowerCase() === query);
+            addCustomBtn.style.display = (query && !exactMatch) ? 'block' : 'none';
+        }
+    };
+
+    searchInput?.addEventListener('input', filterInterests);
+
+    const toggleInterest = (btn) => {
+        const interest = btn.dataset.interest;
+        const idx = selectedInterests.indexOf(interest);
+        if (idx === -1) {
+            selectedInterests.push(interest);
+            btn.classList.add('selected');
+        } else {
+            selectedInterests.splice(idx, 1);
+            btn.classList.remove('selected');
+        }
+        updateInterestsCounter();
+        saveDraft();
+    };
+
+    addCustomBtn?.addEventListener('click', () => {
+        const query = searchInput?.value.trim();
+        if (!query) return;
+
+        const safeVal = query.toLowerCase().replace(/[^a-z0-9_\-]/g, '-');
+        
+        let existingBtn = interestsGrid?.querySelector(`.interest-tag-btn[data-interest="${safeVal}"]`);
+        if (!existingBtn && interestsGrid) {
+            existingBtn = document.createElement('div');
+            existingBtn.className = 'interest-tag-btn selected';
+            existingBtn.dataset.interest = safeVal;
+            existingBtn.textContent = `✨ ${query.toUpperCase()}`;
+            
+            existingBtn.addEventListener('click', () => {
+                toggleInterest(existingBtn);
+            });
+            
+            interestsGrid.appendChild(existingBtn);
+        }
+
+        if (!selectedInterests.includes(safeVal)) {
+            selectedInterests.push(safeVal);
+            existingBtn?.classList.add('selected');
+        }
+
+        if (searchInput) searchInput.value = '';
+        filterInterests();
+        updateInterestsCounter();
+        saveDraft();
+    });
+
+    const tags = interestsGrid?.querySelectorAll('.interest-tag-btn') || [];
     tags.forEach(btn => {
         btn.addEventListener('click', () => {
-            const interest = btn.dataset.interest;
-            const idx = selectedInterests.indexOf(interest);
-            if (idx === -1) {
-                selectedInterests.push(interest);
-                btn.classList.add('selected');
-            } else {
-                selectedInterests.splice(idx, 1);
-                btn.classList.remove('selected');
-            }
-            updateInterestsCounter();
-            saveDraft();
+            toggleInterest(btn);
         });
     });
 }
@@ -327,53 +387,93 @@ function saveDraft() {
 }
 
 function loadDraft() {
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
+
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
+    let draft = {};
+    if (raw) {
+        try {
+            draft = JSON.parse(raw);
+            currentStep = draft.currentStep || 0;
+            selectedInterests = draft.selectedInterests || [];
 
-    try {
-        const draft = JSON.parse(raw);
-        currentStep = draft.currentStep || 0;
-        selectedInterests = draft.selectedInterests || [];
+            setVal('wiz-display-name', draft.display_name || '');
+            setVal('wiz-gender', draft.gender || 'Male');
+            setVal('wiz-bio', draft.bio || '');
+            setVal('wiz-slider-ei', draft.slider_ei || '3');
+            setVal('wiz-slider-ns', draft.slider_ns || '3');
+            setVal('wiz-slider-tf', draft.slider_tf || '3');
+            setVal('wiz-slider-jp', draft.slider_jp || '3');
+            setVal('wiz-comm-tone', draft.comm_tone || 'intellectual');
+            setVal('wiz-custom-comm-tone', draft.custom_comm_tone || '');
+            setVal('wiz-conflict-approach', draft.conflict_approach || 'logical');
+            setVal('wiz-custom-conflict-approach', draft.custom_conflict_approach || '');
+            setVal('wiz-connection-basis', draft.connection_basis || 'banter');
+            setVal('wiz-custom-connection-basis', draft.custom_connection_basis || '');
+            setVal('wiz-custom-cognitive', draft.custom_cognitive || '');
+            setVal('wiz-relationship-intent', draft.relationship_intent || 'Long Term');
+            setVal('wiz-values-focus', draft.values_focus || 'growth');
+            setVal('wiz-custom-values-focus', draft.custom_values_focus || '');
+            setVal('wiz-custom-interests', draft.custom_interests || '');
+            setVal('wiz-digipin', draft.digipin || 'GP-1102');
+        } catch (e) {
+            console.error('[Onboarding] Failed to parse draft:', e);
+        }
+    }
 
-        const setVal = (id, val) => {
-            const el = document.getElementById(id);
-            if (el) el.value = val;
-        };
+    if (currentUser && currentUser.profile) {
+        const prof = currentUser.profile;
+        if (prof.display_name) {
+            setVal('wiz-display-name', prof.display_name);
+            if (currentStep < 2) currentStep = 2;
+        }
+        if (prof.gender) setVal('wiz-gender', prof.gender);
+        if (prof.bio) setVal('wiz-bio', prof.bio);
+        if (prof.digipin) setVal('wiz-digipin', prof.digipin);
+        if (prof.interests && prof.interests.length >= 3) {
+            selectedInterests = prof.interests;
+            if (currentStep < 3) currentStep = 3;
+        }
+    }
 
-        setVal('wiz-display-name', draft.display_name || '');
-        setVal('wiz-gender', draft.gender || 'Male');
-        setVal('wiz-bio', draft.bio || '');
-        setVal('wiz-slider-ei', draft.slider_ei || '3');
-        setVal('wiz-slider-ns', draft.slider_ns || '3');
-        setVal('wiz-slider-tf', draft.slider_tf || '3');
-        setVal('wiz-slider-jp', draft.slider_jp || '3');
-        setVal('wiz-comm-tone', draft.comm_tone || 'intellectual');
-        setVal('wiz-custom-comm-tone', draft.custom_comm_tone || '');
-        setVal('wiz-conflict-approach', draft.conflict_approach || 'logical');
-        setVal('wiz-custom-conflict-approach', draft.custom_conflict_approach || '');
-        setVal('wiz-connection-basis', draft.connection_basis || 'banter');
-        setVal('wiz-custom-connection-basis', draft.custom_connection_basis || '');
-        setVal('wiz-custom-cognitive', draft.custom_cognitive || '');
-        setVal('wiz-relationship-intent', draft.relationship_intent || 'Long Term');
-        setVal('wiz-values-focus', draft.values_focus || 'growth');
-        setVal('wiz-custom-values-focus', draft.custom_values_focus || '');
-        setVal('wiz-custom-interests', draft.custom_interests || '');
-        setVal('wiz-digipin', draft.digipin || 'GP-1102');
+    const interestsGrid = document.getElementById('wiz-interests-grid');
+    if (interestsGrid) {
+        selectedInterests.forEach(interest => {
+            let existingBtn = interestsGrid.querySelector(`.interest-tag-btn[data-interest="${interest}"]`);
+            if (!existingBtn) {
+                existingBtn = document.createElement('div');
+                existingBtn.className = 'interest-tag-btn selected';
+                existingBtn.dataset.interest = interest;
+                const label = interest.replace(/\-/g, ' ').toUpperCase();
+                existingBtn.textContent = `✨ ${label}`;
+                existingBtn.addEventListener('click', () => {
+                    const idx = selectedInterests.indexOf(interest);
+                    if (idx !== -1) {
+                        selectedInterests.splice(idx, 1);
+                        existingBtn.remove();
+                    }
+                    updateInterestsCounter();
+                    saveDraft();
+                });
+                interestsGrid.appendChild(existingBtn);
+            } else {
+                existingBtn.classList.add('selected');
+            }
+        });
 
-        // Apply selections to interest tag UI
-        document.querySelectorAll('#wiz-interests-grid .interest-tag-btn').forEach(btn => {
+        interestsGrid.querySelectorAll('.interest-tag-btn').forEach(btn => {
             const interest = btn.dataset.interest;
             btn.classList.toggle('selected', selectedInterests.includes(interest));
         });
-        updateInterestsCounter();
-
-        // Trigger change updates
-        document.getElementById('wiz-comm-tone')?.dispatchEvent(new Event('change'));
-        document.getElementById('wiz-connection-basis')?.dispatchEvent(new Event('change'));
-        document.getElementById('wiz-values-focus')?.dispatchEvent(new Event('change'));
-    } catch (e) {
-        console.error('[Onboarding] Failed to load draft:', e);
     }
+    updateInterestsCounter();
+
+    document.getElementById('wiz-comm-tone')?.dispatchEvent(new Event('change'));
+    document.getElementById('wiz-connection-basis')?.dispatchEvent(new Event('change'));
+    document.getElementById('wiz-values-focus')?.dispatchEvent(new Event('change'));
 }
 
 // ─── Onboarding Submission ─────────────────────────────────────────────────

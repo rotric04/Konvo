@@ -50,20 +50,36 @@
       "destination": "/$1"
     },
     {
-      "source": "/(feedback|admin_dashboard|blog)",
-      "destination": "/$1.html"
+      "source": "/(robots\\.txt|security\\.txt|pgp-key\\.txt|llms\\.txt|llm-full\\.txt)",
+      "destination": "/txt/$1"
+    },
+    {
+      "source": "/\\.well-known/security\\.txt",
+      "destination": "/txt/security.txt"
+    },
+    {
+      "source": "/llms-full\\.txt",
+      "destination": "/txt/llm-full.txt"
+    },
+    {
+      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy)",
+      "destination": "/pages/$1.html"
     },
     {
       "source": "/(auth|login)",
-      "destination": "/login.html"
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/onboarding",
+      "destination": "/pages/onboarding.html"
     },
     {
       "source": "/blog/(.*)",
-      "destination": "/blog.html"
+      "destination": "/pages/blog.html"
     },
     {
-      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)",
-      "destination": "/app.html"
+      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)",
+      "destination": "/pages/app.html"
     },
     {
       "source": "/(.*)",

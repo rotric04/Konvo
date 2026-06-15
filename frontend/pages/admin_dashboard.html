@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Portal | Konvo — Agent-Based Date Finder</title>
-    
+
     <!-- SEO Metadata -->
-    <meta name="description" content="Access the administrative user node dashboard to inspect seed registries and user accounts.">
+    <meta name="description"
+        content="Access the administrative user node dashboard to inspect seed registries and user accounts.">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <!-- Vercel Web Analytics & Speed Insights -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script defer src="/_vercel/speed-insights/script.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@400;700&display=swap"
+        rel="stylesheet">
     <!-- CryptoJS CDN for Client-Side Decryption -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <link rel="stylesheet" href="/static/theme.css">
     <script src="/static/theme-manager.js"></script>
     <style>
-        :root, html[data-theme="dark"] {
+        :root,
+        html[data-theme="dark"] {
             --bg-base: var(--bg-primary);
             --bg-surface: var(--surface-primary);
             --border-glow: rgba(124, 58, 237, 0.15);
@@ -80,7 +85,7 @@
         }
 
         .barrier-card {
-            background: rgba(20, 20, 30, 0.6);
+            background: rgba(147, 193, 165, 0.6);
             border: 1px solid var(--border-glow);
             padding: 2.5rem;
             border-radius: 24px;
@@ -291,13 +296,16 @@
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.2);
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(124, 58, 237, 0.3);
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(124, 58, 237, 0.5);
         }
@@ -377,7 +385,7 @@
             color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
-        
+
         .status-badge.role-user {
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
@@ -385,6 +393,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Barrier overlay -->
@@ -392,7 +401,8 @@
         <div class="barrier-card">
             <h1>DECRYPTION KEY REQUIRED</h1>
             <p>Enter the administrative key to decrypt the payload on the client side.</p>
-            <input type="password" id="passphrase-input" class="barrier-input" placeholder="Enter security passphrase" autofocus>
+            <input type="password" id="passphrase-input" class="barrier-input" placeholder="Enter security passphrase"
+                autofocus>
             <button id="decrypt-btn" class="barrier-btn">Decrypt Interface</button>
             <div id="error-alert" class="error-msg">Incorrect passphrase. Decryption failed.</div>
         </div>
@@ -423,9 +433,13 @@
         <div class="registry-container">
             <div class="registry-header">
                 <h2>Administrative User Directory</h2>
-                <div style="display: flex; gap: 1rem; align-items: center; width: 100%; max-width: 500px; flex-wrap: wrap;">
-                    <input type="text" id="table-search" class="search-bar" placeholder="Search display name, email, or MBTI..." style="flex: 1; max-width: none;">
-                    <button id="btn-add-user" class="barrier-btn" style="width: auto; padding: 0.8rem 1.5rem; font-size: 0.9rem; margin-top: 0;">Add New User</button>
+                <div
+                    style="display: flex; gap: 1rem; align-items: center; width: 100%; max-width: 500px; flex-wrap: wrap;">
+                    <input type="text" id="table-search" class="search-bar"
+                        placeholder="Search display name, email, or MBTI..." style="flex: 1; max-width: none;">
+                    <button id="btn-add-user" class="barrier-btn"
+                        style="width: auto; padding: 0.8rem 1.5rem; font-size: 0.9rem; margin-top: 0;">Add New
+                        User</button>
                 </div>
             </div>
 
@@ -520,7 +534,7 @@
                 // Parse decrypted JSON
                 const result = JSON.parse(decryptedText);
                 decryptedPassphrase = passphrase;
-                
+
                 // Load metrics
                 document.getElementById("metric-total").innerText = result.metrics.total_users;
                 document.getElementById("metric-verified").innerText = result.metrics.verified_users;
@@ -615,13 +629,13 @@
                 }
 
                 user.premium_user = newPremiumState;
-                
+
                 // Update local metrics and table rows
                 const totalPremium = globalUsersList.filter(u => u.premium_user).length;
                 document.getElementById("metric-premium").innerText = totalPremium;
 
                 const searchVal = document.getElementById("table-search").value.toLowerCase();
-                const filtered = globalUsersList.filter(u => 
+                const filtered = globalUsersList.filter(u =>
                     u.display_name.toLowerCase().includes(searchVal) ||
                     u.email.toLowerCase().includes(searchVal) ||
                     u.mbti.toLowerCase().includes(searchVal) ||
@@ -659,9 +673,9 @@
                 }
 
                 user.role = newRole;
-                
+
                 const searchVal = document.getElementById("table-search").value.toLowerCase();
-                const filtered = globalUsersList.filter(u => 
+                const filtered = globalUsersList.filter(u =>
                     u.display_name.toLowerCase().includes(searchVal) ||
                     u.email.toLowerCase().includes(searchVal) ||
                     u.mbti.toLowerCase().includes(searchVal) ||
@@ -677,7 +691,7 @@
         // Filtering
         document.getElementById("table-search").addEventListener("input", (e) => {
             const query = e.target.value.toLowerCase();
-            const filtered = globalUsersList.filter(u => 
+            const filtered = globalUsersList.filter(u =>
                 u.display_name.toLowerCase().includes(query) ||
                 u.email.toLowerCase().includes(query) ||
                 u.mbti.toLowerCase().includes(query) ||
@@ -819,34 +833,51 @@
     </script>
 
     <!-- Add User Modal -->
-    <div class="modal" id="add-user-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(24px); z-index: 10005; justify-content: center; align-items: center;">
+    <div class="modal" id="add-user-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(24px); z-index: 10005; justify-content: center; align-items: center;">
         <div class="barrier-card" style="max-width: 500px; text-align: left;">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dim); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--text-primary);">Add New User</h2>
-                <button type="button" id="btn-close-add-user" style="background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dim); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--text-primary);">Add
+                    New User</h2>
+                <button type="button" id="btn-close-add-user"
+                    style="background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer;">&times;</button>
             </div>
-            
+
             <form id="add-user-form" onsubmit="event.preventDefault();">
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Email Address</label>
-                    <input type="email" id="add-email" class="barrier-input" placeholder="user@domain.com" required style="text-align: left;">
+                    <label
+                        style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Email
+                        Address</label>
+                    <input type="email" id="add-email" class="barrier-input" placeholder="user@domain.com" required
+                        style="text-align: left;">
                 </div>
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Password</label>
-                    <input type="password" id="add-password" class="barrier-input" placeholder="Password" required style="text-align: left;">
+                    <label
+                        style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Password</label>
+                    <input type="password" id="add-password" class="barrier-input" placeholder="Password" required
+                        style="text-align: left;">
                 </div>
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Display Name</label>
-                    <input type="text" id="add-display-name" class="barrier-input" placeholder="Display Name" required style="text-align: left;">
+                    <label
+                        style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Display
+                        Name</label>
+                    <input type="text" id="add-display-name" class="barrier-input" placeholder="Display Name" required
+                        style="text-align: left;">
                 </div>
                 <div style="margin-bottom: 1rem;">
-                    <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Phone Number</label>
-                    <input type="text" id="add-phone" class="barrier-input" placeholder="Phone Number" required style="text-align: left;">
+                    <label
+                        style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Phone
+                        Number</label>
+                    <input type="text" id="add-phone" class="barrier-input" placeholder="Phone Number" required
+                        style="text-align: left;">
                 </div>
                 <div style="margin-bottom: 1rem; display: flex; gap: 1rem;">
                     <div style="flex: 1;">
-                        <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Gender</label>
-                        <select id="add-gender" class="barrier-input" style="text-align: left; background: rgba(0, 0, 0, 0.4);">
+                        <label
+                            style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Gender</label>
+                        <select id="add-gender" class="barrier-input"
+                            style="text-align: left; background: rgba(0, 0, 0, 0.4);">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
@@ -854,8 +885,11 @@
                         </select>
                     </div>
                     <div style="flex: 1;">
-                        <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Relationship Intent</label>
-                        <select id="add-intent" class="barrier-input" style="text-align: left; background: rgba(0, 0, 0, 0.4);">
+                        <label
+                            style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Relationship
+                            Intent</label>
+                        <select id="add-intent" class="barrier-input"
+                            style="text-align: left; background: rgba(0, 0, 0, 0.4);">
                             <option value="Long Term" selected>Long Term</option>
                             <option value="Casual">Casual</option>
                             <option value="Friendship">Friendship</option>
@@ -863,15 +897,18 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div id="add-user-error" class="error-msg" style="margin-bottom: 1rem;"></div>
-                
+
                 <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                    <button type="button" id="btn-cancel-add-user" class="barrier-btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dim); flex: 1;">Cancel</button>
-                    <button type="submit" id="btn-submit-add-user" class="barrier-btn" style="flex: 1.5;">Add User</button>
+                    <button type="button" id="btn-cancel-add-user" class="barrier-btn"
+                        style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-dim); flex: 1;">Cancel</button>
+                    <button type="submit" id="btn-submit-add-user" class="barrier-btn" style="flex: 1.5;">Add
+                        User</button>
                 </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>

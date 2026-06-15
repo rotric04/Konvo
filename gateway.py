@@ -249,11 +249,11 @@ def get_index_html():
 @app.get("/auth")
 @app.get("/login")
 def get_auth_html():
-    return FileResponse(os.path.join(_root, "frontend", "login.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "login.html"))
 
 @app.get("/onboarding")
 def get_onboarding_html():
-    return FileResponse(os.path.join(_root, "frontend", "onboarding.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "onboarding.html"))
 
 @app.get("/discover")
 @app.get("/chat")
@@ -265,23 +265,24 @@ def get_onboarding_html():
 @app.get("/communities")
 @app.get("/graph")
 @app.get("/virtual-dates")
+@app.get("/diagnostics")
 def get_app_html():
-    return FileResponse(os.path.join(_root, "frontend", "app.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "app.html"))
 
 @app.get("/feedback")
 def get_feedback_html():
-    return FileResponse(os.path.join(_root, "frontend", "feedback.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "feedback.html"))
 
 @app.get("/blog")
 @app.get("/blog/{post_id}")
 def get_blog_html():
-    return FileResponse(os.path.join(_root, "frontend", "blog.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "blog.html"))
 
 # ----------------- SEO & SECURITY SPECIFICATIONS -----------------
 
 @app.get("/robots.txt")
 def get_robots_txt():
-    return FileResponse(os.path.join(_root, "frontend", "robots.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "txt", "robots.txt"), media_type="text/plain")
 
 @app.get("/sitemap.xml")
 def get_sitemap_xml():
@@ -290,28 +291,28 @@ def get_sitemap_xml():
 @app.get("/.well-known/security.txt")
 @app.get("/security.txt")
 def get_security_txt():
-    return FileResponse(os.path.join(_root, "frontend", "security.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "txt", "security.txt"), media_type="text/plain")
 
 @app.get("/pgp-key.txt")
 def get_pgp_key_txt():
-    return FileResponse(os.path.join(_root, "frontend", "pgp-key.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "txt", "pgp-key.txt"), media_type="text/plain")
 
 @app.get("/hall-of-fame")
 def get_hall_of_fame_html():
-    return FileResponse(os.path.join(_root, "frontend", "hall-of-fame.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "hall-of-fame.html"))
 
 @app.get("/security-policy")
 def get_security_policy_html():
-    return FileResponse(os.path.join(_root, "frontend", "security-policy.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "security-policy.html"))
 
 @app.get("/llms.txt")
 def get_llms_txt():
-    return FileResponse(os.path.join(_root, "frontend", "llms.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "txt", "llms.txt"), media_type="text/plain")
 
 @app.get("/llm-full.txt")
 @app.get("/llms-full.txt")
 def get_llms_full_txt():
-    return FileResponse(os.path.join(_root, "frontend", "llm-full.txt"), media_type="text/plain")
+    return FileResponse(os.path.join(_root, "frontend", "txt", "llm-full.txt"), media_type="text/plain")
 
 
 # ----------------- SECURE ENCRYPTED ADMIN DATA ROUTING -----------------
@@ -372,7 +373,7 @@ def get_admin_data(db: Session = Depends(get_db)):
 
 @app.get("/" + os.getenv("ADMIN_ROUTE_PATH", "admin-portal-secured"))
 def get_admin_dashboard():
-    return FileResponse(os.path.join(_root, "frontend", "admin_dashboard.html"))
+    return FileResponse(os.path.join(_root, "frontend", "pages", "admin_dashboard.html"))
 
 
 from pydantic import BaseModel

@@ -323,6 +323,11 @@
                 <h2 class="step-heading">Select Interest Clusters</h2>
                 <p class="step-subheading">Choose at least 3 categories that shape your daily focus. These form the primary nodes in the Resonance Grid.</p>
                 
+                <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem; align-items: center;">
+                    <input type="text" id="interest-search-input" placeholder="Search or filter interests..." style="flex: 1; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--border-primary); background: var(--bg-secondary); color: var(--text-primary); font-family: var(--font-sans); font-size: 0.85rem;" />
+                    <button type="button" id="btn-add-custom-interest" class="btn btn-secondary" style="white-space: nowrap; font-size: 0.8rem; display: none; padding: 0.6rem 1rem; border-color: var(--accent-teal); color: var(--accent-teal);">+ Add Custom</button>
+                </div>
+
                 <div class="interests-picker-grid" id="wiz-interests-grid">
                     <div class="interest-tag-btn" data-interest="artificial-intelligence">🤖 AI / TECH</div>
                     <div class="interest-tag-btn" data-interest="philosophy">🧠 PHILOSOPHY</div>

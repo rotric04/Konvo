@@ -151,14 +151,14 @@ export function initAuthPage() {
     btnSuggestUsername?.addEventListener('click', () => {
         const regEmail = document.getElementById('regEmail');
         let username = '';
-        if (regEmail?.value.includes('@')) {
+        if (regEmail?.value && regEmail.value.includes('@')) {
             const prefix = regEmail.value.split('@')[0].toLowerCase().replace(/[^a-z0-9_\-\.]/g, '');
-            if (prefix.length > 2) {
+            if (prefix.length >= 2) {
                 const suffixes = ['_rizz', '_twin', '_x', '99', '42', '_byte', '_soul'];
                 username = prefix + suffixes[Math.floor(Math.random() * suffixes.length)];
             }
         }
-        if (!username || Math.random() < 0.4) {
+        if (!username) {
             username = `${adjectives[Math.floor(Math.random() * adjectives.length)]}_${nouns[Math.floor(Math.random() * nouns.length)]}${Math.floor(Math.random() * 90) + 10}`;
         }
         if (regUsername) { regUsername.value = username; regUsername.dispatchEvent(new Event('input')); }
@@ -280,6 +280,7 @@ export function initAuthPage() {
 
             if (res) {
                 pendingRegisterEmail = email;
+                localStorage.setItem('pending_email', email);
                 if (otpDesc) otpDesc.textContent = `We sent a 6-digit code to ${email}.`;
                 showForm(formOtp);
                 KonvoToast.show('Verification code sent!', 'success');
@@ -335,12 +336,24 @@ export function initAuthPage() {
     });
 
     document.getElementById('btn-resend-otp')?.addEventListener('click', async () => {
-        if (!pendingRegisterEmail) { KonvoToast.show('Session expired. Please start over.', 'warning'); return; }
+        const email = pendingRegisterEmail || localStorage.getItem('pending_email') || '';
+        if (!email) { KonvoToast.show('Session expired. Please register again or start over.', 'warning'); return; }
+        
+        const btn = document.getElementById('btn-resend-otp');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Resending…';
+        }
         try {
-            await apiFetch('/api/auth/resend-otp', { method: 'POST', body: JSON.stringify({ email: pendingRegisterEmail }) });
+            await apiFetch('/api/auth/resend-otp', { method: 'POST', body: JSON.stringify({ email }) });
             KonvoToast.show('Verification code resent!', 'success');
         } catch (err) {
             KonvoToast.show(err.message || 'Failed to resend code', 'error');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Resend Code';
+            }
         }
     });
 

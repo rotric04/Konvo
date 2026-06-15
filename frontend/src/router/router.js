@@ -80,6 +80,11 @@ async function handleRouting(path) {
     // Normalize path: strip query strings for lookup, keep them for state
     const cleanPath = path.split('?')[0].split('#')[0] || '/';
 
+    if (cleanPath === '/onboarding') {
+        window.location.href = '/onboarding';
+        return;
+    }
+
     // Match route (exact or fallback to 404)
     const route = ROUTES[cleanPath] || ROUTES['/404'];
     const { page } = route;
@@ -112,7 +117,7 @@ async function handleRouting(path) {
             const needsOnboarding = !state.currentUser.profile || !state.currentUser.profile.mbti_summary;
             const isAdmin = state.currentUser.role === 'admin';
             if (needsOnboarding && !isAdmin) {
-                navigateTo('/onboarding');
+                window.location.href = '/onboarding';
                 return;
             }
         }

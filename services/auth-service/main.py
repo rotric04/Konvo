@@ -47,6 +47,31 @@ def verify_otp(request: schemas.OTPVerifyRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=400, detail="Invalid verification code or email.")
     return {"success": True, "message": "Account successfully verified."}
 
+@app.post("/api/auth/resend-otp")
+def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email=request.email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    cooldown_key = f"cooldown:otp:{request.email}"
+    cooldown = redis_client.get_val(cooldown_key)
+    if cooldown:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Please wait 60 seconds before requesting a new OTP."
+        )
+        
+    new_otp = str(secrets.randbelow(900000) + 100000)
+    user.otp_code = new_otp
+    db.commit()
+    
+    redis_client.set_val(cooldown_key, "1", ex_seconds=60)
+    
+    resend_client.send_otp_email(request.email, new_otp)
+    print(f"\n[OTP SYSTEM] Verification code generated for {request.email}: {new_otp}\n")
+    
+    return {"success": True, "message": "Verification code resent successfully."}
+
 @app.post("/api/auth/login", response_model=schemas.Token)
 def login(credentials: schemas.UserLogin, response: Response, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, email=credentials.email)
