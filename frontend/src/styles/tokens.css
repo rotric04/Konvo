@@ -1,0 +1,172 @@
+/* ═══════════════════════════════════════════════════════════════════
+   KONVO™ DESIGN TOKENS — Single Source of Truth
+   All CSS custom properties live here. No other file defines :root variables.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── DARK THEME (Default) ── */
+:root,
+html[data-theme="dark"] {
+    /* ─── Backgrounds ─── */
+    --bg-primary:         #09090B;   /* Obsidian */
+    --bg-secondary:       #141416;   /* Graphite */
+    --bg-tertiary:        #0A0A0F;   /* Deep base */
+    --bg-main:            #09090B;   /* Legacy alias */
+    --bg-card:            #141416;   /* Legacy alias */
+    --bg-deep-ocean:      #0B1329;
+
+    /* ─── Surfaces ─── */
+    --surface-primary:    #141416;
+    --surface-secondary:  #202024;
+    --surface-hover:      #27272A;
+    --card-bg:            #141416;
+    --input-bg:           rgba(255, 255, 255, 0.03);
+    --button-bg:          rgba(255, 255, 255, 0.04);
+    --modal-bg:           #141416;
+    --tooltip-bg:         #202024;
+    --toast-bg:           #141416;
+    --loader-bg:          #09090B;
+    --skeleton-bg:        #27272A;
+
+    /* ─── Text ─── */
+    --text-primary:       #FAF9F6;   /* Ivory */
+    --text-secondary:     #A1A1AA;   /* Stone */
+    --text-muted:         #52525B;   /* Zinc muted */
+
+    /* ─── Borders ─── */
+    --border-primary:     #27272A;
+    --border-secondary:   #3F3F46;
+    --border-color:       #27272A;   /* Legacy alias */
+
+    /* ─── Accent Colors ─── */
+    --accent-primary:     #0D9488;   /* Deep Teal */
+    --accent-secondary:   #06B6D4;   /* Cyan */
+    --accent-success:     #16A34A;   /* Forest */
+    --accent-warning:     #D97706;   /* Amber */
+    --accent-danger:      #EA580C;   /* Copper */
+
+    /* Legacy accent aliases (used throughout app.js) */
+    --accent-teal:        #0D9488;
+    --accent-forest:      #16A34A;
+    --accent-copper:      #EA580C;
+    --accent-amber:       #D97706;
+    --accent-cyan:        #06B6D4;
+    --accent-stone:       #78716C;
+    --accent-indigo:      #06B6D4;   /* Remapped: Cyan not purple */
+    --accent-rose:        #EA580C;   /* Remapped: Copper not rose */
+
+    /* ─── Shadows ─── */
+    --shadow-sm:          0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md:          0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg:          0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-color:       rgba(0, 0, 0, 0.5);
+
+    /* ─── Overlays ─── */
+    --overlay-backdrop:   rgba(0, 0, 0, 0.85);
+
+    /* ─── Header / Navigation ─── */
+    --header-bg:          rgba(9, 9, 11, 0.75);
+    --header-bg-solid:    rgba(9, 9, 11, 0.95);
+
+    /* ─── Graph ─── */
+    --graph-node:         #06B6D4;
+    --graph-link:         rgba(255, 255, 255, 0.08);
+
+    /* ─── Calendar ─── */
+    --calendar-indicator-invert: 1;
+
+    /* ─── Typography ─── */
+    --font-sans:          'Outfit', 'Inter', system-ui, sans-serif;
+    --font-display:       'Outfit', 'Space Grotesk', system-ui, sans-serif;
+    --font-serif:         'Outfit', 'Space Grotesk', system-ui, sans-serif;
+    --font-mono:          'JetBrains Mono', 'Fira Code', monospace;
+
+    /* ─── Motion ─── */
+    --transition:         all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast:    all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow:    all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring:        cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ─── Layout ─── */
+    --sidebar-width:      260px;
+    --header-height:      64px;
+
+    /* ─── Z-Index Scale ─── */
+    --z-sidebar:          10;
+    --z-header:           20;
+    --z-dropdown:         100;
+    --z-modal:            10000;
+    --z-toast:            10010;
+    --z-splash:           10020;
+    --z-alert:            100000;
+}
+
+/* ── LIGHT THEME ── */
+html[data-theme="light"] {
+    /* ─── Backgrounds ─── */
+    --bg-primary:         #FAF9F6;   /* Ivory */
+    --bg-secondary:       #FFFFFF;   /* Pure White */
+    --bg-tertiary:        #F4F4F5;   /* Zinc Base */
+    --bg-main:            #FAF9F6;   /* Legacy alias */
+    --bg-card:            #FFFFFF;   /* Legacy alias */
+    --bg-deep-ocean:      #E2E8F0;
+
+    /* ─── Surfaces ─── */
+    --surface-primary:    #FFFFFF;
+    --surface-secondary:  #F4F4F5;
+    --surface-hover:      #E4E4E7;
+    --card-bg:            #FFFFFF;
+    --input-bg:           rgba(0, 0, 0, 0.03);
+    --button-bg:          rgba(0, 0, 0, 0.04);
+    --modal-bg:           #FFFFFF;
+    --tooltip-bg:         #F4F4F5;
+    --toast-bg:           #FFFFFF;
+    --loader-bg:          #FAF9F6;
+    --skeleton-bg:        #E4E4E7;
+
+    /* ─── Text ─── */
+    --text-primary:       #09090B;   /* Obsidian */
+    --text-secondary:     #52525B;   /* Stone text */
+    --text-muted:         #71717A;   /* Zinc muted */
+
+    /* ─── Borders ─── */
+    --border-primary:     #E4E4E7;
+    --border-secondary:   #D4D4D8;
+    --border-color:       #E4E4E7;   /* Legacy alias */
+
+    /* ─── Accent Colors ─── */
+    --accent-primary:     #0D9488;   /* Teal */
+    --accent-secondary:   #0891B2;   /* Cyan */
+    --accent-success:     #15803D;   /* Forest */
+    --accent-warning:     #B45309;   /* Amber */
+    --accent-danger:      #C2410C;   /* Copper */
+
+    /* Legacy aliases */
+    --accent-teal:        #0D9488;
+    --accent-forest:      #15803D;
+    --accent-copper:      #C2410C;
+    --accent-amber:       #B45309;
+    --accent-cyan:        #0891B2;
+    --accent-stone:       #78716C;
+    --accent-indigo:      #0891B2;
+    --accent-rose:        #C2410C;
+
+    /* ─── Shadows ─── */
+    --shadow-sm:          0 1px 2px rgba(9, 9, 11, 0.05);
+    --shadow-md:          0 4px 6px -1px rgba(9, 9, 11, 0.08), 0 2px 4px -1px rgba(9, 9, 11, 0.04);
+    --shadow-lg:          0 10px 15px -3px rgba(9, 9, 11, 0.1), 0 4px 6px -2px rgba(9, 9, 11, 0.05);
+    --shadow-color:       rgba(9, 9, 11, 0.08);
+
+    /* ─── Overlays ─── */
+    --overlay-backdrop:   rgba(250, 249, 246, 0.85);
+
+    /* ─── Header ─── */
+    --header-bg:          rgba(250, 249, 246, 0.75);
+    --header-bg-solid:    rgba(250, 249, 246, 0.98);
+
+    /* ─── Graph ─── */
+    --graph-node:         #0891B2;
+    --graph-link:         rgba(9, 9, 11, 0.1);
+
+    /* ─── Calendar ─── */
+    --calendar-indicator-invert: 0;
+}

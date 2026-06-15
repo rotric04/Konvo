@@ -50,8 +50,12 @@
       "destination": "/$1"
     },
     {
-      "source": "/(feedback|auth|admin_dashboard|blog)",
+      "source": "/(feedback|admin_dashboard|blog)",
       "destination": "/$1.html"
+    },
+    {
+      "source": "/(auth|login)",
+      "destination": "/login.html"
     },
     {
       "source": "/blog/(.*)",
@@ -59,7 +63,7 @@
     },
     {
       "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)",
-      "destination": "/index.html"
+      "destination": "/app.html"
     },
     {
       "source": "/(.*)",

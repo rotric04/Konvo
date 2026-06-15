@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Calibration | Konvo</title>
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/src/styles/tokens.css">
+    <link rel="stylesheet" href="/src/styles/animations.css">
+    <link rel="stylesheet" href="/src/styles/components.css">
+    <link rel="stylesheet" href="/src/styles/layout.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/theme.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        .onboarding-wrapper {
+            width: 100%;
+            max-width: 680px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg), 0 0 50px rgba(13, 148, 136, 0.03);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .progress-header {
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 20, 22, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-title {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-teal);
+        }
+
+        .progress-step-indicator {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-track {
+            height: 4px;
+            background-color: var(--border-primary);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-cyan));
+            width: 14.28%;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-container {
+            padding: 2.5rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-view {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            animation: stepFade 0.4s ease forwards;
+        }
+
+        .step-view.active {
+            display: flex;
+        }
+
+        @keyframes stepFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-heading {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary), #d4d4d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-subheading {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .onboarding-btn-row {
+            border-top: 1px solid var(--border-primary);
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(20, 20, 22, 0.2);
+        }
+
+        /* Interest tags grid */
+        .interests-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .interest-tag-btn {
+            background: var(--button-bg);
+            border: 1px solid var(--border-primary);
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.75rem 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .interest-tag-btn:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .interest-tag-btn.selected {
+            background: rgba(13, 148, 136, 0.1);
+            border-color: var(--accent-teal);
+            color: var(--text-primary);
+            box-shadow: 0 0 12px rgba(13, 148, 136, 0.15);
+        }
+
+        /* MBTI range sliders styling */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-container {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-family: var(--font-mono);
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .mbti-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-primary);
+            outline: none;
+        }
+
+        .mbti-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-teal);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(13, 148, 136, 0.5);
+            transition: transform 0.1s ease;
+        }
+
+        .mbti-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .mbti-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border: none;
+            border-radius: 50%;
+            background: var(--accent-teal);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(13, 148, 136, 0.5);
+            transition: transform 0.1s ease;
+        }
+
+        /* Forms */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .onboarding-avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--border-primary);
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .onboarding-avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="onboarding-wrapper">
+        <!-- Progress Bar -->
+        <div class="progress-header">
+            <div class="progress-title" id="progress-title-text">Vibe Calibration</div>
+            <div class="progress-step-indicator" id="progress-step-text">Step 1 of 7</div>
+        </div>
+        <div class="progress-track">
+            <div class="progress-bar" id="progress-bar-fill"></div>
+        </div>
+
+        <!-- Wizard Steps -->
+        <div class="step-container">
+            <!-- Step 1: Welcome -->
+            <div class="step-view active" id="step-welcome">
+                <div style="display:flex; justify-content:center; margin-bottom:1.5rem; font-size:3.5rem;">🧬</div>
+                <h2 class="step-heading" style="text-align: center;">Vibe Calibration Protocol</h2>
+                <p class="step-subheading" style="text-align: center; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    Welcome to Konvo. Before you can begin social discovery, you must calibrate your AI Twin digital representative. Our system measures semantic, behavioral, and cognitive indicators to calculate matches.
+                </p>
+                <div style="background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.15); padding: 1.25rem; border-radius: 8px; margin-top: auto;">
+                    <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 0.4rem; font-weight: bold;">✦ NEURAL TWIN AGENT MECHANICS</div>
+                    <div style="font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary);">
+                        Your AI Twin works on your behalf, running rapid micro-simulations with other twins in the network. A completed profile generates compatibility vectors and activates the discovery deck.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Identity -->
+            <div class="step-view" id="step-identity">
+                <h2 class="step-heading">Tell Us Who You Are</h2>
+                <p class="step-subheading">Define your display parameters and self-narrative. The NLP engine will parse your bio to extract semantic hooks.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wiz-display-name">Display Name *</label>
+                        <input type="text" id="wiz-display-name" placeholder="e.g. Alice Mercer" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-gender">Gender Identity</label>
+                        <select id="wiz-gender" style="width: 100%;">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer Not To Say">Prefer Not To Say</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="wiz-bio">Narrative Self-Description * (Vibe Check Core)</label>
+                    <textarea id="wiz-bio" placeholder="Describe your philosophy, quirks, or typical Sunday in your own words. Longer texts enable much higher NLP matching precision..." rows="5" required></textarea>
+                </div>
+            </div>
+
+            <!-- Step 3: Interests -->
+            <div class="step-view" id="step-interests">
+                <h2 class="step-heading">Select Interest Clusters</h2>
+                <p class="step-subheading">Choose at least 3 categories that shape your daily focus. These form the primary nodes in the Resonance Grid.</p>
+                
+                <div class="interests-picker-grid" id="wiz-interests-grid">
+                    <div class="interest-tag-btn" data-interest="artificial-intelligence">🤖 AI / TECH</div>
+                    <div class="interest-tag-btn" data-interest="philosophy">🧠 PHILOSOPHY</div>
+                    <div class="interest-tag-btn" data-interest="indie-music">🎸 INDIE MUSIC</div>
+                    <div class="interest-tag-btn" data-interest="cyberpunk">🌃 CYBERPUNK</div>
+                    <div class="interest-tag-btn" data-interest="specialty-coffee">☕ COFFEE</div>
+                    <div class="interest-tag-btn" data-interest="urban-exploring">🧗 OUTDOORS</div>
+                    <div class="interest-tag-btn" data-interest="film-photography">📸 PHOTOGRAPHY</div>
+                    <div class="interest-tag-btn" data-interest="sci-fi">🚀 SCI-FI</div>
+                    <div class="interest-tag-btn" data-interest="meditation">🧘 MEDITATION</div>
+                    <div class="interest-tag-btn" data-interest="running">🏃 RUNNING</div>
+                    <div class="interest-tag-btn" data-interest="psychology">🔬 PSYCHOLOGY</div>
+                    <div class="interest-tag-btn" data-interest="cooking">🍳 COOKING</div>
+                    <div class="interest-tag-btn" data-interest="startups">💼 STARTUPS</div>
+                    <div class="interest-tag-btn" data-interest="astrology">🌌 ASTROLOGY</div>
+                    <div class="interest-tag-btn" data-interest="creative-writing">📝 WRITING</div>
+                    <div class="interest-tag-btn" data-interest="gaming">🎮 GAMING</div>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-secondary); font-family:var(--font-mono);" id="interests-counter">Selected: 0 (Min 3 required)</div>
+            </div>
+
+            <!-- Step 4: Personality -->
+            <div class="step-view" id="step-personality">
+                <h2 class="step-heading">Personality Indicators</h2>
+                <p class="step-subheading">Fine-tune your cognitive sliders. These calibrate the baseline vectors of your digital agent.</p>
+                
+                <div class="slider-group">
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span>Social Energy Source</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-teal);" id="val-label-ei">Ambivert</span>
+                        </div>
+                        <input type="range" class="mbti-slider" id="wiz-slider-ei" min="1" max="5" value="3">
+                        <div class="slider-labels">
+                            <span>Introversion (I)</span>
+                            <span>Extroversion (E)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span>Information Processing</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-teal);" id="val-label-ns">Balanced</span>
+                        </div>
+                        <input type="range" class="mbti-slider" id="wiz-slider-ns" min="1" max="5" value="3">
+                        <div class="slider-labels">
+                            <span>Sensing (S)</span>
+                            <span>Intuition (N)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span>Decision Criteria</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-teal);" id="val-label-tf">Rational</span>
+                        </div>
+                        <input type="range" class="mbti-slider" id="wiz-slider-tf" min="1" max="5" value="3">
+                        <div class="slider-labels">
+                            <span>Feeling (F)</span>
+                            <span>Thinking (T)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-header">
+                            <span>Lifestyle System</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-teal);" id="val-label-jp">Adaptable</span>
+                        </div>
+                        <input type="range" class="mbti-slider" id="wiz-slider-jp" min="1" max="5" value="3">
+                        <div class="slider-labels">
+                            <span>Perceiving (P)</span>
+                            <span>Judging (J)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Communication -->
+            <div class="step-view" id="step-communication">
+                <h2 class="step-heading">Communication Dynamics</h2>
+                <p class="step-subheading">Calibrate how you interact in conversations and handle relational tension.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wiz-comm-tone">Primary Vibe & Tone</label>
+                        <select id="wiz-comm-tone" style="width: 100%;">
+                            <option value="intellectual">Intellectual & Academic</option>
+                            <option value="minimalist">Minimalist & Precise</option>
+                            <option value="playful">Witty & Bantering</option>
+                            <option value="sincere">Warm & Empathetic</option>
+                            <option value="custom">Custom Expression</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-conflict-approach">Conflict Management</label>
+                        <select id="wiz-conflict-approach" style="width: 100%;">
+                            <option value="logical">Rational Dialogue</option>
+                            <option value="empathetic">Emotional Validation</option>
+                            <option value="cool">Time Out / Space First</option>
+                            <option value="direct">Immediate Directness</option>
+                            <option value="custom">Custom Strategy</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" id="custom-comm-fields-row" style="display: none; margin-top: 0.5rem;">
+                    <div class="form-group">
+                        <label for="wiz-custom-comm-tone">Custom Tone Description</label>
+                        <input type="text" id="wiz-custom-comm-tone" placeholder="e.g. Dry, ironic, poetic">
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-custom-conflict-approach">Custom Conflict Detail</label>
+                        <input type="text" id="wiz-custom-conflict-approach" placeholder="e.g. Needs structured letters">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="wiz-connection-basis">Primary Conversational Basis</label>
+                    <select id="wiz-connection-basis" style="width: 100%;">
+                        <option value="banter">Banter & Teasing</option>
+                        <option value="deep-dive">Deep Existential Topics</option>
+                        <option value="projects">Co-Building / Ambition</option>
+                        <option value="hobbies">Shared Active Hobbies</option>
+                        <option value="custom">Custom Basis</option>
+                    </select>
+                    <input type="text" id="wiz-custom-connection-basis" placeholder="Specify custom basis..." style="display:none; margin-top:0.5rem; width:100%;">
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="wiz-custom-cognitive">Self-Reflection Narrative (NLP Input)</label>
+                    <textarea id="wiz-custom-cognitive" placeholder="Detail how you process thoughts, express affection, or handle disagreements..." rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 6: Preferences -->
+            <div class="step-view" id="step-preferences">
+                <h2 class="step-heading">Synergy Preferences</h2>
+                <p class="step-subheading">Establish the objectives of your twin's micro-simulations and your core values focus.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wiz-relationship-intent">Simulation Objective</label>
+                        <select id="wiz-relationship-intent" style="width: 100%;">
+                            <option value="Long Term">Long-Term Integration</option>
+                            <option value="Short Term">Casual Connection</option>
+                            <option value="Deep Friendship">Intellectual Collaboration</option>
+                            <option value="Just Curious">Exploration & Chat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiz-values-focus">Core Personal Value Focus</label>
+                        <select id="wiz-values-focus" style="width: 100%;">
+                            <option value="growth">Continuous Personal Growth</option>
+                            <option value="creativity">Artistic & Creative Freedom</option>
+                            <option value="truth">Intellectual Honesty & Truth</option>
+                            <option value="harmony">Relational Harmony & Peace</option>
+                            <option value="custom">Custom Value focus</option>
+                        </select>
+                        <input type="text" id="wiz-custom-values-focus" placeholder="Define custom value..." style="display:none; margin-top:0.5rem; width:100%;">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="wiz-custom-interests">Additional Interests & Hobbies (NLP Input)</label>
+                    <textarea id="wiz-custom-interests" placeholder="List details of specific niche interests or goals in your life..." rows="4"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 7: Completion -->
+            <div class="step-view" id="step-completion">
+                <h2 class="step-heading">Twin Activation</h2>
+                <p class="step-subheading">Complete your location index and activate your digital representative.</p>
+                
+                <div style="display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 1rem;">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="onboarding-avatar-preview" id="wiz-avatar-preview">🤖</div>
+                        <label class="btn btn-secondary" style="font-size:0.7rem; padding:0.4rem 0.8rem; cursor:pointer;">
+                            Upload Photo
+                            <input type="file" id="wiz-photo-upload" accept="image/*" style="display:none;">
+                        </label>
+                    </div>
+                    
+                    <div style="flex:1; display:flex; flex-direction:column; gap:1rem;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="wiz-digipin">DIGIPIN Geo-spatial Coordinate *</label>
+                            <input type="text" id="wiz-digipin" placeholder="e.g. 8Y1A3B5C7D" value="GP-1102" required maxlength="10">
+                            <button type="button" id="btn-wiz-know-digipin" class="btn" style="font-size: 0.72rem; padding: 0.35rem 0.75rem; border-color: var(--accent-teal); color: var(--accent-teal); margin-top: 0.4rem; display:inline-block;">
+                                🔍 Find Your DIGIPIN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(217, 119, 6, 0.03); border: 1px solid rgba(217, 119, 6, 0.15); padding: 1rem; border-radius: 8px; margin-top: auto;">
+                    <div style="font-size: 0.78rem; line-height: 1.4; color: var(--text-secondary);">
+                        💡 <strong>Location Privacy:</strong> India Post's geospatial DIGIPIN is aggregated locally. Konvo uses this alphanumeric segment only to compute approximate proximity indexes without leaking coordinates.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button Controls -->
+        <div class="onboarding-btn-row">
+            <button class="btn btn-secondary" id="btn-wiz-prev" disabled>Back</button>
+            <button class="btn btn-primary" id="btn-wiz-next">Next</button>
+        </div>
+    </div>
+
+    <!-- Modals (like DIGIPIN Helper Modal) -->
+    <div class="modal" id="digipin-helper-modal">
+        <div class="modal-content" style="max-width: 500px; background-color: var(--bg-secondary); border: 1px solid var(--border-primary); padding: 2rem; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-primary); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0; color: var(--text-primary);">Discover Your DIGIPIN</h3>
+                <button type="button" class="close-modal" id="btn-close-digipin-modal" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+            </div>
+            <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                The DIGIPIN (Digital Directory of Post Offices in India) is a national geospatial grid system. To preserve your privacy, Konvo uses approximate DIGIPIN zones.
+            </p>
+            <div style="background-color: rgba(13, 148, 136, 0.05); border: 1px solid rgba(13, 148, 136, 0.2); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 0.85rem; color: var(--accent-teal); font-family: var(--font-mono); text-transform: uppercase; margin-bottom: 0.5rem;">How to get your code:</h4>
+                <ol style="font-size: 0.8rem; color: var(--text-secondary); padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                    <li>Click the link below to open the official India Post DIGIPIN portal in a new tab.</li>
+                    <li>Search for your area or click on the map grid to copy your alphanumeric code (e.g. 8Y1A3B5C7D).</li>
+                    <li>Paste the code back into the registration or settings form.</li>
+                </ol>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button type="button" class="btn btn-secondary" id="btn-digipin-modal-cancel" style="flex: 1;">Cancel</button>
+                <a href="https://dac.indiapost.gov.in/mydigipin/home/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 2; text-align: center; display: inline-block; line-height: 1.2; text-decoration: none;">Open DIGIPIN Portal ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Controller -->
+    <script type="module" src="/src/features/auth/onboarding.js"></script>
+</body>
+</html>

@@ -247,8 +247,26 @@ def get_index_html():
     return FileResponse(os.path.join(_root, "frontend", "index.html"))
 
 @app.get("/auth")
+@app.get("/login")
 def get_auth_html():
-    return FileResponse(os.path.join(_root, "frontend", "auth.html"))
+    return FileResponse(os.path.join(_root, "frontend", "login.html"))
+
+@app.get("/onboarding")
+def get_onboarding_html():
+    return FileResponse(os.path.join(_root, "frontend", "onboarding.html"))
+
+@app.get("/discover")
+@app.get("/chat")
+@app.get("/grid")
+@app.get("/profile")
+@app.get("/settings")
+@app.get("/agents")
+@app.get("/compatibility")
+@app.get("/communities")
+@app.get("/graph")
+@app.get("/virtual-dates")
+def get_app_html():
+    return FileResponse(os.path.join(_root, "frontend", "app.html"))
 
 @app.get("/feedback")
 def get_feedback_html():
@@ -428,6 +446,11 @@ def admin_delete_user(request: AdminDeleteUserRequest, db: Session = Depends(get
         err_msg = sanitize_msg(str(e))
         raise HTTPException(status_code=500, detail=f"Deletion failed {err_msg}")
 
+
+# ----------------- ROOT-LEVEL STATIC FILE SERVING FALLBACK -----------------
+# This serves root-level static assets (e.g. /src/app.js, /style.css) locally.
+# It MUST be mounted at the very end to prevent intercepting other API/HTML routes.
+app.mount("/", StaticFiles(directory=os.path.join(_root, "frontend")), name="root_static")
 
 
 if __name__ == "__main__":

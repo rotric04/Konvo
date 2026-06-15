@@ -1,0 +1,221 @@
+/* ═══════════════════════════════════════════════════════════════════
+   KONVO™ ANIMATION SYSTEM
+   All keyframes, transitions, and reveal animations live here.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Universal Theme Transition (flicker-free theme switching) ── */
+html,
+body,
+.card,
+.modal,
+.modal-content,
+.sidebar,
+.landing-header,
+.app-footer,
+.cookie-banner-container,
+input,
+select,
+textarea,
+button,
+label,
+a,
+svg,
+path,
+circle,
+rect,
+line {
+    transition:
+        background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        background       250ms cubic-bezier(0.4, 0, 0.2, 1),
+        color            250ms cubic-bezier(0.4, 0, 0.2, 1),
+        border-color     250ms cubic-bezier(0.4, 0, 0.2, 1),
+        fill             250ms cubic-bezier(0.4, 0, 0.2, 1),
+        stroke           250ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow       250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Block transitions during page init to prevent theme flash */
+html.preload * {
+    transition: none !important;
+}
+
+/* ── Splash / Loader ── */
+@keyframes floatingIso {
+    0%, 100% { transform: translateY(0) rotateX(10deg) rotateY(-5deg); }
+    50%       { transform: translateY(-10px) rotateX(12deg) rotateY(-8deg); }
+}
+
+@keyframes loaderProgressAnim {
+    0%   { transform: translateX(-100%); width: 30%; }
+    50%  { width: 60%; }
+    100% { transform: translateX(200%); width: 30%; }
+}
+
+/* ── Page Fade / Route Transitions ── */
+@keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageFadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-8px); }
+}
+
+.page-enter {
+    animation: pageFadeIn 0.3s var(--ease-spring) forwards;
+}
+
+.page-exit {
+    animation: pageFadeOut 0.2s ease forwards;
+}
+
+/* ── Scroll Reveal ── */
+.reveal-on-scroll,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
+    will-change: opacity, transform;
+}
+
+.reveal-on-scroll { transform: translateY(24px); }
+.reveal-left      { transform: translateX(-24px); }
+.reveal-right     { transform: translateX(24px); }
+.reveal-scale     { transform: scale(0.95); }
+
+.reveal-on-scroll.active,
+.reveal-left.active,
+.reveal-right.active,
+.reveal-scale.active {
+    opacity: 1;
+    transform: none;
+}
+
+/* ── Skeleton Pulse ── */
+@keyframes skeletonPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 0.8; }
+}
+
+.skeleton-pulse {
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+    background-color: var(--skeleton-bg);
+    border-radius: 4px;
+}
+
+/* ── Skeleton Card ── */
+.skeleton-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 340px;
+}
+
+.skeleton-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.skeleton-text {
+    height: 12px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.skeleton-text.title  { height: 18px; width: 60%; }
+.skeleton-text.medium { width: 40%; }
+.skeleton-text.long   { width: 90%; }
+
+.skeleton-btn {
+    height: 36px;
+    border-radius: 6px;
+}
+
+/* ── Pulse / Glow ── */
+@keyframes pulseGlow {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.05); }
+}
+
+/* ── Hero Ring Float ── */
+@keyframes float-ring-1 {
+    0%, 100% { transform: translate(-5px, -5px) scale(1); }
+    50%       { transform: translate(5px, 5px) scale(1.03); }
+}
+
+@keyframes float-ring-2 {
+    0%, 100% { transform: translate(5px, 5px) scale(1); }
+    50%       { transform: translate(-5px, -5px) scale(0.97); }
+}
+
+@keyframes dash-pulse {
+    to { stroke-dashoffset: -16; }
+}
+
+/* ── Sidebar / Nav Stagger ── */
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Modal entrance ── */
+@keyframes modalScaleIn {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes modalScaleOut {
+    from { opacity: 1; transform: scale(1) translateY(0); }
+    to   { opacity: 0; transform: scale(0.94) translateY(12px); }
+}
+
+/* ── Toast ── */
+@keyframes toastSlideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastSlideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(110%); }
+}
+
+/* ── Discovery card hover lift ── */
+@keyframes cardLift {
+    to { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+}
+
+/* ── Cursor / typing blink ── */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+.cursor-blink::after {
+    content: '|';
+    animation: blink 1s step-start infinite;
+    color: var(--accent-amber);
+    margin-left: 1px;
+}
+
+/* ── Stat counter ── */
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Floating iso (splash loader) ── */
+.isometric-3d-svg {
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    transform: rotateX(10deg) rotateY(-5deg);
+    animation: floatingIso 4s ease-in-out infinite;
+}

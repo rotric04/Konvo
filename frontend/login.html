@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | Konvo — Human Chemistry, Amplified</title>
+    <meta name="description" content="Join Konvo.Space — where human curiosity, chemistry, and conversation lead to authentic connection. Sign in or create your account." />
+    <meta name="robots" content="noindex" />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="/static/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/static/src/styles/animations.css" />
+    <link rel="stylesheet" href="/static/src/styles/components.css" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+
+    <!-- Theme Manager: runs before body renders to prevent flash -->
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('konvo-theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', saved);
+            } catch(e) {}
+        })();
+    </script>
+
+    <style>
+        /* ── Auth Page Layout ── */
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .auth-shell {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        /* ── Brand Panel (Left) ── */
+        .auth-brand-panel {
+            background-color: var(--bg-tertiary);
+            border-right: 1px solid var(--border-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand-panel::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(13,148,136,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .auth-brand-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 360px;
+            height: 360px;
+            background: radial-gradient(circle, rgba(217,119,6,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .auth-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1;
+        }
+
+        .auth-brand-wordmark {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-style: italic;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-brand-center {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 1;
+        }
+
+        .auth-brand-tagline {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .auth-brand-tagline .accent {
+            color: var(--accent-amber);
+        }
+
+        .auth-brand-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 380px;
+        }
+
+        /* Conversation preview */
+        .auth-convo-preview {
+            background-color: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            z-index: 1;
+        }
+
+        .auth-convo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .auth-convo-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .auth-convo-dot.green  { background-color: #22c55e; }
+        .auth-convo-dot.amber  { background-color: var(--accent-amber); }
+        .auth-convo-dot.muted  { background-color: var(--text-muted); }
+
+        .auth-convo-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-left: auto;
+        }
+
+        #auth-preview-body {
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+        }
+
+        .auth-msg {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            animation: pageFadeIn 0.35s ease forwards;
+        }
+
+        .auth-msg.b { flex-direction: row-reverse; }
+
+        .auth-msg-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .auth-msg-avatar.a { background-color: var(--accent-teal); color: white; }
+        .auth-msg-avatar.b { background-color: var(--accent-amber); color: var(--bg-primary); }
+
+        .auth-msg-text {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            line-height: 1.5;
+            max-width: calc(100% - 36px);
+        }
+
+        .auth-brand-stats {
+            display: flex;
+            gap: 2rem;
+            z-index: 1;
+        }
+
+        .auth-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .auth-stat-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .auth-stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── Form Panel (Right) ── */
+        .auth-form-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            background-color: var(--bg-primary);
+        }
+
+        .auth-form-inner {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .auth-form-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-form-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .auth-form-sub {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .auth-form-sub a {
+            color: var(--accent-amber);
+        }
+
+        /* Tabs */
+        .form-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 1.75rem;
+            gap: 4px;
+        }
+
+        .form-tab-btn {
+            padding: 0.6rem;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            background-color: transparent;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .form-tab-btn:hover { color: var(--text-primary); }
+
+        .form-tab-btn.active {
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            font-weight: 600;
+        }
+
+        /* OTP Input row */
+        .otp-input-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1.25rem 0;
+        }
+
+        .otp-digit {
+            width: 48px;
+            height: 52px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        .otp-digit:focus {
+            border-color: var(--accent-amber);
+            box-shadow: 0 0 0 3px rgba(217,119,6,0.1);
+            outline: none;
+        }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-primary);
+        }
+
+        /* Form state visibility */
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        /* Link in form */
+        .auth-link-btn {
+            background: none;
+            border: none;
+            color: var(--accent-amber);
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: text-decoration-color 0.2s;
+            padding: 0;
+        }
+
+        .auth-link-btn:hover { text-decoration-color: var(--accent-amber); }
+
+        /* Theme toggle */
+        .auth-theme-btn {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 50;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .auth-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-brand-panel {
+                display: none;
+            }
+
+            .auth-form-panel {
+                padding: 2rem 1.25rem;
+                min-height: 100vh;
+                align-items: flex-start;
+                padding-top: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Theme Toggle (fixed) -->
+<button id="btn-theme-toggle" class="btn btn-theme-toggle auth-theme-btn" aria-label="Toggle theme">
+    <span class="theme-icon">🌙</span>
+    <span class="theme-label">Theme</span>
+</button>
+
+<!-- ── SPLASH LOADER ── -->
+<div id="app-splash-loader" class="splash-loader" aria-hidden="true">
+    <div class="splash-loader-content">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" class="isometric-3d-svg">
+            <polygon points="32,4 60,20 60,44 32,60 4,44 4,20" fill="none" stroke="var(--accent-teal)" stroke-width="1.5" opacity="0.4"/>
+            <polygon points="32,4 60,20 32,36 4,20" fill="none" stroke="var(--accent-amber)" stroke-width="1.5" opacity="0.6"/>
+            <polygon points="32,36 60,20 60,44 32,60" fill="none" stroke="var(--accent-teal)" stroke-width="1" opacity="0.3"/>
+            <polygon points="32,36 4,20 4,44 32,60" fill="none" stroke="var(--accent-amber)" stroke-width="1" opacity="0.3"/>
+            <circle cx="32" cy="20" r="3" fill="var(--accent-amber)"/>
+            <circle cx="32" cy="36" r="2" fill="var(--accent-teal)" opacity="0.6"/>
+        </svg>
+        <div class="loader-title">konvo</div>
+        <div class="loader-subtitle">Human Chemistry, Amplified</div>
+        <div class="loader-progress-bar">
+            <div class="loader-progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" class="toast-container" role="alert" aria-live="polite"></div>
+
+<!-- ── AUTH SHELL ── -->
+<div class="auth-shell">
+
+    <!-- ── Brand Panel ── -->
+    <aside class="auth-brand-panel" aria-hidden="true">
+        <div class="auth-brand-logo">
+            <div class="auth-brand-wordmark">konvo</div>
+        </div>
+
+        <div class="auth-brand-center">
+            <h1 class="auth-brand-tagline">
+                Chemistry meets<br />
+                <span class="accent">curiosity.</span>
+            </h1>
+            <p class="auth-brand-desc">
+                Konvo is not another dating app. It's a living universe of conversations — where two strangers discover they were always meant to connect.
+            </p>
+
+            <!-- Live convo preview -->
+            <div class="auth-convo-preview">
+                <div class="auth-convo-header">
+                    <div class="auth-convo-dot green"></div>
+                    <div class="auth-convo-dot amber"></div>
+                    <div class="auth-convo-dot muted"></div>
+                    <span class="auth-convo-label">Twin Agents · Live Session</span>
+                </div>
+                <div id="auth-preview-body"></div>
+            </div>
+        </div>
+
+        <div class="auth-brand-stats">
+            <div class="auth-stat">
+                <span class="auth-stat-num" data-count-to="2847" data-count-suffix="">2,847</span>
+                <span class="auth-stat-label">Active Members</span>
+            </div>
+            <div class="auth-stat">
+                <span class="auth-stat-num">94%</span>
+                <span class="auth-stat-label">Conversation Rate</span>
+            </div>
+            <div class="auth-stat">
+                <span class="auth-stat-num">87</span>
+                <span class="auth-stat-label">Avg Compatibility</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Form Panel ── -->
+    <main class="auth-form-panel">
+        <div class="auth-form-inner">
+
+            <!-- Form Tabs -->
+            <div class="form-tabs" role="tablist">
+                <button class="form-tab-btn active" id="tab-login" role="tab" aria-selected="true"  aria-controls="form-login">Sign In</button>
+                <button class="form-tab-btn"        id="tab-register" role="tab" aria-selected="false" aria-controls="form-register">Create Account</button>
+            </div>
+
+            <!-- ── Login Form ── -->
+            <div id="form-login" class="auth-form active" role="tabpanel" aria-labelledby="tab-login">
+                <p class="auth-form-eyebrow">Welcome back</p>
+                <h2 class="auth-form-title">Sign in to Konvo</h2>
+                <p class="auth-form-sub">Don't have an account? <button class="auth-link-btn" id="btn-switch-to-register">Create one →</button></p>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="loginEmail">Email address</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="Your password" autocomplete="current-password" required />
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+                        <button type="button" class="auth-link-btn" id="btn-forgot-password" style="font-size: 0.8rem;">Forgot password?</button>
+                    </div>
+
+                    <p id="login-error" class="validation-msg error" style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-login-submit">
+                        Sign In
+                    </button>
+                </form>
+            </div>
+
+            <!-- ── Register Form ── -->
+            <div id="form-register" class="auth-form" role="tabpanel" aria-labelledby="tab-register">
+                <p class="auth-form-eyebrow">Join the universe</p>
+                <h2 class="auth-form-title">Create your account</h2>
+                <p class="auth-form-sub">Already have one? <button class="auth-link-btn" id="btn-switch-to-login">Sign in →</button></p>
+
+                <form id="registerForm" novalidate>
+                    <div class="form-group">
+                        <label for="regDisplayName">Display name</label>
+                        <input type="text" id="regDisplayName" name="display_name" placeholder="What should people call you?" autocomplete="name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regUsername">Username</label>
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+                            <div style="flex: 1;">
+                                <input type="text" id="regUsername" name="username" placeholder="@yourhandle" autocomplete="username" required />
+                                <p id="username-msg" class="validation-msg" style="margin-top: 0.3rem;"></p>
+                            </div>
+                            <button type="button" class="btn-suggest-username" id="btn-suggest-username" style="margin-top: 0.75rem; white-space: nowrap;">✨ Suggest</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail">Email address</label>
+                        <input type="email" id="regEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone">Phone number</label>
+                        <div class="phone-input-wrapper">
+                            <div class="country-select-container">
+                                <button type="button" class="country-select-btn" id="country-select-btn" aria-haspopup="listbox">
+                                    <span id="selected-flag">🇮🇳</span>
+                                    <span id="selected-dial">+91</span>
+                                    <span style="font-size: 0.6rem; opacity: 0.5;">▾</span>
+                                </button>
+                                <ul class="country-dropdown-list hidden" id="country-dropdown" role="listbox" aria-label="Select country code">
+                                    <li class="country-item active" data-dial="+91" data-flag="🇮🇳" role="option">🇮🇳 India (+91)</li>
+                                    <li class="country-item" data-dial="+1" data-flag="🇺🇸" role="option">🇺🇸 United States (+1)</li>
+                                    <li class="country-item" data-dial="+44" data-flag="🇬🇧" role="option">🇬🇧 United Kingdom (+44)</li>
+                                    <li class="country-item" data-dial="+61" data-flag="🇦🇺" role="option">🇦🇺 Australia (+61)</li>
+                                    <li class="country-item" data-dial="+65" data-flag="🇸🇬" role="option">🇸🇬 Singapore (+65)</li>
+                                    <li class="country-item" data-dial="+971" data-flag="🇦🇪" role="option">🇦🇪 UAE (+971)</li>
+                                    <li class="country-item" data-dial="+49" data-flag="🇩🇪" role="option">🇩🇪 Germany (+49)</li>
+                                    <li class="country-item" data-dial="+33" data-flag="🇫🇷" role="option">🇫🇷 France (+33)</li>
+                                    <li class="country-item" data-dial="+81" data-flag="🇯🇵" role="option">🇯🇵 Japan (+81)</li>
+                                    <li class="country-item" data-dial="+82" data-flag="🇰🇷" role="option">🇰🇷 South Korea (+82)</li>
+                                    <li class="country-item" data-dial="+86" data-flag="🇨🇳" role="option">🇨🇳 China (+86)</li>
+                                    <li class="country-item" data-dial="+55" data-flag="🇧🇷" role="option">🇧🇷 Brazil (+55)</li>
+                                    <li class="country-item" data-dial="+7" data-flag="🇷🇺" role="option">🇷🇺 Russia (+7)</li>
+                                    <li class="country-item" data-dial="+27" data-flag="🇿🇦" role="option">🇿🇦 South Africa (+27)</li>
+                                    <li class="country-item" data-dial="+52" data-flag="🇲🇽" role="option">🇲🇽 Mexico (+52)</li>
+                                </ul>
+                            </div>
+                            <input type="tel" id="regPhone" name="phone" placeholder="Phone number" autocomplete="tel-national" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regGender">I identify as</label>
+                        <select id="regGender" name="gender" required>
+                            <option value="" disabled selected>Select your identity</option>
+                            <option value="Male">Man</option>
+                            <option value="Female">Woman</option>
+                            <option value="Non-Binary">Non-Binary</option>
+                            <option value="Genderfluid">Genderfluid</option>
+                            <option value="Agender">Agender</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="password" placeholder="Create a strong password" autocomplete="new-password" required />
+                        <div class="password-strength-wrapper" id="password-strength-wrapper">
+                            <div class="password-strength-bar-container">
+                                <div class="password-strength-fill" id="password-strength-fill"></div>
+                            </div>
+                            <p class="password-strength-feedback" id="password-strength-feedback"></p>
+                            <div class="password-reqs" id="password-reqs">
+                                <span class="req-item" id="req-length">✗ 8+ chars</span>
+                                <span class="req-item" id="req-upper">✗ Uppercase</span>
+                                <span class="req-item" id="req-number">✗ Number</span>
+                                <span class="req-item" id="req-special">✗ Symbol</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; user-select: none; font-family: var(--font-sans); text-transform: none; letter-spacing: 0; font-size: 0.82rem; color: var(--text-secondary);">
+                            <input type="checkbox" id="reg-tos-agree" name="tos" style="margin-top: 3px; width: auto; cursor: pointer;" required />
+                            I agree to the <a href="#" onclick="window.konvoOpenModal && window.konvoOpenModal('tos-modal'); return false;" style="color: var(--accent-amber);">Terms of Service</a> and <a href="#" onclick="window.konvoOpenModal && window.konvoOpenModal('privacy-modal'); return false;" style="color: var(--accent-amber);">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <p id="register-error" class="validation-msg error" style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-register-submit">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- ── OTP Verification Form ── -->
+            <div id="form-otp" class="auth-form" role="tabpanel">
+                <p class="auth-form-eyebrow">Verification</p>
+                <h2 class="auth-form-title">Check your inbox</h2>
+                <p class="auth-form-sub" id="otp-desc">We sent a 6-digit code to your email.</p>
+
+                <form id="otpForm" novalidate>
+                    <div class="otp-input-row" role="group" aria-label="OTP verification code">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-0" aria-label="Digit 1" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-1" aria-label="Digit 2" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-2" aria-label="Digit 3" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-3" aria-label="Digit 4" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-4" aria-label="Digit 5" />
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-5" aria-label="Digit 6" />
+                    </div>
+
+                    <p id="otp-error" class="validation-msg error" style="min-height: 1.2rem; margin-bottom: 0.75rem; text-align: center;"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-otp-submit">
+                        Verify Email
+                    </button>
+
+                    <div class="auth-divider">or</div>
+
+                    <button type="button" class="btn btn-secondary" style="width: 100%;" id="btn-resend-otp">
+                        Resend Code
+                    </button>
+
+                    <p style="text-align: center; margin-top: 1.25rem; font-size: 0.8rem;">
+                        <button type="button" class="auth-link-btn" id="btn-back-from-otp">← Back to sign in</button>
+                    </p>
+                </form>
+            </div>
+
+            <!-- ── Forgot Password Form ── -->
+            <div id="form-forgot" class="auth-form" role="tabpanel">
+                <p class="auth-form-eyebrow">Password reset</p>
+                <h2 class="auth-form-title">Forgot your password?</h2>
+                <p class="auth-form-sub">Enter your email and we'll send a reset link.</p>
+
+                <form id="forgotForm" novalidate>
+                    <div class="form-group">
+                        <label for="forgotEmail">Email address</label>
+                        <input type="email" id="forgotEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
+                    </div>
+
+                    <p id="forgot-message" class="validation-msg" style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-forgot-submit">
+                        Send Reset Link
+                    </button>
+
+                    <p style="text-align: center; margin-top: 1.25rem; font-size: 0.8rem;">
+                        <button type="button" class="auth-link-btn" id="btn-back-to-login">← Back to sign in</button>
+                    </p>
+                </form>
+            </div>
+
+            <!-- ── Reset Password Form ── -->
+            <div id="form-reset" class="auth-form" role="tabpanel" style="display: none;">
+                <p class="auth-form-eyebrow">Set new password</p>
+                <h2 class="auth-form-title">Reset password</h2>
+                <p class="auth-form-sub">Enter the code sent to your email and your new password.</p>
+
+                <form id="resetForm" novalidate>
+                    <div class="form-group">
+                        <label for="resetEmail">Confirm Email</label>
+                        <input type="email" id="resetEmail" name="email" placeholder="you@example.com" autocomplete="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="resetCode">Recovery Code</label>
+                        <input type="text" id="resetCode" name="code" placeholder="123456" maxlength="6" style="font-family: var(--font-mono); letter-spacing: 0.2rem; text-align: center;" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="resetPassword">New Password</label>
+                        <input type="password" id="resetPassword" name="new_password" placeholder="Min 8 characters" required />
+                    </div>
+
+                    <p id="reset-error" class="validation-msg error" style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-reset-submit">
+                        Reset & Sign In
+                    </button>
+
+                    <p style="text-align: center; margin-top: 1.25rem; font-size: 0.8rem;">
+                        <button type="button" class="auth-link-btn" id="btn-reset-back-to-login">← Cancel and return</button>
+                    </p>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" class="toast-container" role="alert" aria-live="polite"></div>
+
+<!-- Initialize theme and load modular auth logic -->
+<script type="module">
+    import { initAuthPage } from '/static/src/features/auth/auth.js';
+
+    // Hook up theme toggle
+    const btnTheme = document.getElementById('btn-theme-toggle');
+    const ThemeManager = {
+        setTheme(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            localStorage.setItem('konvo-theme', t);
+            const icon  = document.querySelector('.theme-icon');
+            const label = document.querySelector('.theme-label');
+            if (icon)  icon.textContent  = t === 'dark' ? '🌙' : '☀️';
+            if (label) label.textContent = t === 'dark' ? 'Dark' : 'Light';
+        }
+    };
+
+    const _savedTheme = localStorage.getItem('konvo-theme') || 'dark';
+    ThemeManager.setTheme(_savedTheme);
+
+    if (btnTheme) {
+        btnTheme.addEventListener('click', () => {
+            const curr = document.documentElement.getAttribute('data-theme') || 'dark';
+            ThemeManager.setTheme(curr === 'dark' ? 'light' : 'dark');
+        });
+    }
+
+    // Initialize forms logic
+    initAuthPage();
+
+    // Automatically switch to registration tab if ?register=true is in URL query
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('register') === 'true') {
+        const tabRegister = document.getElementById('tab-register');
+        if (tabRegister) tabRegister.click();
+    }
+</script>
+
+</body>
+</html>
