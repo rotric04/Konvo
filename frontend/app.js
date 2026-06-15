@@ -2817,6 +2817,12 @@ function setupModalClosers() {
         }
     }
 
+    // Expose close helper globally
+    window.konvoCloseModal = function(id) {
+        const el = document.getElementById(id);
+        if (el) closeModal(el);
+    };
+
     // Click-only delegation on each modal overlay.
     // We do NOT use pointerup here because:
     //   - pointerup with e.preventDefault() suppresses subsequent click events
