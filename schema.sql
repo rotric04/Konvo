@@ -250,7 +250,7 @@ CREATE POLICY profile_read_all ON user_profiles
     FOR SELECT USING (true); -- profiles are discoverable
 
 CREATE POLICY profile_write_own ON user_profiles 
-    FOR ALL USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+    FOR ALL USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
 
 -- Behavioral Fingerprints Policies
 CREATE POLICY fingerprint_read_all ON behavioral_fingerprints 
@@ -261,7 +261,7 @@ CREATE POLICY fingerprint_write_own ON behavioral_fingerprints
 
 -- Behavioral Ledger Policies
 CREATE POLICY ledger_read_own ON behavioral_ledger 
-    FOR SELECT USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+    FOR SELECT USING (auth.uid()::text = user_id::text OR EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
 
 -- Agents Policies
 CREATE POLICY agents_read_all ON agents 
@@ -313,4 +313,4 @@ CREATE POLICY feedback_insert_all ON feedback_entries
     FOR INSERT WITH CHECK (true); -- Allow feedback submission from anyone
 
 CREATE POLICY feedback_read_admin ON feedback_entries 
-    FOR SELECT USING (EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin'));
+    FOR SELECT USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
