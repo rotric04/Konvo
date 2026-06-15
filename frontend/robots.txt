@@ -37,4 +37,4 @@ Allow: /static/
 Disallow: /admin-portal-secured
 Disallow: /api/admin/
 
-Sitemap: http://localhost:8000/sitemap.xml
+Sitemap: http://konvo.space/sitemap.xml
