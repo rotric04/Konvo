@@ -21,6 +21,198 @@ themeChannel.onmessage = (event) => {
     }
 };
 
+// ═══════════════════════════════════════════════════════
+// PREMIUM CUSTOM ALERT SYSTEM (Replaces Default Browser popups)
+// ═══════════════════════════════════════════════════════
+(function() {
+    let alertQueue = [];
+    let activeAlertModal = null;
+
+    window.alert = function(message) {
+        if (message === undefined || message === null) return;
+        const msgStr = String(message);
+        
+        // Push message to queue
+        alertQueue.push(msgStr);
+        
+        if (!activeAlertModal) {
+            processNextAlert();
+        }
+    };
+
+    function processNextAlert() {
+        if (alertQueue.length === 0) {
+            activeAlertModal = null;
+            return;
+        }
+
+        const message = alertQueue.shift();
+        
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.className = 'konvo-custom-alert-overlay';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(9, 9, 11, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        `;
+
+        // Create card content
+        const card = document.createElement('div');
+        card.style.cssText = `
+            background: var(--bg-card, #141416);
+            border: 1px solid var(--border-color, #27272A);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 440px;
+            padding: 2.25rem 2rem 2rem 2rem;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(217, 119, 6, 0.05);
+            text-align: center;
+            transform: scale(0.92) translateY(15px);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        `;
+
+        // Add a subtle top border gradient glow line
+        const glowLine = document.createElement('div');
+        glowLine.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-teal, #0D9488), var(--accent-amber, #D97706), var(--accent-indigo, #06B6D4));
+        `;
+        card.appendChild(glowLine);
+
+        // Header/Icon section
+        const header = document.createElement('div');
+        header.style.cssText = `
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        `;
+        
+        // Premium brand-like pulsing icon
+        header.innerHTML = `
+            <div style="background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.25); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--accent-amber, #D97706); font-size: 1.5rem; animation: pulseGlow 2s infinite ease-in-out;">
+                ✦
+            </div>
+            <style>
+                @keyframes pulseGlow {
+                    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.1); }
+                    50% { transform: scale(1.05); box-shadow: 0 0 12px 2px rgba(217, 119, 6, 0.15); }
+                }
+            </style>
+        `;
+        card.appendChild(header);
+
+        // Message text
+        const text = document.createElement('div');
+        text.style.cssText = `
+            color: var(--text-primary, #FAF9F6);
+            font-family: var(--font-sans, system-ui);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            word-break: break-word;
+            text-align: center;
+        `;
+        text.textContent = message;
+        card.appendChild(text);
+
+        // Button Container & Styled Button
+        const btnContainer = document.createElement('div');
+        btnContainer.style.cssText = `
+            display: flex;
+            justify-content: center;
+        `;
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Acknowledge';
+        btn.style.cssText = `
+            background: var(--accent-amber, #D97706);
+            color: #09090B;
+            border: 1px solid var(--accent-amber, #D97706);
+            font-family: var(--font-mono, monospace);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 2.25rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15);
+        `;
+
+        // Hover animations
+        btn.onmouseover = () => {
+            btn.style.background = 'transparent';
+            btn.style.color = 'var(--accent-amber, #D97706)';
+            btn.style.boxShadow = 'none';
+        };
+        btn.onmouseout = () => {
+            btn.style.background = 'var(--accent-amber, #D97706)';
+            btn.style.color = '#09090B';
+            btn.style.boxShadow = '0 4px 12px rgba(217, 119, 6, 0.15)';
+        };
+
+        btnContainer.appendChild(btn);
+        card.appendChild(btnContainer);
+        modal.appendChild(card);
+        document.body.appendChild(modal);
+
+        activeAlertModal = modal;
+
+        // Animate open
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            card.style.transform = 'scale(1) translateY(0)';
+        });
+
+        // Close functions
+        const closeAlert = () => {
+            modal.style.opacity = '0';
+            card.style.transform = 'scale(0.92) translateY(15px)';
+            
+            // Clean up event listeners
+            window.removeEventListener('keydown', handleKeyDown);
+            
+            setTimeout(() => {
+                modal.remove();
+                // Process next in queue
+                processNextAlert();
+            }, 250);
+        };
+
+        // Event listener for close button click
+        btn.addEventListener('click', closeAlert);
+
+        // Keydown listener for Esc or Enter
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' || e.key === 'Enter') {
+                e.preventDefault();
+                closeAlert();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+    }
+})();
+
 // Typewriter Text Animation Helper
 function animateTextTypewriter(element, text, speed = 15, isInput = false) {
     if (!element) return;
