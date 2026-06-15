@@ -43,7 +43,7 @@ def submit_assessment(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    res = crud.submit_personality_assessment(db, current_user.id, submission.answers)
+    res = crud.submit_personality_assessment(db, current_user.id, submission.answers, submission.custom_inputs)
     if not res:
         raise HTTPException(status_code=400, detail="Failed to process personality assessment.")
     return res

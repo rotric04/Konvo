@@ -15,6 +15,10 @@
       "destination": "/$1.html"
     },
     {
+      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/$1"
     }

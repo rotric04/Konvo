@@ -64,6 +64,7 @@ class TwinResponse(BaseModel):
 # Personality quiz
 class AssessmentSubmission(BaseModel):
     answers: Dict[str, int] # Maps question ID (1 to 50) -> score (1 to 5)
+    custom_inputs: Optional[Dict[str, Any]] = None
 
 # Profile responder
 class UserProfileSchema(BaseModel):

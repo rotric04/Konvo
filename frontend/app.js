@@ -910,7 +910,23 @@ function initProfilePage() {
             goal2: document.getElementById('wiz-goal-2')?.value || '',
             goal3: document.getElementById('wiz-goal-3')?.value || '',
             relationshipIntent: document.getElementById('wiz-relationship-intent')?.value || 'Long Term',
-            disclosureBoundary: document.getElementById('wiz-disclosure-boundary')?.value || 'moderate'
+            disclosureBoundary: document.getElementById('wiz-disclosure-boundary')?.value || 'moderate',
+            
+            // New cognitive inputs
+            mbtiEI: document.getElementById('wiz-mbti-ei')?.value || 'I',
+            mbtiNS: document.getElementById('wiz-mbti-ns')?.value || 'N',
+            mbtiTF: document.getElementById('wiz-mbti-tf')?.value || 'T',
+            mbtiJP: document.getElementById('wiz-mbti-jp')?.value || 'J',
+            commTone: document.getElementById('wiz-comm-tone')?.value || 'casual',
+            customCommTone: document.getElementById('wiz-custom-comm-tone')?.value || '',
+            conflictApproach: document.getElementById('wiz-conflict-approach')?.value || 'calm',
+            customConflictApproach: document.getElementById('wiz-custom-conflict-approach')?.value || '',
+            connectionBasis: document.getElementById('wiz-connection-basis')?.value || 'intellectual',
+            customConnectionBasis: document.getElementById('wiz-custom-connection-basis')?.value || '',
+            customCognitive: document.getElementById('wiz-custom-cognitive')?.value || '',
+            valuesFocus: document.getElementById('wiz-values-focus')?.value || 'growth',
+            customValuesFocus: document.getElementById('wiz-custom-values-focus')?.value || '',
+            customInterests: document.getElementById('wiz-custom-interests')?.value || ''
         };
         localStorage.setItem('konvo_onboarding_draft', JSON.stringify(draft));
     }
@@ -941,6 +957,39 @@ function initProfilePage() {
             if (document.getElementById('wiz-goal-3')) document.getElementById('wiz-goal-3').value = draft.goal3 || '';
             if (document.getElementById('wiz-relationship-intent')) document.getElementById('wiz-relationship-intent').value = draft.relationshipIntent || 'Long Term';
             if (document.getElementById('wiz-disclosure-boundary')) document.getElementById('wiz-disclosure-boundary').value = draft.disclosureBoundary || 'moderate';
+
+            // Load new cognitive fields
+            if (document.getElementById('wiz-mbti-ei')) document.getElementById('wiz-mbti-ei').value = draft.mbtiEI || 'I';
+            if (document.getElementById('wiz-mbti-ns')) document.getElementById('wiz-mbti-ns').value = draft.mbtiNS || 'N';
+            if (document.getElementById('wiz-mbti-tf')) document.getElementById('wiz-mbti-tf').value = draft.mbtiTF || 'T';
+            if (document.getElementById('wiz-mbti-jp')) document.getElementById('wiz-mbti-jp').value = draft.mbtiJP || 'J';
+            
+            if (document.getElementById('wiz-comm-tone')) {
+                document.getElementById('wiz-comm-tone').value = draft.commTone || 'casual';
+                document.getElementById('wiz-custom-comm-tone-wrap').style.display = (draft.commTone === 'custom') ? 'block' : 'none';
+            }
+            if (document.getElementById('wiz-custom-comm-tone')) document.getElementById('wiz-custom-comm-tone').value = draft.customCommTone || '';
+            
+            if (document.getElementById('wiz-conflict-approach')) {
+                document.getElementById('wiz-conflict-approach').value = draft.conflictApproach || 'calm';
+                document.getElementById('wiz-custom-conflict-approach-wrap').style.display = (draft.conflictApproach === 'custom') ? 'block' : 'none';
+            }
+            if (document.getElementById('wiz-custom-conflict-approach')) document.getElementById('wiz-custom-conflict-approach').value = draft.customConflictApproach || '';
+
+            if (document.getElementById('wiz-connection-basis')) {
+                document.getElementById('wiz-connection-basis').value = draft.connectionBasis || 'intellectual';
+                document.getElementById('wiz-custom-connection-basis-wrap').style.display = (draft.connectionBasis === 'custom') ? 'block' : 'none';
+            }
+            if (document.getElementById('wiz-custom-connection-basis')) document.getElementById('wiz-custom-connection-basis').value = draft.customConnectionBasis || '';
+            
+            if (document.getElementById('wiz-custom-cognitive')) document.getElementById('wiz-custom-cognitive').value = draft.customCognitive || '';
+            
+            if (document.getElementById('wiz-values-focus')) {
+                document.getElementById('wiz-values-focus').value = draft.valuesFocus || 'growth';
+                document.getElementById('wiz-custom-values-focus-wrap').style.display = (draft.valuesFocus === 'custom') ? 'block' : 'none';
+            }
+            if (document.getElementById('wiz-custom-values-focus')) document.getElementById('wiz-custom-values-focus').value = draft.customValuesFocus || '';
+            if (document.getElementById('wiz-custom-interests')) document.getElementById('wiz-custom-interests').value = draft.customInterests || '';
 
             document.querySelectorAll('#wiz-interests-grid .option-btn').forEach(btn => {
                 const interest = btn.dataset.interest;
@@ -1195,6 +1244,24 @@ function initProfilePage() {
                 const mbtiTF = document.getElementById('wiz-mbti-tf').value;
                 const mbtiJP = document.getElementById('wiz-mbti-jp').value;
 
+                // Build custom inputs dictionary for Gemini NLP mapping
+                const customInputs = {
+                    mbti_ei: mbtiEI,
+                    mbti_ns: mbtiNS,
+                    mbti_tf: mbtiTF,
+                    mbti_jp: mbtiJP,
+                    comm_tone: document.getElementById('wiz-comm-tone')?.value || 'casual',
+                    custom_comm_tone: document.getElementById('wiz-custom-comm-tone')?.value || '',
+                    conflict_approach: document.getElementById('wiz-conflict-approach')?.value || 'calm',
+                    custom_conflict_approach: document.getElementById('wiz-custom-conflict-approach')?.value || '',
+                    connection_basis: document.getElementById('wiz-connection-basis')?.value || 'intellectual',
+                    custom_connection_basis: document.getElementById('wiz-custom-connection-basis')?.value || '',
+                    custom_cognitive: document.getElementById('wiz-custom-cognitive')?.value || '',
+                    values_focus: document.getElementById('wiz-values-focus')?.value || 'growth',
+                    custom_values_focus: document.getElementById('wiz-custom-values-focus')?.value || '',
+                    custom_interests: document.getElementById('wiz-custom-interests')?.value || ''
+                };
+
                 // compile the 50 answers
                 const compiledAnswers = {};
                 for (let i = 1; i <= 50; i++) {
@@ -1218,7 +1285,7 @@ function initProfilePage() {
 
                 const res = await apiFetch('/api/users/assessment', {
                     method: 'POST',
-                    body: JSON.stringify({ answers: compiledAnswers })
+                    body: JSON.stringify({ answers: compiledAnswers, custom_inputs: customInputs })
                 });
 
                 if (res) {

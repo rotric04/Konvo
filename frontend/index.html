@@ -2356,6 +2356,56 @@
                             <option value="P">Fluid discovery: Value spontaneity, flexibility, and emerging opportunities (Perceiving)</option>
                         </select>
                     </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-comm-tone">Communication Tone & Style</label>
+                        <select id="wiz-comm-tone" style="width: 100%;" onchange="document.getElementById('wiz-custom-comm-tone-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+                            <option value="formal">Highly articulate, structured, and formal tone</option>
+                            <option value="casual" selected>Relaxed, conversational, and casual tone</option>
+                            <option value="sarcastic">Dry, sarcastic, with a touch of irony</option>
+                            <option value="expressive">Highly energetic, expressive, and emoji-friendly</option>
+                            <option value="custom">Write my own custom tone style...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="wiz-custom-comm-tone-wrap" style="margin-bottom: 1.25rem; display: none;">
+                        <label for="wiz-custom-comm-tone">Custom Communication Tone</label>
+                        <input type="text" id="wiz-custom-comm-tone" placeholder="e.g. Poetic, cryptic, or minimalist-stoic">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-conflict-approach">Conflict Resolution Approach</label>
+                        <select id="wiz-conflict-approach" style="width: 100%;" onchange="document.getElementById('wiz-custom-conflict-approach-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+                            <option value="calm" selected>Calm down period followed by collaborative reflection</option>
+                            <option value="direct">Direct confrontation to resolve issues instantly</option>
+                            <option value="structured">Analytical, structured debate on facts</option>
+                            <option value="supportive">Focus on emotional reassurance and support</option>
+                            <option value="custom">Write my own conflict resolution style...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="wiz-custom-conflict-approach-wrap" style="margin-bottom: 1.25rem; display: none;">
+                        <label for="wiz-custom-conflict-approach">Custom Conflict Resolution Style</label>
+                        <input type="text" id="wiz-custom-conflict-approach" placeholder="e.g. Needs space for 24 hours, then writes structured emails">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-connection-basis">Primary Connection Basis</label>
+                        <select id="wiz-connection-basis" style="width: 100%;" onchange="document.getElementById('wiz-custom-connection-basis-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+                            <option value="intellectual" selected>Deep intellectual discussions, problem solving, and ideation</option>
+                            <option value="emotional">Intense emotional support, absolute vulnerability, and care</option>
+                            <option value="experiential">Shared activities, travel, and concrete life adventures</option>
+                            <option value="values">Shared moral philosophies, ethics, and world goals</option>
+                            <option value="custom">Write my own connection basis...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="wiz-custom-connection-basis-wrap" style="margin-bottom: 1.25rem; display: none;">
+                        <label for="wiz-custom-connection-basis">Custom Connection Basis</label>
+                        <input type="text" id="wiz-custom-connection-basis" placeholder="e.g. Quirky jokes, competitive sports, or co-building startups">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-custom-cognitive">Custom Cognitive & Communication Details (NLP Engine Input)</label>
+                        <textarea id="wiz-custom-cognitive" placeholder="Describe how you process thoughts, communicate, handle disagreements, or express your identity in your own words. Our NLP behavior engine will analyze this to calibrate your twin's personality vectors..." rows="3"></textarea>
+                    </div>
                 </div>
 
                 <!-- STAGE 3: Synergy Alignments -->
@@ -2380,7 +2430,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
                         <label for="wiz-relationship-intent">Digital Twin Simulation Target</label>
                         <select id="wiz-relationship-intent">
                             <option value="Long Term">Long-Term Partnership Calibration</option>
@@ -2388,6 +2438,26 @@
                             <option value="Friendship">Sovereign Friendship Network</option>
                             <option value="Mentorship">Technical & Ideation Mentorship</option>
                         </select>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-values-focus">Core Personal Value Focus</label>
+                        <select id="wiz-values-focus" style="width: 100%;" onchange="document.getElementById('wiz-custom-values-focus-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+                            <option value="growth" selected>Continuous self-improvement, knowledge, and mental expansion</option>
+                            <option value="stability">Security, structured schedules, and long-term peace</option>
+                            <option value="adventure">Novelty, creative breakthroughs, and exploring limits</option>
+                            <option value="community">Helping others, family focus, and strong social networks</option>
+                            <option value="custom">Write my own core value focus...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="wiz-custom-values-focus-wrap" style="margin-bottom: 1.25rem; display: none;">
+                        <label for="wiz-custom-values-focus">Custom Core Value Focus</label>
+                        <input type="text" id="wiz-custom-values-focus" placeholder="e.g. Artistic freedom, environmental preservation, or spiritual depth">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="wiz-custom-interests">Custom Hobbies, Interests & Ambitions (NLP Engine Input)</label>
+                        <textarea id="wiz-custom-interests" placeholder="List any other interests, hobbies, or life ambitions in your own words. Our NLP behavior engine will parse this to establish resonance points for matching compatibility..." rows="3"></textarea>
                     </div>
                 </div>
 

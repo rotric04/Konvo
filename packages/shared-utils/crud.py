@@ -115,14 +115,143 @@ def verify_user_otp(db: Session, email: str, otp_code: str) -> bool:
 
 
 # ----------------- PERSONALITY ASSESSMENT -----------------
-def submit_personality_assessment(db: Session, user_id: int, answers: dict):
+def generate_mbti_and_dna_via_gemini(user_profile, custom_inputs: dict) -> dict:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return None
+        
+    display_name = user_profile.display_name or "New Node"
+    gender = user_profile.gender or "Unknown"
+    bio = user_profile.bio or ""
+    
+    mbti_ei = custom_inputs.get("mbti_ei", "I")
+    mbti_ns = custom_inputs.get("mbti_ns", "N")
+    mbti_tf = custom_inputs.get("mbti_tf", "T")
+    mbti_jp = custom_inputs.get("mbti_jp", "J")
+    
+    interests = user_profile.interests or []
+    relationship_intent = user_profile.relationship_intent or "Long Term"
+    
+    comm_tone = custom_inputs.get("comm_tone", "balanced")
+    custom_comm_tone = custom_inputs.get("custom_comm_tone", "")
+    conflict_approach = custom_inputs.get("conflict_approach", "calm")
+    custom_conflict_approach = custom_inputs.get("custom_conflict_approach", "")
+    connection_basis = custom_inputs.get("connection_basis", "values")
+    custom_connection_basis = custom_inputs.get("custom_connection_basis", "")
+    custom_cognitive = custom_inputs.get("custom_cognitive", "")
+    values_focus = custom_inputs.get("values_focus", "growth")
+    custom_values_focus = custom_inputs.get("custom_values_focus", "")
+    custom_interests = custom_inputs.get("custom_interests", "")
+
+    prompt = f"""
+You are the Konvo Resonance Engine. Analyze the user's onboarding inputs to compute their cognitive architecture, communication style, relationship patterns, and Konvo DNA indices.
+
+Onboarding Inputs:
+- Display Name: {display_name}
+- Gender: {gender}
+- Bio: {bio}
+- Social Energy (E/I): {mbti_ei}
+- Information Processing (N/S): {mbti_ns}
+- Decisive Evaluation (T/F): {mbti_tf}
+- System Schedule (J/P): {mbti_jp}
+- Selected Interests: {interests}
+- Relationship Intent: {relationship_intent}
+- Communication Tone Selection: {comm_tone} (custom typed tone: {custom_comm_tone})
+- Conflict Approach Selection: {conflict_approach} (custom typed approach: {custom_conflict_approach})
+- Connection Basis Selection: {connection_basis} (custom typed basis: {custom_connection_basis})
+- Custom Cognitive & Communication Description: {custom_cognitive}
+- Personal Values Selection: {values_focus} (custom typed values: {custom_values_focus})
+- Custom Interests & Ambitions Description: {custom_interests}
+
+Tasks:
+1. Determine their MBTI personality type (must be one of the standard 16 types).
+2. Calculate a confidence level (percentage between 50 and 100).
+3. Draft a premium, professional summary of their archetype (e.g. "The Strategist. Highly analytical...").
+4. Provide 3 specific growth areas.
+5. Provide brief descriptions of their communication, relationship, and friendship styles.
+6. Calculate the 9 Konvo DNA indices (values from 0.0 to 100.0) based on their text descriptions and selections:
+   - dna_behavior (lifestyle consistency, routines vs spontaneity)
+   - dna_personality (confidence, polarization of traits)
+   - dna_communication (articulate, logical vs expressive, casual)
+   - dna_relationship (desire for intimacy, depth, stability)
+   - dna_emotional (vulnerability level, empathy)
+   - dna_lifestyle (activity level, domestic priorities)
+   - dna_interest (conceptual depth, technical vs arts)
+   - dna_trust (open book vs guarded, verification readiness)
+   - dna_values (objectivity, ethics, prioritization)
+
+Output MUST be a single, valid JSON object with the following keys. Do not include markdown code block syntax. Return only raw JSON.
+Keys:
+- mbti_type (str)
+- mbti_confidence (float)
+- mbti_summary (str)
+- mbti_growth_areas (list of 3 str)
+- mbti_communication_style (str)
+- mbti_relationship_style (str)
+- mbti_friendship_style (str)
+- dna_behavior (float)
+- dna_personality (float)
+- dna_communication (float)
+- dna_relationship (float)
+- dna_emotional (float)
+- dna_lifestyle (float)
+- dna_interest (float)
+- dna_trust (float)
+- dna_values (float)
+- role_type (str) (e.g., "The Strategist", "The Dreamer", "The Challenger", "The Companion", "The Builder", "The Explorer")
+"""
+    
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "responseMimeType": "application/json"
+        }
+    }
+    
+    try:
+        import httpx
+        response = httpx.post(url, headers=headers, json=payload, timeout=12.0)
+        if response.status_code == 200:
+            res_data = response.json()
+            text_resp = res_data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            if text_resp.startswith("```json"):
+                text_resp = text_resp[7:]
+            if text_resp.endswith("```"):
+                text_resp = text_resp[:-3]
+            res_json = json.loads(text_resp.strip())
+            return res_json
+    except Exception as e:
+        print(f"[Gemini NLP Engine] Failed generating onboarding compatibility profiles: {e}")
+        
+    return None
+
+def submit_personality_assessment(db: Session, user_id: int, answers: dict, custom_inputs: dict = None):
     user = get_user_by_id(db, user_id)
     if not user or not user.profile:
         return None
         
     prof = user.profile
-    res = calculate_mbti(answers)
     
+    # Try Gemini NLP first, fall back to rule-based MBTI engine
+    res = None
+    if custom_inputs:
+        res = generate_mbti_and_dna_via_gemini(prof, custom_inputs)
+        
+    if not res:
+        res = calculate_mbti(answers)
+        res["role_type"] = res.get("role_type") or "The Companion"
+        res["dna_behavior"] = res["dna"].get("dna_behavior", 50.0)
+        res["dna_personality"] = res["dna"].get("dna_personality", 50.0)
+        res["dna_communication"] = res["dna"].get("dna_communication", 50.0)
+        res["dna_relationship"] = res["dna"].get("dna_relationship", 50.0)
+        res["dna_emotional"] = res["dna"].get("dna_emotional", 50.0)
+        res["dna_lifestyle"] = res["dna"].get("dna_lifestyle", 50.0)
+        res["dna_interest"] = res["dna"].get("dna_interest", 50.0)
+        res["dna_trust"] = res["dna"].get("dna_trust", 50.0)
+        res["dna_values"] = res["dna"].get("dna_values", 50.0)
+
     # Update profile fields
     prof.mbti_type = res["mbti_type"]
     prof.mbti_confidence = res["mbti_confidence"]
@@ -136,16 +265,15 @@ def submit_personality_assessment(db: Session, user_id: int, answers: dict):
     user.konvo_id = generate_konvo_id(res["mbti_type"])
     
     # Populate DNA indices
-    dna = res["dna"]
-    prof.dna_behavior = dna["dna_behavior"]
-    prof.dna_personality = dna["dna_personality"]
-    prof.dna_communication = dna["dna_communication"]
-    prof.dna_relationship = dna["dna_relationship"]
-    prof.dna_emotional = dna["dna_emotional"]
-    prof.dna_lifestyle = dna["dna_lifestyle"]
-    prof.dna_interest = dna["dna_interest"]
-    prof.dna_trust = dna["dna_trust"]
-    prof.dna_values = dna["dna_values"]
+    prof.dna_behavior = res["dna_behavior"]
+    prof.dna_personality = res["dna_personality"]
+    prof.dna_communication = res["dna_communication"]
+    prof.dna_relationship = res["dna_relationship"]
+    prof.dna_emotional = res["dna_emotional"]
+    prof.dna_lifestyle = res["dna_lifestyle"]
+    prof.dna_interest = res["dna_interest"]
+    prof.dna_trust = res["dna_trust"]
+    prof.dna_values = res["dna_values"]
     
     db.commit()
     
