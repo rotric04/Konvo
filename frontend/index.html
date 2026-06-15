@@ -2353,7 +2353,9 @@
     <!-- Secure Integrated Authentication Modal -->
     <div class="modal" id="auth-modal">
         <div class="modal-content modal-auth-content">
-            <button class="close-modal" onclick="document.getElementById('auth-modal').classList.remove('active')">&times;</button>
+            <!-- Mobile drag handle indicator -->
+            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0 auto 1rem;"></div>
+            <button class="close-modal" onclick="document.getElementById('auth-modal').classList.remove('active')" aria-label="Close sign in panel">&times;</button>
             <div class="brand" style="justify-content: center; margin-bottom: 2rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="konvo-logo-svg" style="width: 32px; height: 32px;">
                     <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />
@@ -2425,7 +2427,7 @@
             </form>
 
             <!-- Register Form -->
-            <form id="form-register" class="hidden" style="max-height: 380px; overflow-y: auto; padding-right: 0.5rem;">
+            <form id="form-register" class="hidden" style="padding-right: 0.25rem;">
                 <div class="form-group">
                     <label for="reg-email">Network Email</label>
                     <input type="email" id="reg-email" required placeholder="name@konvo.app">
@@ -2458,13 +2460,16 @@
 
     <!-- OTP Verification Modal -->
     <div class="modal" id="otp-modal">
-        <div class="modal-content modal-otp-content">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem; font-family: var(--font-display); color: var(--text-primary);">Enter Verification OTP</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-                A verification code was sent to your email address. Please input it below to active your account.
+        <div class="modal-content modal-otp-content" style="position: relative;">
+            <!-- Drag handle for mobile bottom-sheet feel -->
+            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0 auto 1.25rem;"></div>
+            <button class="close-modal" onclick="document.getElementById('otp-modal').classList.remove('active')" aria-label="Close OTP modal" style="position: absolute; top: 0.75rem; right: 0.75rem;">&times;</button>
+            <h3 style="font-size: 1.4rem; margin-bottom: 1rem; font-family: var(--font-display); color: var(--text-primary);">Enter Verification OTP</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
+                A verification code was sent to your email address. Please input it below to activate your account.
             </p>
             <div class="form-group">
-                <input type="text" id="otp-code-input" class="search-input" style="font-size: 1.5rem; letter-spacing: 0.5rem; text-align: center; font-family: var(--font-mono); color: var(--text-primary); background-color: var(--bg-main);" placeholder="000000" maxlength="6" required>
+                <input type="text" id="otp-code-input" class="search-input" inputmode="numeric" autocomplete="one-time-code" style="font-size: 1.5rem; letter-spacing: 0.5rem; text-align: center; font-family: var(--font-mono); color: var(--text-primary); background-color: var(--bg-main);" placeholder="000000" maxlength="6" required>
             </div>
             <button class="btn btn-primary" id="btn-submit-otp" style="width: 100%; margin-top: 1rem;">Verify Profile</button>
         </div>
@@ -2716,15 +2721,17 @@
 
     <!-- Privacy Policy Modal -->
     <div class="modal" id="privacy-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden;">
-            <div style="padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(13,148,136,0.05) 0%, transparent 100%);">
+        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Mobile drag handle -->
+            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(13,148,136,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-teal); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
-                    <h3 style="font-family: var(--font-display); font-size: 1.4rem; margin: 0;">Privacy Policy</h3>
+                    <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Privacy Policy</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('privacy-modal').classList.remove('active')" style="position: static; font-size: 1.25rem;">&times;</button>
+                <button class="close-modal" onclick="document.getElementById('privacy-modal').classList.remove('active')" aria-label="Close privacy policy">&times;</button>
             </div>
-            <div style="padding: 2rem; max-height: 65vh; overflow-y: auto;">
+            <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
                 <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
                 <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-teal);">1. Data We Collect</h4>
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">Konvo collects only what is necessary for behavioral compatibility matching. This includes display identifiers you provide, MBTI calibration responses, DIGIPIN approximate area coordinates (never GPS), and interaction ledger data within sandboxed simulations. We do not collect physical addresses, camera data, or payment information.</p>
@@ -2740,17 +2747,20 @@
         </div>
     </div>
 
+
     <!-- Terms of Service Modal -->
     <div class="modal" id="tos-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden;">
-            <div style="padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(217,119,6,0.05) 0%, transparent 100%);">
+        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Mobile drag handle -->
+            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(217,119,6,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
-                    <h3 style="font-family: var(--font-display); font-size: 1.4rem; margin: 0;">Terms of Service</h3>
+                    <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Terms of Service</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('tos-modal').classList.remove('active')" style="position: static; font-size: 1.25rem;">&times;</button>
+                <button class="close-modal" onclick="document.getElementById('tos-modal').classList.remove('active')" aria-label="Close terms of service">&times;</button>
             </div>
-            <div style="padding: 2rem; max-height: 65vh; overflow-y: auto;">
+            <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
                 <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
                 <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-amber);">1. Eligibility</h4>
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">You must be 18 years or older to register a profile on Konvo. By creating an account, you represent that all information you provide is accurate and that you agree to these terms. False identity credentials will result in immediate account termination.</p>
@@ -2768,16 +2778,18 @@
 
     <!-- Security Policy Modal -->
     <div class="modal" id="security-policy-modal">
-        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden;">
-            <div style="padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(225,29,72,0.05) 0%, transparent 100%);">
+        <div class="modal-content" style="max-width: 680px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+            <!-- Mobile drag handle -->
+            <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0.75rem auto 0; flex-shrink: 0;"></div>
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(225,29,72,0.05) 0%, transparent 100%); flex-shrink: 0;">
                 <div>
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 0.25rem;">Security Document</div>
-                    <h3 style="font-family: var(--font-display); font-size: 1.4rem; margin: 0;">Security Policy</h3>
+                    <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Security Policy</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('security-policy-modal').classList.remove('active')" style="position: static; font-size: 1.25rem;">&times;</button>
+                <button class="close-modal" onclick="document.getElementById('security-policy-modal').classList.remove('active')" aria-label="Close security policy">&times;</button>
             </div>
-            <div style="padding: 2rem; max-height: 65vh; overflow-y: auto;">
-                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
+            <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
+                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 &middot; Version 1.0</p>
                 <div style="background: rgba(225,29,72,0.04); border: 1px solid rgba(225,29,72,0.2); border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: var(--accent-rose);">
                     ⚠️ To report a security vulnerability, contact system operators directly through the secure contact channel. Do not post vulnerabilities publicly.
                 </div>

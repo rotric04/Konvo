@@ -5794,5 +5794,141 @@ select:hover {
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE-FIRST MODAL SYSTEM OVERRIDES
+   Fixes: background scroll on iOS/Android, tap targets, safe-area
+═══════════════════════════════════════════════════════════════════ */
 
+/* Body scroll lock — applied via JS when any modal is open */
+body.modal-open {
+    overflow: hidden !important;
+    /* iOS Safari: body must be fixed to fully prevent background scroll */
+    position: fixed !important;
+    width: 100% !important;
+    /* JS saves scroll offset to --scroll-y before locking */
+    top: var(--scroll-y, 0);
+}
 
+/* Modal overlay — full viewport, centred flex, padding for safe areas */
+.modal {
+    padding: env(safe-area-inset-top, 1rem) env(safe-area-inset-right, 1rem) env(safe-area-inset-bottom, 1rem) env(safe-area-inset-left, 1rem) !important;
+    box-sizing: border-box !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: auto !important;
+}
+
+/* Modal content — iOS momentum scroll + overscroll lock */
+.modal-content {
+    max-height: calc(100dvh - 2rem) !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+}
+
+/* Close button — large tap target (min 44x44 per Apple HIG) */
+.close-modal {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 50% !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    font-size: 1.2rem !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
+    z-index: 20 !important;
+    color: var(--text-secondary) !important;
+    transition: background 0.18s ease, color 0.18s ease !important;
+}
+.close-modal:hover,
+.close-modal:active {
+    background: rgba(255,255,255,0.14) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Auth modal: full-width form scrollable on small phones */
+.modal-auth-content {
+    max-width: 500px !important;
+    padding: 2rem 2rem 1.5rem !important;
+}
+.modal-auth-content form {
+    max-height: none !important;
+    overflow-y: visible !important;
+}
+
+/* On phones narrower than 480px, modal goes nearly full-screen */
+@media (max-width: 480px) {
+    .modal {
+        align-items: flex-end !important;
+        padding: 0 !important;
+    }
+    .modal-content {
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 92dvh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 1.5rem 1.25rem !important;
+    }
+    .modal-auth-content {
+        padding: 1.5rem 1.25rem 1rem !important;
+    }
+    .modal-otp-content {
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 70dvh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 1.5rem 1.25rem !important;
+    }
+    .modal-quiz-content {
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 92dvh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* On tablets/medium screens: cap width with comfortable padding */
+@media (min-width: 481px) and (max-width: 768px) {
+    .modal-content {
+        max-width: calc(100vw - 2rem) !important;
+        padding: 2rem 1.5rem !important;
+    }
+}
+
+/* Cookie banner: lift above everything on mobile */
+@media (max-width: 640px) {
+    .cookie-banner-container {
+        bottom: env(safe-area-inset-bottom, 16px) !important;
+        left: 12px !important;
+        right: 12px !important;
+        width: auto !important;
+        transform: translateY(150px) !important;
+    }
+    .cookie-banner-container.active {
+        transform: translateY(0) !important;
+    }
+}
+
+/* Global: prevent double-tap zoom on interactive elements */
+button, a, input, select, textarea, label {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Inputs/checkboxes on mobile: bigger tap area */
+@media (max-width: 768px) {
+    input[type="checkbox"],
+    input[type="radio"] {
+        width: 1.1rem;
+        height: 1.1rem;
+        min-width: 1.1rem;
+        min-height: 1.1rem;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+}

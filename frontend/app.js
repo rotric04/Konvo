@@ -2764,37 +2764,87 @@ function initChatWorkspace() {
     loadMatches();
 }
 
+// ─── Mobile-safe body scroll lock helpers ───────────────────────────────────
+let _scrollLockCount = 0;
+let _savedScrollY = 0;
+
+function lockBodyScroll() {
+    _scrollLockCount++;
+    if (_scrollLockCount === 1) {
+        _savedScrollY = window.scrollY;
+        document.documentElement.style.setProperty('--scroll-y', `-${_savedScrollY}px`);
+        document.body.classList.add('modal-open');
+    }
+}
+
+function unlockBodyScroll() {
+    if (_scrollLockCount <= 0) return;
+    _scrollLockCount--;
+    if (_scrollLockCount === 0) {
+        document.body.classList.remove('modal-open');
+        document.documentElement.style.removeProperty('--scroll-y');
+        document.body.style.removeProperty('top');
+        document.body.style.removeProperty('position');
+        window.scrollTo(0, _savedScrollY);
+    }
+}
+
 // Close Modal helper
 function setupModalClosers() {
+    function closeModal(m) {
+        if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser &&
+            (!currentUser.profile || !currentUser.profile.mbti_summary)) {
+            return; // Prevent closing onboarding quiz
+        }
+        m.classList.remove('active');
+        unlockBodyScroll();
+        if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
+            clearInterval(demoSimInterval);
+            demoSimInterval = null;
+        }
+    }
+
     document.querySelectorAll('.modal').forEach(m => {
-        m.addEventListener('click', (e) => {
+        // Use touchend+click delegation with passive:false to prevent scroll bleed
+        function handleClose(e) {
             if (e.target === m || e.target.closest('.close-modal')) {
-                if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
-                    // Prevent closing quiz modal if user needs calibration
-                    return;
-                }
-                m.classList.remove('active');
-                if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
-                    clearInterval(demoSimInterval);
-                    demoSimInterval = null;
+                e.preventDefault();
+                closeModal(m);
+            }
+        }
+        m.addEventListener('click', handleClose, { passive: false });
+        // Pointer events cover both mouse and touch simultaneously
+        m.addEventListener('pointerup', (e) => {
+            if (e.target === m || e.target.closest('.close-modal')) {
+                e.preventDefault();
+                closeModal(m);
+            }
+        }, { passive: false });
+    });
+
+    // Lock scroll when modal opens (observe class changes via MutationObserver)
+    const scrollLockObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class') {
+                const target = mutation.target;
+                if (!target.classList.contains('modal')) return;
+                if (target.classList.contains('active')) {
+                    lockBodyScroll();
+                } else {
+                    unlockBodyScroll();
                 }
             }
         });
+    });
+    document.querySelectorAll('.modal').forEach(m => {
+        scrollLockObserver.observe(m, { attributes: true, attributeFilter: ['class'] });
     });
 
     // Global ESC key modal closer
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             document.querySelectorAll('.modal.active').forEach(m => {
-                if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
-                    // Prevent closing quiz modal if user needs calibration
-                    return;
-                }
-                m.classList.remove('active');
-                if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
-                    clearInterval(demoSimInterval);
-                    demoSimInterval = null;
-                }
+                closeModal(m);
             });
         }
     });
@@ -5693,7 +5743,9 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
         // Initialize Three.js Scene, Camera, and WebGL Renderer
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x080810, 0.0035);
+        // Reduce fog density on mobile to ease GPU fill rate
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+        scene.fog = new THREE.FogExp2(0x080810, isMobile ? 0.006 : 0.0035);
 
         const width = el.clientWidth || window.innerWidth;
         const height = el.clientHeight || window.innerHeight;
@@ -5701,9 +5753,16 @@ function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         camera.position.set(0, 5, 23);
         camera.lookAt(0, 2.5, 0);
 
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
+        // Mobile: disable antialias + cap pixel ratio to preserve battery/RAM
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: !isMobile,
+            powerPreference: isMobile ? 'default' : 'high-performance'
+        });
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // Cap pixel ratio: 1.5 on mobile, 2 elsewhere — prevents oversized framebuffers
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.0;
         window.vdRenderer = renderer;
@@ -6938,11 +6997,24 @@ function initCookieConsent() {
             banner.classList.remove('active');
         });
     }
+
+    function openPrefModal() {
+        if (prefModal) {
+            prefModal.classList.add('active');
+            lockBodyScroll();
+        }
+    }
+
+    function closePrefModal() {
+        if (prefModal && prefModal.classList.contains('active')) {
+            prefModal.classList.remove('active');
+            unlockBodyScroll();
+        }
+    }
     
     if (btnPreferences) {
-        btnPreferences.addEventListener('click', () => {
-            if (prefModal) prefModal.classList.add('active');
-        });
+        btnPreferences.addEventListener('click', openPrefModal);
+        btnPreferences.addEventListener('touchend', (e) => { e.preventDefault(); openPrefModal(); }, { passive: false });
     }
     
     if (btnSavePrefs) {
@@ -6952,9 +7024,25 @@ function initCookieConsent() {
             localStorage.setItem('konvo_cookies_accepted', 'custom');
             localStorage.setItem('konvo_cookies_analytics', analytics);
             localStorage.setItem('konvo_cookies_functional', functional);
-            if (prefModal) prefModal.classList.remove('active');
+            closePrefModal();
             banner.classList.remove('active');
         });
+    }
+
+    // Wire up inline-onclick close buttons on the cookie pref modal too
+    if (prefModal) {
+        prefModal.addEventListener('click', (e) => {
+            if (e.target === prefModal || e.target.closest('.close-modal') ||
+                e.target.closest('[onclick*="cookie-preferences-modal"]')) {
+                closePrefModal();
+            }
+        }, { passive: false });
+        prefModal.addEventListener('pointerup', (e) => {
+            if (e.target === prefModal || e.target.closest('.close-modal')) {
+                e.preventDefault();
+                closePrefModal();
+            }
+        }, { passive: false });
     }
 }
 
