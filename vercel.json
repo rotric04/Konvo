@@ -62,10 +62,6 @@
       "destination": "/txt/llm-full.txt"
     },
     {
-      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
-      "destination": "/pages/$1.html"
-    },
-    {
       "source": "/(auth|login)",
       "destination": "/pages/login.html"
     },
@@ -74,16 +70,24 @@
       "destination": "/pages/onboarding.html"
     },
     {
-      "source": "/blog/(.*)",
-      "destination": "/pages/blog.html"
-    },
-    {
-      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)",
+      "source": "/(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings|diagnostics)(/.*)?",
       "destination": "/pages/app.html"
     },
     {
-      "source": "/(.*)",
-      "destination": "/$1"
+      "source": "/blog(/.*)?",
+      "destination": "/pages/blog.html"
+    },
+    {
+      "source": "/(feedback|admin_dashboard|blog|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
+      "destination": "/pages/$1.html"
+    },
+    {
+      "source": "/([A-Za-z0-9-_]+)",
+      "destination": "/pages/$1.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
     }
   ]
 }
