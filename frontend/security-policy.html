@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Security Policy | Konvo</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .policy-container {
+            max-width: 800px;
+            margin: 8rem auto;
+            padding: 3rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .policy-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .policy-section {
+            margin-bottom: 2rem;
+        }
+        .policy-section h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--accent-amber);
+            margin-bottom: 0.75rem;
+        }
+        .policy-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .policy-list {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .policy-list li {
+            margin-bottom: 0.5rem;
+        }
+        .btn-back {
+            display: block;
+            width: fit-content;
+            margin: 3rem auto 0 auto;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-teal);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .btn-back:hover {
+            background-color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-main); color: var(--text-primary);">
+    <div class="policy-container">
+        <h1 class="policy-title">Vulnerability Disclosure Policy</h1>
+        
+        <div class="policy-section">
+            <h2>Our Commitment</h2>
+            <p>We take the security of our platform and user privacy extremely seriously. We are committed to working with the security research community to identify and resolve vulnerabilities in a responsible manner.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>How to Report</h2>
+            <p>If you believe you have found a security vulnerability in our platform, please report it immediately by emailing us at <strong>security@konvo.space</strong>.</p>
+            <p>Please include a detailed description of the vulnerability, steps to reproduce it, and any potential impact. We will acknowledge receipt of your report within 48 hours.</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>Guidelines for Research</h2>
+            <p>We ask that you follow these guidelines when performing security research on our platform:</p>
+            <ul class="policy-list">
+                <li>Do not perform actions that cause service degradation or disruption (no denial of service).</li>
+                <li>Do not access, modify, or delete data belonging to other users.</li>
+                <li>Do not share details of any identified vulnerabilities publicly until they have been resolved.</li>
+                <li>Act in good faith to protect our users and system integrity.</li>
+            </ul>
+        </div>
+
+        <a href="/" class="btn-back">Return to Home Page</a>
+    </div>
+</body>
+</html>

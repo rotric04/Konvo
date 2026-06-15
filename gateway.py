@@ -120,6 +120,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
         return response
 
 app.add_middleware(SecurityHeadersMiddleware)
@@ -269,6 +273,18 @@ def get_sitemap_xml():
 @app.get("/security.txt")
 def get_security_txt():
     return FileResponse(os.path.join(_root, "frontend", "security.txt"), media_type="text/plain")
+
+@app.get("/pgp-key.txt")
+def get_pgp_key_txt():
+    return FileResponse(os.path.join(_root, "frontend", "pgp-key.txt"), media_type="text/plain")
+
+@app.get("/hall-of-fame")
+def get_hall_of_fame_html():
+    return FileResponse(os.path.join(_root, "frontend", "hall-of-fame.html"))
+
+@app.get("/security-policy")
+def get_security_policy_html():
+    return FileResponse(os.path.join(_root, "frontend", "security-policy.html"))
 
 @app.get("/llms.txt")
 def get_llms_txt():
