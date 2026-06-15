@@ -493,7 +493,7 @@ function initAuthPage() {
                     body: JSON.stringify({ email })
                 });
                 if (res) {
-                    alert("A password recovery code has been generated and printed to the server terminal.");
+                    alert("A password recovery code has been generated and sent to your email address.");
                     document.getElementById('reset-email').value = email;
                     formForgot.classList.add('hidden');
                     formReset.classList.remove('hidden');
@@ -615,7 +615,7 @@ function initAuthPage() {
                 if (res) {
                     pendingRegisterEmail = email;
                     otpModal.classList.add('active');
-                    alert("A verification code was printed to the server terminal. Enter it to activate your account.");
+                    alert("A verification code has been sent to your email address. Enter it to activate your account.");
                 }
             } catch (err) {
                 alert(`Registration failed: ${err.message}`);
