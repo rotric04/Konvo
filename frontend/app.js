@@ -389,6 +389,17 @@ function updateSidebarUser(user) {
     const idEl = document.querySelector('.user-id');
     if (nameEl) nameEl.textContent = user.profile ? user.profile.display_name : 'New Profile';
     if (idEl) idEl.textContent = user.konvo_id;
+
+    // Add Admin Panel link if admin
+    if (user.role === 'admin') {
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks && !document.getElementById('nav-admin-link')) {
+            const li = document.createElement('li');
+            li.id = 'nav-admin-link';
+            li.innerHTML = `<a href="/admin-portal-secured" target="_blank" style="color:var(--accent-amber); font-weight:600; display:flex; align-items:center; gap:0.5rem;">🛡️ Admin Portal</a>`;
+            navLinks.appendChild(li);
+        }
+    }
 }
 
 // WebSocket Live updates
@@ -1817,6 +1828,75 @@ function initAgentsPage() {
 
         const metrics = sim.match_detail_json;
 
+        // Virtual Date Locking status calculations
+        const lock_json = sim.match_detail_json || {};
+        const isLockedByMe = isUserA ? (lock_json.lock_user_a === true) : (lock_json.lock_user_b === true);
+        const isLockedByPartner = isUserA ? (lock_json.lock_user_b === true) : (lock_json.lock_user_a === true);
+        const isAdmin = currentUser && currentUser.role === 'admin';
+        const isVdUnlocked = (isLockedByMe && isLockedByPartner) || isAdmin;
+
+        let vdLockStatusText = '';
+        let vdLockBadgeColor = '';
+        let vdActionBtnText = '';
+        let vdActionBtnClass = '';
+        
+        if (isVdUnlocked) {
+            vdLockStatusText = isAdmin ? '🛡️ Admin Lock Bypass Active' : '🔓 Ready (Consented by both)';
+            vdLockBadgeColor = 'var(--accent-teal)';
+            vdActionBtnText = 'Unlock / Retract Consent';
+            vdActionBtnClass = 'btn-secondary';
+        } else if (isLockedByMe) {
+            vdLockStatusText = '🔒 Awaiting Partner Consent (You are ready)';
+            vdLockBadgeColor = 'var(--accent-indigo)';
+            vdActionBtnText = 'Unlock / Retract Consent';
+            vdActionBtnClass = 'btn-secondary';
+        } else {
+            vdLockStatusText = '🔒 Locked (Awaiting mutual consent)';
+            vdLockBadgeColor = 'var(--accent-rose)';
+            vdActionBtnText = 'Lock In Date (Signal Ready)';
+            vdActionBtnClass = 'btn-primary btn-primary-glow';
+        }
+
+        const vdPanelHtml = isExpired ? '' : `
+            <div class="card" style="margin-bottom:1.5rem; border-color:var(--border-color); background: linear-gradient(135deg, rgba(6,182,212,0.02) 0%, transparent 100%);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem;">
+                    <div>
+                        <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Interactive Virtual Date</span>
+                        <h3 style="font-size:1.15rem; font-family:var(--font-serif); margin-top:0.15rem; color:var(--accent-cyan);">3D Full-Screen Scenario Engine</h3>
+                    </div>
+                    <span style="font-family:var(--font-mono); font-size:0.7rem; color:${vdLockBadgeColor}; font-weight:600; padding:0.25rem 0.5rem; background:rgba(255,255,255,0.02); border:1px solid ${vdLockBadgeColor}; border-radius:4px;">
+                        ${vdLockStatusText}
+                    </span>
+                </div>
+                
+                <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:1.25rem; line-height:1.45;">
+                    To initiate an interactive 3D virtual date scenario, both you and your partner must click "Lock In" to grant simulation consent. This protects user nodes from unaligned automated simulations.
+                </p>
+
+                <div style="display:flex; flex-direction:column; gap:1rem;">
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <button class="btn ${vdActionBtnClass}" id="btn-toggle-vd-lock" style="font-size:0.8rem; padding:0.5rem 1.25rem; flex-shrink:0;">
+                            ${vdActionBtnText}
+                        </button>
+                        <span style="font-size:0.78rem; color:var(--text-muted); font-style:italic;">
+                            ${isVdUnlocked ? 'Consent established! Choose an environment below to launch.' : 'Awaiting mutual locking action to enable navigation.'}
+                        </span>
+                    </div>
+
+                    <div style="border-top:1px solid var(--border-color); padding-top:1rem; margin-top:0.5rem;">
+                        <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:0.75rem;">Choose WebGL Date Location</div>
+                        <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:0.5rem;" class="cockpit-env-tags">
+                            <button class="btn ${isVdUnlocked ? 'btn-secondary' : 'btn-secondary disabled'}" ${isVdUnlocked ? '' : 'disabled'} style="font-size:0.72rem; padding:0.5rem 0.25rem; text-align:center;" data-open-vdate="rooftop" data-partner-name="${sim.partner_name}">🌃 Rooftop</button>
+                            <button class="btn ${isVdUnlocked ? 'btn-secondary' : 'btn-secondary disabled'}" ${isVdUnlocked ? '' : 'disabled'} style="font-size:0.72rem; padding:0.5rem 0.25rem; text-align:center;" data-open-vdate="cafe" data-partner-name="${sim.partner_name}">☕ Café</button>
+                            <button class="btn ${isVdUnlocked ? 'btn-secondary' : 'btn-secondary disabled'}" ${isVdUnlocked ? '' : 'disabled'} style="font-size:0.72rem; padding:0.5rem 0.25rem; text-align:center;" data-open-vdate="gallery" data-partner-name="${sim.partner_name}">🖼️ Gallery</button>
+                            <button class="btn ${isVdUnlocked ? 'btn-secondary' : 'btn-secondary disabled'}" ${isVdUnlocked ? '' : 'disabled'} style="font-size:0.72rem; padding:0.5rem 0.25rem; text-align:center;" data-open-vdate="forest" data-partner-name="${sim.partner_name}">🌲 Forest</button>
+                            <button class="btn ${isVdUnlocked ? 'btn-secondary' : 'btn-secondary disabled'}" ${isVdUnlocked ? '' : 'disabled'} style="font-size:0.72rem; padding:0.5rem 0.25rem; text-align:center;" data-open-vdate="beach" data-partner-name="${sim.partner_name}">🏖️ Beach</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         simDetailBox.innerHTML = `
             ${statusHtml}
             
@@ -1851,6 +1931,8 @@ function initAgentsPage() {
                 </div>
             </div>
 
+            ${vdPanelHtml}
+
             <h4 style="font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase; color:var(--text-secondary); margin-bottom:0.5rem;">Dialogue Transcript Log</h4>
             <div style="border:1px solid var(--border-color); border-radius:6px; padding:1rem; height:200px; overflow-y:auto; background-color:#060608;" id="sim-text-logs-container">
             </div>
@@ -1881,6 +1963,22 @@ function initAgentsPage() {
         if (myApp === 'pending' && !isExpired) {
             document.getElementById('btn-approve-sim').addEventListener('click', () => handleApproval('approved'));
             document.getElementById('btn-decline-sim').addEventListener('click', () => handleApproval('declined'));
+        }
+
+        // Wire up toggle lock button
+        const lockBtn = document.getElementById('btn-toggle-vd-lock');
+        if (lockBtn && !isExpired) {
+            lockBtn.addEventListener('click', async () => {
+                try {
+                    const updatedSim = await apiFetch(`/api/agents/simulations/${sim.id}/lock`, {
+                        method: 'POST'
+                    });
+                    loadSimulationsHistory();
+                    renderSimulationDetails(updatedSim);
+                } catch (err) {
+                    alert(`Failed toggling date lock: ${err.message}`);
+                }
+            });
         }
 
         // Animate date stage modal trigger
@@ -2069,18 +2167,15 @@ function initChatWorkspace() {
     // Load matches where BOTH humans have approved
     async function loadMatches() {
         try {
+            // Load matches
             const sims = await apiFetch('/api/agents/simulations');
             contactsList.innerHTML = '';
-            
-            // Filter matches where both approved
-            const matches = sims.filter(s => s.approval_user_a === 'approved' && s.approval_user_b === 'approved');
-            
-            // Check if user has taken assessment
             const user = currentUser;
             const incompleteWarn = document.getElementById('incomplete-assessment-warning');
             const mainConsole = document.getElementById('main-console-content');
+            const isAdmin = user.role === 'admin';
             
-            if (!user.profile || !user.profile.mbti_summary) {
+            if ((!user.profile || !user.profile.mbti_summary) && !isAdmin) {
                 if (incompleteWarn) incompleteWarn.classList.remove('hidden');
                 if (mainConsole) mainConsole.classList.add('hidden');
                 return;
@@ -2089,12 +2184,12 @@ function initChatWorkspace() {
                 if (mainConsole) mainConsole.classList.remove('hidden');
             }
 
-            if (matches.length === 0) {
-                contactsList.innerHTML = `<div style="color: var(--text-muted); font-size: 0.75rem; font-style: italic;">No approved matches unlocked. Visit Simulated Dates to review.</div>`;
+            if (sims.length === 0) {
+                contactsList.innerHTML = `<div style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">No approved matches unlocked. Visit Simulated Dates to review.</div>`;
                 return;
             }
 
-            matches.forEach(match => {
+            sims.forEach(match => {
                 const item = document.createElement('div');
                 item.style.padding = '0.5rem 0.75rem';
                 item.style.border = '1px solid var(--border-color)';
@@ -2104,11 +2199,19 @@ function initChatWorkspace() {
                 item.style.backgroundColor = chatPartnerId === match.user_a_id || chatPartnerId === match.user_b_id ? 'rgba(79, 70, 229, 0.05)' : 'transparent';
                 
                 const partner_id = match.user_a_id === currentUser.id ? match.user_b_id : match.user_a_id;
+                const isApproved = (match.approval_user_a === 'approved' && match.approval_user_b === 'approved') || isAdmin;
                 
+                let badgeHtml = '';
+                if (!isApproved) {
+                    badgeHtml = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-rose); border:1px solid rgba(225,29,72,0.3); border-radius:3px; padding:0.05rem 0.25rem; background:rgba(225,29,72,0.02);">🔒 Locked</span>`;
+                } else {
+                    badgeHtml = `<span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted);">${match.partner_konvo_id}</span>`;
+                }
+
                 item.innerHTML = `
-                    <div style="font-weight:600; font-size:0.85rem; display:flex; justify-content:space-between;">
+                    <div style="font-weight:600; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;">
                         <span>${match.partner_name}</span>
-                        <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted);">${match.partner_konvo_id}</span>
+                        ${badgeHtml}
                     </div>
                 `;
                 
@@ -2116,7 +2219,24 @@ function initChatWorkspace() {
                     chatPartnerId = partner_id;
                     document.querySelectorAll('#chat-contacts-list div, #matched-contacts-list div').forEach(el => el.style.backgroundColor = 'transparent');
                     item.style.backgroundColor = 'rgba(79, 70, 229, 0.05)';
-                    openDirectChat(match, partner_id);
+                    
+                    if (!isApproved) {
+                        // Show beautiful lock screen in chat pane
+                        chatWorkspace.innerHTML = `
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:3rem; text-align:center; background:radial-gradient(circle at 50% 30%, rgba(225,29,72,0.02) 0%, var(--bg-base) 80%);">
+                                <div style="font-size:3.5rem; margin-bottom:1.5rem;">🔒</div>
+                                <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--accent-rose); margin-bottom:0.75rem;">Direct Conversation Locked</h3>
+                                <p style="color:var(--text-secondary); max-width:460px; font-size:0.9rem; line-height:1.6; margin-bottom:2rem;">
+                                    Direct cryptographic chat routes require mutual human approval of the AI Twin simulated date logs first.
+                                </p>
+                                <a href="/agents" class="btn btn-primary" style="text-decoration:none;" onclick="event.preventDefault(); window.history.pushState(null, null, '/agents'); window.handleRouting('/profile');">
+                                    Review & Approve Simulated Dates →
+                                </a>
+                            </div>
+                        `;
+                    } else {
+                        openDirectChat(match, partner_id);
+                    }
                 });
                 
                 contactsList.appendChild(item);
@@ -3666,7 +3786,10 @@ function handleRouting(path) {
     // Determine active view container ID
     let activeViewId = 'view-discover-deck'; // Default
     
-    if (currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary)) {
+    const isProfileIncomplete = currentUser && (!currentUser.profile || !currentUser.profile.mbti_summary);
+    const isAdmin = currentUser && currentUser.role === 'admin';
+    
+    if (isProfileIncomplete && !isAdmin) {
         activeViewId = 'view-profile';
     } else {
         if (path.includes('/discover')) {
@@ -6550,11 +6673,90 @@ function initAgentLivePreview() {
     setTimeout(addMessage, 800);
 }
 
+// ----------------- COOKIE CONSENT BANNER & PREFERENCES -----------------
+function initCookieConsent() {
+    const banner = document.getElementById('cookie-consent-banner');
+    const btnAcceptAll = document.getElementById('btn-cookie-accept-all');
+    const btnPreferences = document.getElementById('btn-cookie-preferences');
+    const prefModal = document.getElementById('cookie-preferences-modal');
+    const btnSavePrefs = document.getElementById('btn-cookie-save-prefs');
+    
+    if (!banner) return;
+    
+    // Check if user already accepted cookies
+    const accepted = localStorage.getItem('konvo_cookies_accepted');
+    if (!accepted) {
+        setTimeout(() => {
+            banner.classList.add('active');
+        }, 1500);
+    }
+    
+    if (btnAcceptAll) {
+        btnAcceptAll.addEventListener('click', () => {
+            localStorage.setItem('konvo_cookies_accepted', 'all');
+            localStorage.setItem('konvo_cookies_analytics', 'true');
+            localStorage.setItem('konvo_cookies_functional', 'true');
+            banner.classList.remove('active');
+        });
+    }
+    
+    if (btnPreferences) {
+        btnPreferences.addEventListener('click', () => {
+            if (prefModal) prefModal.classList.add('active');
+        });
+    }
+    
+    if (btnSavePrefs) {
+        btnSavePrefs.addEventListener('click', () => {
+            const analytics = document.getElementById('cookie-pref-analytics')?.checked ? 'true' : 'false';
+            const functional = document.getElementById('cookie-pref-functional')?.checked ? 'true' : 'false';
+            localStorage.setItem('konvo_cookies_accepted', 'custom');
+            localStorage.setItem('konvo_cookies_analytics', analytics);
+            localStorage.setItem('konvo_cookies_functional', functional);
+            if (prefModal) prefModal.classList.remove('active');
+            banner.classList.remove('active');
+        });
+    }
+}
+
+// ----------------- INTERACTIVE USER GUIDE -----------------
+function initUserGuideTabs() {
+    const tabButtons = document.querySelectorAll('.guide-tabs button');
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active from other buttons
+            tabButtons.forEach(b => b.classList.remove('active'));
+            // Add active to current
+            btn.classList.add('active');
+            
+            // Hide all content panes
+            document.querySelectorAll('.guide-content-pane').forEach(pane => {
+                pane.classList.add('hidden');
+                pane.style.display = 'none';
+            });
+            
+            // Show corresponding content pane
+            const targetId = btn.dataset.guideTab;
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) {
+                targetPane.classList.remove('hidden');
+                targetPane.style.display = 'block';
+                // Trigger subtle fade-in animation
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(targetPane, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35 });
+                }
+            }
+        });
+    });
+}
+
 // ----------------- ROOT INTERCEPT ROUTER -----------------
 async function initApp() {
     injectFooter();
     initScrollReveal();
     setupModalClosers();
+    initCookieConsent();
+    initUserGuideTabs();
 
     // GSAP Modal Animation Observer
     if (typeof gsap !== 'undefined') {
@@ -6665,7 +6867,9 @@ async function initApp() {
         if (authLayout) authLayout.classList.remove('hidden');
         if (unauthLayout) unauthLayout.classList.add('hidden');
         initSPALinks();
-        if (!currentUser.profile || !currentUser.profile.mbti_summary) {
+        const isProfileIncomplete = !currentUser.profile || !currentUser.profile.mbti_summary;
+        const isAdmin = currentUser.role === 'admin';
+        if (isProfileIncomplete && !isAdmin) {
             window.history.pushState(null, null, '/profile');
             handleRouting('/profile');
         } else {

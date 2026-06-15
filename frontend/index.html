@@ -1646,6 +1646,84 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Interactive User Guide -->
+                <div style="margin-top: 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2.25rem;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.05em;">Interactive Walkthrough</span>
+                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">In-Depth Platform Protocol Guide</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; max-width: 500px; margin: 0.5rem auto 0 auto;">Select a protocol phase below to examine detailed instructions, workflows, and operational requirements.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 240px 1fr; gap: 2rem;" class="grid-2col-responsive">
+                        <!-- Navigation Guide Tabs -->
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;" class="guide-tabs">
+                            <button class="btn btn-secondary active" data-guide-tab="guide-calibration" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                                <span>🧬</span> Phase 1: Calibration
+                            </button>
+                            <button class="btn btn-secondary" data-guide-tab="guide-twin" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                                <span>🤖</span> Phase 2: Twin Synthesis
+                            </button>
+                            <button class="btn btn-secondary" data-guide-tab="guide-locking" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                                <span>🔒</span> Phase 3: Double-Lock
+                            </button>
+                            <button class="btn btn-secondary" data-guide-tab="guide-virtual" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                                <span>🌌</span> Phase 4: Virtual Dates
+                            </button>
+                            <button class="btn btn-secondary" data-guide-tab="guide-chat" style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                                <span>💬</span> Phase 5: Secure Chat
+                            </button>
+                        </div>
+
+                        <!-- Guide Content Panel -->
+                        <div style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.75rem; position: relative; min-height: 260px;">
+                            <!-- Calibration Guide -->
+                            <div id="guide-calibration" class="guide-content-pane">
+                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Behavioral Audit & Onboarding Calibration</h4>
+                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">The journey begins with our 3-Stage Cognitive Calibration Wizard. Instead of basic profile tags, you will define your communication style, conflict-resolution preferences, and outline your lifestyle interests in raw natural language prompts.</p>
+                                <div style="background-color: rgba(13,148,136,0.04); border-left: 2px solid var(--accent-teal); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    📝 <strong>System Requirement:</strong> All 3 onboarding stages (including custom text fields) must be complete to feed the Gemini NLP compatibility parsing engines and generate your initial identity registry node.
+                                </div>
+                            </div>
+
+                            <!-- Twin Synthesis Guide -->
+                            <div id="guide-twin" class="guide-content-pane hidden" style="display: none;">
+                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">AI Twin Representation Synthesis</h4>
+                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Based on your NLP assessment, the platform compiles your digital representative. The system uses background generative networks to build customized 3D vector avatar graphics and behavioral templates describing your archetype (e.g. "The Strategist").</p>
+                                <div style="background-color: rgba(79,70,229,0.04); border-left: 2px solid var(--accent-indigo); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    ⚡ <strong>Asynchronous Process:</strong> A background worker generates your profile avatar via the fal.ai API or Gemini SVG parser, notifying your dashboard through client-side WebSockets upon completion.
+                                </div>
+                            </div>
+
+                            <!-- Double-Lock Guide -->
+                            <div id="guide-locking" class="guide-content-pane hidden" style="display: none;">
+                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Double-Lock Security & Mutual Consent</h4>
+                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Safety and consent are paramount. To prevent arbitrary interactions and spam, every feature operates on a mutual approval basis. When your twin matches with someone, compatibility simulated date logs are generated for review.</p>
+                                <div style="background-color: rgba(217,119,6,0.04); border-left: 2px solid var(--accent-amber); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    🔒 <strong>Locked State:</strong> Both direct chat and the interactive 3D virtual dates start as **LOCKED**. You must click "Approve Simulated Date" and "Lock In Date (Signal Ready)" before features are unlocked.
+                                </div>
+                            </div>
+
+                            <!-- Virtual Dates Guide -->
+                            <div id="guide-virtual" class="guide-content-pane hidden" style="display: none;">
+                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Interactive 3D Virtual Dates Scenario Engine</h4>
+                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">Once both nodes lock in their ready status, the 3D full-screen interactive story engine becomes active. You and your match can enter WebGL environments (Rooftop, Cafe, Forest, Gallery) and go through simulated scenarios, answering questions and building affinity.</p>
+                                <div style="background-color: rgba(6,182,212,0.04); border-left: 2px solid var(--accent-cyan); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    🌃 <strong>Interactive Scenarios:</strong> Choose dialogue options and prompts to see real-time shifts in your "Date Vibe" metrics meter.
+                                </div>
+                            </div>
+
+                            <!-- Secure Chat Guide -->
+                            <div id="guide-chat" class="guide-content-pane hidden" style="display: none;">
+                                <h4 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">Secure Cryptographic Direct Human Chat</h4>
+                                <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">After mutual human approval of simulated logs is established, a secure communication tunnel opens. You can now chat directly with your match. All messages are encrypted in transit and at rest using AES-256-GCM.</p>
+                                <div style="background-color: rgba(16,185,129,0.04); border-left: 2px solid var(--success); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                                    🛡️ <strong>Privacy Standard:</strong> Conversations are end-to-end encrypted. Even platform administrators cannot decrypt your message histories.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Dashboard 2-Column: Calibration & Synergy Cockpit vs Sandbox Simulation -->
@@ -2257,7 +2335,16 @@
                     <label for="reg-phone">Phone Number (OTP Verification)</label>
                     <input type="tel" id="reg-phone" required placeholder="e.g. +16175550192">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Register Profile</button>
+                <div style="margin: 1.25rem 0; display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.78rem; color: var(--text-secondary);">
+                    <input type="checkbox" id="reg-agree-terms" style="margin-top: 0.15rem;" required>
+                    <label for="reg-agree-terms" style="line-height: 1.45;">
+                        I have read and agree to the 
+                        <a href="#" onclick="document.getElementById('tos-modal').classList.add('active'); return false;" style="color: var(--accent-teal); text-decoration: underline;">Terms of Service</a> 
+                        and 
+                        <a href="#" onclick="document.getElementById('privacy-modal').classList.add('active'); return false;" style="color: var(--accent-teal); text-decoration: underline;">Privacy Policy</a>.
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register Profile</button>
             </form>
         </div>
     </div>
@@ -2600,6 +2687,9 @@
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">We follow a responsible disclosure policy. Security researchers who discover vulnerabilities should report them privately. We commit to acknowledging reports within 48 hours and providing remediation timelines. We do not pursue legal action against good-faith security researchers.</p>
                 <h4 style="font-family: var(--font-display); font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-rose);">Sandbox Isolation</h4>
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0;">All AI Twin interactions run in ephemeral, isolated sandbox containers. Containers are destroyed after each session and have no persistent network access outside the compatibility scoring API. Sandbox environments undergo automated security scanning before every deployment.</p>
+            </div>
+        </div>
+    </div>
     <!-- DIGIPIN Helper Modal -->
     <div class="modal" id="digipin-helper-modal">
         <div class="modal-content" style="max-width: 500px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px;">
@@ -2621,6 +2711,57 @@
             <div style="display: flex; gap: 1rem;">
                 <button type="button" class="btn btn-secondary" id="btn-digipin-modal-cancel" style="flex: 1;">Cancel</button>
                 <a href="https://dac.indiapost.gov.in/mydigipin/home/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="flex: 2; text-align: center; display: inline-block; line-height: 1.2; text-decoration: none;">Open DIGIPIN Portal ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="cookie-banner-container">
+        <div class="cookie-banner-content">
+            <div class="cookie-banner-text">
+                <h3>🍪 Cookie & Privacy Protocol</h3>
+                <p>We use essential cookies for session cryptography and state integrity. By continuing, you agree to our <a href="#" onclick="document.getElementById('tos-modal').classList.add('active'); return false;">Terms of Service</a> and <a href="#" onclick="document.getElementById('privacy-modal').classList.add('active'); return false;">Privacy Policy</a>.</p>
+            </div>
+            <div class="cookie-banner-actions">
+                <button class="btn btn-secondary" id="btn-cookie-preferences" style="font-size: 0.8rem; padding: 0.5rem 1rem;">Manage Preferences</button>
+                <button class="btn btn-primary btn-primary-glow" id="btn-cookie-accept-all" style="font-size: 0.8rem; padding: 0.5rem 1.25rem;">Accept All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Preferences Modal -->
+    <div class="modal" id="cookie-preferences-modal">
+        <div class="modal-content" style="max-width: 500px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0; color: var(--text-primary);">Cookie Settings</h3>
+                <button type="button" class="close-modal" onclick="document.getElementById('cookie-preferences-modal').classList.remove('active')" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                    <div>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Essential Cryptographic Cookies</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Required for JWT authentication and session state preservation. Cannot be disabled.</p>
+                    </div>
+                    <input type="checkbox" checked disabled style="margin-top: 0.2rem;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                    <div>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Observability & Analytics</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Enables PostHog telemetry and Sentry exception logs to debug errors.</p>
+                    </div>
+                    <input type="checkbox" id="cookie-pref-analytics" checked style="margin-top: 0.2rem;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                    <div>
+                        <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem;">Functional Performance</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">Stores theme settings and map view coordinates locally.</p>
+                    </div>
+                    <input type="checkbox" id="cookie-pref-functional" checked style="margin-top: 0.2rem;">
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('cookie-preferences-modal').classList.remove('active')" style="flex: 1;">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btn-cookie-save-prefs" style="flex: 1.5; text-align: center;">Save Preferences</button>
             </div>
         </div>
     </div>

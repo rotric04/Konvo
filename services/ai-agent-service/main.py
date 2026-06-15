@@ -187,6 +187,57 @@ def approve_simulation(
     partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
     partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
     partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
+    return {
+        "id": sim.id,
+        "user_a_id": sim.user_a_id,
+        "user_b_id": sim.user_b_id,
+        "environment": sim.environment,
+        "dialogue_log": sim.dialogue_log,
+        "overall_compatibility": sim.overall_compatibility,
+        "match_detail_json": sim.match_detail_json,
+        "approval_user_a": sim.approval_user_a,
+        "approval_user_b": sim.approval_user_b,
+        "created_at": sim.created_at,
+        "partner_name": partner_name,
+        "partner_konvo_id": partner_konvo_id,
+        "partner_avatar": partner_avatar
+    }
+
+@app.post("/api/agents/simulations/{sim_id}/lock", response_model=schemas.DateSimulationResponse)
+def toggle_simulation_lock(
+    sim_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    sim = db.query(models.AgentDateSimulation).filter(
+        models.AgentDateSimulation.id == sim_id,
+        ((models.AgentDateSimulation.user_a_id == current_user.id) | (models.AgentDateSimulation.user_b_id == current_user.id))
+    ).first()
+    if not sim:
+        raise HTTPException(status_code=404, detail="Date simulation not found.")
+        
+    if sim.match_detail_json is None:
+        sim.match_detail_json = {}
+        
+    # Toggle locking state
+    if sim.user_a_id == current_user.id:
+        current_lock = sim.match_detail_json.get("lock_user_a", False)
+        sim.match_detail_json["lock_user_a"] = not current_lock
+    else:
+        current_lock = sim.match_detail_json.get("lock_user_b", False)
+        sim.match_detail_json["lock_user_b"] = not current_lock
+        
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(sim, "match_detail_json")
+    
+    db.commit()
+    db.refresh(sim)
+    
+    partner_id = sim.user_b_id if sim.user_a_id == current_user.id else sim.user_a_id
+    partner = db.query(models.User).filter(models.User.id == partner_id).first()
+    partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
+    partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
+    partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
     
     return {
         "id": sim.id,
@@ -203,3 +254,4 @@ def approve_simulation(
         "partner_konvo_id": partner_konvo_id,
         "partner_avatar": partner_avatar
     }
+
