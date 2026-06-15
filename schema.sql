@@ -233,6 +233,7 @@ ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feedback_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE communities ENABLE ROW LEVEL SECURITY;
 
 
 -- 4. Create RLS Policies
@@ -314,3 +315,10 @@ CREATE POLICY feedback_insert_all ON feedback_entries
 
 CREATE POLICY feedback_read_admin ON feedback_entries 
     FOR SELECT USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
+
+-- Communities Policies
+CREATE POLICY communities_read_all ON communities 
+    FOR SELECT USING (true);
+
+CREATE POLICY communities_admin_all ON communities 
+    FOR ALL USING (EXISTS (SELECT 1 FROM users WHERE id::text = auth.uid()::text AND role = 'admin'));
