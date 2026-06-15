@@ -21,7 +21,6 @@ from argon2 import PasswordHasher
 ph = PasswordHasher()
 
 from resend_client import resend_client
-from linotp_client import linotp_client
 
 import secrets
 
@@ -98,12 +97,8 @@ def verify_user_otp(db: Session, email: str, otp_code: str) -> bool:
     if not user:
         return False
         
-    # Check via LinOTP client if configured, otherwise fall back to local database comparison
-    is_valid = False
-    if os.getenv("LINOTP_API_URL"):
-        is_valid = linotp_client.validate_otp(email, otp_code)
-    else:
-        is_valid = (user.otp_code == otp_code)
+    # Check against database stored OTP code
+    is_valid = (user.otp_code == otp_code)
         
     if is_valid:
         user.otp_verified = True

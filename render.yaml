@@ -36,8 +36,6 @@ services:
         sync: false # Set securely in Render dashboard
       - key: RESEND_API_KEY
         sync: false # Set securely in Render dashboard
-      - key: LINOTP_API_URL
-        sync: false # Set securely in Render dashboard
 
 databases:
   - name: konvo-db
