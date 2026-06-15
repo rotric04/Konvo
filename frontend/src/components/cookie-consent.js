@@ -9,14 +9,11 @@
 (function () {
     const STORAGE_KEY = 'konvo_cookie_consent';
 
-    // If preference is already saved, do not show the banner
-    if (localStorage.getItem(STORAGE_KEY)) {
-        return;
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         injectStyles();
-        showBanner();
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            showBanner();
+        }
     });
 
     function injectStyles() {
