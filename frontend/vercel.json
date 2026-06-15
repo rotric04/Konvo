@@ -49,12 +49,16 @@
       "destination": "/:path*"
     },
     {
-      "source": "/:file(robots\\.txt|security\\.txt|pgp-key\\.txt|llms\\.txt|llm-full\\.txt)",
+      "source": "/:file(robots\\.txt|security\\.txt|pgp-key\\.txt|llms\\.txt|llm-full\\.txt|agents\\.json)",
       "destination": "/txt/:file"
     },
     {
       "source": "/\\.well-known/security.txt",
       "destination": "/txt/security.txt"
+    },
+    {
+      "source": "/\\.well-known/agents.json",
+      "destination": "/txt/agents.json"
     },
     {
       "source": "/llms-full.txt",

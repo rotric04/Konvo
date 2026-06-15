@@ -291,12 +291,7 @@
     <!-- Sticky Header -->
     <header class="policy-header">
         <a href="/" class="policy-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:26px;height:26px;">
-                <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-primary,rgba(255,255,255,0.15))" stroke-width="2" stroke-dasharray="4 4"/>
-                <circle cx="32" cy="50" r="12" fill="var(--accent-teal,#14b8a6)" opacity="0.85"/>
-                <circle cx="68" cy="50" r="12" fill="var(--accent-indigo,#6366f1)" opacity="0.85"/>
-            </svg>
-            KONVO
+            <img src="/logo_dark.svg" alt="Konvo Logo" class="konvo-logo-img" style="height: 28px; display: block;">
         </a>
         <nav class="policy-nav">
             <button id="btn-theme-toggle" onclick="(function(){const t=document.documentElement.getAttribute('data-theme')||'dark';const n=t==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('konvo_theme',n);})()">🌓 Theme</button>
@@ -336,7 +331,7 @@
                     <div class="flow-step">
                         <div class="flow-step-num">1</div>
                         <div class="flow-step-content">
-                            <h4>Authentication (OTP + Hash)</h4>
+                            <h3>Authentication (OTP + Hash)</h3>
                             <p>Your password is hashed with Argon2. Identity verified via Resend API OTP. Session tokens stored in Redis with TTL. Hacker-proof, and also hacker-bored.</p>
                         </div>
                     </div>
@@ -344,7 +339,7 @@
                     <div class="flow-step">
                         <div class="flow-step-num">2</div>
                         <div class="flow-step-content">
-                            <h4>Cognitive Calibration (Gemini AI Engine)</h4>
+                            <h3>Cognitive Calibration (Gemini AI Engine)</h3>
                             <p>Gemini presents dynamic scenarios & philosophical tradeoffs. Measures response latency & writing style. It's like a personality test that doesn't feel like one.</p>
                         </div>
                     </div>
@@ -352,7 +347,7 @@
                     <div class="flow-step">
                         <div class="flow-step-num">3</div>
                         <div class="flow-step-content">
-                            <h4>128-Dimensional Vector Synthesis</h4>
+                            <h3>128-Dimensional Vector Synthesis</h3>
                             <p>Your responses are converted to 8 domain matrices of 128 floats each. Raw text answers are immediately discarded. You are now beautiful mathematics.</p>
                         </div>
                     </div>
@@ -360,7 +355,7 @@
                     <div class="flow-step">
                         <div class="flow-step-num">4</div>
                         <div class="flow-step-content">
-                            <h4>Cognitive Twin Activation (Sandbox)</h4>
+                            <h3>Cognitive Twin Activation (Sandbox)</h3>
                             <p>Your AI Agent Twin enters the global resonance grid and negotiates virtual dates inside secure, isolated, private sandbox instances. No raw identity exposed.</p>
                         </div>
                     </div>
@@ -368,7 +363,7 @@
                     <div class="flow-step">
                         <div class="flow-step-num">5</div>
                         <div class="flow-step-content">
-                            <h4>Mutual Human Alignment</h4>
+                            <h3>Mutual Human Alignment</h3>
                             <p>Only when both twins report compatibility &gt; 60% do we unlock direct human chat. No awkward intros. The math did the hard work already.</p>
                         </div>
                     </div>

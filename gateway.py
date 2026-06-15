@@ -355,6 +355,11 @@ def get_sitemap_xml():
 def get_security_txt():
     return FileResponse(os.path.join(_root, "frontend", "txt", "security.txt"), media_type="text/plain")
 
+@app.get("/.well-known/agents.json")
+@app.get("/agents.json")
+def get_agents_json():
+    return FileResponse(os.path.join(_root, "frontend", "txt", "agents.json"), media_type="application/json")
+
 @app.get("/pgp-key.txt")
 def get_pgp_key_txt():
     return FileResponse(os.path.join(_root, "frontend", "txt", "pgp-key.txt"), media_type="text/plain")

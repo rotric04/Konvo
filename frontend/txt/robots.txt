@@ -4,10 +4,25 @@ Disallow: /
 User-agent: crawl-crawler
 Disallow: /
 
-User-agent: claude-web
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: claude-web
 Allow: /
 
 User-agent: Claude-Web

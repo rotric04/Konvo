@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "name": "Konvo",
+  "description": "Sovereign behavioral representation and compatibility-first human connections on the world's first agent-based dating network.",
+  "capabilities": ["search", "contact"],
+  "contact": "admin@konvo.space"
+}
