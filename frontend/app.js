@@ -2764,7 +2764,9 @@ function initChatWorkspace() {
     loadMatches();
 }
 
-// ─── Mobile-safe body scroll lock helpers ───────────────────────────────────
+// ─── Body scroll lock — single MutationObserver is the sole controller ───────
+// IMPORTANT: Do NOT call lockBodyScroll/unlockBodyScroll manually in other
+// places. The MutationObserver in setupModalClosers is the only authority.
 let _scrollLockCount = 0;
 let _savedScrollY = 0;
 
@@ -2783,69 +2785,77 @@ function unlockBodyScroll() {
     if (_scrollLockCount === 0) {
         document.body.classList.remove('modal-open');
         document.documentElement.style.removeProperty('--scroll-y');
-        document.body.style.removeProperty('top');
-        document.body.style.removeProperty('position');
         window.scrollTo(0, _savedScrollY);
     }
 }
 
 // Close Modal helper
 function setupModalClosers() {
+
+    // The single function to close a modal.
+    // Does NOT call unlockBodyScroll — the MutationObserver below is the
+    // only place that calls it, preventing the double-decrement bug.
     function closeModal(m) {
         if (m.id === 'quiz-modal' && typeof currentUser !== 'undefined' && currentUser &&
             (!currentUser.profile || !currentUser.profile.mbti_summary)) {
-            return; // Prevent closing onboarding quiz
+            return; // Onboarding quiz cannot be skipped
         }
         m.classList.remove('active');
-        unlockBodyScroll();
         if (m.id === 'demo-modal' && typeof demoSimInterval !== 'undefined' && demoSimInterval) {
             clearInterval(demoSimInterval);
             demoSimInterval = null;
         }
     }
 
+    // Click-only delegation on each modal overlay.
+    // We do NOT use pointerup here because:
+    //   - pointerup with e.preventDefault() suppresses subsequent click events
+    //     in iOS Safari, which breaks inline onclick handlers on close buttons
+    //   - passive:false on inner elements causes laggy checkboxes / inputs
     document.querySelectorAll('.modal').forEach(m => {
-        // Use touchend+click delegation with passive:false to prevent scroll bleed
-        function handleClose(e) {
-            if (e.target === m || e.target.closest('.close-modal')) {
-                e.preventDefault();
+        m.addEventListener('click', (e) => {
+            // Close when clicking the dark backdrop (outside modal-content)
+            if (e.target === m) {
                 closeModal(m);
+                return;
             }
-        }
-        m.addEventListener('click', handleClose, { passive: false });
-        // Pointer events cover both mouse and touch simultaneously
-        m.addEventListener('pointerup', (e) => {
-            if (e.target === m || e.target.closest('.close-modal')) {
-                e.preventDefault();
+            // Close when any .close-modal button is clicked anywhere inside
+            if (e.target.closest('.close-modal')) {
                 closeModal(m);
-            }
-        }, { passive: false });
-    });
-
-    // Lock scroll when modal opens (observe class changes via MutationObserver)
-    const scrollLockObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-                const target = mutation.target;
-                if (!target.classList.contains('modal')) return;
-                if (target.classList.contains('active')) {
-                    lockBodyScroll();
-                } else {
-                    unlockBodyScroll();
-                }
             }
         });
     });
-    document.querySelectorAll('.modal').forEach(m => {
-        scrollLockObserver.observe(m, { attributes: true, attributeFilter: ['class'] });
+
+    // MutationObserver is the single authority for body scroll lock.
+    // It observes class changes and calls lock/unlock exactly once per event.
+    const scrollLockObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName !== 'class') return;
+            const target = mutation.target;
+            // Only act on elements that have the .modal class
+            if (!target.classList.contains('modal')) return;
+            const wasActive = mutation.oldValue ? mutation.oldValue.split(' ').includes('active') : false;
+            const isActive = target.classList.contains('active');
+            if (isActive && !wasActive) {
+                lockBodyScroll();
+            } else if (!isActive && wasActive) {
+                unlockBodyScroll();
+            }
+        });
     });
 
-    // Global ESC key modal closer
+    document.querySelectorAll('.modal').forEach(m => {
+        scrollLockObserver.observe(m, {
+            attributes: true,
+            attributeFilter: ['class'],
+            attributeOldValue: true   // needed to diff old vs new class list
+        });
+    });
+
+    // Global ESC key — close all active modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal.active').forEach(m => {
-                closeModal(m);
-            });
+            document.querySelectorAll('.modal.active').forEach(m => closeModal(m));
         }
     });
 }
@@ -6978,17 +6988,15 @@ function initCookieConsent() {
     const btnPreferences = document.getElementById('btn-cookie-preferences');
     const prefModal = document.getElementById('cookie-preferences-modal');
     const btnSavePrefs = document.getElementById('btn-cookie-save-prefs');
-    
+
     if (!banner) return;
-    
-    // Check if user already accepted cookies
-    const accepted = localStorage.getItem('konvo_cookies_accepted');
-    if (!accepted) {
-        setTimeout(() => {
-            banner.classList.add('active');
-        }, 1500);
+
+    // Show banner if user hasn't accepted yet
+    if (!localStorage.getItem('konvo_cookies_accepted')) {
+        setTimeout(() => { banner.classList.add('active'); }, 1500);
     }
-    
+
+    // Accept all — just dismiss the banner, no modal involved
     if (btnAcceptAll) {
         btnAcceptAll.addEventListener('click', () => {
             localStorage.setItem('konvo_cookies_accepted', 'all');
@@ -6998,25 +7006,18 @@ function initCookieConsent() {
         });
     }
 
-    function openPrefModal() {
-        if (prefModal) {
-            prefModal.classList.add('active');
-            lockBodyScroll();
-        }
+    // "Manage Preferences" — open the modal by adding .active
+    // setupModalClosers() handles closing it (X, backdrop, ESC) and all scroll locking.
+    // We do NOT call lockBodyScroll() here; the MutationObserver in setupModalClosers
+    // fires the moment .active is added to the modal.
+    if (btnPreferences) {
+        btnPreferences.addEventListener('click', () => {
+            if (prefModal) prefModal.classList.add('active');
+        });
     }
 
-    function closePrefModal() {
-        if (prefModal && prefModal.classList.contains('active')) {
-            prefModal.classList.remove('active');
-            unlockBodyScroll();
-        }
-    }
-    
-    if (btnPreferences) {
-        btnPreferences.addEventListener('click', openPrefModal);
-        btnPreferences.addEventListener('touchend', (e) => { e.preventDefault(); openPrefModal(); }, { passive: false });
-    }
-    
+    // Save Preferences — read checkboxes, persist, then close modal.
+    // We remove .active directly; MutationObserver fires unlockBodyScroll automatically.
     if (btnSavePrefs) {
         btnSavePrefs.addEventListener('click', () => {
             const analytics = document.getElementById('cookie-pref-analytics')?.checked ? 'true' : 'false';
@@ -7024,26 +7025,14 @@ function initCookieConsent() {
             localStorage.setItem('konvo_cookies_accepted', 'custom');
             localStorage.setItem('konvo_cookies_analytics', analytics);
             localStorage.setItem('konvo_cookies_functional', functional);
-            closePrefModal();
+            if (prefModal) prefModal.classList.remove('active');
             banner.classList.remove('active');
         });
     }
 
-    // Wire up inline-onclick close buttons on the cookie pref modal too
-    if (prefModal) {
-        prefModal.addEventListener('click', (e) => {
-            if (e.target === prefModal || e.target.closest('.close-modal') ||
-                e.target.closest('[onclick*="cookie-preferences-modal"]')) {
-                closePrefModal();
-            }
-        }, { passive: false });
-        prefModal.addEventListener('pointerup', (e) => {
-            if (e.target === prefModal || e.target.closest('.close-modal')) {
-                e.preventDefault();
-                closePrefModal();
-            }
-        }, { passive: false });
-    }
+    // NOTE: The X button and Cancel button in the HTML use inline onclick to remove .active.
+    // setupModalClosers() ALSO handles them via .close-modal class + backdrop click.
+    // No extra JS listeners needed here — adding them would cause double-fire bugs.
 }
 
 // ----------------- INTERACTIVE USER GUIDE -----------------

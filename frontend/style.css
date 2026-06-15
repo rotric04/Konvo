@@ -5834,8 +5834,11 @@ body.modal-open {
     background: rgba(255,255,255,0.06) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: 50% !important;
-    top: 1rem !important;
-    right: 1rem !important;
+    /* Do NOT set top/right here — that forces position:absolute which breaks
+       close buttons inside flex header rows (cookie, TOS, privacy modals).
+       Each modal that needs absolute positioning sets it via inline style. */
+    position: relative !important;
+    flex-shrink: 0 !important;
     font-size: 1.2rem !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: transparent !important;
@@ -5848,6 +5851,13 @@ body.modal-open {
 .close-modal:active {
     background: rgba(255,255,255,0.14) !important;
     color: var(--text-primary) !important;
+}
+
+/* Auth modal close button IS absolutely positioned over the form content */
+.modal-auth-content .close-modal {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
 }
 
 /* Auth modal: full-width form scrollable on small phones */
@@ -5914,8 +5924,11 @@ body.modal-open {
     }
 }
 
-/* Global: prevent double-tap zoom on interactive elements */
-button, a, input, select, textarea, label {
+/* Global: prevent double-tap zoom on interactive elements.
+   Deliberately excludes 'input' — applying touch-action to inputs
+   disables the browser's native form-control touch handling, which
+   is the root cause of laggy checkboxes on mobile. */
+button, a, select, textarea, label {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
 }

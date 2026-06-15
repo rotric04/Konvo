@@ -2344,7 +2344,7 @@
             <div style="display: flex; gap: 1rem; justify-content: center;">
                 <button class="btn btn-primary" onclick="window.location.href='/agents'">View Virtual Date</button>
                 <button class="btn btn-secondary"
-                    onclick="document.getElementById('match-celebration-modal').classList.remove('active')">Keep
+                    onclick="window.konvoCloseModal('match-celebration-modal')">Keep
                     Swiping</button>
             </div>
         </div>
@@ -2355,7 +2355,7 @@
         <div class="modal-content modal-auth-content">
             <!-- Mobile drag handle indicator -->
             <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0 auto 1rem;"></div>
-            <button class="close-modal" onclick="document.getElementById('auth-modal').classList.remove('active')" aria-label="Close sign in panel">&times;</button>
+            <button class="close-modal" onclick="window.konvoCloseModal('auth-modal')" aria-label="Close sign in panel">&times;</button>
             <div class="brand" style="justify-content: center; margin-bottom: 2rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="konvo-logo-svg" style="width: 32px; height: 32px;">
                     <circle cx="50" cy="50" r="38" fill="none" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />
@@ -2463,7 +2463,7 @@
         <div class="modal-content modal-otp-content" style="position: relative;">
             <!-- Drag handle for mobile bottom-sheet feel -->
             <div style="width: 2.5rem; height: 4px; background: var(--border-color); border-radius: 99px; margin: 0 auto 1.25rem;"></div>
-            <button class="close-modal" onclick="document.getElementById('otp-modal').classList.remove('active')" aria-label="Close OTP modal" style="position: absolute; top: 0.75rem; right: 0.75rem;">&times;</button>
+            <button class="close-modal" onclick="window.konvoCloseModal('otp-modal')" aria-label="Close OTP modal" style="position: absolute; top: 0.75rem; right: 0.75rem;">&times;</button>
             <h3 style="font-size: 1.4rem; margin-bottom: 1rem; font-family: var(--font-display); color: var(--text-primary);">Enter Verification OTP</h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
                 A verification code was sent to your email address. Please input it below to activate your account.
@@ -2680,7 +2680,7 @@
     <!-- Active Live Animation Modal -->
     <div class="modal" id="date-stage-modal">
         <div class="modal-content" style="max-width: 650px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2.5rem;">
-            <button class="close-modal">&times;</button>
+            <button class="close-modal" onclick="window.konvoCloseModal('date-stage-modal')">&times;</button>
             <h3 style="font-family: var(--font-serif); font-size: 1.75rem; margin-bottom: 0.25rem; text-align: center;" id="modal-stage-title">AI Twin Date Simulator</h3>
             <p style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-bottom: 1.5rem;" id="modal-stage-subtitle">Environment: Bookstore</p>
             
@@ -2729,7 +2729,7 @@
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-teal); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Privacy Policy</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('privacy-modal').classList.remove('active')" aria-label="Close privacy policy">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('privacy-modal')" aria-label="Close privacy policy">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
                 <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
@@ -2758,7 +2758,7 @@
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); text-transform: uppercase; margin-bottom: 0.25rem;">Legal Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Terms of Service</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('tos-modal').classList.remove('active')" aria-label="Close terms of service">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('tos-modal')" aria-label="Close terms of service">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
                 <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 · Version 1.0</p>
@@ -2786,7 +2786,7 @@
                     <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-rose); text-transform: uppercase; margin-bottom: 0.25rem;">Security Document</div>
                     <h3 style="font-family: var(--font-display); font-size: 1.3rem; margin: 0;">Security Policy</h3>
                 </div>
-                <button class="close-modal" onclick="document.getElementById('security-policy-modal').classList.remove('active')" aria-label="Close security policy">&times;</button>
+                <button class="close-modal" onclick="window.konvoCloseModal('security-policy-modal')" aria-label="Close security policy">&times;</button>
             </div>
             <div style="padding: 1.5rem 1.5rem; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;">
                 <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1.5rem;">Last updated: June 2026 &middot; Version 1.0</p>
@@ -2853,7 +2853,7 @@
         <div class="modal-content" style="max-width: 500px; background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2rem; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
                 <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0; color: var(--text-primary);">Cookie Settings</h3>
-                <button type="button" class="close-modal" onclick="document.getElementById('cookie-preferences-modal').classList.remove('active')" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+                <button type="button" class="close-modal" onclick="window.konvoCloseModal('cookie-preferences-modal')" aria-label="Close cookie settings">&times;</button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
@@ -2879,7 +2879,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button type="button" class="btn btn-secondary" onclick="document.getElementById('cookie-preferences-modal').classList.remove('active')" style="flex: 1;">Cancel</button>
+                <button type="button" class="btn btn-secondary" onclick="window.konvoCloseModal('cookie-preferences-modal')" style="flex: 1;">Cancel</button>
                 <button type="button" class="btn btn-primary" id="btn-cookie-save-prefs" style="flex: 1.5; text-align: center;">Save Preferences</button>
             </div>
         </div>
@@ -2903,12 +2903,13 @@
             allReveal.forEach(function(el) { observer.observe(el); });
         })();
 
-        // Close modals on backdrop click
-        document.querySelectorAll('#privacy-modal, #tos-modal, #security-policy-modal').forEach(function(modal) {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) modal.classList.remove('active');
-            });
-        });
+        // konvoCloseModal — global shim called by inline onclick on all close buttons.
+        // Removing .active triggers the MutationObserver in setupModalClosers which
+        // handles scroll unlock automatically. Do NOT add manual unlock calls here.
+        window.konvoCloseModal = function(id) {
+            var el = document.getElementById(id);
+            if (el) el.classList.remove('active');
+        };
 
         // Premium card mouse-tracking glow effect
         document.querySelectorAll('.premium-glow-card').forEach(function(card) {
