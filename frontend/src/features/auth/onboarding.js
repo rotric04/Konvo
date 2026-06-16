@@ -129,7 +129,7 @@ export async function initOnboarding() {
             if (res && res.success) {
                 KonvoToast.show('Signals synced successfully. Starting vibe calibration.', 'success');
                 currentQuestion = res.question;
-                
+
                 showScreen(screenCalibrationHud);
                 renderQuestion();
             } else {
@@ -156,7 +156,7 @@ export async function initOnboarding() {
 function renderQuestion() {
     const container = document.getElementById('calibration-card-container');
     const transitionText = document.getElementById('calib-transition-text');
-    
+
     if (!container || !currentQuestion) return;
 
     // Update transition message/vibe state
@@ -220,7 +220,7 @@ function renderQuestion() {
         options.forEach(opt => {
             const card = document.createElement('button');
             card.className = 'option-card';
-            
+
             const keyEl = document.createElement('span');
             keyEl.className = 'option-key';
             keyEl.textContent = opt.key;
@@ -247,7 +247,7 @@ function renderQuestion() {
 
 async function submitAnswer(value) {
     const latency_ms = Date.now() - questionStartTime;
-    
+
     try {
         const res = await apiFetch('/api/onboarding/answer', {
             method: 'POST',
@@ -271,7 +271,7 @@ async function submitAnswer(value) {
                 if (transitionText && currentQuestion.transition_message) {
                     transitionText.textContent = currentQuestion.transition_message;
                 }
-                
+
                 const container = document.getElementById('calibration-card-container');
                 if (container) {
                     container.style.opacity = '0.3';
@@ -330,7 +330,7 @@ async function compileCognitiveTwin() {
     } catch (err) {
         console.error('[Compilation] Gemini analysis failed:', err);
         KonvoToast.show('Failed to finalize Cognitive Twin. Retrying...', 'error');
-        
+
         // Retry logic after short timeout
         setTimeout(compileCognitiveTwin, 3000);
     }

@@ -1701,9 +1701,11 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-top: calc(80px + env(safe-area-inset-top));
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: calc(90px + env(safe-area-inset-top));
+    padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
     padding-left: max(1.5rem, env(safe-area-inset-left));
     padding-right: max(1.5rem, env(safe-area-inset-right));
     transform: translateY(-100%);
@@ -1715,16 +1717,69 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.25rem;
+    width: 100%;
 }
 .mobile-menu-drawer .mobile-nav a {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-secondary);
+    text-align: center;
+    width: 100%;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
 }
 .mobile-menu-drawer .mobile-nav a.active, .mobile-menu-drawer .mobile-nav a:hover {
     color: var(--accent-amber);
+}
+
+/* Reset insights/hall of fame blog links inside mobile menu context to match others */
+.mobile-menu-drawer .mobile-nav a.landing-blog-link {
+    font-family: inherit;
+    font-size: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+}
+.mobile-menu-drawer .mobile-nav a.landing-blog-link:hover {
+    color: var(--accent-amber);
+    background: none;
+}
+
+/* Reset landing tab buttons in footer columns to align with normal footer links */
+.landing-footer .landing-tab-btn {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    padding: 0;
+    border: none;
+    background: none;
+    border-bottom: none;
+    margin-bottom: 0;
+    display: inline;
+}
+.landing-footer .landing-tab-btn.active {
+    background: none;
+    color: inherit;
+}
+
+/* Captcha Loading Spinner Animation */
+.captcha-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent-teal);
+    border-radius: 50%;
+    display: inline-block;
+    animation: captcha-spin 0.8s linear infinite;
+}
+@keyframes captcha-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* Open states for Mobile Menu Drawer */

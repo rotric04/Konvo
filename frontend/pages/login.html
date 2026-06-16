@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In | Konvo - Human Chemistry, Amplified</title>
     <meta name="description"
-        content="Join Konvo.Space — where human curiosity, chemistry, and conversation lead to authentic connection. Sign in or create your account." />
+        content="Join Konvo.Space - where human curiosity, chemistry, and conversation lead to authentic connection. Sign in or create your account." />
     <meta name="robots" content="noindex" />
 
     <!-- Preconnect -->
@@ -23,11 +23,21 @@
     <link rel="stylesheet" href="/src/styles/animations.css" />
     <link rel="stylesheet" href="/src/styles/components.css" />
 
-    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
 
     <!-- Cloudflare Turnstile CAPTCHA -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+        window.onloadTurnstileCallback = function () {
+            if (window.renderCaptchaWidgets) {
+                window.renderCaptchaWidgets();
+            }
+        };
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
+        async defer></script>
 
     <!-- Theme Manager: runs before body renders to prevent flash -->
     <script>
@@ -611,7 +621,7 @@
                     <span class="accent">curiosity.</span>
                 </h1>
                 <p class="auth-brand-desc">
-                    Konvo is not another dating app. It's a living universe of conversations — where two strangers
+                    Konvo is not another dating app. It's a living universe of conversations - where two strangers
                     discover they were always meant to connect.
                 </p>
 
@@ -683,7 +693,15 @@
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
 
                         <!-- Cloudflare Turnstile Widget -->
-                        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 1.25rem; display: flex; justify-content: center;"></div>
+                        <div class="turnstile-wrapper"
+                            style="margin-bottom: 1.25rem; min-height: 65px; display: flex; justify-content: center; align-items: center; position: relative;">
+                            <div id="login-captcha-loader" class="captcha-loader"
+                                style="position: absolute; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
+                                <span class="captcha-spinner"></span>
+                                <span>Verifying secure network connection...</span>
+                            </div>
+                            <div id="login-turnstile" class="turnstile-container"></div>
+                        </div>
 
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-login-submit">
                             Sign In
@@ -807,7 +825,15 @@
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
 
                         <!-- Cloudflare Turnstile Widget -->
-                        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 1.25rem; display: flex; justify-content: center;"></div>
+                        <div class="turnstile-wrapper"
+                            style="margin-bottom: 1.25rem; min-height: 65px; display: flex; justify-content: center; align-items: center; position: relative;">
+                            <div id="register-captcha-loader" class="captcha-loader"
+                                style="position: absolute; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
+                                <span class="captcha-spinner"></span>
+                                <span>Verifying secure network connection...</span>
+                            </div>
+                            <div id="register-turnstile" class="turnstile-container"></div>
+                        </div>
 
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;"
                             id="btn-register-submit">

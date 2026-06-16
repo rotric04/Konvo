@@ -157,12 +157,12 @@ async function bootAuth() {
         console.error('[Boot] Auth check failed:', e);
     }
 
-    const authLayout   = document.getElementById('auth-app-layout');
+    const authLayout = document.getElementById('auth-app-layout');
     const unauthLayout = document.getElementById('unauth-landing-layout');
 
     if (isAuth) {
         // Show authenticated app layout
-        if (authLayout)   authLayout.classList.remove('hidden');
+        if (authLayout) authLayout.classList.remove('hidden');
         if (unauthLayout) unauthLayout.classList.add('hidden');
 
         // Boot SPA routing
@@ -198,7 +198,7 @@ async function bootAuth() {
 
     } else {
         // Show landing page
-        if (authLayout)   authLayout.classList.add('hidden');
+        if (authLayout) authLayout.classList.add('hidden');
         if (unauthLayout) unauthLayout.classList.remove('hidden');
 
         initLandingPage();
@@ -241,10 +241,10 @@ function initScrollRevealObserver() {
 
 // ─── Mobile Sidebar ─────────────────────────────────────────────────
 function initMobileSidebar() {
-    const btnToggle  = document.getElementById('btn-sidebar-toggle');
-    const btnClose   = document.getElementById('btn-sidebar-close');
-    const sidebar    = document.querySelector('.sidebar');
-    const backdrop   = document.getElementById('sidebar-backdrop');
+    const btnToggle = document.getElementById('btn-sidebar-toggle');
+    const btnClose = document.getElementById('btn-sidebar-close');
+    const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
 
     if (!sidebar) return;
 
@@ -259,8 +259,8 @@ function initMobileSidebar() {
     };
 
     if (btnToggle) btnToggle.addEventListener('click', openSidebar);
-    if (btnClose)  btnClose.addEventListener('click', closeSidebar);
-    if (backdrop)  backdrop.addEventListener('click', closeSidebar);
+    if (btnClose) btnClose.addEventListener('click', closeSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
 }
 
 // ─── Theme Toggle ───────────────────────────────────────────────────

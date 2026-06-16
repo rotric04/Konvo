@@ -138,12 +138,12 @@ export function initUserGuideTabs() {
         btn.addEventListener('click', () => {
             tabButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             document.querySelectorAll('.guide-content-pane').forEach(pane => {
                 pane.classList.add('hidden');
                 pane.style.display = 'none';
             });
-            
+
             const targetId = btn.dataset.guideTab;
             const targetPane = document.getElementById(targetId);
             if (targetPane) {
@@ -163,19 +163,19 @@ export function initLandingPage() {
     const header = document.querySelector('.landing-header');
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const drawerLinks = document.querySelectorAll('.mobile-menu-drawer .landing-tab-btn');
-    
+
     if (menuToggle && header) {
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             header.classList.toggle('menu-open');
         });
-        
+
         drawerLinks.forEach(link => {
             link.addEventListener('click', () => {
                 header.classList.remove('menu-open');
             });
         });
-        
+
         document.addEventListener('click', (e) => {
             if (header.classList.contains('menu-open') && !header.contains(e.target)) {
                 header.classList.remove('menu-open');
@@ -193,7 +193,7 @@ export function initLandingPage() {
         const tabContent = targetElement.closest('.landing-tab-content');
         if (tabContent) {
             const tabId = tabContent.id;
-            
+
             const tabBtns = document.querySelectorAll('.landing-tab-btn');
             tabBtns.forEach(el => {
                 if (el.dataset.tab === tabId) {
@@ -212,7 +212,7 @@ export function initLandingPage() {
                     content.style.display = 'none';
                 }
             });
-            
+
             if (window.location.hash !== hash) {
                 window.history.replaceState(null, null, hash);
             }
@@ -229,10 +229,10 @@ export function initLandingPage() {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const tabId = btn.dataset.tab;
-            
+
             tabBtns.forEach(el => el.classList.remove('active'));
             document.querySelectorAll(`.landing-tab-btn[data-tab="${tabId}"]`).forEach(el => el.classList.add('active'));
-            
+
             document.querySelectorAll('.landing-tab-content').forEach(content => {
                 if (content.id === tabId) {
                     content.classList.remove('hidden');
@@ -260,7 +260,7 @@ export function initLandingPage() {
             const subtab = btn.dataset.subtab;
             feedbackTabsContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             document.querySelectorAll('.landing-feedback-form-pane').forEach(p => {
                 p.style.display = 'none';
             });
@@ -355,14 +355,14 @@ export function submitLandingFeedback(type) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).catch(() => {});
-    } catch (e) {}
+        }).catch(() => { });
+    } catch (e) { }
 
     // Submit to FormSubmit.co via AJAX
     try {
         fetch('https://formsubmit.co/ajax/mohit.info.83@gmail.com', {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
@@ -370,8 +370,8 @@ export function submitLandingFeedback(type) {
                 _subject: `Konvo Landing Feedback [${type.toUpperCase()}] - ${data.title || 'General Suggestion'}`,
                 ...data
             })
-        }).catch(() => {});
-    } catch (e) {}
+        }).catch(() => { });
+    } catch (e) { }
 
     // Show success state
     document.querySelectorAll('.landing-feedback-form-pane').forEach(f => f.style.display = 'none');
@@ -385,7 +385,7 @@ export function resetLandingFeedback() {
     document.getElementById('landing-feedback-success').style.display = 'none';
     document.getElementById('landing-feedback-tabs').style.display = 'flex';
     document.getElementById('landing-form-bug').style.display = 'block';
-    
+
     // Reset inputs
     document.getElementById('landing-bug-title').value = '';
     document.getElementById('landing-bug-desc').value = '';
@@ -426,7 +426,7 @@ export function initDemoModal() {
         { role: 'a', name: 'Aria (Twin-A)', text: 'Detected shared affinity: jazz, late-night bookstores, and deep conversation. Synergy index rising…' },
         { role: 'b', name: 'Orion (Twin-B)', text: 'Confirmed. Creative output index: 94%. Emotional availability score: 87%. This is a strong signal.' },
         { role: 'a', name: 'Aria (Twin-A)', text: 'Running conflict-resolution simulation… Result: both nodes default to calm dialogue. No friction detected.' },
-        { role: 'b', name: 'Orion (Twin-B)', text: 'Values alignment — honesty, growth, and humor. Compatible MBTI pairing: INFP × ENFJ. Rare resonance.' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Values alignment - honesty, growth, and humor. Compatible MBTI pairing: INFP × ENFJ. Rare resonance.' },
         { role: 'a', name: 'Aria (Twin-A)', text: 'Compatibility score now at 91% and climbing. Initiating dual-approval handshake protocol…' },
         { role: 'b', name: 'Orion (Twin-B)', text: 'Approval request transmitted to human node Beta. Awaiting confirmation.' },
         { role: 'a', name: 'Aria (Twin-A)', text: '✅ Both nodes have approved. Secure human-to-human chat tunnel is now unlocked. ✨' },

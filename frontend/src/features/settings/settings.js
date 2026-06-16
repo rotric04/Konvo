@@ -7,6 +7,7 @@
 
 import { apiFetch } from '/src/services/api.js';
 import { KonvoToast } from '/src/components/toast.js';
+import { updateUser, getState } from '/src/store/state.js';
 
 export async function initSettingsPage() {
     const profileForm = document.getElementById('settings-profile-form');
@@ -27,7 +28,6 @@ export async function initSettingsPage() {
         });
     });
 
-    const { getState } = await import('/src/store/state.js');
     const currentUser = window.currentUser || getState('currentUser');
     if (currentUser) {
         const prof = currentUser.profile || {};
@@ -92,6 +92,7 @@ export async function initSettingsPage() {
                         if (window.currentUser && window.currentUser.profile) {
                             window.currentUser.profile.avatar_url = result.avatar_url;
                         }
+                        updateUser(window.currentUser || getState('currentUser'));
                     } catch (err) {
                         KonvoToast.show(`Upload failed: ${err.message}`, 'error');
                     } finally {
@@ -186,7 +187,8 @@ export async function initSettingsPage() {
                                 display_name, bio, gender, looking_for_gender, birth_date, birth_location, digipin,
                                 birth_time,
                                 interests: prof.interests || [],
-                                goals: prof.goals || []
+                                goals: prof.goals || [],
+                                avatar_url: (window.currentUser?.profile?.avatar_url || prof.avatar_url || null)
                             })
                         });
                         KonvoToast.show("Profile configuration updated successfully.", 'success');

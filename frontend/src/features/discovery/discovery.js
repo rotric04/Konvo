@@ -10,11 +10,11 @@ import { apiFetch } from '/src/services/api.js';
 // Typewriter Text Animation Helper
 export function animateTextTypewriter(element, text, speed = 15, isInput = false) {
     if (!element) return;
-    
+
     if (element.typewriterTimeout) {
         clearTimeout(element.typewriterTimeout);
     }
-    
+
     if (isInput) {
         element.value = '';
     } else {
@@ -40,12 +40,12 @@ export function animateTextTypewriter(element, text, speed = 15, isInput = false
 // ─── Swipe Deck Recommender Engine ───────────────────────────────────────────
 export function initSwipePage(targetContainerId) {
     const deckContainer = document.getElementById(targetContainerId || 'discovery-deck-container') ||
-                          document.getElementById('swipe-discovery-box');
+        document.getElementById('swipe-discovery-box');
     if (!deckContainer) return;
-    
+
     if (deckContainer.dataset.initialized === 'true') return;
     deckContainer.dataset.initialized = 'true';
-    
+
     let allCandidates = [];
     let candidateFeeds = [];
     let currentCardIndex = 0;
@@ -80,7 +80,7 @@ export function initSwipePage(targetContainerId) {
         const intentSelect = document.querySelector('.filter-intent-select');
         const selectedGender = genderSelect ? genderSelect.value : 'All';
         const selectedIntent = intentSelect ? intentSelect.value : 'All';
-        
+
         candidateFeeds = allCandidates.filter(c => {
             let matchGender = true;
             if (selectedGender !== 'All') {
@@ -92,7 +92,7 @@ export function initSwipePage(targetContainerId) {
             }
             return matchGender && matchIntent;
         });
-        
+
         currentCardIndex = 0;
         renderSwipeCard();
     }
@@ -128,7 +128,7 @@ export function initSwipePage(targetContainerId) {
         }
 
         const candidate = candidateFeeds[currentCardIndex];
-        
+
         deckContainer.innerHTML = `
             <div class="swipe-card" style="margin: 0 auto; max-width: 440px;">
                 <span class="comp-score-badge" style="background: var(--accent-teal); color: var(--bg-primary); font-family: var(--font-mono); font-size: 0.7rem; font-weight: bold; padding: 0.25rem 0.5rem; border-radius: 4px; position: absolute; top: 1rem; right: 1rem;">${candidate.compatibility_score}% Resonance Match</span>
@@ -220,20 +220,20 @@ export function initSwipePage(targetContainerId) {
     }
 
     // AI Twin Proxy Negotiation Simulator log sequence
-    window.runMatchSimulation = function(candidate) {
+    window.runMatchSimulation = function (candidate) {
         const loader = document.getElementById('match-simulation-loader');
         const details = document.getElementById('match-celebration-details');
         const consoleLog = document.getElementById('simulation-console-log');
-        
+
         if (!loader || !details || !consoleLog) return;
-        
+
         loader.style.display = 'block';
         details.style.display = 'none';
         consoleLog.innerHTML = `
             <div style="color: var(--accent-teal);">[SYSTEM] Initiating connection handshake...</div>
             <div style="color: var(--accent-amber);">[AUTH] Verifying Human Anti-Bot Token (JWT/PoW)...</div>
         `;
-        
+
         const logs = [
             { text: "[AUTH] Bot protection token verification: SECURE (Human validated).", delay: 500, color: "var(--accent-teal)" },
             { text: `[PROXY] Launching Cognitive Proxy Twin matching loop for "${candidate.display_name}"...`, delay: 1100, color: "var(--text-primary)" },
@@ -245,7 +245,7 @@ export function initSwipePage(targetContainerId) {
             { text: `[SYSTEM] Encrypting connection keys and creating chat channel...`, delay: 4200, color: "var(--accent-teal)" },
             { text: `[SUCCESS] Connection Established. Opening secure communication gate.`, delay: 4600, color: "var(--accent-teal)" }
         ];
-        
+
         logs.forEach(log => {
             setTimeout(() => {
                 const div = document.createElement('div');
@@ -253,17 +253,17 @@ export function initSwipePage(targetContainerId) {
                 div.textContent = log.text;
                 consoleLog.appendChild(div);
                 consoleLog.scrollTop = consoleLog.scrollHeight;
-                
+
                 // Randomize latency display
                 const latEl = document.getElementById('sim-latency');
                 if (latEl) latEl.textContent = `${Math.floor(Math.random() * 15) + 8}ms`;
-                
+
                 if (log.text.startsWith("[SUCCESS]")) {
                     setTimeout(() => {
                         const matchTitle = document.getElementById('match-title-text');
                         const matchSynergy = document.getElementById('match-synergy-text');
                         const matchSub = document.getElementById('match-sub-text');
-                        
+
                         if (matchTitle) matchTitle.textContent = `Connected with ${candidate.display_name}!`;
                         if (matchSynergy) {
                             const mbtiPairs = ["INFP × ENFJ", "INTJ × ENFP", "INFJ × ENTP", "ENFJ × INTR", "ISFP × ESFJ"];
@@ -273,7 +273,7 @@ export function initSwipePage(targetContainerId) {
                         if (matchSub) {
                             matchSub.textContent = `Your AI Twins successfully completed 50 dialogue loops, verified anti-bot tokens, and approved this connection.`;
                         }
-                        
+
                         loader.style.display = 'none';
                         details.style.display = 'block';
                     }, 600);
@@ -292,26 +292,26 @@ class NeuralRizzEngine {
         this._sessionUsed = [];
 
         this._openers = {
-            m2f: ["okay real talk","not gonna lie","be so fr","no cap","lowkey","honestly tho","bruh okay","wait actually","i just need to say","so like"],
-            f2m: ["okay so","don't make this weird but","be honest","i'm obsessed how","not gonna lie","fr though","lowkey","okay i'll be real","just saying","wait hear me out"]
+            m2f: ["okay real talk", "not gonna lie", "be so fr", "no cap", "lowkey", "honestly tho", "bruh okay", "wait actually", "i just need to say", "so like"],
+            f2m: ["okay so", "don't make this weird but", "be honest", "i'm obsessed how", "not gonna lie", "fr though", "lowkey", "okay i'll be real", "just saying", "wait hear me out"]
         };
         this._compliments = {
-            m2f: ["your energy is unmatched","you're giving main character","you're built different","your vibe is elite","you're literally that girl","your aura is too powerful","you ate that ngl","you're the moment","your energy is so clean","you're a vibe and a half"],
-            f2m: ["you're giving zaddy energy ngl","your confidence is so attractive","you're built for this","you're genuinely hilarious","your energy is really calming","you seem so real tho","you're that guy fr","you're kinda intimidating tbh","your aura is doing something to me","you're very him"]
+            m2f: ["your energy is unmatched", "you're giving main character", "you're built different", "your vibe is elite", "you're literally that girl", "your aura is too powerful", "you ate that ngl", "you're the moment", "your energy is so clean", "you're a vibe and a half"],
+            f2m: ["you're giving zaddy energy ngl", "your confidence is so attractive", "you're built for this", "you're genuinely hilarious", "your energy is really calming", "you seem so real tho", "you're that guy fr", "you're kinda intimidating tbh", "your aura is doing something to me", "you're very him"]
         };
         this._escalations = {
-            m2f: ["and i'm not even trying to rizz you up","and that's a problem for me honestly","rent free btw","and i don't even know what to do about that","and i'm losing","like what do you want from me","the audacity honestly","it's giving unfair","and i'm standing here","it's your fault really"],
-            f2m: ["and i hate it here","and it's unhinged of me","rent free since we met","and i don't even know what that means for me","which is annoying","not like i care tho lol","and that's your problem now","and i'm not okay about it","be so serious with me"]
+            m2f: ["and i'm not even trying to rizz you up", "and that's a problem for me honestly", "rent free btw", "and i don't even know what to do about that", "and i'm losing", "like what do you want from me", "the audacity honestly", "it's giving unfair", "and i'm standing here", "it's your fault really"],
+            f2m: ["and i hate it here", "and it's unhinged of me", "rent free since we met", "and i don't even know what that means for me", "which is annoying", "not like i care tho lol", "and that's your problem now", "and i'm not okay about it", "be so serious with me"]
         };
         this._closers = {
-            m2f: ["just so you know","that's it that's the tweet","thought you should know","okay bye","carry on","take that","you're welcome","i said what i said","no further questions","receipts attached"],
-            f2m: ["just putting that out there","don't read into it","thought you should know","i'll let you sit with that","okay moving on","you're welcome","not my fault","make it make sense","that's all","you didn't hear it from me"]
+            m2f: ["just so you know", "that's it that's the tweet", "thought you should know", "okay bye", "carry on", "take that", "you're welcome", "i said what i said", "no further questions", "receipts attached"],
+            f2m: ["just putting that out there", "don't read into it", "thought you should know", "i'll let you sit with that", "okay moving on", "you're welcome", "not my fault", "make it make sense", "that's all", "you didn't hear it from me"]
         };
-        this._vibes = ['flirty','witty','smooth','playful','deep'];
-        this._mbtiTypes = ['INFP','ENFP','INFJ','ENFJ','INTJ','ENTJ','INTP','ENTP','ISFP','ESFP','ISTP','ESTP','ISFJ','ESFJ','ISTJ','ESTJ'];
+        this._vibes = ['flirty', 'witty', 'smooth', 'playful', 'deep'];
+        this._mbtiTypes = ['INFP', 'ENFP', 'INFJ', 'ENFJ', 'INTJ', 'ENTJ', 'INTP', 'ENTP', 'ISFP', 'ESFP', 'ISTP', 'ESTP', 'ISFJ', 'ESFJ', 'ISTJ', 'ESTJ'];
         this._reactions = {
-            m2f: ['She smiles but tries to hide it 👀','She screenshots this immediately','She shows her bestie right away','She clocks the confidence — intrigued','She\'s not ready for this fr','She says "stop" but means keep going'],
-            f2m: ['He\'s blushing and won\'t admit it','He screenshots this to flex to his boys','He goes quiet for exactly 3 seconds','He says "lol" but meant "I\'m nervous"','He\'s spinning — didn\'t expect this','He\'s already drafting his reply']
+            m2f: ['She smiles but tries to hide it 👀', 'She screenshots this immediately', 'She shows her bestie right away', 'She clocks the confidence - intrigued', 'She\'s not ready for this fr', 'She says "stop" but means keep going'],
+            f2m: ['He\'s blushing and won\'t admit it', 'He screenshots this to flex to his boys', 'He goes quiet for exactly 3 seconds', 'He says "lol" but meant "I\'m nervous"', 'He\'s spinning - didn\'t expect this', 'He\'s already drafting his reply']
         };
     }
 
@@ -333,7 +333,7 @@ class NeuralRizzEngine {
             const compliment = this._pick(this._compliments[gender]);
             const esc = this._pick(this._escalations[gender]);
             const closer = this._pick(this._closers[gender]);
-            line = `"${opener.charAt(0).toUpperCase() + opener.slice(1)}, ${compliment} — ${esc}. ${closer.charAt(0).toUpperCase() + closer.slice(1)}."`;
+            line = `"${opener.charAt(0).toUpperCase() + opener.slice(1)}, ${compliment} - ${esc}. ${closer.charAt(0).toUpperCase() + closer.slice(1)}."`;
             hash = this._hash(line);
             attempts++;
         } while (this._used.has(hash) && attempts < 20);
