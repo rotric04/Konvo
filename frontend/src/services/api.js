@@ -70,7 +70,34 @@ export async function apiFetch(endpoint, options = {}) {
     return response.json();
 }
 
+let turnstileConfigCache = null;
+/**
+ * fetchTurnstileConfig(forceRefresh)
+ * Fetches Turnstile site key and fallback challenge from the backend.
+ */
+export async function fetchTurnstileConfig(forceRefresh = false) {
+    if (turnstileConfigCache && !forceRefresh) {
+        return turnstileConfigCache;
+    }
+    try {
+        const res = await apiFetch('/api/auth/turnstile-config');
+        if (res) {
+            // Cache the site key, but always return the latest fallback challenge
+            if (turnstileConfigCache) {
+                turnstileConfigCache.fallback_challenge = res.fallback_challenge;
+            } else {
+                turnstileConfigCache = res;
+            }
+            return res;
+        }
+    } catch (err) {
+        console.error("[API] Failed to fetch Turnstile config:", err);
+    }
+    return null;
+}
+
 // Expose globally for backwards compat with existing app.js code
 window.apiFetch      = apiFetch;
 window.API_BASE_URL  = API_BASE_URL;
 window.WS_BASE_URL   = WS_BASE_URL;
+window.fetchTurnstileConfig = fetchTurnstileConfig;

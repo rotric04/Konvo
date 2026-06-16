@@ -50,7 +50,7 @@ const VirtualDateScenarios = [
         intro: 'A free Saturday arises. Do you lock in a detailed itinerary of cultural activities, or turn off alarms and go completely unscheduled?',
         choices: [
             { text: 'A pre-planned cultural tour followed by dining reservations.', outcome: 'You maximize efficiency and ensure entry to high-demand venues.', insight: 'Structured. Planning Style: Curated, high productivity.', delta: 10 },
-            { text: 'No alarms, no bookings—just wander and explore organically.', outcome: 'You prioritize surprise discoveries, high flexibility, and relaxed pacing.', insight: 'Fluid. Planning Style: Spontaneous, open to chance.', delta: 10 }
+            { text: 'No alarms, no bookings-just wander and explore organically.', outcome: 'You prioritize surprise discoveries, high flexibility, and relaxed pacing.', insight: 'Fluid. Planning Style: Spontaneous, open to chance.', delta: 10 }
         ],
         neuralPrompts: [
             'What is your perfect Saturday morning routine?',

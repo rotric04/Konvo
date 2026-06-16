@@ -65,7 +65,7 @@ export function initAgentLivePreview() {
     if (!body) return;
 
     const conversation = [
-        { role: 'a', text: 'Hey! Your profile caught my eye — specifically the love for jazz and late-night bookstores.' },
+        { role: 'a', text: 'Hey! Your profile caught my eye - specifically the love for jazz and late-night bookstores.' },
         { role: 'b', text: 'Oh nice, your twin has good taste! What else does my profile say about me?' },
         { role: 'a', text: 'That you value depth over small talk, you\'re an INFP, and Thursdays are your favorite day.' },
         { role: 'b', text: 'Okay that\'s scarily accurate. What\'s the compatibility score saying?' },

@@ -3,7 +3,7 @@
  * Production-grade client-side router using the History API.
  * 
  * This fixes the critical bug: handleRouting() and initSPALinks()
- * were called in initApp() but never defined — causing all navigation to fail silently.
+ * were called in initApp() but never defined - causing all navigation to fail silently.
  *
  * Features:
  * - History API pushState + popstate (browser back/forward)
@@ -74,7 +74,7 @@ let _isNavigating = false;
 /**
  * handleRouting(path)
  * The main route handler. Called on initial load and every navigation.
- * Was missing from the codebase — this is the critical fix.
+ * Was missing from the codebase - this is the critical fix.
  * 
  * @param {string} path - The URL path to route to
  */
@@ -151,7 +151,7 @@ async function renderPage(pageId, route) {
     // Update document title
     document.title = route.title ? `${route.title} | Konvo` : 'Konvo';
 
-    // Get all page sections — uses the existing .view-section class from index.html
+    // Get all page sections - uses the existing .view-section class from index.html
     const allSections = document.querySelectorAll('.view-section');
 
     // Hide all sections
@@ -254,7 +254,7 @@ async function renderPage(pageId, route) {
 
 /**
  * navigateTo(path, pushState = true)
- * Programmatic navigation — the primary way to navigate in code.
+ * Programmatic navigation - the primary way to navigate in code.
  * 
  * @param {string} path - The URL path to navigate to
  * @param {boolean} pushState - Whether to push to browser history
@@ -269,7 +269,7 @@ function navigateTo(path, pushState = true) {
 /**
  * initSPALinks()
  * Intercepts all internal link clicks and routes them through the SPA router.
- * This was missing from the codebase — the other critical fix.
+ * This was missing from the codebase - the other critical fix.
  * 
  * Uses event delegation on document for performance and to catch dynamically added links.
  */

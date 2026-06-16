@@ -44,6 +44,27 @@ def verify_turnstile(token: str, ip: str = None) -> bool:
         return False
     if token in ["1x00000000000000000000AA", "dummy-token"]:
         return True
+
+    # Manual fallback captcha verification
+    if token.startswith("fallback:"):
+        try:
+            parts = token.split(":", 2)
+            if len(parts) == 3:
+                challenge_id = parts[1]
+                user_answer = parts[2].strip()
+                stored_answer = redis_client.get_val(f"captcha:{challenge_id}")
+                if stored_answer:
+                    decoded_answer = stored_answer.decode("utf-8") if isinstance(stored_answer, bytes) else str(stored_answer)
+                    if decoded_answer == user_answer:
+                        try:
+                            redis_client.delete(f"captcha:{challenge_id}")
+                        except Exception:
+                            pass
+                        return True
+        except Exception as e:
+            print(f"[CAPTCHA FALLBACK ERROR] verification failed: {e}")
+        return False
+
     import httpx
     secret = os.getenv("TURNSTILE_SECRET_KEY", "1x00000000000000000000000000000000AA")
     try:
@@ -420,6 +441,38 @@ def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db))
     redis_client.set_val(cooldown_key, "1", ex_seconds=60)
     print(f"\n[OTP SYSTEM] Verification code generated for {request.email}: {new_otp}\n")
     return {"success": True, "message": "Verification code resent successfully."}
+
+@app.get("/api/auth/turnstile-config")
+def get_turnstile_config():
+    import uuid
+    import json
+    site_key = os.getenv("TURNSTILE_SITE_KEY", "1x00000000000000000000AA")
+    
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 10)
+    op = random.choice(["+", "-"])
+    if op == "+":
+        ans = num1 + num2
+    else:
+        if num1 < num2:
+            num1, num2 = num2, num1
+        ans = num1 - num2
+        
+    challenge_id = str(uuid.uuid4())
+    question = f"What is {num1} {op} {num2}?"
+    
+    try:
+        redis_client.set_val(f"captcha:{challenge_id}", str(ans), ex_seconds=300)
+    except Exception as e:
+        print(f"[CAPTCHA FALLBACK] Error setting Redis: {e}")
+        
+    return {
+        "site_key": site_key,
+        "fallback_challenge": {
+            "id": challenge_id,
+            "question": question
+        }
+    }
 
 @app.post("/api/auth/check-username")
 def check_username(request: schemas.UsernameCheckRequest, db: Session = Depends(get_db)):
