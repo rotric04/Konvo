@@ -140,12 +140,11 @@ export async function initSettingsPage() {
             }
 
             const profileForm = document.getElementById('settings-profile-form');
-            if (profileForm) {
-                profileForm.replaceWith(profileForm.cloneNode(true));
-                const newProfileForm = document.getElementById('settings-profile-form');
-                newProfileForm.addEventListener('submit', async (e) => {
+            if (profileForm && !profileForm.dataset.listenerBound) {
+                profileForm.dataset.listenerBound = 'true';
+                profileForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const submitBtn = newProfileForm.querySelector('button[type="submit"]');
+                    const submitBtn = profileForm.querySelector('button[type="submit"]');
                     if (submitBtn) {
                         submitBtn.disabled = true;
                         submitBtn.textContent = 'Saving…';

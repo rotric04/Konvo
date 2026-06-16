@@ -68,6 +68,16 @@ export async function initCommunitiesPage() {
             return;
         }
 
+        const escapeHTML = (str) => {
+            if (!str) return "";
+            return str.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        };
+
         communities.forEach(c => {
             const card = document.createElement('div');
             card.className = 'card';
@@ -77,9 +87,9 @@ export async function initCommunitiesPage() {
             
             card.innerHTML = `
                 <div>
-                    <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-primary); margin-bottom: 0.25rem;">${c.name}</h3>
-                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.75rem;">domain/${c.slug}</div>
-                    <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">${c.description}</p>
+                    <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-primary); margin-bottom: 0.25rem;">${escapeHTML(c.name)}</h3>
+                    <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.75rem;">domain/${escapeHTML(c.slug)}</div>
+                    <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">${escapeHTML(c.description)}</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem; font-family: var(--font-mono); font-size: 0.75rem;">
