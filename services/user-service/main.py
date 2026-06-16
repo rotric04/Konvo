@@ -56,59 +56,98 @@ def update_profile(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    prof = current_user.profile
-    if not prof:
-        prof = models.UserProfile(
-            user_id=current_user.id,
-            display_name=request.display_name or current_user.email.split("@")[0],
-            gender=request.gender or "Unknown",
-            looking_for_gender=request.looking_for_gender or "All",
-            bio=request.bio or "",
-            relationship_intent=request.relationship_intent or "Long Term",
-            sun_sign="Aries",
-            moon_sign="Aries",
-            ascendant="Aries",
-            interests=[],
-            goals=[]
-        )
-        db.add(prof)
-        db.commit()
-        db.refresh(current_user)
+    try:
         prof = current_user.profile
+        if not prof:
+            prof = models.UserProfile(
+                user_id=current_user.id,
+                display_name=request.display_name or current_user.email.split("@")[0],
+                gender=request.gender or "Unknown",
+                looking_for_gender=request.looking_for_gender or "All",
+                bio=request.bio or "",
+                relationship_intent=request.relationship_intent or "Long Term",
+                sun_sign="Aries",
+                moon_sign="Aries",
+                ascendant="Aries",
+                interests=[],
+                goals=[]
+            )
+            db.add(prof)
+            db.commit()
+            db.refresh(current_user)
+            prof = current_user.profile
         
-    prof.display_name = request.display_name
-    prof.bio = request.bio
-    prof.gender = request.gender
-    prof.looking_for_gender = request.looking_for_gender
-    prof.birth_date = request.birth_date
-    prof.birth_time = request.birth_time
-    prof.birth_location = request.birth_location
-    prof.digipin = request.digipin
-    prof.interests = request.interests
-    prof.goals = request.goals
-    prof.relationship_intent = request.relationship_intent
-    if request.avatar_url is not None:
-        prof.avatar_url = request.avatar_url
+        # Update basic profile fields
+        if request.display_name:
+            prof.display_name = request.display_name[:100]
+        if request.bio is not None:
+            prof.bio = request.bio[:500] if request.bio else None
+        if request.gender:
+            prof.gender = request.gender
+        if request.looking_for_gender:
+            prof.looking_for_gender = request.looking_for_gender
+        if request.birth_date:
+            prof.birth_date = request.birth_date
+        if request.birth_time:
+            prof.birth_time = request.birth_time
+        if request.birth_location:
+            prof.birth_location = request.birth_location
+        if request.digipin:
+            prof.digipin = request.digipin
+        if request.interests is not None:
+            prof.interests = request.interests or []
+        if request.goals is not None:
+            prof.goals = request.goals or []
+        if request.relationship_intent:
+            prof.relationship_intent = request.relationship_intent
+        if request.avatar_url is not None:
+            prof.avatar_url = request.avatar_url
+        
+        # Recalculate horoscope signs if birth date/location updated
+        if request.birth_date and request.birth_location:
+            try:
+                b_time = request.birth_time or prof.birth_time or time(12, 0)
+                astro = calculate_astrology(request.birth_date, b_time, request.birth_location)
+                if astro:
+                    prof.sun_sign = astro.get("sun_sign", "Aries")
+                    prof.moon_sign = astro.get("moon_sign", "Aries")
+                    prof.ascendant = astro.get("ascendant", "Aries")
+            except Exception as e:
+                print(f"[Horoscope Error] Failed to calculate astrology: {e}")
+                # Fallback to existing values or defaults
+                if not prof.sun_sign:
+                    prof.sun_sign = "Aries"
+                if not prof.moon_sign:
+                    prof.moon_sign = "Aries"
+                if not prof.ascendant:
+                    prof.ascendant = "Aries"
+        
+        db.commit()
+        db.refresh(prof)
+        
+        return {
+            "success": True,
+            "message": "Profile updated successfully",
+            "data": {
+                "display_name": prof.display_name,
+                "bio": prof.bio,
+                "gender": prof.gender,
+                "looking_for_gender": prof.looking_for_gender,
+                "birth_date": prof.birth_date,
+                "birth_location": prof.birth_location,
+                "sun_sign": prof.sun_sign,
+                "moon_sign": prof.moon_sign,
+                "ascendant": prof.ascendant
+            }
+        }
     
-    # Recalculate horoscope signs if birth date/location updated
-    if request.birth_date and request.birth_location:
-        try:
-            b_time = request.birth_time or prof.birth_time or time(12, 0)
-            astro = calculate_astrology(request.birth_date, b_time, request.birth_location)
-            prof.sun_sign = astro["sun_sign"]
-            prof.moon_sign = astro["moon_sign"]
-            prof.ascendant = astro["ascendant"]
-        except Exception as e:
-            print(f"[Horoscope Error] Failed to calculate astrology: {e}")
-            if not prof.sun_sign:
-                prof.sun_sign = "Aries"
-            if not prof.moon_sign:
-                prof.moon_sign = "Aries"
-            if not prof.ascendant:
-                prof.ascendant = "Aries"
-        
-    db.commit()
-    return {"success": True, "message": "Profile updated successfully."}
+    except ValueError as ve:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=f"Invalid input: {str(ve)}")
+    except Exception as e:
+        db.rollback()
+        print(f"[Profile Update Error] {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to update profile: {str(e)}")
 
 
 @app.post("/api/users/profile/avatar")
@@ -203,6 +242,28 @@ def upload_avatar(
         return JSONResponse(
             status_code=500,
             content={"detail": f"Failed to process and upload avatar image: {str(e)}"}
+        )
+
+@app.delete("/api/users/profile/avatar")
+def delete_avatar(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Delete user's avatar profile image"""
+    prof = current_user.profile
+    if not prof:
+        raise HTTPException(status_code=404, detail="User profile not found")
+    
+    try:
+        prof.avatar_url = None
+        db.commit()
+        return {"success": True, "message": "Avatar deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Failed to delete avatar: {str(e)}"}
         )
 
 @app.get("/api/users/onboarding-draft", response_model=schemas.OnboardingDraft)

@@ -9,6 +9,94 @@ import { apiFetch } from '/src/services/api.js';
 import { KonvoToast } from '/src/components/toast.js';
 import { updateUser, getState } from '/src/store/state.js';
 
+// Geolocation service for reverse geocoding
+const GeoLocationService = {
+    /**
+     * Reverse geocode latitude/longitude to city and state using Nominatim
+     * @param {number} latitude
+     * @param {number} longitude
+     * @returns {Promise<{city: string, state: string, country: string}>}
+     */
+    async reverseGeocode(latitude, longitude) {
+        try {
+            if (!latitude || !longitude) return null;
+            
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'User-Agent': 'Konvo-App/1.0'
+                    }
+                }
+            );
+            
+            if (!response.ok) throw new Error('Geocoding failed');
+            const data = await response.json();
+            
+            const address = data.address || {};
+            const city = address.city || address.town || address.village || '';
+            const state = address.state || '';
+            const country = address.country || '';
+            
+            return { city, state, country, full_address: data.display_name };
+        } catch (error) {
+            console.error('Reverse geocoding error:', error);
+            return null;
+        }
+    },
+
+    /**
+     * Extract coordinates from DIGIPIN if encoded, or parse from location string
+     * DIGIPIN format: XXX-XXX-XXXX
+     * Returns {latitude, longitude} if found
+     */
+    extractCoordinatesFromDigipin(digipin) {
+        try {
+            if (!digipin) return null;
+            
+            const cleaned = digipin.replace(/-/g, '').toUpperCase();
+            
+            // Try to decode as base36 location encoding
+            // This assumes DIGIPIN might contain encoded coordinates
+            // Format: first 6 chars = latitude encoding, next 6 = longitude encoding
+            if (cleaned.length === 10) {
+                // Parse as hex values that represent lat/long
+                const latPart = cleaned.substring(0, 6);
+                const lonPart = cleaned.substring(4, 10);
+                
+                // Convert hex to float coordinates
+                const latValue = parseInt(latPart, 36);
+                const lonValue = parseInt(lonPart, 36);
+                
+                // Normalize to valid lat/lon ranges (-90 to 90, -180 to 180)
+                const latitude = ((latValue % 18000) / 100) - 90;
+                const longitude = ((lonValue % 36000) / 100) - 180;
+                
+                // Validate ranges
+                if (Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180) {
+                    return { latitude, longitude };
+                }
+            }
+        } catch (e) {
+            console.warn('Could not extract coordinates from DIGIPIN:', e);
+        }
+        return null;
+    },
+
+    /**
+     * Generate location string from coordinates
+     */
+    async getLocationFromCoordinates(latitude, longitude) {
+        const result = await this.reverseGeocode(latitude, longitude);
+        if (result) {
+            const { city, state, country } = result;
+            return [city, state, country].filter(Boolean).join(', ');
+        }
+        return null;
+    }
+};
+
 function formatDigipin(value) {
     const cleaned = value
         .toUpperCase()
@@ -126,10 +214,62 @@ export async function initSettingsPage() {
                 });
             }
 
+            // Delete avatar button handler
+            const deleteAvatarBtn = document.getElementById('btn-settings-delete-avatar');
+            if (deleteAvatarBtn && !deleteAvatarBtn.dataset.listenerBound) {
+                deleteAvatarBtn.dataset.listenerBound = 'true';
+                deleteAvatarBtn.addEventListener('click', async () => {
+                    if (!confirm('Are you sure you want to delete your avatar image?')) {
+                        return;
+                    }
+                    try {
+                        deleteAvatarBtn.disabled = true;
+                        deleteAvatarBtn.textContent = 'Deleting...';
+                        
+                        const token = localStorage.getItem('konvo_token');
+                        const headers = {};
+                        if (token) {
+                            headers['Authorization'] = `Bearer ${token}`;
+                        }
 
+                        const response = await fetch('/api/users/profile/avatar', {
+                            method: 'DELETE',
+                            headers
+                        });
+
+                        const responseText = await response.text();
+                        let result;
+                        try {
+                            result = JSON.parse(responseText);
+                        } catch (jsonErr) {
+                            throw new Error(`Server returned invalid response: ${responseText.slice(0, 150)}...`);
+                        }
+
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.detail || 'Delete failed');
+                        }
+
+                        KonvoToast.show('Avatar deleted successfully', 'success');
+                        
+                        // Reset preview
+                        if (previewImg) {
+                            previewImg.src = 'data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="40" r="22" fill="%23888"/><path d="M15 85 C20 65, 80 65, 85 85" fill="%23888"/></svg>';
+                        }
+
+                        if (window.currentUser && window.currentUser.profile) {
+                            window.currentUser.profile.avatar_url = null;
+                        }
+                        updateUser(window.currentUser || getState('currentUser'));
+                    } catch (err) {
+                        KonvoToast.show(`Delete failed: ${err.message}`, 'error');
+                    } finally {
+                        deleteAvatarBtn.disabled = false;
+                        deleteAvatarBtn.textContent = 'Delete Avatar';
+                    }
+                });
+            }
 
             const setDisplayName = document.getElementById('set-display-name');
-            const setBio = document.getElementById('set-bio');
             const setGender = document.getElementById('set-gender');
             const setLookingForGender = document.getElementById('set-looking-for-gender');
             const setDigipin = document.getElementById('set-digipin');
@@ -217,18 +357,80 @@ export async function initSettingsPage() {
                         birth_time = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
                     }
 
+                    // Validate required fields
+                    if (!display_name || display_name.length < 2) {
+                        KonvoToast.show('Display name is required and must be at least 2 characters', 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Save Profile';
+                        }
+                        return;
+                    }
+
+                    if (gender && !['Male', 'Female', 'Non-binary', 'Prefer Not To Say', 'Other'].includes(gender)) {
+                        KonvoToast.show('Invalid gender selection', 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Save Profile';
+                        }
+                        return;
+                    }
+
+                    // Process DIGIPIN location extraction
+                    let final_birth_location = birth_location;
+                    if (digipin) {
+                        const coords = GeoLocationService.extractCoordinatesFromDigipin(digipin);
+                        if (coords) {
+                            // Try to get city/state from coordinates
+                            const locationString = await GeoLocationService.getLocationFromCoordinates(
+                                coords.latitude,
+                                coords.longitude
+                            );
+                            if (locationString) {
+                                final_birth_location = locationString;
+                                // Update the UI field to show resolved location
+                                if (setBirthLocation) {
+                                    setBirthLocation.value = locationString;
+                                }
+                            }
+                        }
+                    }
+
                     try {
-                        await apiFetch('/api/users/profile', {
+                        // Show processing message
+                        if (submitBtn) {
+                            submitBtn.textContent = 'Processing...';
+                        }
+
+                        // Prepare payload with proper validation
+                        const payload = {
+                            display_name: display_name.substring(0, 100),
+                            bio: bio.substring(0, 500) || null,
+                            gender: gender || 'Prefer Not To Say',
+                            looking_for_gender: looking_for_gender || 'All',
+                            birth_date: birth_date || null,
+                            birth_location: final_birth_location || null,
+                            digipin: digipin || null,
+                            birth_time: birth_time || null,
+                            interests: prof.interests || [],
+                            goals: prof.goals || [],
+                            avatar_url: (window.currentUser?.profile?.avatar_url || prof.avatar_url || null),
+                            relationship_intent: prof.relationship_intent || 'Long Term'
+                        };
+
+                        // Log payload for debugging (remove in production)
+                        console.debug('Profile update payload:', payload);
+
+                        const response = await apiFetch('/api/users/profile', {
                             method: 'PUT',
-                            body: JSON.stringify({
-                                display_name, bio, gender, looking_for_gender, birth_date, birth_location, digipin,
-                                birth_time,
-                                interests: prof.interests || [],
-                                goals: prof.goals || [],
-                                avatar_url: (window.currentUser?.profile?.avatar_url || prof.avatar_url || null)
-                            })
+                            body: JSON.stringify(payload)
                         });
-                        KonvoToast.show("Profile configuration updated successfully.", 'success');
+
+                        if (!response || !response.success) {
+                            throw new Error(response?.message || 'Profile update failed');
+                        }
+
+                        KonvoToast.show("✅ Profile configuration updated successfully", 'success');
 
                         if (submitBtn) {
                             submitBtn.disabled = false;
@@ -236,13 +438,19 @@ export async function initSettingsPage() {
                         }
 
                         // Re-fetch user data and update UI dynamically instead of full reload
-                        const updatedUser = await apiFetch('/api/users/me');
-                        if (updatedUser) {
-                            window.currentUser = updatedUser; // Update global cache
-                            initSettingsPage(); // Re-initialize the page to reflect changes
+                        try {
+                            const updatedUser = await apiFetch('/api/users/me');
+                            if (updatedUser) {
+                                window.currentUser = updatedUser;
+                                initSettingsPage();
+                            }
+                        } catch (fetchErr) {
+                            console.warn('Could not refresh user data:', fetchErr);
                         }
                     } catch (err) {
-                        KonvoToast.show(`Failed updating configuration: ${err.message}`, 'error');
+                        console.error('Profile update error:', err);
+                        const errorMsg = err.message || 'Failed updating configuration';
+                        KonvoToast.show(`❌ ${errorMsg}`, 'error');
                         if (submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.textContent = 'Save Profile';

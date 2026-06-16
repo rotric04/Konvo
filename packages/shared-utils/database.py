@@ -112,10 +112,14 @@ def apply_db_migrations(engine):
             print("[MIGRATION] 'avatar_url' column added successfully.")
         else:
             # Ensure the column is TEXT to support long base64 data URLs on Vercel
-            print("[MIGRATION] Ensuring 'avatar_url' column type is TEXT...")
-            with engine.begin() as conn:
-                if "postgresql" in str(engine.url):
-                    conn.execute(text("ALTER TABLE user_profiles ALTER COLUMN avatar_url TYPE TEXT"))
+            avatar_col = next((c for c in inspector.get_columns('user_profiles') if c['name'] == 'avatar_url'), None)
+            if avatar_col:
+                type_str = str(avatar_col['type']).lower()
+                if 'text' not in type_str:
+                    print(f"[MIGRATION] Altering 'avatar_url' column type from {type_str} to TEXT...")
+                    with engine.begin() as conn:
+                        if "postgresql" in str(engine.url):
+                            conn.execute(text("ALTER TABLE user_profiles ALTER COLUMN avatar_url TYPE TEXT"))
 
         if 'looking_for_gender' not in up_columns:
             print("[MIGRATION] Adding 'looking_for_gender' column to 'user_profiles' table...")

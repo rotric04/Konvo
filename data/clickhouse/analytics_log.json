@@ -490,3 +490,4 @@
 {"timestamp": 1781555543.678667, "event_type": "SentimentMetric", "details": {"text_length": 117, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
 {"timestamp": 1781555543.713194, "event_type": "SentimentMetric", "details": {"text_length": 97, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
 {"timestamp": 1781555543.7378914, "event_type": "SentimentMetric", "details": {"text_length": 99, "positive": 0.5, "neutral": 0.5, "negative": 0.0}}
+{"timestamp": 1781640092.934494, "event_type": "UserRegistered", "details": {"email": "test_profile_500@example.com", "konvo_id": "KON-INTJ-9D238"}}
