@@ -1,6 +1,6 @@
 /**
  * KONVO™ APP ENTRY POINT
- * src/app.js — Wires together all modules and boots the application.
+ * src/app.js - Wires together all modules and boots the application.
  */
 
 import { registerPageInit } from '/src/router/router.js';
