@@ -25,11 +25,25 @@ import schemas
 import crud
 from auth_helper import get_current_user
 from algorithms.compatibility import calculate_compatibility
+from redis_client import redis_client
+from datetime import date
 import json
 
 app = FastAPI(title="Behavior & Compatibility Engine", version="1.0.0")
 
 def _calculate_compatibility_grpc(user_a, user_b, db) -> dict:
+    min_id = min(user_a.id, user_b.id)
+    max_id = max(user_a.id, user_b.id)
+    cache_key = f"compatibility_cache:{min_id}:{max_id}"
+    
+    cached_val = redis_client.get_val(cache_key)
+    if cached_val:
+        try:
+            return json.loads(cached_val)
+        except Exception:
+            pass
+
+    res = None
     try:
         import grpc
         from services.grpc_compatibility.proto import compatibility_pb2, compatibility_pb2_grpc
@@ -37,10 +51,18 @@ def _calculate_compatibility_grpc(user_a, user_b, db) -> dict:
         stub = compatibility_pb2_grpc.CompatibilityServiceStub(channel)
         req = compatibility_pb2.CompatibilityRequest(user_id=user_a.id, partner_id=user_b.id)
         resp = stub.CalculateCompatibility(req, timeout=2.0)
-        return json.loads(resp.details_json)
+        res = json.loads(resp.details_json)
     except Exception as e:
         print(f"[gRPC Fallback in Behavior Engine] gRPC call failed: {e}. Calculating locally.")
-        return calculate_compatibility(user_a, user_b, db)
+        res = calculate_compatibility(user_a, user_b, db)
+        
+    if res:
+        try:
+            redis_client.set_val(cache_key, json.dumps(res), ex_seconds=3600)
+        except Exception as e:
+            print(f"[Redis Cache Error] Failed to write cache: {e}")
+            
+    return res
 
 @app.get("/api/compatibility/calculate/{target_user_id}")
 def get_user_compatibility(
@@ -77,6 +99,16 @@ def get_discovery_feed(
             
         res = _calculate_compatibility_grpc(current_user, u, db)
         
+        # Calculate human age from birth_date
+        age = 22
+        if u.profile.birth_date:
+            try:
+                today = date.today()
+                bd = u.profile.birth_date
+                age = today.year - bd.year - ((today.month, today.day) < (bd.month, bd.day))
+            except Exception:
+                pass
+
         cards.append({
             "user_id": u.id,
             "konvo_id": u.konvo_id,
@@ -91,7 +123,10 @@ def get_discovery_feed(
             "avatar": u.agent_twin.avatar,
             "voice_style": u.agent_twin.voice_style,
             "emoji_style": u.agent_twin.emoji_style,
-            "digipin": u.profile.digipin
+            "digipin": u.profile.digipin,
+            "gender": u.profile.gender or "Unknown",
+            "looking_for_gender": u.profile.looking_for_gender or "All",
+            "age": age
         })
         
     # Sort card recommendations using Gale-Shapley stable matching algorithm

@@ -94,4 +94,10 @@ def apply_db_migrations(engine):
                 conn.execute(text("ALTER TABLE user_profiles ADD COLUMN avatar_url VARCHAR(1024)"))
             print("[MIGRATION] 'avatar_url' column added successfully.")
 
+        if 'looking_for_gender' not in up_columns:
+            print("[MIGRATION] Adding 'looking_for_gender' column to 'user_profiles' table...")
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE user_profiles ADD COLUMN looking_for_gender VARCHAR(50) DEFAULT 'All'"))
+            print("[MIGRATION] 'looking_for_gender' column added successfully.")
+
 

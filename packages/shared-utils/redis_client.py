@@ -2,6 +2,7 @@ import redis
 import os
 import time
 import socket
+import random
 from urllib.parse import urlparse
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
@@ -78,6 +79,41 @@ class RedisClient:
             new_val = int(current) + 1
         self.set_val(key, str(new_val), ex_seconds=window_seconds)
         return new_val
+
+    def check_sliding_window_limit(self, key: str, limit: int, window_seconds: int) -> bool:
+        now = time.time()
+        cutoff = now - window_seconds
+        if self.connected:
+            try:
+                # Remove expired requests
+                self.client.zremrangebyscore(key, 0, cutoff)
+                # Count current requests in the window
+                count = self.client.zcard(key)
+                if count >= limit:
+                    return True  # Rate limited
+                # Add current request to the window
+                pipe = self.client.pipeline()
+                pipe.zadd(key, {f"{now}-{random.random()}": now})
+                pipe.expire(key, window_seconds)
+                pipe.execute()
+                return False  # Not rate limited
+            except Exception:
+                self.connected = False
+
+        # Fallback in-memory sliding window
+        if not hasattr(self, "fallback_sliding_windows"):
+            self.fallback_sliding_windows = {}
+        if key not in self.fallback_sliding_windows:
+            self.fallback_sliding_windows[key] = []
+        
+        # Filter out expired timestamps
+        self.fallback_sliding_windows[key] = [t for t in self.fallback_sliding_windows[key] if t > cutoff]
+        
+        if len(self.fallback_sliding_windows[key]) >= limit:
+            return True  # Rate limited
+            
+        self.fallback_sliding_windows[key].append(now)
+        return False  # Not rate limited
 
     def set_presence(self, user_id: int, state: str):
         key = f"presence:user:{user_id}"

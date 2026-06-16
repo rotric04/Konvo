@@ -233,6 +233,7 @@ export function initAuthPage() {
 
         const email    = document.getElementById('loginEmail')?.value.trim();
         const password = document.getElementById('loginPassword')?.value;
+        const turnstileToken = e.target.querySelector('[name="cf-turnstile-response"]')?.value || '';
 
         if (!email || !password) {
             if (loginError) loginError.textContent = 'Please enter your email and password.';
@@ -245,7 +246,7 @@ export function initAuthPage() {
         try {
             const res = await apiFetch('/api/auth/login', {
                 method: 'POST',
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, turnstile_token: turnstileToken }),
             });
 
             if (res?.access_token) {
@@ -254,10 +255,12 @@ export function initAuthPage() {
                 setTimeout(() => { window.location.href = '/discover'; }, 800);
             } else {
                 if (loginError) loginError.textContent = 'Invalid credentials. Please try again.';
+                if (window.turnstile) { window.turnstile.reset(); }
             }
         } catch (err) {
             if (loginError) loginError.textContent = err.message || 'Authentication failed.';
             KonvoToast.show(err.message || 'Login failed', 'error');
+            if (window.turnstile) { window.turnstile.reset(); }
         } finally {
             if (btn) { btn.disabled = false; btn.textContent = 'Sign In'; }
         }
@@ -275,6 +278,7 @@ export function initAuthPage() {
         const username    = document.getElementById('regUsername')?.value.trim();
         const phoneVal    = document.getElementById('regPhone')?.value.trim();
         const tosAgreed   = document.getElementById('reg-tos-agree')?.checked;
+        const turnstileToken = e.target.querySelector('[name="cf-turnstile-response"]')?.value || '';
 
         if (!email || !password || !displayName || !username || !phoneVal) {
             if (registerError) registerError.textContent = 'All fields are required.';
@@ -300,10 +304,12 @@ export function initAuthPage() {
                     username,
                     phone: fullPhone,
                     gender: 'Unknown',
+                    looking_for_gender: 'All',
                     relationship_intent: 'Long Term',
                     bio: '',
                     interests: [],
                     goals: [],
+                    turnstile_token: turnstileToken
                 }),
             });
 
@@ -317,6 +323,7 @@ export function initAuthPage() {
         } catch (err) {
             if (registerError) registerError.textContent = err.message || 'Registration failed.';
             KonvoToast.show(err.message || 'Registration failed', 'error');
+            if (window.turnstile) { window.turnstile.reset(); }
         } finally {
             if (btn) { btn.disabled = false; btn.textContent = 'Create Account'; }
         }

@@ -26,6 +26,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Cloudflare Turnstile CAPTCHA -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
     <!-- Theme Manager: runs before body renders to prevent flash -->
     <script>
         (function () {
@@ -679,6 +682,9 @@
                         <p id="login-error" class="validation-msg error"
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
 
+                        <!-- Cloudflare Turnstile Widget -->
+                        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 1.25rem; display: flex; justify-content: center;"></div>
+
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-login-submit">
                             Sign In
                         </button>
@@ -799,6 +805,9 @@
 
                         <p id="register-error" class="validation-msg error"
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
+
+                        <!-- Cloudflare Turnstile Widget -->
+                        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark" style="margin-bottom: 1.25rem; display: flex; justify-content: center;"></div>
 
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;"
                             id="btn-register-submit">

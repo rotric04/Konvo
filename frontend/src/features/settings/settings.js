@@ -71,7 +71,14 @@ export async function initSettingsPage() {
                             body: formData
                         });
                         
-                        const result = await response.json();
+                        const responseText = await response.text();
+                        let result;
+                        try {
+                            result = JSON.parse(responseText);
+                        } catch (jsonErr) {
+                            throw new Error(`Server returned invalid response: ${responseText.slice(0, 150)}...`);
+                        }
+                        
                         if (!response.ok || !result.success) {
                             throw new Error(result.detail || 'Upload failed');
                         }
@@ -99,6 +106,7 @@ export async function initSettingsPage() {
             const setDisplayName = document.getElementById('set-display-name');
             const setBio = document.getElementById('set-bio');
             const setGender = document.getElementById('set-gender');
+            const setLookingForGender = document.getElementById('set-looking-for-gender');
             const setDigipin = document.getElementById('set-digipin');
             const setBirthDate = document.getElementById('set-birth-date');
             const setBirthLocation = document.getElementById('set-birth-location');
@@ -106,6 +114,7 @@ export async function initSettingsPage() {
             if (setDisplayName) setDisplayName.value = prof.display_name || '';
             if (setBio) setBio.value = prof.bio || '';
             if (setGender) setGender.value = prof.gender || 'Prefer Not To Say';
+            if (setLookingForGender) setLookingForGender.value = prof.looking_for_gender || 'All';
             if (setDigipin) setDigipin.value = prof.digipin || '';
             if (setBirthDate) setBirthDate.value = prof.birth_date || '';
             if (setBirthLocation) setBirthLocation.value = prof.birth_location || '';
@@ -152,6 +161,7 @@ export async function initSettingsPage() {
                     const display_name = document.getElementById('set-display-name').value.trim();
                     const bio = document.getElementById('set-bio').value.trim();
                     const gender = document.getElementById('set-gender').value;
+                    const looking_for_gender = document.getElementById('set-looking-for-gender')?.value || 'All';
                     const birth_date = document.getElementById('set-birth-date').value || null;
                     const birth_location = document.getElementById('set-birth-location').value.trim() || null;
                     const digipin = document.getElementById('set-digipin').value.trim() || null;
@@ -173,7 +183,7 @@ export async function initSettingsPage() {
                         await apiFetch('/api/users/profile', {
                             method: 'PUT',
                             body: JSON.stringify({
-                                display_name, bio, gender, birth_date, birth_location, digipin,
+                                display_name, bio, gender, looking_for_gender, birth_date, birth_location, digipin,
                                 birth_time,
                                 interests: prof.interests || [],
                                 goals: prof.goals || []

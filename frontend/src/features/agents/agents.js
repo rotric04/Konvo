@@ -11,7 +11,7 @@ export function initAgentsPage() {
     const twinCard = document.getElementById('twin-profile-card');
     const simHistoryList = document.getElementById('sim-history-list');
     const simDetailBox = document.getElementById('sim-detail-box');
-    
+
     let activeTwin = null;
     let selectedSimId = null;
 
@@ -83,7 +83,7 @@ export function initAgentsPage() {
         try {
             const sims = await apiFetch('/api/agents/simulations');
             simHistoryList.innerHTML = '';
-            
+
             if (!sims || sims.length === 0) {
                 simHistoryList.innerHTML = `<div style="color:var(--text-muted);font-style:italic;font-size:0.8rem;padding:1rem;">No simulations found. Swipe on matches to trigger agent interactions.</div>`;
                 return;
@@ -182,7 +182,7 @@ export function initAgentsPage() {
                     <div style="border-top:1px solid var(--border-color); padding-top:0.75rem; display:flex; justify-content:space-between; align-items:center;">
                         <span style="font-size:0.8rem;">${approvalText}</span>
                         <div style="display:flex; gap:0.5rem;">
-                            <button class="btn btn-primary" id="btn-animate-date-stage" style="padding:0.4rem 0.8rem; font-size:0.75rem; color:var(--bg-primary);">⚡ Run Dialogue Playback</button>
+                            <button class="btn btn-primary" id="btn-animate-date-stage" style="padding:0.4rem 0.8rem; font-size:0.75rem; color:var(--accent-teal);">⚡ Run Dialogue Playback</button>
                             ${myApp === 'pending' && !isExpired ? `
                                 <button class="btn btn-secondary" id="btn-approve-match" style="padding:0.4rem 0.8rem; font-size:0.75rem; border-color:var(--accent-teal); color:var(--accent-teal);">Approve</button>
                                 <button class="btn btn-secondary" id="btn-decline-match" style="padding:0.4rem 0.8rem; font-size:0.75rem; border-color:var(--accent-rose); color:var(--accent-rose);">Decline</button>
@@ -208,7 +208,7 @@ export function initAgentsPage() {
 
         document.getElementById('btn-approve-match')?.addEventListener('click', () => handleApproval('approved'));
         document.getElementById('btn-decline-match')?.addEventListener('click', () => handleApproval('declined'));
-        
+
         document.getElementById('btn-animate-date-stage')?.addEventListener('click', () => {
             openDateAnimationStageModal(sim);
         });
@@ -234,14 +234,14 @@ export function initAgentsPage() {
         const modal = document.getElementById('date-stage-modal');
         const stageLogs = document.getElementById('date-stage-logs-scroller');
         const approvalsTray = document.getElementById('date-stage-approvals-tray');
-        
+
         if (!modal) return;
-        
+
         const titleEl = document.getElementById('modal-stage-title');
         const subtitleEl = document.getElementById('modal-stage-subtitle');
         if (titleEl) titleEl.textContent = `${activeTwin.name} & ${sim.partner_name}`;
         if (subtitleEl) subtitleEl.textContent = `Environment: ${sim.environment}`;
-        
+
         if (typeof window.konvoOpenModal === 'function') {
             window.konvoOpenModal('date-stage-modal');
         }
@@ -256,9 +256,9 @@ export function initAgentsPage() {
                 easing: 'easeOutBack'
             });
         }
-        
+
         if (stageLogs) stageLogs.innerHTML = '';
-        
+
         const bubbleA = document.getElementById('speech-bubble-a');
         const bubbleB = document.getElementById('speech-bubble-b');
         if (bubbleA) {
@@ -269,11 +269,11 @@ export function initAgentsPage() {
             bubbleB.style.opacity = '0';
             bubbleB.style.transform = 'scale(0.8)';
         }
-        
+
         const currentUser = window.currentUser;
         const isUserA = sim.user_a_id === currentUser?.id;
         const myApp = isUserA ? sim.approval_user_a : sim.approval_user_b;
-        
+
         if (approvalsTray) {
             approvalsTray.innerHTML = '';
             if (myApp === 'pending') {
@@ -296,7 +296,7 @@ export function initAgentsPage() {
 
         let logIndex = 0;
         const logEntries = sim.dialogue_log || [];
-        
+
         function runDialogAnimation() {
             const isModalActive = modal.classList.contains('active') || modal.style.display === 'flex' || modal.style.display === 'block';
             if (!isModalActive || logIndex >= logEntries.length) {
@@ -308,10 +308,10 @@ export function initAgentsPage() {
                 }
                 return;
             }
-            
+
             const entry = logEntries[logIndex];
             const div = document.createElement('div');
-            
+
             if (entry.speaker === 'System Core') {
                 div.style.color = 'var(--text-muted)';
                 div.style.fontFamily = 'var(--font-mono)';
@@ -325,7 +325,7 @@ export function initAgentsPage() {
             } else if (entry.speaker === activeTwin.name) {
                 div.style.color = 'var(--accent-teal)';
                 div.style.fontWeight = 'bold';
-                
+
                 if (bubbleB && window.anime) {
                     window.anime({ targets: '#speech-bubble-b', opacity: 0, scale: 0.8, duration: 300, easing: 'easeOutQuad' });
                 }
@@ -340,7 +340,7 @@ export function initAgentsPage() {
                             duration: 500,
                             easing: 'easeOutBack'
                         });
-                        
+
                         window.anime({
                             targets: '#stage-avatar-a',
                             translateY: [0, -15, 0],
@@ -355,7 +355,7 @@ export function initAgentsPage() {
             } else {
                 div.style.color = 'var(--accent-indigo)';
                 div.style.fontWeight = 'bold';
-                
+
                 if (bubbleA && window.anime) {
                     window.anime({ targets: '#speech-bubble-a', opacity: 0, scale: 0.8, duration: 300, easing: 'easeOutQuad' });
                 }
@@ -370,7 +370,7 @@ export function initAgentsPage() {
                             duration: 500,
                             easing: 'easeOutBack'
                         });
-                        
+
                         window.anime({
                             targets: '#stage-avatar-b',
                             translateY: [0, -15, 0],
@@ -383,15 +383,47 @@ export function initAgentsPage() {
                     }
                 }
             }
+
+            div.style.marginBottom = '0.45rem';
+            div.style.fontSize = '0.78rem';
+            div.style.lineHeight = '1.4';
+            div.style.display = 'flex';
+            div.style.alignItems = 'flex-start';
+            div.style.gap = '0.4rem';
             
-            div.textContent = `${entry.speaker}: ${entry.message}`;
-            div.style.marginBottom = '0.4rem';
-            div.style.fontSize = '0.85rem';
+            const speakerSpan = document.createElement('span');
+            speakerSpan.style.fontFamily = 'var(--font-mono)';
+            speakerSpan.style.whiteSpace = 'nowrap';
+            if (entry.speaker === 'System Core') {
+                speakerSpan.style.color = 'var(--text-muted)';
+                speakerSpan.textContent = `⚙️ [${entry.speaker}]:`;
+            } else if (entry.speaker === activeTwin.name) {
+                speakerSpan.style.color = 'var(--accent-teal)';
+                speakerSpan.style.fontWeight = 'bold';
+                speakerSpan.textContent = `🤖 [${entry.speaker}]:`;
+            } else {
+                speakerSpan.style.color = 'var(--accent-indigo)';
+                speakerSpan.style.fontWeight = 'bold';
+                speakerSpan.textContent = `👤 [${entry.speaker}]:`;
+            }
+            
+            const messageSpan = document.createElement('span');
+            messageSpan.textContent = entry.message;
+            if (entry.speaker === 'System Core') {
+                messageSpan.style.color = 'var(--text-muted)';
+                messageSpan.style.fontStyle = 'italic';
+            } else {
+                messageSpan.style.color = 'var(--text-primary)';
+            }
+            
+            div.appendChild(speakerSpan);
+            div.appendChild(messageSpan);
+
             if (stageLogs) {
                 stageLogs.appendChild(div);
                 stageLogs.scrollTop = stageLogs.scrollHeight;
             }
-            
+
             logIndex++;
             setTimeout(runDialogAnimation, 3000);
         }

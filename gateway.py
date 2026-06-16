@@ -93,47 +93,7 @@ async def handle_notification(notification: dict):
     return {"success": True}
 
 
-# 2. slowapi Rate Limiter Init
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
-from slowapi.middleware import SlowAPIMiddleware
-import socket
-from urllib.parse import urlparse
-
-# Probe Redis to prevent uncaught slowapi connection crashes
-redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-storage_uri = "memory://"
-try:
-    parsed = urlparse(redis_url)
-    host = parsed.hostname or "127.0.0.1"
-    port = parsed.port or 6379
-    if host == "localhost":
-        host = "127.0.0.1"
-    # Try a quick socket connection
-    s = socket.create_connection((host, port), timeout=0.5)
-    s.close()
-    storage_uri = redis_url
-    print(f"[GATEWAY] Rate limiter connected to Redis at {host}:{port}")
-except Exception:
-    print("[GATEWAY] WARNING: Redis is not reachable. Limiter falling back to memory:// storage.")
-
-limiter = Limiter(
-    key_func=get_remote_address,
-    storage_uri=storage_uri,
-    default_limits=["120/minute"]
-)
-app.state.limiter = limiter
-app.add_middleware(SlowAPIMiddleware)
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
-
-
-# 3. Prometheus Metrics Instrumentation
-from prometheus_fastapi_instrumentator import Instrumentator
-Instrumentator().instrument(app).expose(app)
-print("[GATEWAY] Prometheus metrics instrumentation active.")
-
-# Rate limiting rules configuration
+# 2. Custom Sliding Window Rate Limiting Setup
 RATE_LIMIT_RULES = {
     "/api/auth/login": (10, 60),
     "/api/auth/register": (5, 60),
@@ -144,18 +104,54 @@ RATE_LIMIT_RULES = {
     "/api/search": (60, 60),
 }
 
+class SlidingWindowRateLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path.startswith("/api") and not request.url.path.startswith("/api/health"):
+            ip = request.client.host if request.client else "127.0.0.1"
+            rule = None
+            for path_prefix, (limit, window) in RATE_LIMIT_RULES.items():
+                if request.url.path == path_prefix or request.url.path.startswith(path_prefix + "/"):
+                    rule = (limit, window)
+                    break
+            
+            if rule is None:
+                # Default limit of 120 requests per minute
+                rule = (120, 60)
+                
+            limit, window = rule
+            clean_path = request.url.path.rstrip("/").replace("/", "_")
+            key = f"rate_limit:{ip}:{clean_path}"
+            
+            if redis_client.check_sliding_window_limit(key, limit, window):
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded. Please try again later."}
+                )
+        
+        return await call_next(request)
+
+app.add_middleware(SlidingWindowRateLimitMiddleware)
+
+
+# 3. Prometheus Metrics Instrumentation
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app)
+print("[GATEWAY] Prometheus metrics instrumentation active.")
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         response.headers["Content-Security-Policy"] = (
             "default-src 'self' *; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com https://static.cloudflareinsights.com blob:; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com https://static.cloudflareinsights.com https://challenges.cloudflare.com blob:; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com; "
             "img-src 'self' data: blob: https://unpkg.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
-            "connect-src 'self' ws: wss: https://formsubmit.co https://unpkg.com https://konvo-u5qb.onrender.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
+            "connect-src 'self' ws: wss: https://formsubmit.co https://unpkg.com https://konvo-u5qb.onrender.com https://nominatim.openstreetmap.org https://challenges.cloudflare.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
+            "frame-src 'self' https://challenges.cloudflare.com; "
             "worker-src 'self' blob:; "
-            "child-src 'self' blob:; "
+            "child-src 'self' blob: https://challenges.cloudflare.com; "
             "frame-ancestors 'none';"
         )
         response.headers["X-Frame-Options"] = "DENY"

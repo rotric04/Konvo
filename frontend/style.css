@@ -2117,7 +2117,7 @@ body::before {
     border: 1px solid var(--border-color);
     background-color: var(--bg-card);
     border-radius: 8px;
-    height: 300px;
+    height: 420px;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -2128,7 +2128,8 @@ body::before {
 .stage-avatars {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 1.5rem;
     flex: 1;
 }
 .stage-avatar-wrapper {
@@ -2140,25 +2141,28 @@ body::before {
 }
 .stage-bubble {
     position: absolute;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: rgba(20, 20, 25, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.75rem 1rem;
-    border-radius: 8px;
-    max-width: 200px;
-    font-size: 0.8rem;
+    border-radius: 12px;
+    max-width: 240px;
+    font-size: 0.82rem;
     color: var(--text-primary);
     opacity: 0;
-    transition: opacity 0.3s ease;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
     pointer-events: none;
+    z-index: 10;
 }
 .stage-bubble.left {
-    top: 20px;
-    left: 60px;
+    bottom: 230px;
+    left: 35px;
 }
 .stage-bubble.right {
-    top: 20px;
-    right: 60px;
+    bottom: 230px;
+    right: 35px;
 }
 .stage-bubble::after {
     content: '';
@@ -2166,24 +2170,63 @@ body::before {
     bottom: -8px;
     border-width: 8px 8px 0;
     border-style: solid;
-    border-color: var(--bg-card) transparent;
+    border-color: rgba(20, 20, 25, 0.8) transparent;
     display: block;
     width: 0;
 }
 .stage-bubble.left::after {
-    left: 20px;
+    left: 24px;
 }
 .stage-bubble.right::after {
-    right: 20px;
+    right: 24px;
 }
 .stage-scroller {
-    height: 100px;
+    height: 140px;
     border-top: 1px solid var(--border-color);
-    background-color: var(--surface-secondary, var(--bg-card));
+    background-color: #0c0c0f;
     overflow-y: auto;
-    padding: 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    padding: 1rem;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+    border-radius: 0 0 8px 8px;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+}
+.stage-scroller::-webkit-scrollbar {
+    width: 6px;
+}
+.stage-scroller::-webkit-scrollbar-track {
+    background: #09090b;
+}
+.stage-scroller::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 3px;
+}
+.stage-scroller::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+}
+
+/* Light Theme Overrides for Twin Stage */
+html[data-theme="light"] .stage-bubble {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    box-shadow: 0 8px 32px 0 rgba(9, 9, 11, 0.1);
+}
+html[data-theme="light"] .stage-bubble::after {
+    border-color: rgba(255, 255, 255, 0.85) transparent;
+}
+html[data-theme="light"] .stage-scroller {
+    background-color: #faf9f6;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+}
+html[data-theme="light"] .stage-scroller::-webkit-scrollbar-track {
+    background: #f4f4f5;
+}
+html[data-theme="light"] .stage-scroller::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+}
+html[data-theme="light"] .stage-scroller::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
 }
 
 /* --- DISCOVER & RESONANCE GRID VIEW --- */

@@ -69,7 +69,8 @@ def create_user(db: Session, user: schemas.UserRegister):
         asc = astro["ascendant"]
         
     db_profile = models.UserProfile(
-        user_id=db_user.id, display_name=user.display_name, gender=user.gender, bio="",
+        user_id=db_user.id, display_name=user.display_name, gender=user.gender,
+        looking_for_gender=user.looking_for_gender, bio="",
         relationship_intent=user.relationship_intent,
         birth_date=user.birth_date, birth_time=user.birth_time, birth_location=user.birth_location,
         digipin=user.digipin,
@@ -104,6 +105,7 @@ def create_verified_user(db: Session, user_data: dict) -> models.User:
     username = user_data["username"]
     phone = user_data["phone"]
     gender = user_data.get("gender", "Unknown")
+    looking_for_gender = user_data.get("looking_for_gender", "All")
     relationship_intent = user_data.get("relationship_intent", "Long Term")
     interests = user_data.get("interests", [])
     goals = user_data.get("goals", [])
@@ -145,7 +147,8 @@ def create_verified_user(db: Session, user_data: dict) -> models.User:
             print(f"[ASTROLOGY ERROR] {e}")
 
     db_profile = models.UserProfile(
-        user_id=db_user.id, display_name=display_name, gender=gender, bio="",
+        user_id=db_user.id, display_name=display_name, gender=gender,
+        looking_for_gender=looking_for_gender, bio="",
         relationship_intent=relationship_intent,
         birth_date=b_date, birth_time=b_time, birth_location=birth_location,
         digipin=digipin,
@@ -228,6 +231,7 @@ def update_user_profile(db: Session, user_id: int, profile_update: schemas.Profi
         user.profile.display_name = profile_update.display_name
         user.profile.bio = profile_update.bio
         user.profile.gender = profile_update.gender
+        user.profile.looking_for_gender = profile_update.looking_for_gender
         user.profile.birth_date = b_date
         user.profile.birth_time = b_time
         user.profile.birth_location = b_location
@@ -248,6 +252,7 @@ def update_user_profile(db: Session, user_id: int, profile_update: schemas.Profi
             display_name=profile_update.display_name,
             bio=profile_update.bio,
             gender=profile_update.gender,
+            looking_for_gender=profile_update.looking_for_gender,
             birth_date=b_date,
             birth_time=b_time,
             birth_location=b_location,
@@ -478,6 +483,7 @@ def submit_personality_assessment(db: Session, user_id: int, answers: dict, cust
             user_id=user_id,
             display_name=user.email.split("@")[0],
             gender="Unknown",
+            looking_for_gender="All",
             bio="",
             relationship_intent="Long Term",
             sun_sign="Aries",

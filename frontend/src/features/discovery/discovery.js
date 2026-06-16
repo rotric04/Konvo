@@ -46,6 +46,7 @@ export function initSwipePage(targetContainerId) {
     if (deckContainer.dataset.initialized === 'true') return;
     deckContainer.dataset.initialized = 'true';
     
+    let allCandidates = [];
     let candidateFeeds = [];
     let currentCardIndex = 0;
 
@@ -67,13 +68,50 @@ export function initSwipePage(targetContainerId) {
                     </div>
                 </div>
             `;
-            candidateFeeds = await apiFetch('/api/compatibility/discovery');
-            currentCardIndex = 0;
-            renderSwipeCard();
+            allCandidates = await apiFetch('/api/compatibility/discovery');
+            applyFilters();
         } catch (e) {
             deckContainer.innerHTML = `<div style="color: var(--accent-rose); font-family: var(--font-mono); font-size: 0.8rem; padding: 1.5rem; text-align: center;">Failed loading discovery deck: ${e.message}</div>`;
         }
     }
+
+    function applyFilters() {
+        const genderSelect = document.querySelector('.filter-gender-select');
+        const intentSelect = document.querySelector('.filter-intent-select');
+        const selectedGender = genderSelect ? genderSelect.value : 'All';
+        const selectedIntent = intentSelect ? intentSelect.value : 'All';
+        
+        candidateFeeds = allCandidates.filter(c => {
+            let matchGender = true;
+            if (selectedGender !== 'All') {
+                matchGender = (c.gender && c.gender.toLowerCase() === selectedGender.toLowerCase());
+            }
+            let matchIntent = true;
+            if (selectedIntent !== 'All') {
+                matchIntent = (c.relationship_intent && c.relationship_intent.toLowerCase() === selectedIntent.toLowerCase());
+            }
+            return matchGender && matchIntent;
+        });
+        
+        currentCardIndex = 0;
+        renderSwipeCard();
+    }
+
+    // Bind filters
+    const genderSelects = document.querySelectorAll('.filter-gender-select');
+    const intentSelects = document.querySelectorAll('.filter-intent-select');
+    genderSelects.forEach(select => {
+        select.addEventListener('change', (e) => {
+            genderSelects.forEach(s => { s.value = e.target.value; });
+            applyFilters();
+        });
+    });
+    intentSelects.forEach(select => {
+        select.addEventListener('change', (e) => {
+            intentSelects.forEach(s => { s.value = e.target.value; });
+            applyFilters();
+        });
+    });
 
     function renderSwipeCard() {
         if (!candidateFeeds || candidateFeeds.length === 0 || currentCardIndex >= candidateFeeds.length) {
@@ -102,8 +140,12 @@ export function initSwipePage(targetContainerId) {
                 <h2 style="font-family: var(--font-serif); font-size:1.6rem; color:var(--text-primary); margin-bottom:0.25rem; text-align: center;">${candidate.display_name}</h2>
                 <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); margin-bottom: 0.75rem; text-align: center;">${candidate.mbti_type} Archetype</div>
                 
-                <div style="display: flex; gap: 0.5rem; justify-content: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 1.25rem;">
-                    <span>Location: Staging</span>
+                <div style="display: flex; gap: 0.5rem; justify-content: center; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 1.25rem; flex-wrap: wrap;">
+                    <span>Age: ${candidate.age}</span>
+                    <span>•</span>
+                    <span>Gender: ${candidate.gender}</span>
+                    <span>•</span>
+                    <span>Seeking: ${candidate.looking_for_gender}</span>
                     <span>•</span>
                     <span>Intent: ${candidate.relationship_intent}</span>
                     <span>•</span>

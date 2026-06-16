@@ -62,6 +62,7 @@ def update_profile(
             user_id=current_user.id,
             display_name=request.display_name or current_user.email.split("@")[0],
             gender=request.gender or "Unknown",
+            looking_for_gender=request.looking_for_gender or "All",
             bio=request.bio or "",
             relationship_intent=request.relationship_intent or "Long Term",
             sun_sign="Aries",
@@ -78,6 +79,7 @@ def update_profile(
     prof.display_name = request.display_name
     prof.bio = request.bio
     prof.gender = request.gender
+    prof.looking_for_gender = request.looking_for_gender
     prof.birth_date = request.birth_date
     prof.birth_time = request.birth_time
     prof.birth_location = request.birth_location
@@ -193,11 +195,16 @@ def upload_avatar(
         
         return {"success": True, "avatar_url": avatar_url}
         
-    except HTTPException:
-        raise
+    except HTTPException as he:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=he.status_code, content={"detail": he.detail})
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Failed to process and upload avatar image: {str(e)}")
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Failed to process and upload avatar image: {str(e)}"}
+        )
 
 @app.get("/api/users/onboarding-draft", response_model=schemas.OnboardingDraft)
 def get_onboarding_draft(current_user: models.User = Depends(get_current_user)):

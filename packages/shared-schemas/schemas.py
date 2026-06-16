@@ -10,6 +10,7 @@ class UserRegister(BaseModel):
     username: str
     phone: str
     gender: str = "Unknown"
+    looking_for_gender: Optional[str] = "All"
     relationship_intent: str = "Long Term"
     interests: List[str] = []
     goals: List[str] = []
@@ -19,6 +20,7 @@ class UserRegister(BaseModel):
     birth_time: Optional[time] = None
     birth_location: Optional[str] = None
     digipin: Optional[str] = None
+    turnstile_token: Optional[str] = None
 
 class RegisterResponse(BaseModel):
     success: bool
@@ -35,6 +37,7 @@ class OTPResendRequest(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+    turnstile_token: Optional[str] = None
 
 class Token(BaseModel):
     access_token: str
@@ -79,6 +82,7 @@ class AssessmentSubmission(BaseModel):
 class UserProfileSchema(BaseModel):
     display_name: str
     gender: str
+    looking_for_gender: Optional[str] = "All"
     bio: Optional[str]
     relationship_intent: str
     birth_date: Optional[date]
@@ -161,6 +165,9 @@ class DiscoveryCard(BaseModel):
     voice_style: str
     emoji_style: str
     digipin: Optional[str] = None
+    gender: str
+    looking_for_gender: str
+    age: int
 
 # Virtual Date Simulation
 class DateSimulationResponse(BaseModel):
@@ -274,6 +281,7 @@ class ProfileUpdateRequest(BaseModel):
     display_name: str
     bio: str
     gender: str
+    looking_for_gender: Optional[str] = "All"
     birth_date: Optional[date] = None
     birth_time: Optional[time] = None
     birth_location: Optional[str] = None

@@ -36,6 +36,7 @@ class UserProfile(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
     display_name = Column(String, nullable=False)
     gender = Column(String, default="Unknown")
+    looking_for_gender = Column(String, default="All")
     bio = Column(Text, nullable=True)
     relationship_intent = Column(String, default="Long Term") # Long Term, Casual, Friendship, Mentorship
     
