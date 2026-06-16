@@ -50,165 +50,11 @@ export function initAuthPage() {
 
     // ─── Helpers ────────────────────────────────────────────────────────────────
 
-    let loginWidgetId = null;
-    let registerWidgetId = null;
-    let currentLoginChallengeId = null;
-    let currentRegisterChallengeId = null;
-
-    async function loadFallbackChallenge(type) {
-        try {
-            const config = await fetchTurnstileConfig(true);
-            if (config && config.fallback_challenge) {
-                const challenge = config.fallback_challenge;
-                if (type === 'login') {
-                    currentLoginChallengeId = challenge.id;
-                    const qEl = document.getElementById('login-fallback-question');
-                    if (qEl) qEl.textContent = challenge.question;
-                    const aInput = document.getElementById('login-fallback-answer');
-                    if (aInput) aInput.value = '';
-                } else if (type === 'register') {
-                    currentRegisterChallengeId = challenge.id;
-                    const qEl = document.getElementById('register-fallback-question');
-                    if (qEl) qEl.textContent = challenge.question;
-                    const aInput = document.getElementById('register-fallback-answer');
-                    if (aInput) aInput.value = '';
-                }
-            }
-        } catch (err) {
-            console.error(`[Auth] Failed to load fallback challenge for ${type}:`, err);
-        }
-    }
-
-    async function renderCaptchaWidgets() {
-        const config = await fetchTurnstileConfig();
-        const sitekey = config?.site_key || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? '1x00000000000000000000AA' : '0x4AAAAAADg9vHwYwA4a699m');
-        const resolvedTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        const hasTurnstile = typeof window.turnstile !== 'undefined';
-
-        // ── Login Captcha ──
-        const loginContainer = document.getElementById('login-turnstile');
-        if (loginContainer && formLogin?.classList.contains('active')) {
-            const loader = document.getElementById('login-captcha-loader');
-            const fallbackContainer = document.getElementById('login-captcha-fallback');
-            
-            if (hasTurnstile) {
-                if (fallbackContainer) {
-                    fallbackContainer.style.display = 'none';
-                    fallbackContainer.classList.add('hidden');
-                }
-                loginContainer.style.display = 'block';
-                if (loader) loader.style.display = 'flex';
-                
-                if (loginWidgetId !== null) {
-                    try { window.turnstile.remove(loginWidgetId); } catch (e) { }
-                    loginWidgetId = null;
-                }
-                
-                try {
-                    loginWidgetId = window.turnstile.render('#login-turnstile', {
-                        sitekey: sitekey,
-                        theme: resolvedTheme
-                    });
-                } catch (err) {
-                    console.error("[Auth] Turnstile Login Render Failed:", err);
-                    showLoginFallback();
-                }
-                setTimeout(() => { if (loader) loader.style.display = 'none'; }, 300);
-            } else {
-                showLoginFallback();
-            }
-        }
-
-        // ── Register Captcha ──
-        const registerContainer = document.getElementById('register-turnstile');
-        if (registerContainer && formRegister?.classList.contains('active')) {
-            const loader = document.getElementById('register-captcha-loader');
-            const fallbackContainer = document.getElementById('register-captcha-fallback');
-            
-            if (hasTurnstile) {
-                if (fallbackContainer) {
-                    fallbackContainer.style.display = 'none';
-                    fallbackContainer.classList.add('hidden');
-                }
-                registerContainer.style.display = 'block';
-                if (loader) loader.style.display = 'flex';
-                
-                if (registerWidgetId !== null) {
-                    try { window.turnstile.remove(registerWidgetId); } catch (e) { }
-                    registerWidgetId = null;
-                }
-                
-                try {
-                    registerWidgetId = window.turnstile.render('#register-turnstile', {
-                        sitekey: sitekey,
-                        theme: resolvedTheme
-                    });
-                } catch (err) {
-                    console.error("[Auth] Turnstile Register Render Failed:", err);
-                    showRegisterFallback();
-                }
-                setTimeout(() => { if (loader) loader.style.display = 'none'; }, 300);
-            } else {
-                showRegisterFallback();
-            }
-        }
-    }
-
-    function showLoginFallback() {
-        const loginContainer = document.getElementById('login-turnstile');
-        const loader = document.getElementById('login-captcha-loader');
-        const fallbackContainer = document.getElementById('login-captcha-fallback');
-        
-        if (loginContainer) loginContainer.style.display = 'none';
-        if (loader) loader.style.display = 'none';
-        if (fallbackContainer) {
-            fallbackContainer.style.display = 'flex';
-            fallbackContainer.classList.remove('hidden');
-        }
-        loadFallbackChallenge('login');
-    }
-
-    function showRegisterFallback() {
-        const registerContainer = document.getElementById('register-turnstile');
-        const loader = document.getElementById('register-captcha-loader');
-        const fallbackContainer = document.getElementById('register-captcha-fallback');
-        
-        if (registerContainer) registerContainer.style.display = 'none';
-        if (loader) loader.style.display = 'none';
-        if (fallbackContainer) {
-            fallbackContainer.style.display = 'flex';
-            fallbackContainer.classList.remove('hidden');
-        }
-        loadFallbackChallenge('register');
-    }
-
-    // Expose globally so that Cloudflare's explicit onload callback can trigger it
-    window.renderCaptchaWidgets = renderCaptchaWidgets;
-
-    // Synchronize Turnstile widget theme with application theme dynamic switching
-    window.addEventListener('konvoThemeChanged', () => {
-        renderCaptchaWidgets();
-    });
-
-    document.getElementById('btn-login-refresh-captcha')?.addEventListener('click', () => {
-        loadFallbackChallenge('login');
-    });
-    document.getElementById('btn-register-refresh-captcha')?.addEventListener('click', () => {
-        loadFallbackChallenge('register');
-    });
-
     function showForm(formEl) {
         [formLogin, formRegister, formOtp, formForgot, formReset].forEach(f => {
             if (f) { f.classList.remove('active'); f.style.display = 'none'; }
         });
         if (formEl) { formEl.classList.add('active'); formEl.style.display = 'block'; }
-
-        // Render captcha when showing Login or Register form (giving DOM a small tick to layout)
-        if (formEl === formLogin || formEl === formRegister) {
-            setTimeout(() => {
-                renderCaptchaWidgets();
-            }, 50);
-        }
     }
 
     function switchTab(active) {
@@ -380,20 +226,12 @@ export function initAuthPage() {
     });
 
     // ─── Submit: Login ───────────────────────────────────────────────────────────
-
     loginForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (loginError) loginError.textContent = '';
 
         const email = document.getElementById('loginEmail')?.value.trim();
         const password = document.getElementById('loginPassword')?.value;
-        
-        let turnstileToken = e.target.querySelector('[name="cf-turnstile-response"]')?.value || '';
-        const fallbackContainer = document.getElementById('login-captcha-fallback');
-        if (fallbackContainer && !fallbackContainer.classList.contains('hidden')) {
-            const ans = document.getElementById('login-fallback-answer')?.value.trim();
-            turnstileToken = `fallback:${currentLoginChallengeId || ''}:${ans || ''}`;
-        }
 
         if (!email || !password) {
             if (loginError) loginError.textContent = 'Please enter your email and password.';
@@ -406,7 +244,7 @@ export function initAuthPage() {
         try {
             const res = await apiFetch('/api/auth/login', {
                 method: 'POST',
-                body: JSON.stringify({ email, password, turnstile_token: turnstileToken }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (res?.access_token) {
@@ -415,25 +253,15 @@ export function initAuthPage() {
                 setTimeout(() => { window.location.href = '/discover'; }, 800);
             } else {
                 if (loginError) loginError.textContent = 'Invalid credentials. Please try again.';
-                if (window.turnstile) { window.turnstile.reset(); }
-                if (fallbackContainer && !fallbackContainer.classList.contains('hidden')) {
-                    loadFallbackChallenge('login');
-                }
             }
         } catch (err) {
             if (loginError) loginError.textContent = err.message || 'Authentication failed.';
             KonvoToast.show(err.message || 'Login failed', 'error');
-            if (window.turnstile) { window.turnstile.reset(); }
-            if (fallbackContainer && !fallbackContainer.classList.contains('hidden')) {
-                loadFallbackChallenge('login');
-            }
         } finally {
             if (btn) { btn.disabled = false; btn.textContent = 'Sign In'; }
         }
     });
-
     // ─── Submit: Register ─────────────────────────────────────────────────────────
-
     registerForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (registerError) registerError.textContent = '';
@@ -444,13 +272,6 @@ export function initAuthPage() {
         const username = document.getElementById('regUsername')?.value.trim();
         const phoneVal = document.getElementById('regPhone')?.value.trim();
         const tosAgreed = document.getElementById('reg-tos-agree')?.checked;
-        
-        let turnstileToken = e.target.querySelector('[name="cf-turnstile-response"]')?.value || '';
-        const fallbackContainer = document.getElementById('register-captcha-fallback');
-        if (fallbackContainer && !fallbackContainer.classList.contains('hidden')) {
-            const ans = document.getElementById('register-fallback-answer')?.value.trim();
-            turnstileToken = `fallback:${currentRegisterChallengeId || ''}:${ans || ''}`;
-        }
 
         if (!email || !password || !displayName || !username || !phoneVal) {
             if (registerError) registerError.textContent = 'All fields are required.';
@@ -480,8 +301,7 @@ export function initAuthPage() {
                     relationship_intent: 'Long Term',
                     bio: '',
                     interests: [],
-                    goals: [],
-                    turnstile_token: turnstileToken
+                    goals: []
                 }),
             });
 
@@ -495,15 +315,10 @@ export function initAuthPage() {
         } catch (err) {
             if (registerError) registerError.textContent = err.message || 'Registration failed.';
             KonvoToast.show(err.message || 'Registration failed', 'error');
-            if (window.turnstile) { window.turnstile.reset(); }
-            if (fallbackContainer && !fallbackContainer.classList.contains('hidden')) {
-                loadFallbackChallenge('register');
-            }
         } finally {
             if (btn) { btn.disabled = false; btn.textContent = 'Create Account'; }
         }
     });
-
     // ─── Submit: OTP Verification ─────────────────────────────────────────────────
 
     otpForm?.addEventListener('submit', async (e) => {
@@ -692,8 +507,5 @@ export function initAuthPage() {
     if (document.readyState === 'complete') hideSplash();
     else window.addEventListener('load', hideSplash);
 
-    // Initial render if Turnstile is already loaded in the environment
-    if (window.turnstile) {
-        renderCaptchaWidgets();
-    }
+
 }
