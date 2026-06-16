@@ -39,26 +39,22 @@ export async function initSettingsPage() {
                 previewImg.src = prof.avatar_url;
             }
 
-            if (uploadBtn && avatarInput) {
-                avatarInput.replaceWith(avatarInput.cloneNode(true));
-                const newAvatarInput = document.getElementById('settings-avatar-input');
-
-                uploadBtn.replaceWith(uploadBtn.cloneNode(true));
-                const newUploadBtn = document.getElementById('btn-settings-upload-avatar');
-                newUploadBtn.addEventListener('click', () => {
-                    newAvatarInput.click();
+            if (uploadBtn && avatarInput && !uploadBtn.dataset.listenerBound) {
+                uploadBtn.dataset.listenerBound = 'true';
+                uploadBtn.addEventListener('click', () => {
+                    avatarInput.click();
                 });
 
-                newAvatarInput.addEventListener('change', async () => {
-                    const file = newAvatarInput.files[0];
+                avatarInput.addEventListener('change', async () => {
+                    const file = avatarInput.files[0];
                     if (!file) return;
 
                     const formData = new FormData();
                     formData.append('file', file);
 
                     try {
-                        newUploadBtn.disabled = true;
-                        newUploadBtn.textContent = 'Uploading...';
+                        uploadBtn.disabled = true;
+                        uploadBtn.textContent = 'Uploading...';
                         
                         const token = localStorage.getItem('konvo_token');
                         const headers = {};
@@ -89,8 +85,8 @@ export async function initSettingsPage() {
                     } catch (err) {
                         KonvoToast.show(`Upload failed: ${err.message}`, 'error');
                     } finally {
-                        newUploadBtn.disabled = false;
-                        newUploadBtn.textContent = 'Upload Image';
+                        uploadBtn.disabled = false;
+                        uploadBtn.textContent = 'Upload Image';
                     }
                 });
             }
