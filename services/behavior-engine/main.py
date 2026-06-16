@@ -97,6 +97,20 @@ def get_discovery_feed(
     # Sort card recommendations using Gale-Shapley stable matching algorithm
     from algorithms.matching_dsa import run_gale_shapley_matching
     cards = run_gale_shapley_matching(cards)
+    
+    # Sort to prioritize candidates in the same DIGIPIN geographic region
+    def get_region_digit(dp):
+        if not dp:
+            return ""
+        c = dp.upper().replace("GP-", "").replace("DIGIPIN-", "").replace("-", "").strip()
+        return c[0] if c else ""
+
+    curr_dp = current_user.profile.digipin if current_user.profile else ""
+    curr_reg = get_region_digit(curr_dp)
+    
+    if curr_reg:
+        cards.sort(key=lambda x: 0 if get_region_digit(x.get("digipin")) == curr_reg else 1)
+        
     return cards
 
 @app.post("/api/compatibility/swipe", response_model=schemas.SwipeResponse)

@@ -63,13 +63,24 @@ def generate_avatar(self, user_id: int, prompt: str, style: str = "photorealisti
     """
     try:
         logger.info(f"[Avatar Worker] Generating avatar for user_id={user_id}, style={style}")
+        result = None
 
         if FAL_API_KEY:
-            result = _generate_via_fal(prompt, style)
-        elif REPLICATE_TOKEN:
-            result = _generate_via_replicate(prompt, style)
-        else:
-            # Fallback: return placeholder SVG data URL
+            try:
+                logger.info("[Avatar Worker] Attempting Fal AI generation...")
+                result = _generate_via_fal(prompt, style)
+            except Exception as fal_err:
+                logger.warning(f"[Avatar Worker] Fal AI generation failed (likely exhausted balance): {fal_err}. Falling back...")
+                
+        if not result and REPLICATE_TOKEN:
+            try:
+                logger.info("[Avatar Worker] Attempting Replicate AI generation...")
+                result = _generate_via_replicate(prompt, style)
+            except Exception as rep_err:
+                logger.warning(f"[Avatar Worker] Replicate AI generation failed (likely exhausted balance): {rep_err}. Falling back...")
+
+        if not result:
+            logger.info("[Avatar Worker] All AI generation providers failed or are unconfigured. Generating placeholder SVG...")
             result = {"url": _generate_placeholder_svg(user_id), "provider": "placeholder"}
 
         logger.info(f"[Avatar Worker] Avatar generated successfully for user_id={user_id}")
