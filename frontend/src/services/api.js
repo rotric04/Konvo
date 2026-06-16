@@ -4,8 +4,25 @@
  * Extracted from app.js to be the single place for all API calls.
  */
 
-export const API_BASE_URL = window.location.origin;
-export const WS_BASE_URL  = window.location.origin.replace(/^http/, 'ws');
+// Automatically detect the correct API backend URL based on the current host.
+let detectedApiUrl = window.location.origin;
+
+// 1. Local development static port bypass (e.g., Live Server on 5500, Vite on 5173, etc. -> route to FastAPI gateway)
+if (window.location.port && window.location.port !== '8000' && window.location.port !== '80') {
+    detectedApiUrl = 'http://localhost:8000';
+}
+// 2. Known static hosting subdomains -> route to the deployed Render backend gateway
+else if (
+    window.location.hostname.includes('github.io') || 
+    window.location.hostname.includes('pages.dev') ||
+    window.location.hostname.includes('netlify.app')
+) {
+    detectedApiUrl = 'https://konvo-u5qb.onrender.com';
+}
+
+export const API_BASE_URL = detectedApiUrl;
+export const WS_BASE_URL  = API_BASE_URL.replace(/^http/, 'ws');
+
 
 /**
  * apiFetch(endpoint, options)

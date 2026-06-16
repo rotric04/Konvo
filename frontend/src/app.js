@@ -285,6 +285,47 @@ function initDigipinHelper() {
             window.konvoOpenModal?.('digipin-helper-modal');
         }
     });
+
+    // Formatting helper function for DIGIPIN input fields
+    const formatDigipin = (value) => {
+        const cleaned = value
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, '')
+            .slice(0, 10);
+
+        let formatted = cleaned;
+
+        if (cleaned.length > 3) {
+            formatted = cleaned.slice(0, 3) + '-' + cleaned.slice(3);
+        }
+
+        if (cleaned.length > 6) {
+            formatted =
+                cleaned.slice(0, 3) +
+                '-' +
+                cleaned.slice(3, 6) +
+                '-' +
+                cleaned.slice(6);
+        }
+
+        return formatted;
+    };
+
+    // Use event delegation to format all DIGIPIN input fields dynamically
+    document.addEventListener('input', (e) => {
+        const id = e.target.id;
+        if (id === 'set-digipin' || id === 'wiz-digipin' || id === 'analyzer-digipin-input') {
+            const start = e.target.selectionStart;
+            const end = e.target.selectionEnd;
+            const origLength = e.target.value.length;
+            
+            const formatted = formatDigipin(e.target.value);
+            e.target.value = formatted;
+            
+            const diff = formatted.length - origLength;
+            e.target.setSelectionRange(start + diff, end + diff);
+        }
+    });
 }
 
 // ─── Splash Loader ──────────────────────────────────────────────────

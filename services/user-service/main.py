@@ -181,15 +181,14 @@ def upload_avatar(
         else:
             img_final = img_resized.convert("RGB")
             
-        uploads_dir = os.path.join(_root, "frontend", "uploads")
-        os.makedirs(uploads_dir, exist_ok=True)
+        import base64
         
-        filename = f"avatar_{current_user.id}_{uuid.uuid4().hex}.webp"
-        file_path = os.path.join(uploads_dir, filename)
+        buffer = io.BytesIO()
+        img_final.save(buffer, format="WEBP", quality=90)
+        webp_bytes = buffer.getvalue()
+        base64_str = base64.b64encode(webp_bytes).decode("utf-8")
+        avatar_url = f"data:image/webp;base64,{base64_str}"
         
-        img_final.save(file_path, format="WEBP", quality=90)
-        
-        avatar_url = f"/static/uploads/{filename}"
         prof.avatar_url = avatar_url
         db.commit()
         

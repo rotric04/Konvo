@@ -5,6 +5,31 @@
 
 import { apiFetch } from '/src/services/api.js';
 
+function formatDigipin(value) {
+    if (!value) return '';
+    const cleaned = value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .slice(0, 10);
+
+    let formatted = cleaned;
+
+    if (cleaned.length > 3) {
+        formatted = cleaned.slice(0, 3) + '-' + cleaned.slice(3);
+    }
+
+    if (cleaned.length > 6) {
+        formatted =
+            cleaned.slice(0, 3) +
+            '-' +
+            cleaned.slice(3, 6) +
+            '-' +
+            cleaned.slice(6);
+    }
+
+    return formatted;
+}
+
 export function initDiscoverTabs() {
     const tabBtns = document.querySelectorAll('.tab-navigation .tab-btn');
     tabBtns.forEach(btn => {
@@ -598,7 +623,7 @@ export async function initMapPage() {
             el.innerHTML = `<div style="background-color: var(--accent-amber); border: 2.5px solid white; width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 10px var(--accent-amber); filter: drop-shadow(0 0 4px var(--accent-amber)); cursor: pointer;"></div>`;
 
             const popupHTML = `<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
-                <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                <strong>Your Masked Node</strong><br>Grid: ${formatDigipin(currentUser.profile.digipin) || 'N/A'}<br>
                 <span class="geocode-info">Loading location...</span>
             </div>`;
 
@@ -618,7 +643,7 @@ export async function initMapPage() {
                         if (geoEl) geoEl.textContent = txt;
                     } else {
                         popup.setHTML(`<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
-                            <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                            <strong>Your Masked Node</strong><br>Grid: ${formatDigipin(currentUser.profile.digipin) || 'N/A'}<br>
                             <span class="geocode-info">${txt}</span>
                         </div>`);
                     }
@@ -628,7 +653,7 @@ export async function initMapPage() {
                         locationText.textContent = `${myCoords.city} (Your Node)`;
                     }
                     popup.setHTML(`<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
-                        <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                        <strong>Your Masked Node</strong><br>Grid: ${formatDigipin(currentUser.profile.digipin) || 'N/A'}<br>
                         <span class="geocode-info">${myCoords.city}</span>
                     </div>`);
                 }
@@ -684,7 +709,7 @@ export async function initMapPage() {
                         const popupContent = `
                             <div style="font-family: var(--font-sans); min-width: 180px; text-align: center; color: var(--text-primary);" id="popup-${user.id}">
                                 <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: bold; margin-bottom: 0.25rem;">${user.profile?.display_name || user.username}</div>
-                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.4rem;">Grid: ${userDigipin}</div>
+                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.4rem;">Grid: ${formatDigipin(userDigipin)}</div>
                                 <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;" class="geocode-info">Loading location...</div>
                                 <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem;">MBTI: ${user.profile?.mbti_type || 'N/A'} // Intent: ${user.profile?.relationship_intent || 'N/A'}</div>
                                 <button class="btn btn-primary" style="font-size: 0.7rem; padding: 0.35rem 0.75rem; width: 100%;" onclick="window.location.href='/profile/${user.id}'">View Profile</button>

@@ -81,7 +81,6 @@ export function initAuthPage() {
 
     window.renderCaptchaWidgets = async function () {
         const config = await fetchTurnstileConfig();
-        const siteKey = config ? config.site_key : '0x4AAAAAADg9vHwYwA4a699m';
         
         if (config && config.fallback_challenge) {
             loginFallbackId = config.fallback_challenge.id;
@@ -91,6 +90,14 @@ export function initAuthPage() {
             if (loginQ) loginQ.textContent = config.fallback_challenge.question;
             const registerQ = document.getElementById('register-fallback-question');
             if (registerQ) registerQ.textContent = config.fallback_challenge.question;
+        }
+
+        const siteKey = config?.site_key;
+        if (!siteKey) {
+            console.warn("[AUTH] No Turnstile site key received from backend. Falling back to math captcha.");
+            showLoginFallback();
+            showRegisterFallback();
+            return;
         }
 
         if (typeof window.turnstile !== 'undefined') {

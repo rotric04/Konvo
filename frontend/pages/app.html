@@ -1566,10 +1566,14 @@
                                 style="font-family: var(--font-mono);">--</span></div>
                         <div>📍 <strong>Longitude:</strong> <span id="digipin-lon"
                                 style="font-family: var(--font-mono);">--</span></div>
+                        <div>🏙️ <strong>City:</strong> <span id="digipin-city"
+                                style="font-family: var(--font-mono); color: var(--accent-orange, #f97316);">--</span></div>
                         <div>🏛️ <strong>District:</strong> <span id="digipin-district"
                                 style="font-family: var(--font-mono); color: var(--accent-amber);">--</span></div>
                         <div>🗺️ <strong>State:</strong> <span id="digipin-state"
                                 style="font-family: var(--font-mono); color: var(--accent-teal);">--</span></div>
+                        <div>🇮🇳 <strong>Country:</strong> <span id="digipin-country"
+                                style="font-family: var(--font-mono); color: var(--text-primary);">--</span></div>
                     </div>
                     <button type="button" class="btn btn-primary" id="btn-copy-analyzed-pin"
                         style="margin-top: 0.75rem; width: 100%; font-size: 0.78rem; padding: 0.45rem;">Use & Copy Back
@@ -1581,6 +1585,20 @@
             </div>
 
             <script type="module">
+                const digipinGeocodeCache = {};
+
+                const OFFLINE_REGIONS = {
+                    '1': { lat: 28.6139, lng: 77.2090, state: 'Delhi', district: 'New Delhi', city: 'Delhi / North Region' },
+                    '2': { lat: 26.8467, lng: 80.9462, state: 'Uttar Pradesh', district: 'Lucknow', city: 'UP / Uttarakhand Region' },
+                    '3': { lat: 26.9124, lng: 75.7873, state: 'Rajasthan', district: 'Jaipur', city: 'Rajasthan / Gujarat Region' },
+                    '4': { lat: 19.0760, lng: 72.8777, state: 'Maharashtra', district: 'Mumbai', city: 'Maharashtra / MP / Goa Region' },
+                    '5': { lat: 17.3850, lng: 78.4867, state: 'Telangana', district: 'Hyderabad', city: 'Telangana / Andhra Region' },
+                    '6': { lat: 13.0827, lng: 80.2707, state: 'Tamil Nadu', district: 'Chennai', city: 'Tamil Nadu / Kerala Region' },
+                    '7': { lat: 22.5726, lng: 88.3639, state: 'West Bengal', district: 'Kolkata', city: 'West Bengal / NE Region' },
+                    '8': { lat: 12.9716, lng: 77.5946, state: 'Karnataka', district: 'Bengaluru', city: 'Karnataka Region' },
+                    '9': { lat: 20.2961, lng: 85.8245, state: 'Odisha', district: 'Khordha', city: 'Odisha / Central East Region' }
+                };
+
                 document.getElementById('btn-analyze-digipin')?.addEventListener('click', async () => {
                     const input = document.getElementById('analyzer-digipin-input')?.value || '';
                     const errEl = document.getElementById('digipin-analyzer-error');
@@ -1588,13 +1606,15 @@
                     const stepsEl = document.getElementById('digipin-analysis-steps');
                     const latEl = document.getElementById('digipin-lat');
                     const lonEl = document.getElementById('digipin-lon');
+                    const cityEl = document.getElementById('digipin-city');
                     const distEl = document.getElementById('digipin-district');
                     const stateEl = document.getElementById('digipin-state');
+                    const countryEl = document.getElementById('digipin-country');
 
                     if (errEl) errEl.style.display = 'none';
                     if (resEl) resEl.style.display = 'none';
 
-                    const cleanPin = input.replace(/[^a-zA-Z0-9]/g, '');
+                    const cleanPin = input.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
                     if (cleanPin.length !== 10) {
                         if (errEl) {
                             errEl.textContent = "Error: DIGIPIN must contain exactly 10 alphanumeric characters. Format: XXX-XXX-XXXX.";
@@ -1603,7 +1623,15 @@
                         return;
                     }
 
+                    const DIGIPIN_REGEX = /^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{4}$/;
                     const formattedPin = cleanPin.slice(0, 3) + '-' + cleanPin.slice(3, 6) + '-' + cleanPin.slice(6);
+                    if (!DIGIPIN_REGEX.test(formattedPin)) {
+                        if (errEl) {
+                            errEl.textContent = "Error: Invalid DIGIPIN characters. DIGIPIN uses: 2, 3, 4, 5, 6, 7, 8, 9, C, F, J, K, L, M, P, T.";
+                            errEl.style.display = 'block';
+                        }
+                        return;
+                    }
 
                     function decodeDigipin(pin) {
                         const DIGIPIN_GRID = [
@@ -1654,7 +1682,23 @@
                         return { lat: centerLat, lng: centerLon };
                     }
 
-                    const decoded = decodeDigipin(cleanPin.toUpperCase());
+                    // Check cache first
+                    if (digipinGeocodeCache[cleanPin]) {
+                        const cached = digipinGeocodeCache[cleanPin];
+                        if (stepsEl) {
+                            stepsEl.textContent = `[1] Input DIGIPIN: ${input}\n[2] Canonical format: ${formattedPin}\n[3] Alphanumeric coordinates conversion complete.\n[4] Geocoding resolved from cache!`;
+                        }
+                        if (resEl) resEl.style.display = 'block';
+                        if (latEl) latEl.textContent = cached.latitude.toFixed(5);
+                        if (lonEl) lonEl.textContent = cached.longitude.toFixed(5);
+                        if (cityEl) cityEl.textContent = cached.city;
+                        if (distEl) distEl.textContent = cached.district;
+                        if (stateEl) stateEl.textContent = cached.state;
+                        if (countryEl) countryEl.textContent = cached.country;
+                        return;
+                    }
+
+                    const decoded = decodeDigipin(cleanPin);
                     if (!decoded) {
                         if (errEl) {
                             errEl.textContent = "Error: Invalid DIGIPIN characters. DIGIPIN uses: 2, 3, 4, 5, 6, 7, 8, 9, C, F, J, K, L, M, P, T.";
@@ -1672,8 +1716,10 @@
 
                     if (latEl) latEl.textContent = lat.toFixed(5);
                     if (lonEl) lonEl.textContent = lon.toFixed(5);
+                    if (cityEl) cityEl.textContent = "Querying...";
                     if (distEl) distEl.textContent = "Querying...";
                     if (stateEl) stateEl.textContent = "Querying...";
+                    if (countryEl) countryEl.textContent = "Querying...";
 
                     try {
                         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=en`;
@@ -1681,22 +1727,55 @@
                         if (resp.ok) {
                             const data = await resp.json();
                             const address = data.address || {};
-                            const district = address.county || address.district || address.suburb || address.city || "Unknown District";
+                            const city = address.city || address.town || address.village || address.suburb || address.municipality || "Unknown City";
+                            const district = address.county || address.district || "Unknown District";
                             const state = address.state || "Unknown State";
+                            const country = address.country || "India";
 
+                            const result = {
+                                latitude: lat,
+                                longitude: lon,
+                                city,
+                                district,
+                                state,
+                                country
+                            };
+                            digipinGeocodeCache[cleanPin] = result;
+
+                            if (cityEl) cityEl.textContent = city;
                             if (distEl) distEl.textContent = district;
                             if (stateEl) stateEl.textContent = state;
+                            if (countryEl) countryEl.textContent = country;
                             if (stepsEl) {
-                                stepsEl.textContent += `\n[5] Reverse geocoding succeeded.\n[6] District resolved: ${district}\n[7] State resolved: ${state}`;
+                                stepsEl.textContent += `\n[5] Reverse geocoding succeeded.\n[6] City resolved: ${city}\n[7] District resolved: ${district}\n[8] State resolved: ${state}\n[9] Country resolved: ${country}`;
                             }
                         } else {
                             throw new Error("HTTP " + resp.status);
                         }
                     } catch (e) {
-                        if (distEl) distEl.textContent = "Jaipur (Fallback)";
-                        if (stateEl) stateEl.textContent = "Rajasthan (Fallback)";
+                        const firstChar = cleanPin.charAt(0);
+                        const fallback = OFFLINE_REGIONS[firstChar] || OFFLINE_REGIONS['8'];
+                        const city = fallback.city || "Unknown City";
+                        const district = fallback.district || "Unknown District";
+                        const state = fallback.state || "Unknown State";
+                        const country = "India (Fallback)";
+
+                        const result = {
+                            latitude: lat,
+                            longitude: lon,
+                            city,
+                            district,
+                            state,
+                            country
+                        };
+                        digipinGeocodeCache[cleanPin] = result;
+
+                        if (cityEl) cityEl.textContent = city;
+                        if (distEl) distEl.textContent = district;
+                        if (stateEl) stateEl.textContent = state;
+                        if (countryEl) countryEl.textContent = country;
                         if (stepsEl) {
-                            stepsEl.textContent += `\n[5] Reverse geocoding failed: ${e.message}\n[6] Fallback applied.`;
+                            stepsEl.textContent += `\n[5] Reverse geocoding failed: ${e.message}\n[6] Fallback applied.\n[7] City resolved: ${city}\n[8] District resolved: ${district}\n[9] State resolved: ${state}\n[10] Country resolved: ${country}`;
                         }
                     }
                 });

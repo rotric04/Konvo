@@ -9,6 +9,30 @@ import { apiFetch } from '/src/services/api.js';
 import { KonvoToast } from '/src/components/toast.js';
 import { updateUser, getState } from '/src/store/state.js';
 
+function formatDigipin(value) {
+    const cleaned = value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .slice(0, 10);
+
+    let formatted = cleaned;
+
+    if (cleaned.length > 3) {
+        formatted = cleaned.slice(0, 3) + '-' + cleaned.slice(3);
+    }
+
+    if (cleaned.length > 6) {
+        formatted =
+            cleaned.slice(0, 3) +
+            '-' +
+            cleaned.slice(3, 6) +
+            '-' +
+            cleaned.slice(6);
+    }
+
+    return formatted;
+}
+
 export async function initSettingsPage() {
     const profileForm = document.getElementById('settings-profile-form');
     if (!profileForm) return;
@@ -116,7 +140,7 @@ export async function initSettingsPage() {
             if (setBio) setBio.value = prof.bio || '';
             if (setGender) setGender.value = prof.gender || 'Prefer Not To Say';
             if (setLookingForGender) setLookingForGender.value = prof.looking_for_gender || 'All';
-            if (setDigipin) setDigipin.value = prof.digipin || '';
+            if (setDigipin) setDigipin.value = formatDigipin(prof.digipin || '');
             if (setBirthDate) setBirthDate.value = prof.birth_date || '';
             if (setBirthLocation) setBirthLocation.value = prof.birth_location || '';
 
@@ -165,7 +189,20 @@ export async function initSettingsPage() {
                     const looking_for_gender = document.getElementById('set-looking-for-gender')?.value || 'All';
                     const birth_date = document.getElementById('set-birth-date').value || null;
                     const birth_location = document.getElementById('set-birth-location').value.trim() || null;
-                    const digipin = document.getElementById('set-digipin').value.trim() || null;
+                    const digipinRaw = document.getElementById('set-digipin').value.trim() || null;
+                    let digipin = null;
+                    if (digipinRaw) {
+                        const DIGIPIN_REGEX = /^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{4}$/;
+                        if (!DIGIPIN_REGEX.test(digipinRaw)) {
+                            KonvoToast.show('Invalid DIGIPIN format. Expected format: XXX-XXX-XXXX', 'error');
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'Save Profile';
+                            }
+                            return;
+                        }
+                        digipin = digipinRaw.replace(/-/g, '');
+                    }
 
                     const birthTimeRaw = document.getElementById('set-birth-time').value || null;
                     const birthTimeAmpm = document.getElementById('set-birth-time-ampm').value;

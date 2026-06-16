@@ -15,6 +15,30 @@ let currentUser = null;
 let currentQuestion = null;
 let questionStartTime = 0;
 
+function formatDigipin(value) {
+    const cleaned = value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, '')
+        .slice(0, 10);
+
+    let formatted = cleaned;
+
+    if (cleaned.length > 3) {
+        formatted = cleaned.slice(0, 3) + '-' + cleaned.slice(3);
+    }
+
+    if (cleaned.length > 6) {
+        formatted =
+            cleaned.slice(0, 3) +
+            '-' +
+            cleaned.slice(3, 6) +
+            '-' +
+            cleaned.slice(6);
+    }
+
+    return formatted;
+}
+
 // ─── Welcome Experience & Navigation Bindings ──────────────────────────────────
 export async function initOnboarding() {
     // 1. Auth Guard
@@ -40,6 +64,22 @@ export async function initOnboarding() {
         console.error('[Onboarding] Profile load failed:', err);
         window.location.href = '/auth';
         return;
+    }
+
+    // Bind DIGIPIN dynamic formatter
+    const syncDigipin = document.getElementById('syncDigipin');
+    if (syncDigipin) {
+        syncDigipin.addEventListener('input', (e) => {
+            const start = e.target.selectionStart;
+            const end = e.target.selectionEnd;
+            const origLength = e.target.value.length;
+            
+            const formatted = formatDigipin(e.target.value);
+            e.target.value = formatted;
+            
+            const diff = formatted.length - origLength;
+            e.target.setSelectionRange(start + diff, end + diff);
+        });
     }
 
     // Populate user's first name in welcome screen
@@ -99,13 +139,21 @@ export async function initOnboarding() {
             birthTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
         }
         const birthLocation = document.getElementById('syncBirthLocation').value.trim() || null;
-        const digipin = document.getElementById('syncDigipin').value.trim();
+        const digipinRaw = document.getElementById('syncDigipin').value.trim();
         const language = document.getElementById('syncLanguage').value.trim();
 
-        if (!gender || !birthDate || !digipin || !language) {
+        if (!gender || !birthDate || !digipinRaw || !language) {
             KonvoToast.show('Please fill in all required fields.', 'error');
             return;
         }
+
+        const DIGIPIN_REGEX = /^[A-Z0-9]{3}-[A-Z0-9]{3}-[A-Z0-9]{4}$/;
+        if (!DIGIPIN_REGEX.test(digipinRaw)) {
+            KonvoToast.show('Invalid DIGIPIN format. Expected format: XXX-XXX-XXXX', 'error');
+            return;
+        }
+
+        const digipin = digipinRaw.replace(/-/g, '');
 
         const startBtn = document.getElementById('btn-start-calibration');
         if (startBtn) {
