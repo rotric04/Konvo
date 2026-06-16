@@ -27,16 +27,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    <!-- Cloudflare Turnstile CAPTCHA -->
-    <script>
-        window.onloadTurnstileCallback = function () {
-            if (window.renderCaptchaWidgets) {
-                window.renderCaptchaWidgets();
-            }
-        };
-    </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
-        async defer></script>
+
     <!-- Theme Manager: runs before body renders to prevent flash -->
     <script>
         (function () {
@@ -690,26 +681,7 @@
                         <p id="login-error" class="validation-msg error"
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
 
-                        <!-- Cloudflare Turnstile Widget -->
-                        <div class="turnstile-wrapper"
-                            style="margin-bottom: 1.25rem; min-height: 65px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
-                            <div id="login-captcha-loader" class="captcha-loader"
-                                style="position: absolute; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
-                                <span class="captcha-spinner"></span>
-                                <span>Verifying secure network connection...</span>
-                            </div>
-                            <div id="login-turnstile" class="turnstile-container"></div>
-                            
-                            <!-- Manual Captcha Fallback (hidden by default) -->
-                            <div id="login-captcha-fallback" class="captcha-fallback hidden" style="width: 100%; display: none; flex-direction: column; gap: 0.5rem; align-items: center; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 1rem;">
-                                <p style="font-size: 0.85rem; color: var(--accent-warning, #d97706); margin: 0; text-align: center;">⚠️ Cloudflare Turnstile failed to load. Please verify manually:</p>
-                                <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem;">
-                                    <span id="login-fallback-question" style="font-family: var(--font-mono); font-size: 1rem; color: #fff; font-weight: 600;">What is 3 + 4?</span>
-                                    <input type="text" id="login-fallback-answer" placeholder="Answer" style="width: 80px; padding: 0.4rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.12)); background: rgba(0,0,0,0.3); color: #fff; text-align: center; font-size: 0.95rem; outline: none;" />
-                                    <button type="button" id="btn-login-refresh-captcha" style="background: none; border: none; color: var(--accent-teal, #14b8a6); cursor: pointer; font-size: 0.9rem;" title="Refresh challenge">🔄</button>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-login-submit">
                             Sign In
@@ -833,26 +805,7 @@
                         <p id="register-error" class="validation-msg error"
                             style="min-height: 1.2rem; margin-bottom: 0.75rem;"></p>
 
-                        <!-- Cloudflare Turnstile Widget -->
-                        <div class="turnstile-wrapper"
-                            style="margin-bottom: 1.25rem; min-height: 65px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
-                            <div id="register-captcha-loader" class="captcha-loader"
-                                style="position: absolute; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
-                                <span class="captcha-spinner"></span>
-                                <span>Verifying secure network connection...</span>
-                            </div>
-                            <div id="register-turnstile" class="turnstile-container"></div>
-                            
-                            <!-- Manual Captcha Fallback (hidden by default) -->
-                            <div id="register-captcha-fallback" class="captcha-fallback hidden" style="width: 100%; display: none; flex-direction: column; gap: 0.5rem; align-items: center; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 1rem;">
-                                <p style="font-size: 0.85rem; color: var(--accent-warning, #d97706); margin: 0; text-align: center;">⚠️ Cloudflare Turnstile failed to load. Please verify manually:</p>
-                                <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem;">
-                                    <span id="register-fallback-question" style="font-family: var(--font-mono); font-size: 1rem; color: #fff; font-weight: 600;">What is 3 + 4?</span>
-                                    <input type="text" id="register-fallback-answer" placeholder="Answer" style="width: 80px; padding: 0.4rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.12)); background: rgba(0,0,0,0.3); color: #fff; text-align: center; font-size: 0.95rem; outline: none;" />
-                                    <button type="button" id="btn-register-refresh-captcha" style="background: none; border: none; color: var(--accent-teal, #14b8a6); cursor: pointer; font-size: 0.9rem;" title="Refresh challenge">🔄</button>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;"
                             id="btn-register-submit">

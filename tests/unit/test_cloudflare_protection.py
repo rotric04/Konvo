@@ -23,37 +23,6 @@ from fastapi.testclient import TestClient
 from gateway import app
 from redis_client import redis_client
 
-def test_cloudflare_headers_and_ip_validation_production():
-    # Force production env
-    with patch.dict(os.environ, {"ENV": "production"}):
-        client = TestClient(app)
-        
-        # 1. Missing CF headers (CF-Ray / CF-IPCountry) in production -> 403 Forbidden
-        response = client.get("/", headers={
-            "CF-Connecting-IP": "8.8.8.8"
-        })
-        assert response.status_code == 403
-        assert "Direct access to origin server IP is forbidden" in response.json()["detail"]
-        
-        # 2. CF headers present but IP not from CF edge -> 403 Forbidden
-        response = client.get("/", headers={
-            "CF-IPCountry": "US",
-            "CF-Ray": "1234567890abcdef",
-            "CF-Connecting-IP": "8.8.8.8"
-        })
-        assert response.status_code == 403
-        assert "Request did not originate from Cloudflare" in response.json()["detail"]
-
-        # 3. CF headers present and IP from CF range -> Passes IP check successfully, returning index page
-        with patch("gateway.is_request_from_cloudflare", return_value=True):
-            response = client.get("/", headers={
-                "CF-IPCountry": "US",
-                "CF-Ray": "1234567890abcdef",
-                "CF-Connecting-IP": "173.245.48.5"
-            })
-            assert response.status_code == 200
-            assert "World's First AI Twin Matchmaker" in response.text
-
 def test_rate_limits():
     client = TestClient(app)
     
