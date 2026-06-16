@@ -55,7 +55,7 @@ def register(user: schemas.UserRegister, db: Session = Depends(get_db)):
         
     otp = str(secrets.randbelow(900000) + 100000)
     
-    email_sent = resend_client.send_otp_email(user.email, otp)
+    email_sent = resend_client.send_otp_email(user.email, otp, user.display_name)
     if not email_sent:
         raise HTTPException(
             status_code=500,
@@ -336,7 +336,8 @@ def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db))
             )
             
         new_otp = str(secrets.randbelow(900000) + 100000)
-        email_sent = resend_client.send_otp_email(request.email, new_otp)
+        display_name = user.profile.display_name if user.profile else "Valued Member"
+        email_sent = resend_client.send_otp_email(request.email, new_otp, display_name)
         if not email_sent:
             raise HTTPException(
                 status_code=500,
@@ -371,7 +372,8 @@ def resend_otp(request: schemas.OTPResendRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=400, detail="Registration session corrupted.")
         
     new_otp = str(secrets.randbelow(900000) + 100000)
-    email_sent = resend_client.send_otp_email(request.email, new_otp)
+    display_name = pending_data.get("user_data", {}).get("display_name", "Valued Member")
+    email_sent = resend_client.send_otp_email(request.email, new_otp, display_name)
     if not email_sent:
         raise HTTPException(
             status_code=500,

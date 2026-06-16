@@ -89,7 +89,7 @@ def create_user(db: Session, user: schemas.UserRegister):
     db.commit()
     
     # Dispatch OTP verification email via Resend
-    resend_client.send_otp_email(user.email, otp)
+    resend_client.send_otp_email(user.email, otp, user.display_name)
     
     # Log OTP generated in server console/audit log for easy client access
     print(f"\n[OTP SYSTEM] Verification code generated for {user.email}: {otp}\n")

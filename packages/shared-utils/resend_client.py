@@ -52,21 +52,57 @@ class ResendClient:
                 return True
             return False
 
-    def send_otp_email(self, to_email: str, otp_code: str) -> bool:
+    def send_template_email(self, to_email: str, subject: str, template_id: str, variables: dict) -> bool:
+        if not self.api_key or self.api_key == "your_resend_api_key" or not self.api_key.startswith("re_"):
+            print(f"\n[MOCK RESEND TEMPLATE] Simulated email to {to_email}:")
+            print(f"Subject: {subject}")
+            print(f"Template ID: {template_id}")
+            print(f"Variables: {variables}\n")
+            return True
+
+        payload = {
+            "from": self.from_email,
+            "to": [to_email],
+            "subject": subject,
+            "template": {
+                "id": template_id,
+                "variables": variables
+            }
+        }
+
+        try:
+            response = httpx.post(self.url, headers=self.headers, json=payload, timeout=5.0)
+            if response.status_code in [200, 201]:
+                print(f"[RESEND] Successfully sent template email to {to_email}")
+                return True
+            else:
+                print(f"[RESEND ERROR] Failed to send template email: {response.status_code} - {response.text}")
+                env = os.getenv("ENV", "development")
+                if env == "development":
+                    print(f"\n[DEVELOPMENT FALLBACK] Resend API call failed, falling back to success to avoid blocking developer flow.")
+                    print(f"Simulated template email to: {to_email}")
+                    print(f"Template ID: {template_id}")
+                    print(f"Variables: {variables}\n")
+                    return True
+                return False
+        except Exception as e:
+            print(f"[RESEND EXCEPTION] Error connecting to Resend: {e}")
+            env = os.getenv("ENV", "development")
+            if env == "development":
+                print(f"\n[DEVELOPMENT FALLBACK] Resend API connection exception, falling back to success to avoid blocking developer flow.")
+                return True
+            return False
+
+    def send_otp_email(self, to_email: str, otp_code: str, display_name: str = "Valued Member") -> bool:
+        first_name = display_name.split()[0] if display_name else "Valued Member"
+        template_id = "9ead31b1-bd15-4b03-afbb-52b3fcba8ab9"
         subject = "Your Konvo Authentication Code"
-        html_content = f"""
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px;">
-            <h2 style="color: #0d9488; text-align: center;">Konvo Security Verification</h2>
-            <p>Welcome to the world's first Behavioral Internet. Please use the verification code below to complete your registration or verify your identity.</p>
-            <div style="background-color: #f4f4f5; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 5px; text-align: center; padding: 15px; margin: 20px 0; border-radius: 4px; border: 1px solid #e4e4e7;">
-                {otp_code}
-            </div>
-            <p style="font-size: 12px; color: #71717a; text-align: center; margin-top: 30px;">
-                If you did not request this code, you can safely ignore this email.
-            </p>
-        </div>
-        """
-        return self.send_email(to_email, subject, html_content)
+        
+        variables = {
+            "first_name": first_name,
+            "otp_code": otp_code
+        }
+        return self.send_template_email(to_email, subject, template_id, variables)
 
     def send_marketing_welcome_email(self, to_email: str, display_name: str) -> bool:
         subject = "Welcome to Konvo.Space — Human Intelligence Network"

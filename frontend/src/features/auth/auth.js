@@ -510,11 +510,3 @@ export function initAuthPage() {
     if (document.readyState === 'complete') hideSplash();
     else window.addEventListener('load', hideSplash);
 }
-
-// ─── Auto-Boot ────────────────────────────────────────────────────────────────
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAuthPage);
-} else {
-    initAuthPage();
-}

@@ -1,5 +1,5 @@
 // frontend/sw.js
-const CACHE_NAME = 'konvo-static-v1';
+const CACHE_NAME = 'konvo-static-v2';
 const STATIC_RESOURCES = [
   '/',
   '/auth',

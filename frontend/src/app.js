@@ -19,7 +19,7 @@ import { initLiveWebSockets } from '/src/services/websocket.js';
 import { initRealtimeWebSockets } from '/src/services/realtime.js';
 import { openVirtualDate, initRatingPopup, animateStatCounters } from '/src/features/virtual-dates/virtual-dates.js';
 import { initLandingPage, initAgentLivePreview, initCookieConsent, initUserGuideTabs } from '/src/features/landing/landing.js';
-import { initAuthPage } from '/src/features/auth/auth.js';
+import { initAuthPage } from '/src/features/auth/auth.js?v=2';
 import { setupModalClosers, drainLegacyModalQueue } from '/src/components/modal.js';
 
 // ─── Register SPA page initializers ──────────────────────────────────
