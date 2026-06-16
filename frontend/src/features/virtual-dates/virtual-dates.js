@@ -656,7 +656,14 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
     const sortedIds = [currentUser.id, partnerId].sort((a, b) => a - b);
     const channelName = `vdate_room_${sortedIds[0]}_${sortedIds[1]}`;
     const wsProto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${wsProto}//${window.location.host}/ws/realtime?channel=${channelName}&token=${token}`;
+    const isLocal = window.location.hostname.includes('localhost') || 
+                    window.location.hostname.includes('127.0.0.1') || 
+                    window.location.hostname.startsWith('192.168.') || 
+                    window.location.hostname.startsWith('10.') || 
+                    window.location.hostname.startsWith('172.') || 
+                    window.location.hostname.endsWith('.local');
+    const wsHost = isLocal ? window.location.host : 'konvo-u5qb.onrender.com';
+    const wsUrl = `${wsProto}//${wsHost}/ws/realtime?channel=${channelName}&token=${token}`;
     let socket = null;
 
     try {
