@@ -132,6 +132,7 @@ class UserResponse(BaseModel):
     created_at: datetime
     otp_verified: bool
     premium_user: bool
+    credits: int = Field(default=10, description="Available daily credits")
     profile_completion: float = Field(default=0.0, description="Profile completion percentage (0-100%)")
     profile: Optional[UserProfileSchema] = None
     agent_twin: Optional[TwinResponse] = None

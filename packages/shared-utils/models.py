@@ -21,6 +21,8 @@ class User(Base):
     otp_created_at = Column(DateTime, nullable=True)
     premium_user = Column(Boolean, default=False)
     refresh_token_hash = Column(String, nullable=True)
+    credits = Column(Integer, default=10)
+    last_credit_reset = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
     profile = relationship("UserProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")

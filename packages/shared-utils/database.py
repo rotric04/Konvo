@@ -81,6 +81,23 @@ def apply_db_migrations(engine):
                     conn.execute(text("ALTER TABLE users ADD COLUMN otp_created_at DATETIME"))
             print("[MIGRATION] 'otp_created_at' column added successfully.")
 
+        # Add 'credits' if missing
+        if 'credits' not in columns:
+            print("[MIGRATION] Adding 'credits' column to 'users' table...")
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN credits INTEGER DEFAULT 10"))
+            print("[MIGRATION] 'credits' column added successfully.")
+
+        # Add 'last_credit_reset' if missing
+        if 'last_credit_reset' not in columns:
+            print("[MIGRATION] Adding 'last_credit_reset' column to 'users' table...")
+            with engine.begin() as conn:
+                if "postgresql" in str(engine.url):
+                    conn.execute(text("ALTER TABLE users ADD COLUMN last_credit_reset TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP"))
+                else:
+                    conn.execute(text("ALTER TABLE users ADD COLUMN last_credit_reset DATETIME DEFAULT CURRENT_TIMESTAMP"))
+            print("[MIGRATION] 'last_credit_reset' column added successfully.")
+
         # Ensure all existing users have a unique username (if NULL)
         with engine.begin() as conn:
             conn.execute(text("UPDATE users SET username = 'user_' || id WHERE username IS NULL"))
@@ -99,5 +116,8 @@ def apply_db_migrations(engine):
             with engine.begin() as conn:
                 conn.execute(text("ALTER TABLE user_profiles ADD COLUMN looking_for_gender VARCHAR(50) DEFAULT 'All'"))
             print("[MIGRATION] 'looking_for_gender' column added successfully.")
+
+# Run migrations automatically on import
+apply_db_migrations(engine)
 
 
