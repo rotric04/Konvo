@@ -11,9 +11,9 @@ import { KonvoToast } from '/src/components/toast.js';
 export async function initSettingsPage() {
     const profileForm = document.getElementById('settings-profile-form');
     if (!profileForm) return;
-    
+
     const picker = document.getElementById('set-theme-picker');
-    
+
     const navItems = document.querySelectorAll('.settings-nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -58,19 +58,19 @@ export async function initSettingsPage() {
                     try {
                         uploadBtn.disabled = true;
                         uploadBtn.textContent = 'Uploading...';
-                        
+
                         const token = localStorage.getItem('konvo_token');
                         const headers = {};
                         if (token) {
                             headers['Authorization'] = `Bearer ${token}`;
                         }
-                        
+
                         const response = await fetch('/api/users/profile/avatar', {
                             method: 'POST',
                             headers,
                             body: formData
                         });
-                        
+
                         const responseText = await response.text();
                         let result;
                         try {
@@ -78,17 +78,17 @@ export async function initSettingsPage() {
                         } catch (jsonErr) {
                             throw new Error(`Server returned invalid response: ${responseText.slice(0, 150)}...`);
                         }
-                        
+
                         if (!response.ok || !result.success) {
                             throw new Error(result.detail || 'Upload failed');
                         }
 
                         KonvoToast.show('Avatar photo uploaded successfully!', 'success');
-                        
+
                         if (previewImg) {
                             previewImg.src = result.avatar_url;
                         }
-                        
+
                         if (window.currentUser && window.currentUser.profile) {
                             window.currentUser.profile.avatar_url = result.avatar_url;
                         }
@@ -118,7 +118,7 @@ export async function initSettingsPage() {
             if (setDigipin) setDigipin.value = prof.digipin || '';
             if (setBirthDate) setBirthDate.value = prof.birth_date || '';
             if (setBirthLocation) setBirthLocation.value = prof.birth_location || '';
-            
+
             const birthTimeInput = document.getElementById('set-birth-time');
             const birthTimeAmpmInput = document.getElementById('set-birth-time-ampm');
 
@@ -137,7 +137,7 @@ export async function initSettingsPage() {
                 if (birthTimeInput) birthTimeInput.value = '';
                 if (birthTimeAmpmInput) birthTimeAmpmInput.value = 'AM';
             }
-            
+
             const nodeIdEl = document.getElementById('set-node-id');
             const otpStatusEl = document.getElementById('set-otp-status');
             const roleStatusEl = document.getElementById('set-role-status');
@@ -165,7 +165,7 @@ export async function initSettingsPage() {
                     const birth_date = document.getElementById('set-birth-date').value || null;
                     const birth_location = document.getElementById('set-birth-location').value.trim() || null;
                     const digipin = document.getElementById('set-digipin').value.trim() || null;
-                    
+
                     const birthTimeRaw = document.getElementById('set-birth-time').value || null;
                     const birthTimeAmpm = document.getElementById('set-birth-time-ampm').value;
                     let birth_time = null;
@@ -190,12 +190,12 @@ export async function initSettingsPage() {
                             })
                         });
                         KonvoToast.show("Profile configuration updated successfully.", 'success');
-                        
+
                         if (submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.textContent = 'Save Profile';
                         }
-                        
+
                         // Re-fetch user data and update UI dynamically instead of full reload
                         const updatedUser = await apiFetch('/api/users/me');
                         if (updatedUser) {
@@ -223,7 +223,7 @@ export async function initSettingsPage() {
             window.ThemeManager?.setTheme?.(picker.value);
         });
     }
-    
+
     const btnSaveAppearance = document.getElementById('btn-save-appearance');
     if (btnSaveAppearance) {
         btnSaveAppearance.replaceWith(btnSaveAppearance.cloneNode(true));
@@ -249,7 +249,7 @@ export async function initTwinSettings() {
         const emojiVal = prefs.agent_emoji !== undefined ? prefs.agent_emoji : 50;
         const boundaries = prefs.agent_boundaries || 'moderate';
         const discovery = prefs.discovery_pref || 'collaboration';
-        
+
         container.innerHTML = `
             <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
                 <div style="width: 60px; height: 60px; border-radius: 50%; border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: center; background-color: var(--bg-primary); overflow:hidden;">
@@ -298,7 +298,7 @@ export async function initTwinSettings() {
                         <option value="social" ${discovery === 'social' ? 'selected' : ''}>Casual Social Exchange</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; color: var(--bg-primary); font-weight:600;">Update Twin Parameters</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; color: var(--accent-teal); font-weight:600;">Update Twin Parameters</button>
             </form>
         `;
 
