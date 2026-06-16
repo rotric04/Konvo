@@ -95,34 +95,7 @@ export async function initSettingsPage() {
                 });
             }
 
-            if (aiAvatarBtn) {
-                aiAvatarBtn.replaceWith(aiAvatarBtn.cloneNode(true));
-                const newAiAvatarBtn = document.getElementById('btn-settings-ai-avatar');
-                newAiAvatarBtn.addEventListener('click', async () => {
-                    const promptText = prompt("Enter a description prompt to generate your unique AI avatar:", "A futuristic digital twin representation, neon accents");
-                    if (!promptText) return;
-                    
-                    try {
-                        newAiAvatarBtn.disabled = true;
-                        newAiAvatarBtn.textContent = 'Generating...';
-                        
-                        const res = await apiFetch('/api/agents/twin/avatar/generate', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                prompt: promptText,
-                                style: 'digital-art'
-                            })
-                        });
-                        
-                        KonvoToast.show(res.message || "AI Avatar generation started in the background. It will update your profile automatically upon completion.", 'success', 6000);
-                    } catch (err) {
-                        KonvoToast.show(`AI Avatar trigger failed: ${err.message}`, 'error');
-                    } finally {
-                        newAiAvatarBtn.disabled = false;
-                        newAiAvatarBtn.textContent = 'AI Generate';
-                    }
-                });
-            }
+
 
             const setDisplayName = document.getElementById('set-display-name');
             const setBio = document.getElementById('set-bio');
