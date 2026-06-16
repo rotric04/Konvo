@@ -341,12 +341,92 @@ export async function initMapPage() {
         '1A2B3C4D5E': { lat: 28.7041, lng: 77.1025, city: 'Delhi (Connaught Grid)' }
     };
 
+    function decodeDigipin(digipin) {
+        if (!digipin) return null;
+        const pin = digipin.replace(/-/g, '').trim().toUpperCase();
+        if (pin.length !== 10) return null;
+        
+        const DIGIPIN_GRID = [
+            ['F', 'C', '9', '8'],
+            ['J', '3', '2', '7'],
+            ['K', '4', '5', '6'],
+            ['L', 'M', 'P', 'T']
+        ];
+        
+        let minLat = 2.5;
+        let maxLat = 38.5;
+        let minLon = 63.5;
+        let maxLon = 99.5;
+        
+        for (let i = 0; i < 10; i++) {
+            const char = pin[i];
+            let ri = -1, ci = -1;
+            let found = false;
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    if (DIGIPIN_GRID[r][c] === char) {
+                        ri = r;
+                        ci = c;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+            if (!found) return null; // Invalid character
+            
+            const latDiv = (maxLat - minLat) / 4;
+            const lonDiv = (maxLon - minLon) / 4;
+            
+            const lat1 = maxLat - latDiv * (ri + 1);
+            const lat2 = maxLat - latDiv * ri;
+            const lon1 = minLon + lonDiv * ci;
+            const lon2 = minLon + lonDiv * (ci + 1);
+            
+            minLat = lat1;
+            maxLat = lat2;
+            minLon = lon1;
+            maxLon = lon2;
+        }
+        
+        const centerLat = (minLat + maxLat) / 2;
+        const centerLon = (minLon + maxLon) / 2;
+        return { lat: centerLat, lng: centerLon };
+    }
+
+    const geocodeCache = {};
+    async function fetchReverseGeocode(lat, lng) {
+        const cacheKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+        if (geocodeCache[cacheKey]) return geocodeCache[cacheKey];
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=en`);
+            if (res.ok) {
+                const data = await res.json();
+                const address = data.address || {};
+                const state = address.state || '';
+                const district = address.state_district || address.district || address.county || address.city || address.suburb || '';
+                const result = { state, district };
+                geocodeCache[cacheKey] = result;
+                return result;
+            }
+        } catch (e) {
+            console.error("Reverse geocoding failed", e);
+        }
+        return null;
+    }
+
     function getCoordsForDigipin(digipin) {
         if (!digipin) return null;
         const formatted = digipin.trim().toUpperCase();
         if (DIGIPIN_MAPPING[formatted]) {
-            return DIGIPIN_MAPPING[formatted];
+            return { ...DIGIPIN_MAPPING[formatted], city: DIGIPIN_MAPPING[formatted].city };
         }
+        
+        const decoded = decodeDigipin(formatted);
+        if (decoded) {
+            return { lat: decoded.lat, lng: decoded.lng, city: `Grid Zone ${formatted.substring(0, 4)}` };
+        }
+
         // Fallback translation algorithm mapping arbitrary pins
         let hash = 0;
         for (let i = 0; i < formatted.length; i++) {
@@ -459,6 +539,8 @@ export async function initMapPage() {
 
     map.on('load', async () => {
         const features = [];
+        const locationInfo = document.getElementById('map-location-info');
+        const locationText = document.getElementById('map-location-text');
 
         if (myCoords) {
             const jitterLat = centerLat + (Math.random() - 0.5) * 0.002;
@@ -468,11 +550,45 @@ export async function initMapPage() {
             el.className = 'my-location-marker';
             el.innerHTML = `<div style="background-color: var(--accent-amber); border: 2.5px solid white; width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 10px var(--accent-amber); filter: drop-shadow(0 0 4px var(--accent-amber)); cursor: pointer;"></div>`;
 
-            const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
-                `<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;">
-                    <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>${myCoords.city}
-                 </div>`
-            );
+            const popupHTML = `<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
+                <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                <span class="geocode-info">Loading location...</span>
+            </div>`;
+
+            const popup = new maplibregl.Popup({ offset: 15 }).setHTML(popupHTML);
+
+            async function updateMyGeocode() {
+                const geo = await fetchReverseGeocode(centerLat, centerLng);
+                if (geo && (geo.state || geo.district)) {
+                    const txt = `${geo.district ? geo.district + ', ' : ''}${geo.state}`;
+                    if (locationInfo && locationText) {
+                        locationInfo.style.display = 'block';
+                        locationText.textContent = `${txt} (Your Node)`;
+                    }
+                    const container = document.getElementById('popup-me');
+                    if (container) {
+                        const geoEl = container.querySelector('.geocode-info');
+                        if (geoEl) geoEl.textContent = txt;
+                    } else {
+                        popup.setHTML(`<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
+                            <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                            <span class="geocode-info">${txt}</span>
+                        </div>`);
+                    }
+                } else {
+                    if (locationInfo && locationText) {
+                        locationInfo.style.display = 'block';
+                        locationText.textContent = `${myCoords.city} (Your Node)`;
+                    }
+                    popup.setHTML(`<div style="font-family: var(--font-sans); color: var(--text-primary); text-align: center; font-size: 0.8rem;" id="popup-me">
+                        <strong>Your Masked Node</strong><br>Grid: ${currentUser.profile.digipin || 'N/A'}<br>
+                        <span class="geocode-info">${myCoords.city}</span>
+                    </div>`);
+                }
+            }
+
+            popup.on('open', updateMyGeocode);
+            updateMyGeocode();
 
             new maplibregl.Marker({ element: el })
                 .setLngLat([jitterLng, jitterLat])
@@ -501,7 +617,7 @@ export async function initMapPage() {
                             4: '8Y2A1B3C5D',
                             5: '1A2B3C4D5E'
                         };
-                        userDigipin = fallbackDigipins[user.id % 5 + 1] || '8Y1A3B5C7D'; // Use user.id for a pseudo-random fallback
+                        userDigipin = fallbackDigipins[user.id % 5 + 1] || '8Y1A3B5C7D';
                     }
 
                     const userCoords = getCoordsForDigipin(userDigipin);
@@ -511,9 +627,7 @@ export async function initMapPage() {
 
                         let color = 'var(--text-muted)';
                         let shadowColor = 'rgba(85, 85, 98, 0.4)';
-                        // For nearby users, we don't have compatibility score directly from this endpoint
-                        // We can use a default color or derive it from other profile attributes if needed
-                        color = 'var(--accent-teal)'; // Default for nearby users
+                        color = 'var(--accent-teal)';
                         shadowColor = 'rgba(13, 148, 136, 0.5)';
 
                         const el = document.createElement('div');
@@ -521,15 +635,31 @@ export async function initMapPage() {
                         el.innerHTML = `<div style="background-color: ${color}; border: 1.5px solid var(--border-color); width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 10px ${shadowColor}; cursor: pointer;"></div>`;
 
                         const popupContent = `
-                            <div style="font-family: var(--font-sans); min-width: 180px; text-align: center; color: var(--text-primary);">
+                            <div style="font-family: var(--font-sans); min-width: 180px; text-align: center; color: var(--text-primary);" id="popup-${user.id}">
                                 <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: bold; margin-bottom: 0.25rem;">${user.profile?.display_name || user.username}</div>
-                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.5rem;">Grid: ${userDigipin}</div>
+                                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-amber); margin-bottom: 0.4rem;">Grid: ${userDigipin}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem;" class="geocode-info">Loading location...</div>
                                 <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem;">MBTI: ${user.profile?.mbti_type || 'N/A'} // Intent: ${user.profile?.relationship_intent || 'N/A'}</div>
                                 <button class="btn btn-primary" style="font-size: 0.7rem; padding: 0.35rem 0.75rem; width: 100%;" onclick="window.location.href='/profile/${user.id}'">View Profile</button>
                             </div>
                         `;
 
                         const popup = new maplibregl.Popup({ offset: 15 }).setHTML(popupContent);
+
+                        popup.on('open', async () => {
+                            const geo = await fetchReverseGeocode(userCoords.lat, userCoords.lng);
+                            const container = document.getElementById(`popup-${user.id}`);
+                            const displayTxt = geo && (geo.state || geo.district) ? `${geo.district ? geo.district + ', ' : ''}${geo.state}` : userCoords.city;
+                            
+                            if (container) {
+                                const geoEl = container.querySelector('.geocode-info');
+                                if (geoEl) geoEl.textContent = displayTxt;
+                            }
+                            if (locationInfo && locationText) {
+                                locationInfo.style.display = 'block';
+                                locationText.textContent = `${displayTxt} (${user.profile?.display_name || user.username})`;
+                            }
+                        });
 
                         new maplibregl.Marker({ element: el })
                             .setLngLat([jitterLng, jitterLat])

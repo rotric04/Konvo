@@ -31,7 +31,6 @@ const ROUTES = {
     '/virtual-dates': { page: 'profile',    title: 'Twin DNA',       auth: true,  guestOnly: false },
     '/agents':        { page: 'profile',    title: 'Twin DNA',       auth: true,  guestOnly: false },
     '/settings':      { page: 'settings',   title: 'Settings',       auth: true,  guestOnly: false },
-    '/ai-diagnostics': { page: 'ai-diagnostics', title: 'AI Diagnostics', auth: true, guestOnly: false },
     '/notifications': { page: 'notifications', title: 'Notifications', auth: true, guestOnly: false },
     '/onboarding':    { page: 'profile',    title: 'Get Started',    auth: true,  guestOnly: false },
     '/auth':          { page: 'auth',       title: 'Sign In',        auth: false, guestOnly: true  },
@@ -47,7 +46,6 @@ const PAGE_SECTIONS = {
     'grid':          'view-grid',
     'profile':       'view-profile',
     'settings':      'view-settings',
-    'ai-diagnostics': 'view-ai-diagnostics',
     'notifications': 'view-notifications',
     'auth':          null, // auth.html is separate
     '404':           'view-404',
@@ -143,6 +141,12 @@ async function handleRouting(path) {
  */
 async function renderPage(pageId, route) {
     _isNavigating = true;
+
+    // Reset swipe deck initialized guards on navigation to force fresh candidate query
+    const swipeBox = document.getElementById('swipe-discovery-box');
+    if (swipeBox) delete swipeBox.dataset.initialized;
+    const deckContainer = document.getElementById('discovery-deck-container');
+    if (deckContainer) delete deckContainer.dataset.initialized;
 
     // Update document title
     document.title = route.title ? `${route.title} | Konvo` : 'Konvo';

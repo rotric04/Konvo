@@ -85,3 +85,13 @@ def apply_db_migrations(engine):
         with engine.begin() as conn:
             conn.execute(text("UPDATE users SET username = 'user_' || id WHERE username IS NULL"))
 
+    # Check if 'user_profiles' table columns need migration
+    if 'user_profiles' in inspector.get_table_names():
+        up_columns = [c['name'] for c in inspector.get_columns('user_profiles')]
+        if 'avatar_url' not in up_columns:
+            print("[MIGRATION] Adding 'avatar_url' column to 'user_profiles' table...")
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE user_profiles ADD COLUMN avatar_url VARCHAR(1024)"))
+            print("[MIGRATION] 'avatar_url' column added successfully.")
+
+

@@ -12,7 +12,6 @@ import { initChatPage } from '/src/features/chat/chat.js';
 import { initProfilePage } from '/src/features/profile/profile.js';
 import { initSettingsPage } from '/src/features/settings/settings.js';
 import { initAgentsPage } from '/src/features/agents/agents.js';
-import { initAIDiagnosticsPage } from '/src/features/ai-diagnostics/ai-diagnostics.js';
 import { initCommunitiesPage, initGraphPage, initMapPage, initDiscoverTabs } from '/src/features/grid/grid.js';
 import { setupLogout, updateSidebarUser } from '/src/components/nav.js';
 import { initLiveWebSockets } from '/src/services/websocket.js';
@@ -49,9 +48,6 @@ registerPageInit('settings', () => {
     initSettingsPage();
 });
 
-registerPageInit('ai-diagnostics', () => {
-    initAIDiagnosticsPage();
-});
 
 // Expose apiFetch to window for other modules
 window.apiFetch = apiFetch;

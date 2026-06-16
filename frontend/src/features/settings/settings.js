@@ -29,6 +29,100 @@ export async function initSettingsPage() {
     if (currentUser) {
         const prof = currentUser.profile;
         if (prof) {
+            // Avatar file upload and AI generation wiring
+            const avatarInput = document.getElementById('settings-avatar-input');
+            const uploadBtn = document.getElementById('btn-settings-upload-avatar');
+            const previewImg = document.getElementById('settings-avatar-preview');
+            const aiAvatarBtn = document.getElementById('btn-settings-ai-avatar');
+
+            if (prof.avatar_url && previewImg) {
+                previewImg.src = prof.avatar_url;
+            }
+
+            if (uploadBtn && avatarInput) {
+                uploadBtn.replaceWith(uploadBtn.cloneNode(true));
+                const newUploadBtn = document.getElementById('btn-settings-upload-avatar');
+                newUploadBtn.addEventListener('click', () => {
+                    avatarInput.click();
+                });
+
+                avatarInput.replaceWith(avatarInput.cloneNode(true));
+                const newAvatarInput = document.getElementById('settings-avatar-input');
+                newAvatarInput.addEventListener('change', async () => {
+                    const file = newAvatarInput.files[0];
+                    if (!file) return;
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        newUploadBtn.disabled = true;
+                        newUploadBtn.textContent = 'Uploading...';
+                        
+                        const token = localStorage.getItem('konvo_token');
+                        const headers = {};
+                        if (token) {
+                            headers['Authorization'] = `Bearer ${token}`;
+                        }
+                        
+                        const response = await fetch('/api/users/profile/avatar', {
+                            method: 'POST',
+                            headers,
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.detail || 'Upload failed');
+                        }
+
+                        KonvoToast.show('Avatar photo uploaded successfully!', 'success');
+                        
+                        if (previewImg) {
+                            previewImg.src = result.avatar_url;
+                        }
+                        
+                        if (window.currentUser && window.currentUser.profile) {
+                            window.currentUser.profile.avatar_url = result.avatar_url;
+                        }
+                    } catch (err) {
+                        KonvoToast.show(`Upload failed: ${err.message}`, 'error');
+                    } finally {
+                        newUploadBtn.disabled = false;
+                        newUploadBtn.textContent = 'Upload Image';
+                    }
+                });
+            }
+
+            if (aiAvatarBtn) {
+                aiAvatarBtn.replaceWith(aiAvatarBtn.cloneNode(true));
+                const newAiAvatarBtn = document.getElementById('btn-settings-ai-avatar');
+                newAiAvatarBtn.addEventListener('click', async () => {
+                    const promptText = prompt("Enter a description prompt to generate your unique AI avatar:", "A futuristic digital twin representation, neon accents");
+                    if (!promptText) return;
+                    
+                    try {
+                        newAiAvatarBtn.disabled = true;
+                        newAiAvatarBtn.textContent = 'Generating...';
+                        
+                        const res = await apiFetch('/api/agents/twin/avatar/generate', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                prompt: promptText,
+                                style: 'digital-art'
+                            })
+                        });
+                        
+                        KonvoToast.show(res.message || "AI Avatar generation started in the background. It will update your profile automatically upon completion.", 'success', 6000);
+                    } catch (err) {
+                        KonvoToast.show(`AI Avatar trigger failed: ${err.message}`, 'error');
+                    } finally {
+                        newAiAvatarBtn.disabled = false;
+                        newAiAvatarBtn.textContent = 'AI Generate';
+                    }
+                });
+            }
+
             const setDisplayName = document.getElementById('set-display-name');
             const setBio = document.getElementById('set-bio');
             const setGender = document.getElementById('set-gender');

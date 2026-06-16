@@ -50,8 +50,16 @@ def test_llms_full_txt_alias():
     assert "# Konvo.Space — Full LLM Technical Specification" in response.text
 
 if __name__ == "__main__":
+    print("Starting SEO & LLM route tests...")
     test_robots_txt()
+    print("test_robots_txt passed")
     test_llms_txt()
+    print("test_llms_txt passed")
     test_llm_full_txt()
+    print("test_llm_full_txt passed")
     test_llms_full_txt_alias()
+    print("test_llms_full_txt_alias passed")
     print("All SEO & LLM route unit tests passed successfully!")
+    import os; os._exit(0)
+
+

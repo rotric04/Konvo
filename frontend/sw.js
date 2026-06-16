@@ -15,8 +15,6 @@ const STATIC_RESOURCES = [
   '/communities',
   '/graph',
   '/virtual-dates',
-  '/diagnostics',
-  '/ai-diagnostics',
   '/notifications'
 ];
 

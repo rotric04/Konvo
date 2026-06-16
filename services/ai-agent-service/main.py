@@ -117,7 +117,12 @@ def get_simulations(
         partner = db.query(models.User).filter(models.User.id == partner_id).first()
         partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
         partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
-        partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
+        partner_avatar = ""
+        if partner:
+            if partner.profile and partner.profile.avatar_url:
+                partner_avatar = partner.profile.avatar_url
+            elif partner.agent_twin and partner.agent_twin.avatar:
+                partner_avatar = partner.agent_twin.avatar
         
         res.append({
             "id": sim.id,
@@ -132,7 +137,8 @@ def get_simulations(
             "created_at": sim.created_at,
             "partner_name": partner_name,
             "partner_konvo_id": partner_konvo_id,
-            "partner_avatar": partner_avatar
+            "partner_avatar": partner_avatar,
+            "summary": sim.match_detail_json.get("date_summary", "Review the simulated date report below.")
         })
     return res
 
@@ -153,7 +159,12 @@ def get_simulation_detail(
     partner = db.query(models.User).filter(models.User.id == partner_id).first()
     partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
     partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
-    partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
+    partner_avatar = ""
+    if partner:
+        if partner.profile and partner.profile.avatar_url:
+            partner_avatar = partner.profile.avatar_url
+        elif partner.agent_twin and partner.agent_twin.avatar:
+            partner_avatar = partner.agent_twin.avatar
     
     return {
         "id": sim.id,
@@ -168,7 +179,8 @@ def get_simulation_detail(
         "created_at": sim.created_at,
         "partner_name": partner_name,
         "partner_konvo_id": partner_konvo_id,
-        "partner_avatar": partner_avatar
+        "partner_avatar": partner_avatar,
+        "summary": sim.match_detail_json.get("date_summary", "Review the simulated date report below.")
     }
 
 @app.post("/api/agents/simulations/{sim_id}/approve", response_model=schemas.DateSimulationResponse)
@@ -186,7 +198,12 @@ def approve_simulation(
     partner = db.query(models.User).filter(models.User.id == partner_id).first()
     partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
     partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
-    partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
+    partner_avatar = ""
+    if partner:
+        if partner.profile and partner.profile.avatar_url:
+            partner_avatar = partner.profile.avatar_url
+        elif partner.agent_twin and partner.agent_twin.avatar:
+            partner_avatar = partner.agent_twin.avatar
     return {
         "id": sim.id,
         "user_a_id": sim.user_a_id,
@@ -200,7 +217,8 @@ def approve_simulation(
         "created_at": sim.created_at,
         "partner_name": partner_name,
         "partner_konvo_id": partner_konvo_id,
-        "partner_avatar": partner_avatar
+        "partner_avatar": partner_avatar,
+        "summary": sim.match_detail_json.get("date_summary", "Review the simulated date report below.")
     }
 
 @app.post("/api/agents/simulations/{sim_id}/lock", response_model=schemas.DateSimulationResponse)
@@ -237,7 +255,12 @@ def toggle_simulation_lock(
     partner = db.query(models.User).filter(models.User.id == partner_id).first()
     partner_name = partner.profile.display_name if partner and partner.profile else "Partner"
     partner_konvo_id = partner.konvo_id if partner else "KON-XXXX"
-    partner_avatar = partner.agent_twin.avatar if partner and partner.agent_twin else ""
+    partner_avatar = ""
+    if partner:
+        if partner.profile and partner.profile.avatar_url:
+            partner_avatar = partner.profile.avatar_url
+        elif partner.agent_twin and partner.agent_twin.avatar:
+            partner_avatar = partner.agent_twin.avatar
     
     return {
         "id": sim.id,
@@ -252,6 +275,7 @@ def toggle_simulation_lock(
         "created_at": sim.created_at,
         "partner_name": partner_name,
         "partner_konvo_id": partner_konvo_id,
-        "partner_avatar": partner_avatar
+        "partner_avatar": partner_avatar,
+        "summary": sim.match_detail_json.get("date_summary", "Review the simulated date report below.")
     }
 

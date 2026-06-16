@@ -407,8 +407,7 @@ window.updateThreeJSTheme = function(theme) {
  * Calls onContinue() when user proceeds.
  */
 function showVirtualDateDeviceWarning(onContinue) {
-    // Only show on small screens (mobile)
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 1024; // Treat phone and small tablets as mobile
     
     // Remove any existing popup
     const existing = document.getElementById('vd-device-popup');
@@ -423,86 +422,106 @@ function showVirtualDateDeviceWarning(onContinue) {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         padding: 1.5rem;
         animation: fadeIn 0.3s ease;
     `;
 
+    const roastTitle = isMobile ? "Tiny Screen Energy Alert! 🚨" : "Elite Screen Energy! 💻";
+    const roastEmoji = isMobile ? "💀" : "💅";
+    
+    let roastText = "";
+    if (isMobile) {
+        roastText = `
+            Wait, are you seriously trying to enter a fully immersive 3D virtual date on a screen the size of a Pop-Tart? 😭<br><br>
+            Bestie, squinting at your phone screen like a confused grandma is <strong>not</strong> a vibe. Your digital twin deserves better than being rendered in a microscopic pixel box.<br><br>
+            For the actual best experience, go grab a <strong>laptop, iPad, tablet, or PC</strong>. But hey, if you love suffering, feel free to proceed on this tiny brick at your own optical risk!
+        `;
+    } else {
+        roastText = `
+            Look at you using a civilized screen! Laptops, iPads, tablets, and PCs are indeed the elite tier for high-fidelity matchmaking.<br><br>
+            Thank you for not bringing small-screen energy into this pristine virtual date. You're about to run our full-blown Three.js cognitive simulator in its maximum visual glory.<br><br>
+            Get ready to meet your AI Twin compatibility matches without needing a magnifying glass. Let's see if your digital twin actually has game!
+        `;
+    }
+
     popup.innerHTML = `
         <div style="
-            background: var(--bg-card, #111118);
-            border: 1px solid var(--border-color, rgba(255,255,255,0.1));
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 420px;
+            background: var(--bg-card, #121214);
+            border: 1px solid var(--border-color, rgba(255,255,255,0.08));
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 440px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05);
             animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+            position: relative;
+            font-family: 'Outfit', sans-serif;
         ">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🌃</div>
+            <div style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #d97706, #14b8a6, #4f46e5);
+                border-radius: 24px 24px 0 0;
+            "></div>
+            
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">${roastEmoji}</div>
+            
             <h3 style="
-                font-family: var(--font-display, 'Outfit', sans-serif);
-                font-size: 1.35rem;
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.5rem;
                 font-weight: 700;
                 color: var(--text-primary, #fff);
-                margin-bottom: 0.5rem;
-            ">Virtual Date Experience</h3>
+                margin-bottom: 1rem;
+                letter-spacing: -0.02em;
+            ">${roastTitle}</h3>
 
-            ${isMobile ? `
             <div style="
-                background: rgba(245, 158, 11, 0.08);
-                border: 1px solid rgba(245, 158, 11, 0.3);
-                border-radius: 10px;
-                padding: 0.85rem 1rem;
-                margin: 1rem 0;
-                display: flex;
-                align-items: flex-start;
-                gap: 0.6rem;
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                border-radius: 14px;
+                padding: 1.25rem;
+                margin-bottom: 1.75rem;
+                font-size: 0.9rem;
+                color: var(--text-secondary, rgba(255,255,255,0.7));
+                line-height: 1.6;
                 text-align: left;
             ">
-                <span style="font-size:1.2rem;flex-shrink:0;">📱</span>
-                <div>
-                    <div style="font-size:0.82rem;font-weight:600;color:var(--accent-amber,#f59e0b);margin-bottom:0.2rem;">Better on Tablet or Laptop</div>
-                    <div style="font-size:0.78rem;color:var(--text-secondary,rgba(255,255,255,0.6));line-height:1.5;">
-                        The 3D virtual date environment is designed for larger screens. For the full immersive experience with parallax animations and scene controls, we recommend using a tablet or laptop.
-                    </div>
-                </div>
+                ${roastText}
             </div>
-            ` : ''}
-
-            <p style="font-size:0.88rem;color:var(--text-secondary,rgba(255,255,255,0.6));line-height:1.6;margin-bottom:1.5rem;">
-                ${isMobile 
-                    ? 'You can still enter on mobile, but some visual elements may be limited.'
-                    : 'You\'re about to enter a fully immersive 3D virtual date environment. Choose your scene, chat in real-time, and discover compatibility chemistry.'}
-            </p>
 
             <div style="display:flex;flex-direction:column;gap:0.75rem;">
                 <button id="vd-popup-continue" style="
-                    padding: 0.85rem 2rem;
-                    background: linear-gradient(135deg, #4F46E5, #0D9488);
+                    padding: 0.9rem 2rem;
+                    background: linear-gradient(135deg, #14b8a6, #4f46e5);
                     color: white;
                     border: none;
-                    border-radius: 10px;
-                    font-family: var(--font-display, 'Outfit', sans-serif);
+                    border-radius: 12px;
+                    font-family: 'Outfit', sans-serif;
                     font-size: 0.95rem;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: opacity 0.2s;
-                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-                    🌃 Enter Virtual Date
+                    transition: transform 0.2s, filter 0.2s;
+                " onmouseover="this.style.transform='scale(1.02)';" onmouseout="this.style.transform='scale(1)';">
+                    Enter Virtual Date 🚀
                 </button>
                 <button id="vd-popup-cancel" style="
-                    padding: 0.6rem;
+                    padding: 0.65rem;
                     background: transparent;
                     color: var(--text-muted, rgba(255,255,255,0.4));
                     border: 1px solid var(--border-color, rgba(255,255,255,0.1));
-                    border-radius: 8px;
-                    font-size: 0.82rem;
+                    border-radius: 10px;
+                    font-size: 0.85rem;
                     cursor: pointer;
-                ">Cancel</button>
+                    font-family: 'Outfit', sans-serif;
+                    transition: background 0.2s;
+                " onmouseover="this.style.background='rgba(255,255,255,0.03)';" onmouseout="this.style.background='transparent';">Abort Mission</button>
             </div>
         </div>
     `;
@@ -518,7 +537,7 @@ function showVirtualDateDeviceWarning(onContinue) {
     popup.querySelector('#vd-popup-cancel').addEventListener('click', () => {
         popup.style.opacity = '0';
         popup.style.transition = 'opacity 0.25s';
-        setTimeout(() => popup.remove(), 250);
+        setTimeout(() => { popup.remove(); }, 250);
     });
 
     popup.addEventListener('click', (e) => {
@@ -528,6 +547,35 @@ function showVirtualDateDeviceWarning(onContinue) {
             setTimeout(() => popup.remove(), 250);
         }
     });
+}
+
+function extractAvatarUrl(avatarStr) {
+    if (!avatarStr) return '';
+    const trimmed = avatarStr.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:') || trimmed.startsWith('/')) {
+        return trimmed;
+    }
+    const imgMatch = trimmed.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (imgMatch && imgMatch[1]) {
+        return imgMatch[1];
+    }
+    if (trimmed.includes('<svg')) {
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(trimmed);
+    }
+    return '';
+}
+
+function getAvatarHtml(avatarStr) {
+    if (!avatarStr) return '👤';
+    const trimmed = avatarStr.trim();
+    if (trimmed.includes('<svg') || trimmed.includes('<img')) {
+        return trimmed;
+    }
+    const url = extractAvatarUrl(trimmed);
+    if (url) {
+        return `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+    }
+    return '👤';
 }
 
 async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
@@ -558,6 +606,33 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
     if (!partnerId) {
         KonvoToast.show("Please select an approved mutual match from your Chat contacts to start a real-time virtual date.", "warning", 5000);
         return;
+    }
+
+    // Fetch user twin avatar & partner twin avatar
+    let userAvatarStr = '';
+    let partnerAvatarStr = '';
+
+    if (currentUser && currentUser.profile && currentUser.profile.avatar_url) {
+        userAvatarStr = currentUser.profile.avatar_url;
+    } else {
+        try {
+            const userTwin = await apiFetch('/api/agents/twin');
+            if (userTwin && userTwin.avatar) {
+                userAvatarStr = userTwin.avatar;
+            }
+        } catch (err) {
+            console.warn("Failed to fetch user twin avatar:", err);
+        }
+    }
+
+    try {
+        const simulations = await apiFetch('/api/agents/simulations');
+        const targetSim = simulations.find(s => s.user_a_id == partnerId || s.user_b_id == partnerId);
+        if (targetSim && targetSim.partner_avatar) {
+            partnerAvatarStr = targetSim.partner_avatar;
+        }
+    } catch (err) {
+        console.warn("Failed to fetch partner avatar from simulations list:", err);
     }
 
     const existing = document.getElementById('vd-fullscreen');
@@ -602,6 +677,9 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
 
     function render() {
         const loc = VirtualDateLocations[currentLocIdx];
+        const userRingHtml = getAvatarHtml(userAvatarStr);
+        const partnerRingHtml = getAvatarHtml(partnerAvatarStr);
+
         el.innerHTML = `
         <div class="vd-bg ${loc.bg}"></div>
         <canvas class="vd-canvas-particles" id="vd-canvas" style="position: absolute; inset: 0; pointer-events: auto; z-index: 1;"></canvas>
@@ -624,14 +702,14 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         <!-- AI Avatars Panel -->
         <div class="vd-avatars-panel">
             <div class="vd-avatar-card">
-                <div class="vd-avatar-ring">👤</div>
+                <div class="vd-avatar-ring" id="user-avatar-ring">${userRingHtml}</div>
                 <div class="vd-avatar-info">
                     <div class="vd-avatar-role">YOU</div>
                     <div class="vd-avatar-mood" id="vd-avatar-mood-user">Calm</div>
                 </div>
             </div>
             <div class="vd-avatar-card">
-                <div class="vd-avatar-ring pink" id="partner-avatar-ring">👤</div>
+                <div class="vd-avatar-ring pink" id="partner-avatar-ring">${partnerRingHtml}</div>
                 <div class="vd-avatar-info">
                     <div class="vd-avatar-role" id="partner-hud-name">${partnerName.toUpperCase()}</div>
                     <div class="vd-avatar-mood" id="vd-avatar-mood-partner">Calm</div>
@@ -1310,7 +1388,7 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         window.threeTableMat = tableMat;
 
         // Composite Avatar Builder
-        function create3DAvatar(roleType, baseColor, emissiveColor) {
+        function create3DAvatar(roleType, baseColor, emissiveColor, avatarUrl) {
             const group = new THREE.Group();
 
             const bodyGeo = new THREE.CylinderGeometry(0.5, 0.7, 1.6, 16);
@@ -1334,6 +1412,25 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
                 emissive: emissiveColor,
                 emissiveIntensity: 0.4
             });
+
+            if (avatarUrl) {
+                const textureLoader = new THREE.TextureLoader();
+                textureLoader.setCrossOrigin('anonymous');
+                textureLoader.load(
+                    avatarUrl,
+                    (texture) => {
+                        console.log(`[Three.js] Successfully loaded avatar texture for ${roleType}`);
+                        headMat.map = texture;
+                        headMat.color.setHex(0xffffff);
+                        headMat.needsUpdate = true;
+                    },
+                    undefined,
+                    (err) => {
+                        console.warn(`[Three.js] Failed to load avatar texture for ${roleType}:`, err);
+                    }
+                );
+            }
+
             const head = new THREE.Mesh(headGeo, headMat);
             head.position.set(0, 2.1, 0);
             group.add(head);
@@ -1370,11 +1467,11 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
             return group;
         }
 
-        avatarA = create3DAvatar('user', 0x06b6d4, 0x0891b2);
+        avatarA = create3DAvatar('user', 0x06b6d4, 0x0891b2, extractAvatarUrl(userAvatarStr));
         avatarA.position.set(-4.5, 2.4, 0);
         envGroup.add(avatarA);
 
-        avatarB = create3DAvatar('partner', 0xec4899, 0xdb2777);
+        avatarB = create3DAvatar('partner', 0xec4899, 0xdb2777, extractAvatarUrl(partnerAvatarStr));
         avatarB.position.set(4.5, 2.4, 0);
         envGroup.add(avatarB);
 

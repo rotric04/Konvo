@@ -88,6 +88,7 @@ class UserProfileSchema(BaseModel):
     sun_sign: str
     moon_sign: str
     ascendant: str
+    avatar_url: Optional[str] = None
     
     mbti_type: str
     mbti_confidence: float
@@ -177,6 +178,7 @@ class DateSimulationResponse(BaseModel):
     partner_name: str
     partner_konvo_id: str
     partner_avatar: Optional[str]
+    summary: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -279,6 +281,7 @@ class ProfileUpdateRequest(BaseModel):
     interests: List[str] = []
     goals: List[str] = []
     relationship_intent: Optional[str] = "Long Term"
+    avatar_url: Optional[str] = None
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr

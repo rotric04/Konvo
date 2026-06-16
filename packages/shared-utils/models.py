@@ -49,6 +49,8 @@ class UserProfile(Base):
     ascendant = Column(String, default="Aries")
     interests = Column(JSON, default=list)
     goals = Column(JSON, default=list)
+    avatar_url = Column(String, nullable=True)
+
 
     # MBTI outputs
     mbti_type = Column(String, default="INTJ")

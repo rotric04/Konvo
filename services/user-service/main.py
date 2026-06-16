@@ -15,7 +15,7 @@ while _curr:
 sys.path.append(os.path.join(_root, "packages", "shared-utils"))
 sys.path.append(os.path.join(_root, "packages", "shared-schemas"))
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from typing import List
 from database import get_db
@@ -85,6 +85,8 @@ def update_profile(
     prof.interests = request.interests
     prof.goals = request.goals
     prof.relationship_intent = request.relationship_intent
+    if request.avatar_url is not None:
+        prof.avatar_url = request.avatar_url
     
     # Recalculate horoscope signs if birth date/location updated
     if request.birth_date and request.birth_location:
@@ -105,6 +107,83 @@ def update_profile(
         
     db.commit()
     return {"success": True, "message": "Profile updated successfully."}
+
+
+@app.post("/api/users/profile/avatar")
+def upload_avatar(
+    file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from fastapi import UploadFile, File
+    from PIL import Image
+    import io
+    import uuid
+    
+    prof = current_user.profile
+    if not prof:
+        prof = models.UserProfile(
+            user_id=current_user.id,
+            display_name=current_user.email.split("@")[0],
+            gender="Unknown",
+            bio="",
+            relationship_intent="Long Term",
+            sun_sign="Aries",
+            moon_sign="Aries",
+            ascendant="Aries",
+            interests=[],
+            goals=[]
+        )
+        db.add(prof)
+        db.commit()
+        db.refresh(current_user)
+        prof = current_user.profile
+
+    try:
+        image_bytes = file.file.read()
+        try:
+            img = Image.open(io.BytesIO(image_bytes))
+        except Exception as e:
+            raise HTTPException(status_code=400, detail="Invalid image file format")
+            
+        # Center crop to square
+        width, height = img.size
+        min_dim = min(width, height)
+        left = (width - min_dim) // 2
+        top = (height - min_dim) // 2
+        right = left + min_dim
+        bottom = top + min_dim
+        
+        img_cropped = img.crop((left, top, right, bottom))
+        
+        # Resize to 512x512
+        img_resized = img_cropped.resize((512, 512), Image.Resampling.LANCZOS)
+        
+        # Convert to RGB or RGBA depending on transparency
+        if img_resized.mode in ("RGBA", "LA") or (img_resized.mode == "P" and "transparency" in img_resized.info):
+            img_final = img_resized.convert("RGBA")
+        else:
+            img_final = img_resized.convert("RGB")
+            
+        uploads_dir = os.path.join(_root, "frontend", "uploads")
+        os.makedirs(uploads_dir, exist_ok=True)
+        
+        filename = f"avatar_{current_user.id}_{uuid.uuid4().hex}.webp"
+        file_path = os.path.join(uploads_dir, filename)
+        
+        img_final.save(file_path, format="WEBP", quality=90)
+        
+        avatar_url = f"/static/uploads/{filename}"
+        prof.avatar_url = avatar_url
+        db.commit()
+        
+        return {"success": True, "avatar_url": avatar_url}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to process and upload avatar image: {str(e)}")
 
 @app.get("/api/users/onboarding-draft", response_model=schemas.OnboardingDraft)
 def get_onboarding_draft(current_user: models.User = Depends(get_current_user)):

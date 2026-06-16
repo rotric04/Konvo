@@ -87,7 +87,7 @@ async def send_chat_message(
         raise HTTPException(status_code=403, detail=str(e))
 
 @app.websocket("/api/chat/ws")
-async def chat_websocket_handler(websocket: WebSocket, user_token: str):
+async def chat_websocket_handler(websocket: WebSocket, user_token: str = None):
     # Authenticate manually since WS path headers differ
     # For testing, user_token parameter contains the JWT token
     from auth_helper import SECRET_KEY, ALGORITHM
@@ -95,6 +95,11 @@ async def chat_websocket_handler(websocket: WebSocket, user_token: str):
     from database import engine
     import jwt
     
+    if not user_token:
+        await websocket.accept()
+        await websocket.close(code=4003)
+        return
+        
     SessionLocal = sessionmaker(bind=engine)
     db = SessionLocal()
     
@@ -103,9 +108,11 @@ async def chat_websocket_handler(websocket: WebSocket, user_token: str):
         email = payload.get("sub")
         user = db.query(models.User).filter(models.User.email == email).first()
         if not user:
+            await websocket.accept()
             await websocket.close(code=4003)
             return
     except Exception:
+        await websocket.accept()
         await websocket.close(code=4003)
         return
         
