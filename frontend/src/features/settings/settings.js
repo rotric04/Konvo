@@ -208,6 +208,12 @@ export async function initSettingsPage() {
                             })
                         });
                         KonvoToast.show("Profile configuration updated successfully.", 'success');
+                        
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Save Profile';
+                        }
+                        
                         // Re-fetch user data and update UI dynamically instead of full reload
                         const updatedUser = await apiFetch('/api/users/me');
                         if (updatedUser) {
@@ -216,7 +222,6 @@ export async function initSettingsPage() {
                         }
                     } catch (err) {
                         KonvoToast.show(`Failed updating configuration: ${err.message}`, 'error');
-                    } finally {
                         if (submitBtn) {
                             submitBtn.disabled = false;
                             submitBtn.textContent = 'Save Profile';

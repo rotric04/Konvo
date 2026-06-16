@@ -341,9 +341,23 @@ export async function initMapPage() {
         '1A2B3C4D5E': { lat: 28.7041, lng: 77.1025, city: 'Delhi (Connaught Grid)' }
     };
 
+    // Offline region mapping for Indian postal/geospatial prefix zones to prevent Bengaluru defaults
+    const OFFLINE_REGIONS = {
+        '1': { lat: 28.6139, lng: 77.2090, state: 'Delhi', district: 'New Delhi', city: 'Delhi / North Region' },
+        '2': { lat: 26.8467, lng: 80.9462, state: 'Uttar Pradesh', district: 'Lucknow', city: 'UP / Uttarakhand Region' },
+        '3': { lat: 26.9124, lng: 75.7873, state: 'Rajasthan', district: 'Jaipur', city: 'Rajasthan / Gujarat Region' },
+        '4': { lat: 19.0760, lng: 72.8777, state: 'Maharashtra', district: 'Mumbai', city: 'Maharashtra / MP / Goa Region' },
+        '5': { lat: 17.3850, lng: 78.4867, state: 'Telangana', district: 'Hyderabad', city: 'Telangana / Andhra Region' },
+        '6': { lat: 13.0827, lng: 80.2707, state: 'Tamil Nadu', district: 'Chennai', city: 'Tamil Nadu / Kerala Region' },
+        '7': { lat: 22.5726, lng: 88.3639, state: 'West Bengal', district: 'Kolkata', city: 'West Bengal / NE Region' },
+        '8': { lat: 12.9716, lng: 77.5946, state: 'Karnataka', district: 'Bengaluru', city: 'Karnataka Region' },
+        '9': { lat: 20.2961, lng: 85.8245, state: 'Odisha', district: 'Khordha', city: 'Odisha / Central East Region' }
+    };
+
     function decodeDigipin(digipin) {
         if (!digipin) return null;
-        const pin = digipin.replace(/-/g, '').trim().toUpperCase();
+        // Strip GP- prefixes or other non-alphanumeric noise
+        let pin = digipin.replace(/^GP-/i, '').replace(/^DIGIPIN-/i, '').replace(/-/g, '').trim().toUpperCase();
         if (pin.length !== 10) return null;
         
         const DIGIPIN_GRID = [
@@ -412,12 +426,25 @@ export async function initMapPage() {
         } catch (e) {
             console.error("Reverse geocoding failed", e);
         }
-        return null;
+        
+        // Offline backup: match to closest offline region
+        let closestRegion = OFFLINE_REGIONS['8']; // default South/Karnataka
+        let minDistance = Infinity;
+        for (const key in OFFLINE_REGIONS) {
+            const r = OFFLINE_REGIONS[key];
+            const dist = Math.pow(r.lat - lat, 2) + Math.pow(r.lng - lng, 2);
+            if (dist < minDistance) {
+                minDistance = dist;
+                closestRegion = r;
+            }
+        }
+        return { state: closestRegion.state, district: closestRegion.district };
     }
 
     function getCoordsForDigipin(digipin) {
         if (!digipin) return null;
-        const formatted = digipin.trim().toUpperCase();
+        let formatted = digipin.replace(/^GP-/i, '').replace(/^DIGIPIN-/i, '').replace(/-/g, '').trim().toUpperCase();
+        
         if (DIGIPIN_MAPPING[formatted]) {
             return { ...DIGIPIN_MAPPING[formatted], city: DIGIPIN_MAPPING[formatted].city };
         }
@@ -427,14 +454,24 @@ export async function initMapPage() {
             return { lat: decoded.lat, lng: decoded.lng, city: `Grid Zone ${formatted.substring(0, 4)}` };
         }
 
-        // Fallback translation algorithm mapping arbitrary pins
+        // Fallback translation algorithm mapping arbitrary/short pins to correct regions
+        const firstChar = formatted.charAt(0);
+        let baseRegion = OFFLINE_REGIONS[firstChar] || OFFLINE_REGIONS['8']; // default Karnataka
+        
         let hash = 0;
         for (let i = 0; i < formatted.length; i++) {
             hash = formatted.charCodeAt(i) + ((hash << 5) - hash);
         }
-        const mockLat = 12.9 + (Math.abs(hash % 1000) / 5000);
-        const mockLng = 77.5 + (Math.abs((hash >> 3) % 1000) / 5000);
-        return { lat: mockLat, lng: mockLng, city: `Grid Zone ${formatted.substring(0, 4)}` };
+        
+        // Determinstic offset within that region so different pins space out
+        const latOffset = ((Math.abs(hash) % 1000) / 10000) - 0.05; 
+        const lngOffset = ((Math.abs(hash >> 3) % 1000) / 10000) - 0.05;
+        
+        return { 
+            lat: baseRegion.lat + latOffset, 
+            lng: baseRegion.lng + lngOffset, 
+            city: `${baseRegion.city} (Zone ${formatted.substring(0, 4) || 'GEN'})` 
+        };
     }
 
     let centerLat = 12.9716;

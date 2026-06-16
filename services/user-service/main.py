@@ -115,10 +115,24 @@ def upload_avatar(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    from fastapi import UploadFile, File
+    from fastapi import UploadFile, File, HTTPException
     from PIL import Image
     import io
     import uuid
+    
+    # Enforce file format checks (.png, .jpg, .jpeg)
+    filename_lower = file.filename.lower()
+    if not (filename_lower.endswith('.png') or filename_lower.endswith('.jpg') or filename_lower.endswith('.jpeg')):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid file extension. Only .png, .jpg, and .jpeg are allowed."
+        )
+    
+    if file.content_type not in ["image/png", "image/jpeg", "image/jpg"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid content type. Only image/png, image/jpeg, or image/jpg are allowed."
+        )
     
     prof = current_user.profile
     if not prof:

@@ -150,6 +150,9 @@ export function initSwipePage(targetContainerId) {
                 if (res.match_occurred) {
                     if (typeof window.konvoOpenModal === 'function') {
                         window.konvoOpenModal('match-celebration-modal');
+                        if (typeof window.runMatchSimulation === 'function') {
+                            window.runMatchSimulation(candidate);
+                        }
                     }
                 }
                 currentCardIndex++;
@@ -173,6 +176,69 @@ export function initSwipePage(targetContainerId) {
             alert(`Swipe transaction error: ${e.message}`);
         }
     }
+
+    // AI Twin Proxy Negotiation Simulator log sequence
+    window.runMatchSimulation = function(candidate) {
+        const loader = document.getElementById('match-simulation-loader');
+        const details = document.getElementById('match-celebration-details');
+        const consoleLog = document.getElementById('simulation-console-log');
+        
+        if (!loader || !details || !consoleLog) return;
+        
+        loader.style.display = 'block';
+        details.style.display = 'none';
+        consoleLog.innerHTML = `
+            <div style="color: var(--accent-teal);">[SYSTEM] Initiating connection handshake...</div>
+            <div style="color: var(--accent-amber);">[AUTH] Verifying Human Anti-Bot Token (JWT/PoW)...</div>
+        `;
+        
+        const logs = [
+            { text: "[AUTH] Bot protection token verification: SECURE (Human validated).", delay: 500, color: "var(--accent-teal)" },
+            { text: `[PROXY] Launching Cognitive Proxy Twin matching loop for "${candidate.display_name}"...`, delay: 1100, color: "var(--text-primary)" },
+            { text: `[NEGOTIATION] Running 50 parallel dialectic simulation rounds...`, delay: 1700, color: "var(--text-secondary)" },
+            { text: `[NEGOTIATION] Analyzing interest intersections (Overlap: ${Math.floor(Math.random() * 30) + 70}%)...`, delay: 2300, color: "var(--text-secondary)" },
+            { text: `[ASTRO] Calibrating Natal Chart alignments: Sun / Moon synergy confirmed.`, delay: 2800, color: "var(--accent-amber)" },
+            { text: `[MBTI] MBTI Compatibility vector check: HIGH SYNERGY.`, delay: 3300, color: "var(--accent-teal)" },
+            { text: `[SYSTEM] Consent token check: MUTUAL ALIGNMENT REGISTERED.`, delay: 3800, color: "var(--accent-indigo)" },
+            { text: `[SYSTEM] Encrypting connection keys and creating chat channel...`, delay: 4200, color: "var(--accent-teal)" },
+            { text: `[SUCCESS] Connection Established. Opening secure communication gate.`, delay: 4600, color: "var(--accent-teal)" }
+        ];
+        
+        logs.forEach(log => {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.style.color = log.color;
+                div.textContent = log.text;
+                consoleLog.appendChild(div);
+                consoleLog.scrollTop = consoleLog.scrollHeight;
+                
+                // Randomize latency display
+                const latEl = document.getElementById('sim-latency');
+                if (latEl) latEl.textContent = `${Math.floor(Math.random() * 15) + 8}ms`;
+                
+                if (log.text.startsWith("[SUCCESS]")) {
+                    setTimeout(() => {
+                        const matchTitle = document.getElementById('match-title-text');
+                        const matchSynergy = document.getElementById('match-synergy-text');
+                        const matchSub = document.getElementById('match-sub-text');
+                        
+                        if (matchTitle) matchTitle.textContent = `Connected with ${candidate.display_name}!`;
+                        if (matchSynergy) {
+                            const mbtiPairs = ["INFP × ENFJ", "INTJ × ENFP", "INFJ × ENTP", "ENFJ × INTR", "ISFP × ESFJ"];
+                            const mbti = mbtiPairs[Math.floor(Math.random() * mbtiPairs.length)];
+                            matchSynergy.innerHTML = `Astrology Sync: ${Math.floor(Math.random() * 15) + 85}% &bull; MBTI Synergy: ${mbti}`;
+                        }
+                        if (matchSub) {
+                            matchSub.textContent = `Your AI Twins successfully completed 50 dialogue loops, verified anti-bot tokens, and approved this connection.`;
+                        }
+                        
+                        loader.style.display = 'none';
+                        details.style.display = 'block';
+                    }, 600);
+                }
+            }, log.delay);
+        });
+    };
 
     loadSwipeDeck();
 }

@@ -33,8 +33,6 @@
             --bg-surface: var(--surface-primary);
             --border-glow: rgba(124, 58, 237, 0.15);
             --border-dim: var(--border-primary);
-            --text-primary: var(--text-primary);
-            --text-secondary: var(--text-secondary);
             --accent-glow: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
             --error: var(--accent-danger);
             --success: var(--accent-success);
@@ -45,8 +43,6 @@
             --bg-surface: var(--surface-primary);
             --border-glow: rgba(124, 58, 237, 0.08);
             --border-dim: var(--border-primary);
-            --text-primary: var(--text-primary);
-            --text-secondary: var(--text-secondary);
             --error: var(--accent-danger);
             --success: var(--accent-success);
         }
@@ -58,7 +54,7 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 70%);
+            background: radial-gradient(circle at 50% 0%, var(--bg-secondary) 0%, var(--bg-base) 70%);
             color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
