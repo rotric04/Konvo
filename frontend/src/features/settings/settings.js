@@ -40,14 +40,15 @@ export async function initSettingsPage() {
             }
 
             if (uploadBtn && avatarInput) {
+                avatarInput.replaceWith(avatarInput.cloneNode(true));
+                const newAvatarInput = document.getElementById('settings-avatar-input');
+
                 uploadBtn.replaceWith(uploadBtn.cloneNode(true));
                 const newUploadBtn = document.getElementById('btn-settings-upload-avatar');
                 newUploadBtn.addEventListener('click', () => {
-                    avatarInput.click();
+                    newAvatarInput.click();
                 });
 
-                avatarInput.replaceWith(avatarInput.cloneNode(true));
-                const newAvatarInput = document.getElementById('settings-avatar-input');
                 newAvatarInput.addEventListener('change', async () => {
                     const file = newAvatarInput.files[0];
                     if (!file) return;

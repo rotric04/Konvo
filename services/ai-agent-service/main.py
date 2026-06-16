@@ -64,20 +64,42 @@ def generate_twin_avatar(
         db.refresh(twin)
         
     try:
+        import sys as _sys
+        import os as _os
+        _root_path = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+        if _root_path not in _sys.path:
+            _sys.path.insert(0, _root_path)
+        
+        # Load the task
+        from services.worker_service.tasks.avatar import generate_avatar as _gen_avatar
+        
+        celery_triggered = False
         try:
-            import sys as _sys
-            import os as _os
-            _root_path = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-            if _root_path not in _sys.path:
-                _sys.path.insert(0, _root_path)
-            from services.worker_service.tasks.avatar import generate_avatar as _gen_avatar
             _gen_avatar.delay(current_user.id, request.prompt, request.style)
-        except ImportError:
-            # Celery worker not available — generate avatar synchronously as fallback
-            raise HTTPException(status_code=503, detail="Avatar generation worker is offline. Please ensure the Celery worker is running.")
-        return {"success": True, "message": "AI Avatar generation started in the background. It will update your profile automatically upon completion."}
-    except HTTPException:
-        raise
+            celery_triggered = True
+        except Exception as celery_err:
+            print(f"[Celery Alert] Failed to queue task via Celery: {celery_err}. Using local thread fallback.")
+            
+        if not celery_triggered:
+            # Fallback to local background thread
+            import threading
+            
+            class MockTaskSelf:
+                def retry(self, exc, **kwargs):
+                    raise exc
+            
+            def run_synchronously():
+                try:
+                    task_func = _gen_avatar.run if hasattr(_gen_avatar, 'run') else _gen_avatar
+                    task_func(MockTaskSelf(), current_user.id, request.prompt, request.style)
+                except Exception as t_err:
+                    print(f"[Worker Fallback Error] Local run failed: {t_err}")
+            
+            thread = threading.Thread(target=run_synchronously)
+            thread.daemon = True
+            thread.start()
+            
+        return {"success": True, "message": "AI Avatar generation started. It will update your profile automatically upon completion."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to trigger avatar task: {str(e)}")
 
