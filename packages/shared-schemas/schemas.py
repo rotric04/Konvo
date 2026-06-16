@@ -80,38 +80,38 @@ class AssessmentSubmission(BaseModel):
 
 # Profile responder
 class UserProfileSchema(BaseModel):
-    display_name: str
-    gender: str
+    display_name: Optional[str] = ""
+    gender: Optional[str] = "Unknown"
     looking_for_gender: Optional[str] = "All"
-    bio: Optional[str]
-    relationship_intent: str
-    birth_date: Optional[date]
-    birth_time: Optional[time]
-    birth_location: Optional[str]
+    bio: Optional[str] = ""
+    relationship_intent: Optional[str] = "Long Term"
+    birth_date: Optional[date] = None
+    birth_time: Optional[time] = None
+    birth_location: Optional[str] = ""
     digipin: Optional[str] = None
-    sun_sign: str
-    moon_sign: str
-    ascendant: str
+    sun_sign: Optional[str] = "Aries"
+    moon_sign: Optional[str] = "Aries"
+    ascendant: Optional[str] = "Aries"
     avatar_url: Optional[str] = None
     
-    mbti_type: str
-    mbti_confidence: float
-    mbti_summary: Optional[str]
-    mbti_growth_areas: List[str]
-    mbti_communication_style: Optional[str]
-    mbti_relationship_style: Optional[str]
-    mbti_friendship_style: Optional[str]
+    mbti_type: Optional[str] = "INTJ"
+    mbti_confidence: Optional[float] = 75.0
+    mbti_summary: Optional[str] = ""
+    mbti_growth_areas: Optional[List[str]] = []
+    mbti_communication_style: Optional[str] = ""
+    mbti_relationship_style: Optional[str] = ""
+    mbti_friendship_style: Optional[str] = ""
     
     # Konvo DNA
-    dna_behavior: float
-    dna_personality: float
-    dna_communication: float
-    dna_relationship: float
-    dna_emotional: float
-    dna_lifestyle: float
-    dna_interest: float
-    dna_trust: float
-    dna_values: float
+    dna_behavior: Optional[float] = 50.0
+    dna_personality: Optional[float] = 50.0
+    dna_communication: Optional[float] = 50.0
+    dna_relationship: Optional[float] = 50.0
+    dna_emotional: Optional[float] = 50.0
+    dna_lifestyle: Optional[float] = 50.0
+    dna_interest: Optional[float] = 50.0
+    dna_trust: Optional[float] = 50.0
+    dna_values: Optional[float] = 50.0
 
     class Config:
         from_attributes = True

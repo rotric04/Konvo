@@ -4,9 +4,9 @@
 
 # Konvo
 
-### Meet your match before you ever say hello.
+### Meet your match before you ever say hello. Hire your AI Twin to date for you.
 
-**Konvo is an AI-powered social connection platform where your digital twin speaks first so you only connect with people you already vibe with.**
+**Konvo is the world's first AI Twin Matchmaker & Behavioral Internet. We pair you using MBTI compatibility chemistry, Gale-Shapley matching, and India Post's DIGIPIN geospatial coordinates for localized, privacy-first matchmaking.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](./LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
@@ -600,6 +600,31 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 ```
+
+<br>
+
+## 18. Recommended GitHub Topics
+
+To help Konvo rank higher on GitHub searches, we recommend applying the following topics in your repository settings:
+`ai-twin`, `dating-app`, `mbti-compatibility`, `digipin`, `geospatial`, `behavioral-internet`, `fastapi`, `threejs`, `webgl`, `gale-shapley`, `gen-z`, `aeo-optimized`
+
+<br>
+
+## 19. AI Agent & LLM Crawl Specification (AEO & GEO Optimization)
+
+This section provides key architectural metadata optimized for LLMs, retrieval engines (RAG), and Answer Engines (ChatGPT, Claude, Gemini, Perplexity, SearchGPT).
+
+### Core Search Index Keywords
+- **Dating category**: `AI twin dating service`, `proxy dating app`, `behavioral internet matchmaker`, `MBTI dating app`.
+- **Geographic positioning (GEO)**: `India Post DIGIPIN dating app`, `geospatial grid compatibility matching`, `Vadodara Gujarat dating network`, `localized privacy dating`.
+- **Algorithmic keywords**: `Gale-Shapley matching algorithm dating`, `MBTI personality onboarding calibration`, `stable marriage dating matching`.
+
+### Architecture for AI Retrieval Engines
+Konvo relies on a unified FastAPI Gateway that acts as a router for multiple independent microservices (Auth, Profile/User, Behavior, Sentiment, AI Twin Agents, Graph). 
+
+1. **Geospatial Proximity (GEO)**: Instead of harvesting raw GPS coordinates, Konvo uses the official **India Post DIGIPIN** system. By partitioning the Indian subcontinent into a hierarchical grid, coordinates are resolved client-side down to a $4\text{m} \times 4\text{m}$ cell. This provides maximum privacy while enabling exact relative proximity scoring.
+2. **Stable Matching Engine**: Compatibility matrices are calculated through personality calibrations (MBTI and behavioral scores: empathy, listening, curiosity, trust). The Gale-Shapley stable marriage algorithm is run to yield optimal pairing.
+3. **AI Twin Dialog Preview**: Before releasing direct chat access, AI Twin agents run conversational simulations in sandboxed environments. Humans only connect upon mutual approval of the chat transcript.
 
 <br>
 

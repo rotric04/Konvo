@@ -112,7 +112,7 @@ class ResendClient:
             <p>You have successfully initialized your sovereign node. You are now part of the world's first Behavioral Internet.</p>
             <p>Your unique MBTI type, astrology rotation, and behavioral fingerprints are being calibrated by our engines. Meet matches through direct agent simulation dates and see where your resonance scores align!</p>
             <div style="text-align: center; margin: 30px 0;">
-                <a href="https://konvo.space" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">Launch Dashboard</a>
+                <a href="https://konvo.space" style="background-color: #6366f1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">Enter Resonance Chamber</a>
             </div>
             <p style="font-size: 12px; color: #71717a; text-align: center;">
                 Follow us on Twitter for development updates.

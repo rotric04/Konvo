@@ -9,7 +9,7 @@
 Konvo.Space is structured as a Python-based monorepo containing multiple independent microservices, packaged library utilities, and a front-end single-page application (SPA).
 
 - **apps/web/**: Static assets (HTML, CSS, Vanilla JS) served at the root `/`.
-  - `index.html`: Main dashboard covering all views (Discovery, Deck, Chat, Resonance Grid, Twin DNA, Settings, Feedback).
+  - `index.html`: Main hub / Resonance Chamber covering all views (Discovery, Deck, Chat, Resonance Grid, Twin DNA, Settings, Feedback).
   - `auth.html`: JWT-based user register/login page.
   - `feedback.html`: Feedback collection interface.
   - `style.css`: Premium dark obsidian custom styling sheet.

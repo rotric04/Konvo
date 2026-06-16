@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Konvo</title>
+    <title>Resonance Chamber | Konvo</title>
 
     <!-- SEO Metadata -->
     <meta name="description"
-        content="Access your secure compatibility dashboard, coordinate matching twin agents, and connect in direct human chat on the world's first Behavioral Internet.">
+        content="Enter your private Resonance Chamber. Let your AI Twin proxy date, analyze behavioral compatibility, and unlock direct connection gates.">
     <meta name="robots" content="noindex, nofollow">
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -858,7 +858,7 @@
                 <aside style="border-left: 1px solid var(--border-color); padding-left: 2rem;">
                     <h3
                         style="font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1rem;">
-                        Trust Dashboard</h3>
+                        Vibe Integrity Index</h3>
 
                     <div class="card" style="padding: 1.25rem; margin-bottom: 1.5rem;">
                         <div
@@ -1604,22 +1604,65 @@
 
                     const formattedPin = cleanPin.slice(0, 3) + '-' + cleanPin.slice(3, 6) + '-' + cleanPin.slice(6);
 
-                    let lat = 26.8877;
-                    let lon = 75.7654;
-
-                    if (cleanPin === '2688770002') {
-                        lat = 26.8877;
-                        lon = 75.7654;
-                    } else {
-                        const codes = cleanPin.toUpperCase().split('').map(c => c.charCodeAt(0));
-                        let latHash = 0;
-                        for (let i = 0; i < 5; i++) latHash = (latHash * 31 + codes[i]) % 100000;
-                        lat = 8.0 + (latHash / 100000) * (36.0 - 8.0);
-
-                        let lonHash = 0;
-                        for (let i = 5; i < 10; i++) lonHash = (lonHash * 31 + codes[i]) % 100000;
-                        lon = 68.0 + (lonHash / 100000) * (96.0 - 68.0);
+                    function decodeDigipin(pin) {
+                        const DIGIPIN_GRID = [
+                            ['F', 'C', '9', '8'],
+                            ['J', '3', '2', '7'],
+                            ['K', '4', '5', '6'],
+                            ['L', 'M', 'P', 'T']
+                        ];
+                        
+                        let minLat = 2.5;
+                        let maxLat = 38.5;
+                        let minLon = 63.5;
+                        let maxLon = 99.5;
+                        
+                        for (let i = 0; i < 10; i++) {
+                            const char = pin[i];
+                            let ri = -1, ci = -1;
+                            let found = false;
+                            for (let r = 0; r < 4; r++) {
+                                for (let c = 0; c < 4; c++) {
+                                    if (DIGIPIN_GRID[r][c] === char) {
+                                        ri = r;
+                                        ci = c;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (found) break;
+                            }
+                            if (!found) return null; // Invalid character
+                            
+                            const latDiv = (maxLat - minLat) / 4;
+                            const lonDiv = (maxLon - minLon) / 4;
+                            
+                            const lat1 = maxLat - latDiv * (ri + 1);
+                            const lat2 = maxLat - latDiv * ri;
+                            const lon1 = minLon + lonDiv * ci;
+                            const lon2 = minLon + lonDiv * (ci + 1);
+                            
+                            minLat = lat1;
+                            maxLat = lat2;
+                            minLon = lon1;
+                            maxLon = lon2;
+                        }
+                        
+                        const centerLat = (minLat + maxLat) / 2;
+                        const centerLon = (minLon + maxLon) / 2;
+                        return { lat: centerLat, lng: centerLon };
                     }
+
+                    const decoded = decodeDigipin(cleanPin.toUpperCase());
+                    if (!decoded) {
+                        if (errEl) {
+                            errEl.textContent = "Error: Invalid DIGIPIN characters. DIGIPIN uses: 2, 3, 4, 5, 6, 7, 8, 9, C, F, J, K, L, M, P, T.";
+                            errEl.style.display = 'block';
+                        }
+                        return;
+                    }
+                    const lat = decoded.lat;
+                    const lon = decoded.lng;
 
                     if (stepsEl) {
                         stepsEl.textContent = `[1] Input DIGIPIN: ${input}\n[2] Canonical format: ${formattedPin}\n[3] Alphanumeric coordinates conversion complete.\n[4] Requesting reverse geocoding from OpenStreetMap...`;

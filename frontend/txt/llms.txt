@@ -1,10 +1,10 @@
 # Konvo.Space
-> Konvo.Space is the world's first Behavioral Internet, offering a secure compatibility dashboard, coordinate matching twin agents, and direct human chat.
+> Konvo.Space is the world's first Behavioral Internet, offering a secure compatibility Resonance Chamber, coordinate-matching twin agents, and direct human chat.
 
 ## Core Pages
-- [Home](https://konvo.space/): Access the main landing page and interactive compatibility and DNA dashboard.
+- [Home](https://konvo.space/): Access the main landing page and interactive compatibility and DNA Resonance Chamber.
 - [Auth](https://konvo.space/auth): Secure registration, authentication, JWT tokens, and login portal.
-- [Profile](https://konvo.space/profile): AST DNA, astrology calculations, and twin AI customization dashboard.
+- [Profile](https://konvo.space/profile): AST DNA, astrology calculations, and twin AI customization workspace.
 - [Feedback](https://konvo.space/feedback): Submit user feedback, suggestions, and application bugs.
 
 ## Platform Features & APIs

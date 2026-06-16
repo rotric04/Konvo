@@ -145,6 +145,7 @@ def update_profile(
     updated_user = crud.update_user_profile(db, current_user.id, profile_update)
     if not updated_user:
         raise HTTPException(status_code=400, detail="Failed to update profile.")
+    updated_user.profile_completion = crud.calculate_profile_completion(updated_user)
     return updated_user
 
 @app.get("/api/ai-diagnostics", response_model=schemas.AIDiagnosticsResponse)
