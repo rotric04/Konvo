@@ -7,7 +7,6 @@
  */
 
 import { apiFetch } from '/src/services/api.js';
-import { navigateTo } from '/src/router/router.js';
 import { KonvoToast } from '/src/components/toast.js';
 import { updateUser } from '/src/store/state.js';
 
@@ -21,25 +20,25 @@ export async function initOnboarding() {
     // 1. Auth Guard
     const token = localStorage.getItem('konvo_token');
     if (!token) {
-        navigateTo('/auth');
+        window.location.href = '/auth';
         return;
     }
 
     try {
         currentUser = await apiFetch('/api/users/me');
         if (!currentUser) {
-            navigateTo('/auth');
+            window.location.href = '/auth';
             return;
         }
 
         // If user already has assessment results, skip onboarding
         if (currentUser.profile && currentUser.profile.mbti_summary) {
-            navigateTo('/discover');
+            window.location.href = '/discover';
             return;
         }
     } catch (err) {
         console.error('[Onboarding] Profile load failed:', err);
-        navigateTo('/auth');
+        window.location.href = '/auth';
         return;
     }
 
@@ -87,7 +86,18 @@ export async function initOnboarding() {
 
         const gender = document.getElementById('syncGender').value;
         const birthDate = document.getElementById('syncBirthDate').value;
-        const birthTime = document.getElementById('syncBirthTime').value || null;
+        const birthTimeRaw = document.getElementById('syncBirthTime').value || null;
+        const birthTimeAmpm = document.getElementById('syncBirthTimeAmpm').value;
+        let birthTime = null;
+        if (birthTimeRaw) {
+            let [hours, minutes] = birthTimeRaw.split(':').map(Number);
+            if (birthTimeAmpm === 'PM' && hours < 12) {
+                hours += 12;
+            } else if (birthTimeAmpm === 'AM' && hours === 12) {
+                hours = 0;
+            }
+            birthTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+        }
         const birthLocation = document.getElementById('syncBirthLocation').value.trim() || null;
         const digipin = document.getElementById('syncDigipin').value.trim();
         const language = document.getElementById('syncLanguage').value.trim();
@@ -138,7 +148,7 @@ export async function initOnboarding() {
 
     // ─── Complete Calibration Button ───
     document.getElementById('btn-complete-onboarding')?.addEventListener('click', () => {
-        navigateTo('/discover');
+        window.location.href = '/discover';
     });
 }
 

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibe Calibration | Konvo</title>
-    
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/src/styles/tokens.css">
     <link rel="stylesheet" href="/src/styles/animations.css">
@@ -12,10 +13,12 @@
     <link rel="stylesheet" href="/src/styles/layout.css">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/theme.css">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
 
     <style>
         body {
@@ -33,7 +36,7 @@
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
             background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-                              radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.05) 0%, transparent 40%);
         }
 
         /* Obsidian Glass Card */
@@ -43,8 +46,8 @@
             background: rgba(18, 18, 20, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             padding: 3rem;
@@ -59,6 +62,7 @@
                 align-items: flex-start;
                 justify-content: flex-start;
             }
+
             .glass-hud {
                 max-width: none;
                 min-height: 100dvh;
@@ -97,6 +101,7 @@
                 opacity: 0;
                 transform: translateY(12px) scale(0.98);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -227,7 +232,8 @@
             color: #71717a;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #ffffff;
@@ -239,7 +245,8 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: rgba(20, 184, 166, 0.6);
             background: rgba(255, 255, 255, 0.07);
             box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
@@ -273,8 +280,17 @@
         }
 
         @keyframes pulseGlow {
-            0%, 100% { opacity: 0.3; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.1); }
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.9);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
         }
 
         .question-text {
@@ -383,8 +399,8 @@
             height: 100%;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, rgba(20, 184, 166, 0.8), rgba(99, 102, 241, 0.2));
-            box-shadow: 0 0 40px rgba(20, 184, 166, 0.25), 
-                        inset -10px -10px 30px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 40px rgba(20, 184, 166, 0.25),
+                inset -10px -10px 30px rgba(0, 0, 0, 0.6);
             animation: floatSph 4s infinite ease-in-out;
         }
 
@@ -400,13 +416,25 @@
         }
 
         @keyframes floatSph {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.02); }
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-8px) scale(1.02);
+            }
         }
 
         @keyframes spinRing {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .processing-title {
@@ -437,6 +465,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Toast container -->
@@ -450,7 +479,8 @@
         <div class="screen-view active" id="welcome-s1">
             <div class="brand-logo"><span class="brand-dot"></span>konvo</div>
             <h2 class="calibration-title" id="welcome-title">Welcome to Konvo.</h2>
-            <p class="calibration-desc">Most apps ask you to build a profile.<br><br>We'd rather understand the person behind it.</p>
+            <p class="calibration-desc">Most apps ask you to build a profile.<br><br>We'd rather understand the person
+                behind it.</p>
             <button class="btn-calibration btn-accent" id="btn-s1-next">Continue</button>
         </div>
 
@@ -458,7 +488,9 @@
         <div class="screen-view" id="welcome-s2">
             <div class="brand-logo"><span class="brand-dot"></span>calibration</div>
             <h2 class="calibration-title">Quick heads up.</h2>
-            <p class="calibration-desc">The next few minutes help us understand how you think, connect, communicate, and discover people.<br><br>No right answers. No wrong answers.<br><br>Just don't let your LinkedIn personality answer for you.</p>
+            <p class="calibration-desc">The next few minutes help us understand how you think, connect, communicate, and
+                discover people.<br><br>No right answers. No wrong answers.<br><br>Just don't let your LinkedIn
+                personality answer for you.</p>
             <button class="btn-calibration" id="btn-s2-next">Understood</button>
         </div>
 
@@ -466,7 +498,9 @@
         <div class="screen-view" id="welcome-s3">
             <div class="brand-logo"><span class="brand-dot"></span>calibration</div>
             <h2 class="calibration-title">Please answer honestly.</h2>
-            <p class="calibration-desc">Your future recommendations, conversations, and connections depend on it.<br><br>Also... If you try to outsmart the system, the system may accidentally introduce you to your own personality.<br><br>We don't recommend that.</p>
+            <p class="calibration-desc">Your future recommendations, conversations, and connections depend on
+                it.<br><br>Also... If you try to outsmart the system, the system may accidentally introduce you to your
+                own personality.<br><br>We don't recommend that.</p>
             <button class="btn-calibration" id="btn-s3-next">I promise</button>
         </div>
 
@@ -506,7 +540,13 @@
 
                     <div class="form-group">
                         <label for="syncBirthTime">Birth Time (Optional)</label>
-                        <input type="time" id="syncBirthTime" />
+                        <div style="display: grid; grid-template-columns: 1fr 90px; gap: 0.5rem;">
+                            <input type="time" id="syncBirthTime" />
+                            <select id="syncBirthTimeAmpm">
+                                <option value="AM">AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -517,6 +557,11 @@
                     <div class="form-group">
                         <label for="syncDigipin">DIGIPIN (Local Region)</label>
                         <input type="text" id="syncDigipin" placeholder="e.g. 110001" required maxlength="10" />
+                        <div style="margin-top: 0.4rem;">
+                            <a href="https://dac.indiapost.gov.in/mydigipin/home" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; color: var(--accent-teal, #14b8a6); text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                🔍 Find your DIGIPIN ↗
+                            </a>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -525,7 +570,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-calibration btn-accent" id="btn-start-calibration">Start Vibe Calibration</button>
+                <button type="submit" class="btn-calibration btn-accent" id="btn-start-calibration">Start Vibe
+                    Calibration</button>
             </form>
         </div>
 
@@ -551,7 +597,8 @@
                     <div class="twin-ring"></div>
                 </div>
                 <h3 class="processing-title">Compiling Cognitive Twin...</h3>
-                <p class="processing-sub">Gemini is synthesizing your behavioral signals, language style, and compatibilities to map your neural duplicate.</p>
+                <p class="processing-sub">Konvo is synthesizing your behavioral signals, language style, and
+                    compatibilities to map your neural duplicate.</p>
             </div>
         </div>
 
@@ -565,7 +612,7 @@
                 You seem genuinely human.<br><br>
                 We'll handle the complicated part from here.
             </p>
-            <button class="btn-calibration btn-accent" id="btn-complete-onboarding">Launch Konvo</button>
+            <button class="btn-calibration btn-accent" id="btn-complete-onboarding">Take Me In</button>
         </div>
 
     </div>
@@ -574,4 +621,5 @@
     <script type="module" src="/src/features/auth/onboarding.js"></script>
     <script type="module" src="/src/components/cookie-consent.js"></script>
 </body>
+
 </html>
