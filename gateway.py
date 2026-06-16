@@ -167,6 +167,42 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(SecurityHeadersMiddleware)
 
+class SecurityVerificationMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        path = request.url.path
+        
+        # 1. Skip non-GET requests
+        if request.method != "GET":
+            return await call_next(request)
+            
+        # 2. Skip API, WebSockets, and Static folders
+        if path.startswith("/api/") or path.startswith("/ws/") or path.startswith("/static/"):
+            return await call_next(request)
+            
+        # 3. Skip static assets by extension (CSS, JS, images, fonts, ico, svg, txt, xml)
+        _, ext = os.path.splitext(path)
+        if ext and ext.lower() not in [".html", ".htm"]:
+            return await call_next(request)
+            
+        # 4. Skip specific root-level static files
+        skip_files = {
+            "/favicon.ico", "/favicon.png", "/favicon.svg", "/og_banner.png",
+            "/logo_dark.svg", "/logo_light.svg", "/logo_app.svg", "/logo_loading.svg",
+            "/theme.css", "/style.css", "/sw.js", "/robots.txt", "/sitemap.xml",
+            "/security.txt", "/agents.json", "/pgp-key.txt", "/llms.txt", "/llms-full.txt"
+        }
+        if path in skip_files:
+            return await call_next(request)
+            
+        # 5. Skip check if verified cookie is set
+        if request.cookies.get("konvo_verified") == "true":
+            return await call_next(request)
+            
+        # Otherwise, serve the security verification HTML
+        return FileResponse(os.path.join(_root, "frontend", "security-verification.html"))
+
+app.add_middleware(SecurityVerificationMiddleware)
+
 # Apply CORS middleware to avoid cross-origin constraints
 app.add_middleware(
     CORSMiddleware,

@@ -474,6 +474,25 @@ def get_turnstile_config():
         }
     }
 
+from pydantic import BaseModel
+
+class VerifyManualCaptchaRequest(BaseModel):
+    challenge_id: str
+    answer: str
+
+@app.post("/api/auth/verify-manual-captcha")
+def verify_manual_captcha(request: VerifyManualCaptchaRequest):
+    stored_answer = redis_client.get_val(f"captcha:{request.challenge_id}")
+    if stored_answer:
+        decoded_answer = stored_answer.decode("utf-8") if isinstance(stored_answer, bytes) else str(stored_answer)
+        if decoded_answer == request.answer.strip():
+            try:
+                redis_client.delete(f"captcha:{request.challenge_id}")
+            except Exception:
+                pass
+            return {"success": True}
+    raise HTTPException(status_code=400, detail="Verification failed. Incorrect answer.")
+
 @app.post("/api/auth/check-username")
 def check_username(request: schemas.UsernameCheckRequest, db: Session = Depends(get_db)):
     user = crud.get_user_by_username(db, username=request.username)
