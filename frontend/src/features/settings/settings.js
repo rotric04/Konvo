@@ -27,9 +27,10 @@ export async function initSettingsPage() {
         });
     });
 
-    const currentUser = window.currentUser;
+    const { getState } = await import('/src/store/state.js');
+    const currentUser = window.currentUser || getState('currentUser');
     if (currentUser) {
-        const prof = currentUser.profile;
+        const prof = currentUser.profile || {};
         if (prof) {
             // Avatar file upload and AI generation wiring
             const avatarInput = document.getElementById('settings-avatar-input');
