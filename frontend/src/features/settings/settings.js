@@ -9,8 +9,10 @@ import { apiFetch } from '/src/services/api.js';
 import { KonvoToast } from '/src/components/toast.js';
 
 export async function initSettingsPage() {
+    const profileForm = document.getElementById('settings-profile-form');
+    if (!profileForm) return;
+    
     const picker = document.getElementById('set-theme-picker');
-    if (!picker) return;
     
     const navItems = document.querySelectorAll('.settings-nav-item');
     navItems.forEach(item => {
