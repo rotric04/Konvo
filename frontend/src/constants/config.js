@@ -4,7 +4,9 @@
  */
 
 export const API_BASE_URL = window.location.origin;
-export const WS_BASE_URL  = window.location.origin.replace(/^http/, 'ws');
+export const WS_BASE_URL  = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
+    ? window.location.origin.replace(/^http/, 'ws')
+    : 'wss://konvo-u5qb.onrender.com';
 
 export const APP_NAME    = 'Konvo';
 export const APP_TAGLINE = 'Human Chemistry, Amplified';
