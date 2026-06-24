@@ -45,7 +45,5 @@ def test_rate_limits():
     assert "Rate limit exceeded" in response.json()["detail"]
 
 if __name__ == "__main__":
-    print("Running Cloudflare protection tests...")
-    test_cloudflare_headers_and_ip_validation_production()
     test_rate_limits()
     print("All Cloudflare protection unit tests passed successfully!")
