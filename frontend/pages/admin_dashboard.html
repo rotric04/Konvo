@@ -36,8 +36,6 @@
             --bg-surface: var(--surface-primary);
             --border-glow: rgba(124, 58, 237, 0.15);
             --border-dim: var(--border-primary);
-            --text-primary: var(--text-primary);
-            --text-secondary: var(--text-secondary);
             --accent-glow: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
             --error: var(--accent-danger);
             --success: var(--accent-success);
@@ -48,8 +46,6 @@
             --bg-surface: var(--surface-primary);
             --border-glow: rgba(165, 143, 202, 0.08);
             --border-dim: var(--border-primary);
-            --text-primary: var(--text-primary);
-            --text-secondary: var(--text-secondary);
             --error: var(--accent-danger);
             --success: var(--accent-success);
         }
@@ -61,7 +57,7 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 70%);
+            background: var(--bg-base);
             color: var(--text-primary);
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
@@ -69,6 +65,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        
+        html[data-theme="dark"] body {
+            background: radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 70%);
+        }
+        html[data-theme="light"] body {
+            background: radial-gradient(circle at 50% 0%, #e0e0ff 0%, var(--bg-base) 70%);
         }
 
         /* Access Barrier Overlay */
@@ -78,7 +81,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 10, 15, 0.95);
+            background: var(--overlay-backdrop);
             backdrop-filter: blur(24px);
             z-index: 9999;
             display: flex;
@@ -88,14 +91,15 @@
         }
 
         .barrier-card {
-            background: rgba(147, 193, 165, 0.6);
-            border: 1px solid var(--border-glow);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dim);
             padding: 2.5rem;
             border-radius: 24px;
             width: 90%;
             max-width: 450px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(124, 58, 237, 0.1);
+            box-shadow: var(--shadow-lg), 0 0 40px var(--border-glow);
+            backdrop-filter: blur(12px);
         }
 
         .barrier-card h1 {
@@ -117,10 +121,10 @@
         .barrier-input {
             width: 100%;
             padding: 1rem 1.2rem;
-            background: rgba(0, 0, 0, 0.4);
+            background: var(--input-bg);
             border: 1px solid var(--border-dim);
             border-radius: 12px;
-            color: #fff;
+            color: var(--text-primary);
             font-size: 1rem;
             margin-bottom: 1rem;
             outline: none;
@@ -132,6 +136,19 @@
             border-color: #7c3aed;
             box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
         }
+        
+        select.barrier-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+        
+        html[data-theme="light"] select.barrier-input {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2352525b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
 
         .barrier-btn {
             width: 100%;
@@ -142,12 +159,13 @@
             color: #fff;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease, opacity 0.2s ease;
+            transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
         }
 
         .barrier-btn:hover {
             opacity: 0.9;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
         .error-msg {
@@ -194,6 +212,40 @@
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 1px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dim);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--surface-hover);
+            transform: scale(1.05);
+        }
+
+        html[data-theme="dark"] .theme-toggle-btn .sun-icon {
+            display: block;
+        }
+        html[data-theme="dark"] .theme-toggle-btn .moon-icon {
+            display: none;
+        }
+        
+        html[data-theme="light"] .theme-toggle-btn .sun-icon {
+            display: none;
+        }
+        html[data-theme="light"] .theme-toggle-btn .moon-icon {
+            display: block;
         }
 
         /* Metrics grid */
@@ -249,7 +301,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -279,10 +331,10 @@
 
         .search-bar {
             padding: 0.8rem 1.2rem;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--input-bg);
             border: 1px solid var(--border-dim);
             border-radius: 12px;
-            color: #fff;
+            color: var(--text-primary);
             font-size: 0.9rem;
             outline: none;
             width: 100%;
@@ -301,7 +353,7 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -328,7 +380,7 @@
         }
 
         th {
-            background: rgba(0, 0, 0, 0.4);
+            background: var(--surface-secondary);
             padding: 1.2rem;
             color: var(--text-secondary);
             font-weight: 600;
@@ -340,12 +392,12 @@
 
         td {
             padding: 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid var(--border-primary);
             color: var(--text-primary);
         }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.015);
+            background: var(--surface-hover);
         }
 
         /* Badges */
@@ -360,25 +412,34 @@
         }
 
         .status-badge.verified {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(22, 163, 74, 0.1);
             color: var(--success);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(22, 163, 74, 0.2);
+            box-shadow: 0 0 10px rgba(22, 163, 74, 0.05);
         }
 
         .status-badge.pending {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(234, 88, 12, 0.1);
             color: var(--error);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(234, 88, 12, 0.2);
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.05);
         }
 
         .status-badge.premium {
             background: rgba(124, 58, 237, 0.1);
-            color: #a78bfa;
-            border: 1px solid rgba(124, 58, 237, 0.2);
+            color: #c084fc;
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.05);
+        }
+        
+        html[data-theme="light"] .status-badge.premium {
+            color: #6d28d9;
+            background: rgba(109, 40, 217, 0.06);
+            border-color: rgba(109, 40, 217, 0.2);
         }
 
         .status-badge.regular {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--button-bg);
             color: var(--text-secondary);
             border: 1px solid var(--border-dim);
         }
@@ -393,6 +454,185 @@
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
             border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Action Buttons styling */
+        .admin-action-btn {
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            background: transparent;
+        }
+        
+        .admin-action-btn.premium-btn {
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            color: #c084fc;
+        }
+        .admin-action-btn.premium-btn:hover {
+            background: rgba(124, 58, 237, 0.16);
+            border-color: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 0 8px rgba(124, 58, 237, 0.2);
+        }
+        
+        html[data-theme="light"] .admin-action-btn.premium-btn {
+            color: #6d28d9;
+            background: rgba(109, 40, 217, 0.06);
+            border-color: rgba(109, 40, 217, 0.15);
+        }
+        html[data-theme="light"] .admin-action-btn.premium-btn:hover {
+            background: rgba(109, 40, 217, 0.12);
+            border-color: rgba(109, 40, 217, 0.3);
+        }
+
+        .admin-action-btn.role-btn {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+        .admin-action-btn.role-btn:hover {
+            background: rgba(59, 130, 246, 0.16);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+        }
+        
+        html[data-theme="light"] .admin-action-btn.role-btn {
+            color: #1d4ed8;
+            background: rgba(29, 78, 216, 0.06);
+            border-color: rgba(29, 78, 216, 0.15);
+        }
+        html[data-theme="light"] .admin-action-btn.role-btn:hover {
+            background: rgba(29, 78, 216, 0.12);
+            border-color: rgba(29, 78, 216, 0.3);
+        }
+
+        .admin-action-btn.delete-btn {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .admin-action-btn.delete-btn:hover {
+            background: rgba(239, 68, 68, 0.16);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+        }
+        
+        html[data-theme="light"] .admin-action-btn.delete-btn {
+            color: #b91c1c;
+            background: rgba(185, 28, 28, 0.06);
+            border-color: rgba(185, 28, 28, 0.15);
+        }
+        html[data-theme="light"] .admin-action-btn.delete-btn:hover {
+            background: rgba(185, 28, 28, 0.12);
+            border-color: rgba(185, 28, 28, 0.3);
+        }
+
+        /* Mobile Card Styles */
+        .mobile-cards-container {
+            display: none;
+        }
+
+        .user-mobile-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-dim);
+            border-radius: 16px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .user-mobile-card:hover {
+            border-color: rgba(124, 58, 237, 0.2);
+            box-shadow: var(--shadow-md);
+        }
+
+        .user-mobile-card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-mobile-card .card-id {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .user-mobile-card .card-field {
+            word-break: break-all;
+        }
+
+        .user-mobile-card .font-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-mobile-card .font-email {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .user-mobile-card .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            padding: 0.75rem;
+            background: var(--surface-secondary);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .user-mobile-card .card-meta div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-mobile-card .card-meta .label {
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .user-mobile-card .card-meta .val {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .user-mobile-card .card-meta .font-mono {
+            font-family: monospace;
+        }
+
+        .user-mobile-card .card-meta .font-digipin {
+            color: #3b82f6;
+        }
+
+        .user-mobile-card .card-meta .font-mbti {
+            color: #a78bfa;
+            font-weight: 600;
+        }
+
+        .user-mobile-card .card-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .user-mobile-card .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .user-mobile-card .card-actions .delete-btn {
+            grid-column: span 2;
         }
 
         @media (max-width: 768px) {
@@ -450,10 +690,14 @@
                 max-width: none !important;
             }
 
-            th,
-            td {
-                padding: 0.8rem 0.6rem !important;
-                font-size: 0.8rem !important;
+            .table-responsive {
+                display: none !important;
+            }
+
+            .mobile-cards-container {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
             }
 
             .barrier-card {
@@ -490,7 +734,13 @@
     <div id="dashboard-wrapper">
         <header>
             <h1>KONVO™</h1>
-            <div class="badge-secure">AES-256 SECURED CLIENT SESSION</div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button id="btn-theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <div class="badge-secure">AES-256 SECURED CLIENT SESSION</div>
+            </div>
         </header>
 
         <div class="metrics-grid">
@@ -541,6 +791,9 @@
                         <!-- Loaded dynamically -->
                     </tbody>
                 </table>
+            </div>
+            <div class="mobile-cards-container" id="users-cards-body">
+                <!-- Loaded dynamically -->
             </div>
         </div>
     </div>
@@ -623,7 +876,10 @@
 
                 // Reveal dashboard with animation
                 document.body.style.display = "block";
-                document.body.style.background = "radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 100%)";
+                const isLight = document.documentElement.getAttribute("data-theme") === "light";
+                document.body.style.background = isLight 
+                    ? "radial-gradient(circle at 50% 0%, #e0e0ff 0%, var(--bg-base) 100%)" 
+                    : "radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 100%)";
                 document.getElementById("barrier-overlay").style.opacity = 0;
                 setTimeout(() => {
                     document.getElementById("barrier-overlay").style.display = "none";
@@ -640,7 +896,7 @@
             }
         }
 
-        // Table renderer
+        // Table and card renderer
         let globalUsersList = [];
         function loadUsersTable(users) {
             globalUsersList = users;
@@ -651,7 +907,11 @@
             const tbody = document.getElementById("users-table-body");
             tbody.innerHTML = "";
 
+            const cardsBody = document.getElementById("users-cards-body");
+            if (cardsBody) cardsBody.innerHTML = "";
+
             users.forEach(u => {
+                // Table Row (Desktop)
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td>${u.id}</td>
@@ -665,19 +925,54 @@
                     <td><span class="status-badge ${u.premium_user ? 'premium' : 'regular'}">${u.premium_user ? 'Premium' : 'Regular'}</span></td>
                     <td>
                         <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <button onclick="toggleUserPremium(${u.id}, ${u.premium_user})" class="admin-action-btn premium-btn" style="padding: 0.35rem 0.6rem; background: rgba(124, 58, 237, 0.1); border: 1px solid rgba(124, 58, 237, 0.3); color: #a78bfa; border-radius: 6px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s;">
+                            <button onclick="toggleUserPremium(${u.id}, ${u.premium_user})" class="admin-action-btn premium-btn">
                                 ${u.premium_user ? "Revoke Premium" : "Grant Premium"}
                             </button>
-                            <button onclick="toggleUserRole(${u.id}, '${u.role}')" class="admin-action-btn role-btn" style="padding: 0.35rem 0.6rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; border-radius: 6px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s;">
+                            <button onclick="toggleUserRole(${u.id}, '${u.role}')" class="admin-action-btn role-btn">
                                 ${u.role === 'admin' ? "Demote to User" : "Promote to Admin"}
                             </button>
-                            <button onclick="deleteUserNode(${u.id})" class="admin-action-btn delete-btn" style="padding: 0.35rem 0.6rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: 6px; font-size: 0.72rem; cursor: pointer; transition: all 0.2s;">
+                            <button onclick="deleteUserNode(${u.id})" class="admin-action-btn delete-btn">
                                 Delete User
                             </button>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                // Mobile Card (Responsive)
+                if (cardsBody) {
+                    const card = document.createElement("div");
+                    card.className = "user-mobile-card";
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="card-id">#${u.id}</span>
+                            <span class="status-badge role-${u.role}">${escapeHtml(u.role)}</span>
+                        </div>
+                        <div class="card-field font-name">${escapeHtml(u.display_name)}</div>
+                        <div class="card-field font-email">${escapeHtml(u.email)}</div>
+                        <div class="card-meta">
+                            <div><span class="label">Konvo ID:</span> <span class="val font-mono">${escapeHtml(u.konvo_id)}</span></div>
+                            <div><span class="label">MBTI:</span> <span class="val font-mbti">${escapeHtml(u.mbti)}</span></div>
+                            <div><span class="label">DIGIPIN:</span> <span class="val font-digipin">${u.digipin ? escapeHtml(u.digipin) : "N/A"}</span></div>
+                        </div>
+                        <div class="card-badges">
+                            <span class="status-badge ${u.otp_verified ? 'verified' : 'pending'}">${u.otp_verified ? 'Verified' : 'Pending'}</span>
+                            <span class="status-badge ${u.premium_user ? 'premium' : 'regular'}">${u.premium_user ? 'Premium' : 'Regular'}</span>
+                        </div>
+                        <div class="card-actions">
+                            <button onclick="toggleUserPremium(${u.id}, ${u.premium_user})" class="admin-action-btn premium-btn">
+                                ${u.premium_user ? "Revoke" : "Premium"}
+                            </button>
+                            <button onclick="toggleUserRole(${u.id}, '${u.role}')" class="admin-action-btn role-btn">
+                                ${u.role === 'admin' ? "Demote" : "Admin"}
+                            </button>
+                            <button onclick="deleteUserNode(${u.id})" class="admin-action-btn delete-btn">
+                                Delete User
+                            </button>
+                        </div>
+                    `;
+                    cardsBody.appendChild(card);
+                }
             });
         }
 
@@ -833,6 +1128,28 @@
 
         // Bind Add User buttons
         document.addEventListener("DOMContentLoaded", () => {
+            // Bind theme toggle button
+            const btnThemeToggle = document.getElementById("btn-theme-toggle");
+            if (btnThemeToggle) {
+                btnThemeToggle.addEventListener("click", () => {
+                    const currentTheme = window.ThemeManager.getTheme();
+                    const newTheme = currentTheme === "dark" ? "light" : "dark";
+                    window.ThemeManager.setTheme(newTheme);
+                });
+            }
+
+            // Sync body background on theme change
+            window.addEventListener('konvoThemeChanged', (e) => {
+                const currentTheme = e.detail.theme;
+                if (decryptedPassphrase) {
+                    if (currentTheme === "light") {
+                        document.body.style.background = "radial-gradient(circle at 50% 0%, #e0e0ff 0%, var(--bg-base) 100%)";
+                    } else {
+                        document.body.style.background = "radial-gradient(circle at 50% 0%, #15102a 0%, var(--bg-base) 100%)";
+                    }
+                }
+            });
+
             const btnAddUser = document.getElementById("btn-add-user");
             const addUserModal = document.getElementById("add-user-modal");
             const btnCloseAddUser = document.getElementById("btn-close-add-user");
@@ -912,7 +1229,7 @@
 
     <!-- Add User Modal -->
     <div class="modal" id="add-user-modal"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(24px); z-index: 10005; justify-content: center; align-items: center;">
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay-backdrop); backdrop-filter: blur(24px); z-index: 10005; justify-content: center; align-items: center;">
         <div class="barrier-card" style="max-width: 500px; text-align: left;">
             <div
                 style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dim); padding-bottom: 1rem; margin-bottom: 1.5rem;">
@@ -955,7 +1272,7 @@
                         <label
                             style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Gender</label>
                         <select id="add-gender" class="barrier-input"
-                            style="text-align: left; background: rgba(0, 0, 0, 0.4);">
+                            style="text-align: left;">
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
@@ -967,7 +1284,7 @@
                             style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem;">Relationship
                             Intent</label>
                         <select id="add-intent" class="barrier-input"
-                            style="text-align: left; background: rgba(0, 0, 0, 0.4);">
+                            style="text-align: left;">
                             <option value="Long Term" selected>Long Term</option>
                             <option value="Casual">Casual</option>
                             <option value="Friendship">Friendship</option>
