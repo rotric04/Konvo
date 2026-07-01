@@ -157,8 +157,111 @@ export function initUserGuideTabs() {
     });
 }
 
+function initThreeHeroBg() {
+    const container = document.getElementById('three-hero-bg');
+    if (!container || typeof THREE === 'undefined') return;
+
+    // Clear existing renderer if any
+    container.innerHTML = '';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const particleCount = 200;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    const colorTeal = new THREE.Color('#0d9488');
+    const colorIndigo = new THREE.Color('#0891b2');
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 12;
+        positions[i + 1] = (Math.random() - 0.5) * 12;
+        positions[i + 2] = (Math.random() - 0.5) * 12;
+
+        const mixed = colorTeal.clone().lerp(colorIndigo, Math.random());
+        colors[i] = mixed.r;
+        colors[i + 1] = mixed.g;
+        colors[i + 2] = mixed.b;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.PointsMaterial({
+        size: 0.08,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    camera.position.z = 5;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    const onMouseMove = (event) => {
+        mouseX = (event.clientX - windowHalfX) / 100;
+        mouseY = (event.clientY - windowHalfY) / 100;
+    };
+    document.addEventListener('mousemove', onMouseMove);
+
+    const onResize = () => {
+        if (!container.clientWidth) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    };
+    window.addEventListener('resize', onResize);
+
+    let frameId;
+    function animate() {
+        if (!document.getElementById('three-hero-bg')) {
+            renderer.dispose();
+            document.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('resize', onResize);
+            return;
+        }
+        frameId = requestAnimationFrame(animate);
+
+        points.rotation.y += 0.005;
+        points.rotation.x += 0.003;
+
+        points.position.x += (mouseX * 0.2 - points.position.x) * 0.05;
+        points.position.y += (-mouseY * 0.2 - points.position.y) * 0.05;
+
+        const scrollY = window.scrollY || 0;
+        camera.position.z = 5 + scrollY * 0.0015;
+
+        renderer.render(scene, camera);
+    }
+    animate();
+}
+
 // ─── Landing Page Interactive Setup ──────────────────────────────────────────────
 export function initLandingPage() {
+    // 0. Initialize Three.js particle background and GSAP animations
+    initThreeHeroBg();
+    if (typeof gsap !== 'undefined') {
+        gsap.from('.worlds-first-badge', { opacity: 0, y: -20, duration: 0.6, ease: 'power2.out' });
+        gsap.from('.hero-title', { opacity: 0, y: 30, duration: 0.8, delay: 0.15, ease: 'power3.out' });
+        gsap.from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8, delay: 0.3, ease: 'power2.out' });
+        gsap.from('.hero-ctas', { opacity: 0, y: 15, duration: 0.6, delay: 0.45, ease: 'power2.out' });
+        gsap.from('.sim-console', { opacity: 0, scale: 0.95, duration: 1.0, delay: 0.5, ease: 'power2.out' });
+    }
+
     // 1. Mobile Menu Drawer Toggle
     const header = document.querySelector('.landing-header');
     const menuToggle = document.querySelector('.mobile-menu-toggle');

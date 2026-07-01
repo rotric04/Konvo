@@ -26,6 +26,26 @@ import { initErrorTracking, captureError, setErrorUser } from '/src/services/err
 import { identifyUser, trackPageView, resetAnalytics } from '/src/services/analytics.js';
 
 // ─── Register SPA page initializers ──────────────────────────────────
+registerPageInit('home', () => {
+    const hrs = new Date().getHours();
+    let greet = "Good morning.";
+    if (hrs >= 12 && hrs < 17) greet = "Good afternoon.";
+    else if (hrs >= 17 || hrs < 5) greet = "Good evening.";
+
+    const greetingEl = document.getElementById('companion-greeting');
+    if (greetingEl) {
+        const name = window.currentUser?.display_name || (window.currentUser?.profile?.display_name) || "there";
+        greetingEl.textContent = `${greet} Hello, ${name}.`;
+    }
+
+    const continueBtn = document.getElementById('btn-companion-continue');
+    if (continueBtn) {
+        continueBtn.onclick = () => {
+            window.navigateTo('/discover');
+        };
+    }
+});
+
 registerPageInit('discover', () => {
     initSwipePage('swipe-discovery-box');
     initRizzPanel();

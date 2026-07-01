@@ -181,14 +181,13 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="/discover" id="nav-discover">Discovery Deck</a></li>
-                <li><a href="/chat" id="nav-chat">Chat Center</a></li>
-                <li><a href="/grid" id="nav-grid">Resonance Grid</a></li>
-                <li><a href="/profile" id="nav-profile">Twin DNA</a></li>
+                <li><a href="/" id="nav-home">Home</a></li>
+                <li><a href="/discover" id="nav-discover">Discover</a></li>
+                <li><a href="/chat" id="nav-chat">Messages</a></li>
+                <li><a href="/virtual-dates" id="nav-virtual-dates">Virtual Dates</a></li>
+                <li><a href="/profile" id="nav-profile">Profile</a></li>
                 <li><a href="/settings" id="nav-settings">Settings</a></li>
-                <li><a href="/feedback" id="nav-feedback">Feedback</a></li>
-                <li><a href="/blog" id="nav-blog">Insights Blog</a></li>
-                <li><a href="/pages/hall-of-fame.html" id="nav-hall-of-fame">Hall of Fame</a></li>
+                <li><a href="/feedback" id="nav-feedback">Help</a></li>
             </ul>
 
             <div class="nav-footer">
@@ -229,6 +228,20 @@
                 </p>
                 <a class="btn btn-primary" href="/profile" style="display: inline-block; text-decoration: none;">Take
                     Quiz Now</a>
+            </div>
+
+            <!-- View 0: Companion Home View -->
+            <div class="view-section hidden" id="view-home" style="max-width: 680px; margin: 0 auto; padding-top: 1.5rem;">
+                <div class="card companion-card" style="padding: 2.5rem; text-align: center; border-radius: 0px; background-color: var(--surface-primary); border: 1px solid var(--border-primary);">
+                    <div class="companion-avatar" style="font-size: 3rem; margin-bottom: 1.25rem; filter: drop-shadow(0 0 10px rgba(13,148,136,0.3));">✨</div>
+                    <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.75rem; color: var(--text-primary); font-weight: 700;" id="companion-greeting">Good morning.</h2>
+                    <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto;" id="companion-summary">
+                        Your Twin explored 18 conversations overnight. Three promising connections were discovered. One virtual date is ready.
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: stretch; max-width: 260px; margin: 0 auto;">
+                        <button class="btn btn-primary" id="btn-companion-continue" style="padding: 0.85rem 2rem; font-size: 0.95rem; font-weight: 600;">Continue</button>
+                    </div>
+                </div>
             </div>
 
             <!-- View 1: Discovery Deck View -->

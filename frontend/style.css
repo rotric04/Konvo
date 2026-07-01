@@ -1788,14 +1788,9 @@ input:focus, textarea:focus, select:focus {
     opacity: 1;
     pointer-events: auto;
 }
-.landing-header.menu-open .mobile-menu-toggle .line-top {
-    transform: translateY(6px) rotate(45deg);
-}
-.landing-header.menu-open .mobile-menu-toggle .line-mid {
+.landing-header.menu-open .mobile-menu-toggle {
     opacity: 0;
-}
-.landing-header.menu-open .mobile-menu-toggle .line-bot {
-    transform: translateY(-6px) rotate(-45deg);
+    pointer-events: none;
 }
 
 /* High-Density Dashboard Grid */
@@ -6141,5 +6136,34 @@ button, a, select, textarea, label {
         min-width: 1.1rem;
         min-height: 1.1rem;
         cursor: pointer;
+    }
+}
+
+/* ── Premium Companion Card Styles ── */
+.companion-card {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-primary) !important;
+    background: linear-gradient(135deg, var(--surface-primary) 0%, rgba(9, 9, 11, 0.95) 100%) !important;
+}
+
+.companion-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-teal) !important;
+    box-shadow: 0 12px 30px rgba(13, 148, 136, 0.08) !important;
+}
+
+.companion-avatar {
+    animation: companion-pulse 3s infinite ease-in-out;
+    display: inline-block;
+}
+
+@keyframes companion-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(13,148,136,0.3));
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 20px rgba(13,148,136,0.6));
     }
 }

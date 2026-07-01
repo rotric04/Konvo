@@ -64,6 +64,7 @@
     <!-- Heavy libs: loaded once -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <!-- Modal stub: queues calls before modal.js loads -->
     <script>
@@ -87,7 +88,7 @@
     <!-- Automatic Login Redirect -->
     <script>
         if (localStorage.getItem('konvo_token')) {
-            window.location.href = '/discover';
+            window.location.href = '/';
         }
     </script>
     <script type="application/ld+json">
@@ -215,7 +216,7 @@
                 <a href="#security" class="landing-tab-btn" data-tab="landing-security">Security</a>
                 <a href="#legal" class="landing-tab-btn" data-tab="landing-legal">Legal & FAQ</a>
                 <a href="/blog" class="landing-blog-link">Insights Blog</a>
-                <a href="/pages/hall-of-fame.html" class="landing-blog-link">Hall of Fame</a>
+                <a href="/hall-of-fame" class="landing-blog-link">Hall of Fame</a>
                 <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
             </nav>
             <div class="landing-header-actions desktop-only" style="display: flex; gap: 1rem; align-items: center;">
@@ -243,7 +244,7 @@
                     <a href="#security" class="landing-tab-btn" data-tab="landing-security">Security</a>
                     <a href="#legal" class="landing-tab-btn" data-tab="landing-legal">Legal & FAQ</a>
                     <a href="/blog" class="landing-blog-link">Insights Blog</a>
-                    <a href="/pages/hall-of-fame.html" class="landing-blog-link">Hall of Fame</a>
+                    <a href="/hall-of-fame" class="landing-blog-link">Hall of Fame</a>
                     <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
                 </nav>
                 <div class="mobile-actions" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; margin-top: 2rem;">
@@ -268,26 +269,29 @@
                 style="border-top: none; padding-top: calc(7rem + env(safe-area-inset-top));">
 
                 <div class="landing-hero reveal-on-scroll"
-                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 2rem;">
+                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 2rem; position: relative; overflow: hidden;">
                     
-                    <div class="hero-content">
+                    <!-- Three.js Hero Particle Canvas Background -->
+                    <div id="three-hero-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.65; pointer-events: none;"></div>
+
+                    <div class="hero-content" style="position: relative; z-index: 1;">
                         <div>
                             <div class="worlds-first-badge">
-                                🌍 World's First Dating Autopilot
+                                ✨ Dating on Autopilot
                             </div>
                             <h1 class="hero-title">
-                                Your AI Twin does the dating.<br><span class="gradient-text">You do the connecting.</span>
+                                Dating without the<br><span class="gradient-text">endless swiping.</span>
                             </h1>
                             <p class="hero-subtitle">
-                                Skip the endless swiping, dry small talk, and ghosting. Your digital double pre-simulates 
-                                dates in virtual lounges to check for genuine alignment on humor, vibes, and values—so 
-                                you only spend time on people you actually connect with.
+                                Konvo learns how you naturally communicate to start meaningful conversations for you. 
+                                Your Twin checks for compatibility in cozy virtual settings so you only spend time on 
+                                people you actually connect with.
                             </p>
                         </div>
 
                         <div class="hero-ctas" style="margin-top: 1.5rem;">
-                            <a href="/login?register=true" class="btn btn-primary" style="padding: 0.85rem 2rem;">Synthesize My Twin</a>
-                            <a href="/login" class="btn btn-secondary" style="padding: 0.85rem 2rem;">Enter Sandbox</a>
+                            <a href="/login?register=true" class="btn btn-primary" style="padding: 0.85rem 2rem;">Create My Twin</a>
+                            <a href="/login" class="btn btn-secondary" style="padding: 0.85rem 2rem;">Explore Matches</a>
                         </div>
                     </div>
 
@@ -331,28 +335,28 @@
             <!-- Simplified Three Pillars Section -->
             <section class="landing-section reveal-on-scroll" style="padding-top: 3rem;">
                 <div class="section-header">
-                    <span class="section-tag">High-Dimension Discovery</span>
-                    <h2 class="section-title">The Three Pillars of Resonance Discovery</h2>
-                    <p class="section-desc">We replace superficial profile cards with direct cognitive synchronization. Your representative handles the noise; you manage the connection.</p>
+                    <span class="section-tag">Dating Made Natural</span>
+                    <h2 class="section-title">How Konvo Works for You</h2>
+                    <p class="section-desc">We replace superficial profile cards with genuine alignment checks. Your Twin handles the noise; you manage the real connections.</p>
                 </div>
                 <div class="swiss-grid">
                     <!-- Pillar 1 -->
                     <div class="flat-card">
                         <div class="flat-card-icon">🧠</div>
-                        <h4>1. Cognitive Incubation</h4>
-                        <p>Complete our 50-Question Calibration Audit. Our generative natural language processing system constructs a detailed behavioral representation of your personality, humor, and values.</p>
+                        <h4>1. Natural Expression</h4>
+                        <p>Answer a few deep, open questions about your values, humor, and lifestyle. We learn how you naturally communicate so introductions feel genuine.</p>
                     </div>
                     <!-- Pillar 2 -->
                     <div class="flat-card">
                         <div class="flat-card-icon">🧪</div>
-                        <h4>2. Sandboxed Interactions</h4>
-                        <p>Your AI Twin searches the grid and initiates parallel dialogue simulations with compatible nodes in secure virtual settings. We test emotional availability, interests, and conversational compatibility in real-time.</p>
+                        <h4>2. Vibe Check Previews</h4>
+                        <p>Your Twin explores promising connections for you by chatting in virtual settings first. Skip the dry small talk and review compatibility before you say hello.</p>
                     </div>
                     <!-- Pillar 3 -->
                     <div class="flat-card">
                         <div class="flat-card-icon">🔐</div>
-                        <h4>3. Cryptographic Direct Gate</h4>
-                        <p>Review detailed conversation reports. Direct human chat tunnels are only created upon mutual verification. Your credentials and physical location details remain fully sealed behind AES-256-GCM encryption.</p>
+                        <h4>3. Control & Chemistry</h4>
+                        <p>You are always in control. Direct chat is only unlocked when both you and your match approve, keeping your details fully private and secure.</p>
                     </div>
                 </div>
             </section>
@@ -376,50 +380,50 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>AI Agent Representation</td>
-                                <td class="highlight-col"><span class="check">✓</span> Full AI Twin</td>
+                                <td>Your Personal Twin</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                             </tr>
                             <tr>
-                                <td>Pre-Match Compatibility Simulation</td>
-                                <td class="highlight-col"><span class="check">✓</span> Full Sandbox</td>
+                                <td>Vibe Check Previews</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                             </tr>
                             <tr>
-                                <td>Dual Human Approval Required</td>
+                                <td>Mutual Vibe Approval</td>
                                 <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td>⋅ Partial</td>
                                 <td><span class="cross">×</span></td>
                             </tr>
                             <tr>
-                                <td>No Ghost Profiles</td>
-                                <td class="highlight-col"><span class="check">✓</span> OTP Verified</td>
+                                <td>Real, Verified People Only</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td>⋅ Partial</td>
                                 <td>⋅ Partial</td>
                             </tr>
                             <tr>
-                                <td>MBTI & Behavioral DNA Matching</td>
-                                <td class="highlight-col"><span class="check">✓</span> 50-Q Audit</td>
+                                <td>Humor & Values Alignment</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                                 <td>⋅ Basic</td>
                             </tr>
                             <tr>
-                                <td>Virtual 3D Date Preview</td>
-                                <td class="highlight-col"><span class="check">✓</span> 10 Locations</td>
+                                <td>Simulated Cafes & Lounges</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                             </tr>
                             <tr>
-                                <td>Gen-Z Rizz Engine</td>
-                                <td class="highlight-col"><span class="check">✓</span> Neural AI</td>
+                                <td>Helpful Icebreakers</td>
+                                <td class="highlight-col"><span class="check">✓</span> Yes</td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
                                 <td><span class="cross">×</span></td>
@@ -434,7 +438,7 @@
                 <div class="section-header">
                     <span class="section-tag">Designed for Real Connection</span>
                     <h2 class="section-title">How We Bring Chemistry Back</h2>
-                    <p class="section-desc">We use smart helper networks to make discovery effortless, keep your private details sealed, and ensure you connect only on your terms.</p>
+                    <p class="section-desc">We use dedicated helper networks to make discovery effortless, keep your private details sealed, and ensure you connect only on your terms.</p>
                 </div>
                 
                 <div class="tech-grid">
@@ -443,11 +447,11 @@
                         <div class="tech-logo-wrapper">
                             <span style="font-size: 1.5rem;">🎨</span>
                             <span class="tech-service-name">Visual Expression</span>
-                            <span class="tech-badge cloudinary">Avatars</span>
+                            <span class="tech-badge cloudinary">Your Style</span>
                         </div>
-                        <p>Your AI Twin represents your aesthetic with customized, expressive visuals. Dynamic loading templates update your representative's appearance instantly across all screens.</p>
+                        <p>Your Twin represents your style with a customized avatar card that reflects your aesthetic personality and interests instantly.</p>
                         <div class="tech-visual-flow">
-                            YOUR PROMPT &rarr; ESTHETIC CALIBRATION &rarr; DIGITAL AVATAR SYNTHESIS
+                            YOUR STYLE &rarr; CALIBRATION &rarr; CUSTOM AVATAR CARD
                         </div>
                     </div>
 
@@ -456,11 +460,11 @@
                         <div class="tech-logo-wrapper">
                             <span style="font-size: 1.5rem;">🔍</span>
                             <span class="tech-service-name">Vibe Scan</span>
-                            <span class="tech-badge algolia">Vibe Search</span>
+                            <span class="tech-badge algolia">Local Vibes</span>
                         </div>
-                        <p>Scans your surrounding neighborhood zones instantly for matching profiles. Filters coordinate grids for shared interests, music taste, and lifestyle alignment with zero delay.</p>
+                        <p>Quickly discover compatible matches in your surrounding area. Filter by shared music tastes, interests, and lifestyle alignment.</p>
                         <div class="tech-visual-flow">
-                            YOUR VIBE DNA &rarr; NEIGHBORHOOD SEARCH &rarr; INSTANT SYNERGY MATCH
+                            YOUR FREQUENCY &rarr; NEIGHBORHOOD SEARCH &rarr; INSTANT MATCH
                         </div>
                     </div>
 
@@ -468,12 +472,12 @@
                     <div class="tech-integration-card">
                         <div class="tech-logo-wrapper">
                             <span style="font-size: 1.5rem;">💬</span>
-                            <span class="tech-service-name">Safe Chat Grid</span>
-                            <span class="tech-badge stream">Live Tunnels</span>
+                            <span class="tech-service-name">Safe Chat Tunnels</span>
+                            <span class="tech-badge stream">Encrypted</span>
                         </div>
-                        <p>Opens safe, encrypted communication tunnels only when mutual approval is met. Prevents spam and unsolicited messages so you only have conversations that count.</p>
+                        <p>Start chatting only when there is mutual chemistry. No spam, no unsolicited messages—just real, private conversations.</p>
                         <div class="tech-visual-flow">
-                            MUTUAL APPROVAL &rarr; SAFE CHAT GATE UNLOCKED &rarr; DIRECT DISCOVERY
+                            MUTUAL CHEMISTRY &rarr; SAFE CONNECTION &rarr; DIRECT DISCOVERY
                         </div>
                     </div>
                 </div>
@@ -501,7 +505,7 @@
                             <div
                                 style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem; color: var(--text-primary); font-weight: 600; line-height: 1.6;">
                                 <span style="color: var(--accent-teal); font-weight: 600;">Konvo Protocol:</span><br>
-                                Answer Prompts &rarr; Twin Synthesis &rarr; Vibe Check Match &rarr; Virtual Date Preview &rarr; Mutual Vibe Approval &rarr; Direct Chat
+                                Answer Prompts &rarr; Create Your Twin &rarr; Virtual Vibe Check &rarr; Mutual Vibe Approval &rarr; Start Chatting
                             </div>
                         </div>
                     </div>
@@ -525,9 +529,9 @@
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">02</div>
                                 <div class="pipeline-text">
-                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Twin Synthesis</h4>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Create Your Twin</h4>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
-                                        Your representative is created with dynamic, visual avatar cards.</p>
+                                        Your representative is created with customized, visual avatar cards.</p>
                                 </div>
                             </div>
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
@@ -1201,13 +1205,17 @@
 
             if (mobileMenuToggle && mobileMenuDrawer) {
                 mobileMenuToggle.addEventListener("click", () => {
+                    const header = document.querySelector(".landing-header");
                     mobileMenuDrawer.classList.add("open");
+                    if (header) header.classList.add("menu-open");
                     if (mobileMenuBackdrop) mobileMenuBackdrop.style.display = "block";
                 });
             }
 
             const closeMenu = () => {
+                const header = document.querySelector(".landing-header");
                 if (mobileMenuDrawer) mobileMenuDrawer.classList.remove("open");
+                if (header) header.classList.remove("menu-open");
                 if (mobileMenuBackdrop) mobileMenuBackdrop.style.display = "none";
             };
 

@@ -20,7 +20,8 @@
 
 // ─── Route Registry ───────────────────────────────────────────────
 const ROUTES = {
-    '/':              { page: 'discover',   title: 'Discovery',      auth: true,  guestOnly: false },
+    '/':              { page: 'home',       title: 'Companion Space', auth: true,  guestOnly: false },
+    '/dashboard':     { page: 'home',       title: 'Companion Space', auth: true,  guestOnly: false },
     '/discover':      { page: 'discover',   title: 'Discovery',      auth: true,  guestOnly: false },
     '/chat':          { page: 'chat',       title: 'Messages',       auth: true,  guestOnly: false },
     '/grid':          { page: 'grid',       title: 'Resonance Grid', auth: true,  guestOnly: false },
@@ -41,6 +42,7 @@ const ROUTES = {
 // ─── Page Section Registry ─────────────────────────────────────────
 // Maps route page IDs to the actual DOM element IDs in index.html/app.html
 const PAGE_SECTIONS = {
+    'home':          'view-home',
     'discover':      'view-discover-deck',
     'chat':          'view-chat-center',
     'grid':          'view-grid',

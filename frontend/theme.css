@@ -78,6 +78,7 @@ svg, path, circle, rect, line {
     /* Legacy Remap Variables */
     --bg-main: var(--bg-primary);
     --border-color: var(--border-primary);
+    --bg-card: var(--card-bg);
     --accent-teal: var(--accent-primary);
     --accent-forest: var(--accent-success);
     --accent-copper: var(--accent-danger);
@@ -145,6 +146,7 @@ html[data-theme="light"] {
     /* Legacy Remap Variables */
     --bg-main: var(--bg-primary);
     --border-color: var(--border-primary);
+    --bg-card: var(--card-bg);
     --accent-teal: var(--accent-primary);
     --accent-forest: var(--accent-success);
     --accent-copper: var(--accent-danger);
