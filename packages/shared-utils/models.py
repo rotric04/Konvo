@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean, Date, Time, JSON, Text
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from datetime import datetime
 from database import Base
 
@@ -25,11 +25,17 @@ class User(Base):
     last_credit_reset = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    profile = relationship("UserProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
-    agent_twin = relationship("Agent", back_populates="creator", uselist=False, cascade="all, delete-orphan")
-    ledger_entries = relationship("BehavioralLedger", back_populates="user", cascade="all, delete-orphan")
-    fingerprint = relationship("BehavioralFingerprint", back_populates="user", uselist=False, cascade="all, delete-orphan")
-    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+    profile = relationship("UserProfile", back_populates="user", uselist=False, cascade="all, delete-orphan", passive_deletes=True)
+    agent_twin = relationship("Agent", back_populates="creator", uselist=False, cascade="all, delete-orphan", passive_deletes=True)
+    ledger_entries = relationship("BehavioralLedger", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    fingerprint = relationship("BehavioralFingerprint", back_populates="user", uselist=False, cascade="all, delete-orphan", passive_deletes=True)
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    embeddings = relationship("UserEmbedding", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    behavioral_signals = relationship("BehavioralSignal", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    personality_profile = relationship("PersonalityProfile", back_populates="user", uselist=False, cascade="all, delete-orphan", passive_deletes=True)
+    interest_clusters_rel = relationship("InterestCluster", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    compatibility_vectors_rel = relationship("CompatibilityVector", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    social_vectors_rel = relationship("SocialVector", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
 
 class UserProfile(Base):
     __tablename__ = "user_profiles"
@@ -255,7 +261,7 @@ class UserEmbedding(Base):
     emotional_vector = Column(JSON, nullable=True)
     lifestyle_vector = Column(JSON, nullable=True)
 
-    user = relationship("User", backref="embeddings")
+    user = relationship("User", back_populates="embeddings")
 
 
 class BehavioralSignal(Base):
@@ -270,7 +276,7 @@ class BehavioralSignal(Base):
     writing_style_metrics = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", backref="behavioral_signals")
+    user = relationship("User", back_populates="behavioral_signals")
 
 
 class PersonalityProfile(Base):
@@ -291,7 +297,7 @@ class PersonalityProfile(Base):
     interest_clusters = Column(JSON, default=list)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    user = relationship("User", backref="personality_profile")
+    user = relationship("User", back_populates="personality_profile")
 
 
 class InterestCluster(Base):
@@ -302,7 +308,7 @@ class InterestCluster(Base):
     cluster_name = Column(String, nullable=False)
     score = Column(Float, default=0.0)
 
-    user = relationship("User", backref="interest_clusters_rel")
+    user = relationship("User", back_populates="interest_clusters_rel")
 
 
 class CompatibilityVector(Base):
@@ -312,7 +318,7 @@ class CompatibilityVector(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     vector_data = Column(JSON, nullable=False)
 
-    user = relationship("User", backref="compatibility_vectors_rel")
+    user = relationship("User", back_populates="compatibility_vectors_rel")
 
 
 class SocialVector(Base):
@@ -322,5 +328,5 @@ class SocialVector(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     vector_data = Column(JSON, nullable=False)
 
-    user = relationship("User", backref="social_vectors_rel")
+    user = relationship("User", back_populates="social_vectors_rel")
 

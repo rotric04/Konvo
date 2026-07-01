@@ -95,7 +95,8 @@ def apply_db_migrations(engine):
                 if "postgresql" in str(engine.url):
                     conn.execute(text("ALTER TABLE users ADD COLUMN last_credit_reset TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP"))
                 else:
-                    conn.execute(text("ALTER TABLE users ADD COLUMN last_credit_reset DATETIME DEFAULT CURRENT_TIMESTAMP"))
+                    conn.execute(text("ALTER TABLE users ADD COLUMN last_credit_reset DATETIME"))
+                    conn.execute(text("UPDATE users SET last_credit_reset = CURRENT_TIMESTAMP WHERE last_credit_reset IS NULL"))
             print("[MIGRATION] 'last_credit_reset' column added successfully.")
 
         # Ensure all existing users have a unique username (if NULL)
