@@ -262,6 +262,21 @@ export function initLandingPage() {
         gsap.from('.sim-console', { opacity: 0, scale: 0.95, duration: 1.0, delay: 0.5, ease: 'power2.out' });
     }
 
+    // Initialize Lenis smooth scroll if loaded
+    if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            smooth: true
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    }
+
     // 1. Mobile Menu Drawer Toggle
     const header = document.querySelector('.landing-header');
     const menuToggle = document.querySelector('.mobile-menu-toggle');
