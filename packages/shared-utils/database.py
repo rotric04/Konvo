@@ -128,6 +128,42 @@ def apply_db_migrations(engine):
                 conn.execute(text("ALTER TABLE user_profiles ADD COLUMN looking_for_gender VARCHAR(50) DEFAULT 'All'"))
             print("[MIGRATION] 'looking_for_gender' column added successfully.")
 
+    # For PostgreSQL, ensure all foreign keys referencing users have ON DELETE CASCADE
+    if "postgresql" in str(engine.url):
+        print("[MIGRATION] Checking/updating PostgreSQL foreign key constraints to ON DELETE CASCADE...")
+        fk_targets = [
+            ("user_profiles", "user_id", "user_profiles_user_id_fkey"),
+            ("notifications", "user_id", "notifications_user_id_fkey"),
+            ("behavioral_fingerprints", "user_id", "behavioral_fingerprints_user_id_fkey"),
+            ("behavioral_ledger", "user_id", "behavioral_ledger_user_id_fkey"),
+            ("agents", "creator_id", "agents_creator_id_fkey"),
+            ("swipes", "swiper_id", "swipes_swiper_id_fkey"),
+            ("swipes", "swipee_id", "swipes_swipee_id_fkey"),
+            ("agent_date_simulations", "user_a_id", "agent_date_simulations_user_a_id_fkey"),
+            ("agent_date_simulations", "user_b_id", "agent_date_simulations_user_b_id_fkey"),
+            ("chat_messages", "sender_id", "chat_messages_sender_id_fkey"),
+            ("chat_messages", "receiver_id", "chat_messages_receiver_id_fkey"),
+            ("posts", "author_id", "posts_author_id_fkey"),
+            ("comments", "author_id", "comments_author_id_fkey"),
+            ("user_embeddings", "user_id", "user_embeddings_user_id_fkey"),
+            ("behavioral_signals", "user_id", "behavioral_signals_user_id_fkey"),
+            ("personality_profiles", "user_id", "personality_profiles_user_id_fkey"),
+            ("interest_clusters", "user_id", "interest_clusters_user_id_fkey"),
+            ("compatibility_vectors", "user_id", "compatibility_vectors_user_id_fkey"),
+            ("social_vectors", "user_id", "social_vectors_user_id_fkey"),
+        ]
+        
+        with engine.begin() as conn:
+            for table, col, constraint in fk_targets:
+                try:
+                    # Drop existing constraint
+                    conn.execute(text(f"ALTER TABLE {table} DROP CONSTRAINT IF EXISTS {constraint}"))
+                    # Re-create constraint with ON DELETE CASCADE
+                    conn.execute(text(f"ALTER TABLE {table} ADD CONSTRAINT {constraint} FOREIGN KEY ({col}) REFERENCES users(id) ON DELETE CASCADE"))
+                    print(f"[MIGRATION] Updated constraint {constraint} on table {table} to ON DELETE CASCADE.")
+                except Exception as e:
+                    print(f"[MIGRATION] Warning: could not update constraint {constraint} on table {table} ({e})")
+
 # Run migrations automatically on import
 apply_db_migrations(engine)
 

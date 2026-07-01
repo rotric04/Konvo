@@ -842,9 +842,9 @@
                 style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-rose);">SECURITY ARCHITECTURE</span>
-                    <h2 class="section-title">Zero-Exposure Data Mandate</h2>
+                    <h2 class="section-title">Zero Exposure Data Mandate</h2>
                     <p class="section-desc">We secure your behavioral footprint. Calibrations, dialogues, and
-                        coordinates are shielded by industry-standard cryptography.</p>
+                        coordinates are shielded by industry standard cryptography.</p>
                 </div>
 
                 <div class="dashboard-two-col">
@@ -888,14 +888,14 @@
                             Safety & Privacy Mandate</h4>
                         <p
                             style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            To protect your peace of mind, Konvo operates on a zero-exposure data policy. Your profile
+                            To protect your peace of mind, Konvo operates on a zero exposure data policy. Your profile
                             calibrations and answers are encrypted. Match simulations run in secure, private spaces that
                             only share vibe scores, never exposing raw answers or your private identity until you both
                             approve.
                         </p>
                         <p
                             style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            Authentication mechanisms use industry-standard security protocols to block dictionary
+                            Authentication mechanisms use industry standard security protocols to block dictionary
                             scanning and automated scraping, ensuring your dating experience remains authentic and
                             protected.
                         </p>
@@ -952,7 +952,7 @@
                                 <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">What
                                     exactly is Konvo?</div>
                                 <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">
-                                    Konvo is a compatibility-first human connection platform designed for professionals,
+                                    Konvo is a compatibility first human connection platform designed for professionals,
                                     engineers, and creators who value alignment and want to avoid superficial swiping.
                                     We match users based on deep personality, values, and communication calibrations.
                                 </div>
@@ -963,7 +963,7 @@
                                 <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">
                                     Never. Your AI Twin only converses with other AI Twins inside secure sandboxed
                                     environments to pre-simulate compatibility chemistry. Direct human communication is
-                                    strictly human-to-human, unlocked only after dual approval.</div>
+                                    strictly human to human, unlocked only after dual approval.</div>
                             </div>
                             <div class="faq-item">
                                 <div class="faq-question" style="padding: 1rem 1.25rem; font-size: 0.95rem;">How are
@@ -978,7 +978,7 @@
                                     sold or used for model training?</div>
                                 <div class="faq-answer" style="padding: 0 1.25rem 1rem 1.25rem; font-size: 0.85rem;">No.
                                     All behavioral parameters, MBTI assessments, and chat ledgers are encrypted with
-                                    AES-256-GCM. We do not sell user behavioral insights or use them for third-party
+                                    AES 256 GCM. We do not sell user behavioral insights or use them for third party
                                     model training.</div>
                             </div>
                         </div>
@@ -1250,14 +1250,14 @@
                     <img src="/logo_dark.svg" alt="Konvo Logo" style="height: 32px; display: block;"
                         class="konvo-logo-img">
                     <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
-                        Sovereign behavioral representation and compatibility-first human connections.
+                        Sovereign behavioral representation and compatibility first human connections.
                     </p>
                     <div style="margin-top: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
                         <span
                             style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-teal); border: 1px solid rgba(13,148,136,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">TLS
                             1.3</span>
                         <span
-                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES-256-GCM</span>
+                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES 256 GCM</span>
                         <span
                             style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px;">E2E
                             Encrypted</span>
@@ -1440,16 +1440,23 @@
         const pct  = document.getElementById('vibe-pct-display');
         if (!fill || !pct) return;
         fill.classList.add('animate');
-        let current = 0;
-        const target = 94;
+        const phases = [
+            'analyzing behavior...',
+            'reading conversation pattern...',
+            'verifying personality match...',
+            'strong alignment found'
+        ];
+        let phaseIdx = 0;
+        pct.textContent = phases[0];
         const interval = setInterval(() => {
-            current = Math.min(current + Math.ceil(Math.random() * 4), target);
-            pct.textContent = current + '%';
-            if (current >= target) {
+            phaseIdx++;
+            if (phaseIdx < phases.length) {
+                pct.textContent = phases[phaseIdx];
+            } else {
                 clearInterval(interval);
-                pct.textContent = '94%';
+                pct.textContent = 'strong alignment found';
             }
-        }, 40);
+        }, 600);
     }
 
     // Start vibe animation 1.5s after load
@@ -1509,7 +1516,7 @@
             const fill = document.getElementById('vibe-fill-bar');
             const pct  = document.getElementById('vibe-pct-display');
             if (fill) { fill.classList.remove('animate'); fill.style.width = '0%'; }
-            if (pct)  pct.textContent = '0%';
+            if (pct)  pct.textContent = 'analyzing behavior...';
             setTimeout(startVibeAnimation, 400);
         }, 600);
     }

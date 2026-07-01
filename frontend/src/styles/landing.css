@@ -420,12 +420,15 @@ html[data-theme="light"] .glass-panel {
     padding: 1rem 1.25rem;
     font-size: 0.8rem;
     border-color: var(--border-primary);
+    text-transform: none;
+    white-space: normal;
 }
 
 .guide-tabs .btn-secondary.active {
     background-color: var(--text-primary);
     color: var(--bg-primary);
     border-color: var(--text-primary);
+    text-transform: none;
 }
 
 .guide-content-panel {
