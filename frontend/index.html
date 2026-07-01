@@ -206,27 +206,27 @@
     <!-- Unauthenticated Public Landing Layout -->
     <div id="unauth-landing-layout">
         <!-- Landing Header -->
-        <header class="landing-header">
+        <header class="landing-header glass-panel">
             <div class="brand" style="margin-bottom: 0;">
                 <img src="/logo_dark.svg" alt="Konvo Logo" style="height: 32px; display: block;" class="konvo-logo-img">
             </div>
             <nav class="landing-nav desktop-only">
                 <a href="#platform" class="landing-tab-btn active" data-tab="landing-platform">Platform</a>
-                <a href="#guide" class="landing-tab-btn" data-tab="landing-guide">System Guide</a>
-                <a href="#about" class="landing-tab-btn" data-tab="landing-about">About Us</a>
                 <a href="#security" class="landing-tab-btn" data-tab="landing-security">Security</a>
                 <a href="#legal" class="landing-tab-btn" data-tab="landing-legal">Legal & FAQ</a>
                 <a href="/blog" class="landing-blog-link">Insights Blog</a>
-                <a href="/hall-of-fame" class="landing-blog-link">Hall of Fame</a>
+                <a href="/pages/hall-of-fame.html" class="landing-blog-link">Hall of Fame</a>
                 <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
             </nav>
             <div class="landing-header-actions desktop-only" style="display: flex; gap: 1rem; align-items: center;">
-                <a href="/login" class="btn btn-secondary"
-                    style="padding: 0.5rem 1rem; border-color: transparent;">Login</a>
-                <a href="/login?register=true" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Create My AI
-                    Twin</a>
+                <button id="btn-theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <a href="/login" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Login</a>
+                <a href="/login?register=true" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Create My AI Twin</a>
             </div>
-            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu" style="display: none; background: none; border: none; color: var(--text-primary); cursor: pointer;">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12" class="line-mid"></line>
                     <line x1="3" y1="6" x2="21" y2="6" class="line-top"></line>
@@ -234,142 +234,126 @@
                 </svg>
             </button>
             <div class="mobile-menu-drawer">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1.5rem;">
+                    <span style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.25rem;">KONVO</span>
+                    <button class="mobile-menu-close" aria-label="Close Menu">&times;</button>
+                </div>
                 <nav class="mobile-nav">
                     <a href="#platform" class="landing-tab-btn active" data-tab="landing-platform">Platform</a>
-                    <a href="#guide" class="landing-tab-btn" data-tab="landing-guide">System Guide</a>
-                    <a href="#about" class="landing-tab-btn" data-tab="landing-about">About Us</a>
                     <a href="#security" class="landing-tab-btn" data-tab="landing-security">Security</a>
                     <a href="#legal" class="landing-tab-btn" data-tab="landing-legal">Legal & FAQ</a>
                     <a href="/blog" class="landing-blog-link">Insights Blog</a>
-                    <a href="/hall-of-fame" class="landing-blog-link">Hall of Fame</a>
+                    <a href="/pages/hall-of-fame.html" class="landing-blog-link">Hall of Fame</a>
                     <a href="#feedback" class="landing-tab-btn" data-tab="landing-feedback">Feedback</a>
                 </nav>
-                <div class="mobile-actions"
-                    style="display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 0 2rem; margin-top: 2rem;">
-                    <a href="/login" class="btn btn-secondary"
-                        style="width: 100%; text-align: center; border-color: var(--border-color);">Login</a>
-                    <a href="/login?register=true" class="btn btn-primary"
-                        style="width: 100%; text-align: center;">Create My AI Twin</a>
+                <div class="mobile-actions" style="display: flex; flex-direction: column; gap: 1rem; width: 100%; margin-top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-secondary);">Toggle Theme:</span>
+                        <button id="btn-theme-toggle-mobile" class="theme-toggle-btn" aria-label="Toggle theme">
+                            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        </button>
+                    </div>
+                    <a href="/login" class="btn btn-secondary" style="width: 100%; text-align: center;">Login</a>
+                    <a href="/login?register=true" class="btn btn-primary" style="width: 100%; text-align: center;">Create My AI Twin</a>
                 </div>
             </div>
+            <div class="mobile-menu-backdrop"></div>
         </header>
 
         <!-- Tab Content 1: Platform -->
         <div id="landing-platform" class="landing-tab-content active">
             <!-- Hero Section -->
             <section id="platform" class="landing-section"
-                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
+                style="border-top: none; padding-top: calc(7rem + env(safe-area-inset-top));">
+
                 <div class="landing-hero reveal-on-scroll"
-                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 4rem;">
-                    <div>
-                        <div class="worlds-first-badge">
-                            🌍 World's First AI Agent-Based Date Finder
+                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 2rem;">
+                    
+                    <div class="hero-content">
+                        <div>
+                            <div class="worlds-first-badge">
+                                🌍 World's First Dating Autopilot
+                            </div>
+                            <h1 class="hero-title">
+                                Your AI Twin does the dating.<br><span class="gradient-text">You do the connecting.</span>
+                            </h1>
+                            <p class="hero-subtitle">
+                                Skip the endless swiping, dry small talk, and ghosting. Your digital double pre-simulates 
+                                dates in virtual lounges to check for genuine alignment on humor, vibes, and values—so 
+                                you only spend time on people you actually connect with.
+                            </p>
                         </div>
-                        <span class="section-tag">Identity Verification & Connection</span>
-                        <h1 class="hero-title"
-                            style="font-size: 3.2rem; font-family: var(--font-display); line-height: 1.1; letter-spacing: -0.02em;">
-                            Represent yourself with an <span class="gradient-text">AI Twin</span>. Connect through <span
-                                class="gradient-text">resonance</span>.
-                        </h1>
-                        <p class="hero-subtitle"
-                            style="font-size: 1.05rem; color: var(--text-secondary); margin-top: 1.25rem; line-height: 1.6;">
-                            Traditional networks monetize attention, resulting in small-talk fatigue.
-                            <strong>Konvo</strong> replaces profiles with behavior analysis, simulated date previews,
-                            and dual human approval. We protect your time.
-                        </p>
-                        <div class="hero-ctas" style="margin-top: 2rem;">
-                            <a href="/login?register=true" class="btn btn-primary btn-primary-glow"
-                                style="padding: 0.8rem 2rem; font-size: 0.95rem;">Create My AI Twin</a>
-                            <button class="btn btn-secondary" id="btn-watch-demo"
-                                onclick="window.konvoOpenModal('demo-modal')"
-                                style="padding: 0.8rem 2rem; font-size: 0.95rem;">Watch Demo</button>
+
+                        <div class="hero-ctas" style="margin-top: 1.5rem;">
+                            <a href="/login?register=true" class="btn btn-primary" style="padding: 0.85rem 2rem;">Synthesize My Twin</a>
+                            <a href="/login" class="btn btn-secondary" style="padding: 0.85rem 2rem;">Enter Sandbox</a>
                         </div>
                     </div>
+
                     <div class="hero-viz">
-                        <svg class="resonance-rings-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <radialGradient id="teal-glow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="#0D9488" stop-opacity="0.2" />
-                                    <stop offset="100%" stop-color="var(--bg-main)" stop-opacity="0" />
-                                </radialGradient>
-                                <radialGradient id="indigo-glow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="#4F46E5" stop-opacity="0.2" />
-                                    <stop offset="100%" stop-color="var(--bg-main)" stop-opacity="0" />
-                                </radialGradient>
-                            </defs>
-                            <circle cx="140" cy="200" r="110" fill="url(#teal-glow)" />
-                            <circle cx="260" cy="200" r="110" fill="url(#indigo-glow)" />
-                            <circle class="res-ring-1" cx="140" cy="200" r="50" fill="none" stroke="var(--border-color)"
-                                stroke-width="1.5" stroke-dasharray="6 6" />
-                            <circle class="res-ring-2" cx="260" cy="200" r="50" fill="none" stroke="var(--border-color)"
-                                stroke-width="1.5" stroke-dasharray="6 6" />
-                            <line class="pulse-line" x1="140" y1="200" x2="260" y2="200" stroke="#D97706"
-                                stroke-width="2.5" stroke-linecap="round" />
-                            <circle cx="140" cy="200" r="12" fill="var(--bg-card)" stroke="#0D9488" stroke-width="3" />
-                            <circle cx="260" cy="200" r="12" fill="var(--bg-card)" stroke="#4F46E5" stroke-width="3" />
-                            <circle cx="140" cy="200" r="4" fill="var(--text-primary)" />
-                            <circle cx="260" cy="200" r="4" fill="var(--text-primary)" />
-                        </svg>
+                        <!-- Simulated Live Date Simulator console -->
+                        <div class="sim-console">
+                            <div class="sim-console-header">
+                                <div class="sim-status">
+                                    <div class="sim-status-dot"></div>
+                                    <span>Virtual Vibe Simulation</span>
+                                </div>
+                                <div id="sim-location" style="font-family: 'JetBrains Mono', monospace;">Zen Garden</div>
+                            </div>
+                            <div class="sim-console-body">
+                                <div class="sim-canvas-container">
+                                    <div class="sim-sync-gauge" id="sim-gauge">VIBE: 84%</div>
+                                    <div class="sim-avatar-label label-a" id="sim-name-a">Aria</div>
+                                    <canvas class="sim-canvas" id="sim-canvas"></canvas>
+                                    <div class="sim-avatar-label label-b" id="sim-name-b">Orion</div>
+                                </div>
+                                <div class="sim-chat-logs" id="sim-chat-logs">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                                <!-- Interactive Swipe card overlay -->
+                                <div class="sim-card-overlay" id="sim-overlay">
+                                    <div class="sim-card-box">
+                                        <div class="sim-card-title" id="sim-overlay-title">High Compatibility Detected</div>
+                                        <div class="sim-card-desc" id="sim-overlay-desc">Aria and Orion share a 94% vibe match. Connect in real life?</div>
+                                        <div class="sim-card-actions">
+                                            <button class="sim-card-btn btn-reject" id="sim-btn-reject">Skip</button>
+                                            <button class="sim-card-btn btn-approve" id="sim-btn-approve">Let's Connect</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Agent How-it-Works + Live Preview -->
-            <section class="landing-section reveal-on-scroll" style="padding-top: 2rem;">
-                <div class="section-header" style="margin-bottom: 2.5rem;">
-                    <span class="section-tag" style="color: var(--accent-teal);">How The Agent Network Works</span>
-                    <h2 class="section-title">Agents Talk, Humans Decide</h2>
-                    <p class="section-desc">Two AI Twins negotiate compatibility in a sandboxed environment. You only
-                        connect if both approve.</p>
+            <!-- Simplified Three Pillars Section -->
+            <section class="landing-section reveal-on-scroll" style="padding-top: 3rem;">
+                <div class="section-header">
+                    <span class="section-tag">High-Dimension Discovery</span>
+                    <h2 class="section-title">The Three Pillars of Resonance Discovery</h2>
+                    <p class="section-desc">We replace superficial profile cards with direct cognitive synchronization. Your representative handles the noise; you manage the connection.</p>
                 </div>
-                <div class="agent-flow-diagram">
-                    <div class="agent-flow-step">
-                        <div class="agent-flow-icon">🧑</div>
-                        <div class="agent-flow-label">Step 1</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
-                            You Join</div>
-                        <div class="agent-flow-desc">Complete calibration. Your AI Twin is synthesized.</div>
+                <div class="swiss-grid">
+                    <!-- Pillar 1 -->
+                    <div class="flat-card">
+                        <div class="flat-card-icon">🧠</div>
+                        <h4>1. Cognitive Incubation</h4>
+                        <p>Complete our 50-Question Calibration Audit. Our generative natural language processing system constructs a detailed behavioral representation of your personality, humor, and values.</p>
                     </div>
-                    <div class="agent-flow-arrow">→</div>
-                    <div class="agent-flow-step">
-                        <div class="agent-flow-icon">🤖</div>
-                        <div class="agent-flow-label">Step 2</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
-                            Agents Match</div>
-                        <div class="agent-flow-desc">Your Twin scans for resonant personalities.</div>
+                    <!-- Pillar 2 -->
+                    <div class="flat-card">
+                        <div class="flat-card-icon">🧪</div>
+                        <h4>2. Sandboxed Interactions</h4>
+                        <p>Your AI Twin searches the grid and initiates parallel dialogue simulations with compatible nodes in secure virtual settings. We test emotional availability, interests, and conversational compatibility in real-time.</p>
                     </div>
-                    <div class="agent-flow-arrow">→</div>
-                    <div class="agent-flow-step">
-                        <div class="agent-flow-icon">💬</div>
-                        <div class="agent-flow-label">Step 3</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
-                            Agents Converse</div>
-                        <div class="agent-flow-desc">AI Twins talk in a secure sandbox.</div>
+                    <!-- Pillar 3 -->
+                    <div class="flat-card">
+                        <div class="flat-card-icon">🔐</div>
+                        <h4>3. Cryptographic Direct Gate</h4>
+                        <p>Review detailed conversation reports. Direct human chat tunnels are only created upon mutual verification. Your credentials and physical location details remain fully sealed behind AES-256-GCM encryption.</p>
                     </div>
-                    <div class="agent-flow-arrow">→</div>
-                    <div class="agent-flow-step">
-                        <div class="agent-flow-icon">👥</div>
-                        <div class="agent-flow-label">Step 4</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--text-primary);margin-bottom:0.25rem;">
-                            Dual Approval</div>
-                        <div class="agent-flow-desc">Both humans review transcript and approve.</div>
-                    </div>
-                    <div class="agent-flow-arrow">→</div>
-                    <div class="agent-flow-step"
-                        style="border-color:rgba(13,148,136,0.3);background:rgba(13,148,136,0.05);">
-                        <div class="agent-flow-icon">❤️</div>
-                        <div class="agent-flow-label">Step 5</div>
-                        <div style="font-size:0.9rem;font-weight:600;color:var(--accent-teal);margin-bottom:0.25rem;">
-                            Real Connection</div>
-                        <div class="agent-flow-desc">Secure direct chat unlocks.</div>
-                    </div>
-                </div>
-                <div class="agent-live-preview" style="max-width:600px;margin:2.5rem auto 0;">
-                    <div class="agent-preview-header">
-                        <div class="agent-preview-status">Live Agent Conversation</div>
-                        <div style="color:var(--text-muted);margin-left:auto;">Sandbox &bull; Encrypted</div>
-                    </div>
-                    <div class="agent-preview-body" id="agent-preview-body"></div>
                 </div>
             </section>
 
@@ -445,11 +429,61 @@
                 </div>
             </section>
 
+            <!-- Vibe Engine Integrations Section -->
+            <section id="integrations" class="landing-section reveal-on-scroll">
+                <div class="section-header">
+                    <span class="section-tag">Designed for Real Connection</span>
+                    <h2 class="section-title">How We Bring Chemistry Back</h2>
+                    <p class="section-desc">We use smart helper networks to make discovery effortless, keep your private details sealed, and ensure you connect only on your terms.</p>
+                </div>
+                
+                <div class="tech-grid">
+                    <!-- Cloudinary Integration Card -->
+                    <div class="tech-integration-card">
+                        <div class="tech-logo-wrapper">
+                            <span style="font-size: 1.5rem;">🎨</span>
+                            <span class="tech-service-name">Visual Expression</span>
+                            <span class="tech-badge cloudinary">Avatars</span>
+                        </div>
+                        <p>Your AI Twin represents your aesthetic with customized, expressive visuals. Dynamic loading templates update your representative's appearance instantly across all screens.</p>
+                        <div class="tech-visual-flow">
+                            YOUR PROMPT &rarr; ESTHETIC CALIBRATION &rarr; DIGITAL AVATAR SYNTHESIS
+                        </div>
+                    </div>
+
+                    <!-- Algolia Integration Card -->
+                    <div class="tech-integration-card">
+                        <div class="tech-logo-wrapper">
+                            <span style="font-size: 1.5rem;">🔍</span>
+                            <span class="tech-service-name">Vibe Scan</span>
+                            <span class="tech-badge algolia">Vibe Search</span>
+                        </div>
+                        <p>Scans your surrounding neighborhood zones instantly for matching profiles. Filters coordinate grids for shared interests, music taste, and lifestyle alignment with zero delay.</p>
+                        <div class="tech-visual-flow">
+                            YOUR VIBE DNA &rarr; NEIGHBORHOOD SEARCH &rarr; INSTANT SYNERGY MATCH
+                        </div>
+                    </div>
+
+                    <!-- GetStream Integration Card -->
+                    <div class="tech-integration-card">
+                        <div class="tech-logo-wrapper">
+                            <span style="font-size: 1.5rem;">💬</span>
+                            <span class="tech-service-name">Safe Chat Grid</span>
+                            <span class="tech-badge stream">Live Tunnels</span>
+                        </div>
+                        <p>Opens safe, encrypted communication tunnels only when mutual approval is met. Prevents spam and unsolicited messages so you only have conversations that count.</p>
+                        <div class="tech-visual-flow">
+                            MUTUAL APPROVAL &rarr; SAFE CHAT GATE UNLOCKED &rarr; DIRECT DISCOVERY
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Resonance 2-Column -->
             <section id="how-it-works" class="landing-section reveal-on-scroll" style="padding-top: 2rem;">
                 <div class="dashboard-two-col">
                     <div
-                        style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 2.25rem; border-radius: 8px; height: 100%;">
+                        style="background-color: var(--surface-primary); border: 1px solid var(--border-primary); padding: 2.25rem; border-radius: 0px; height: 100%;">
                         <div
                             style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
                             The Paradigm Shift</div>
@@ -467,8 +501,7 @@
                             <div
                                 style="border-left: 2px solid var(--accent-teal); padding-left: 1.25rem; color: var(--text-primary); font-weight: 600; line-height: 1.6;">
                                 <span style="color: var(--accent-teal); font-weight: 600;">Konvo Protocol:</span><br>
-                                Calibration &rarr; AI Twin Synthesis &rarr; Synergy Match &rarr; Sandboxed Date Preview
-                                &rarr; Approval &rarr; Secure Chat
+                                Answer Prompts &rarr; Twin Synthesis &rarr; Vibe Check Match &rarr; Virtual Date Preview &rarr; Mutual Vibe Approval &rarr; Direct Chat
                             </div>
                         </div>
                     </div>
@@ -478,31 +511,31 @@
                             style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
                             The Connection Pipeline</div>
                         <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-family: var(--font-display);">
-                            Automated Match Chemistry</h3>
+                            Automated Vibe Matching</h3>
                         <div class="pipeline-container">
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">01</div>
                                 <div class="pipeline-text">
-                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Behavioral Audit</h4>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Express Yourself</h4>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
-                                        Calibrate personality, humor, and values parameters through a secure checklist.
+                                        Answer a few fun, deep prompts about your values, humor, and ideal weekend.
                                     </p>
                                 </div>
                             </div>
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">02</div>
                                 <div class="pipeline-text">
-                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">AI Twin Synthesis</h4>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Twin Synthesis</h4>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
-                                        Secure digital representatives converse in isolated sandbox environments.</p>
+                                        Your representative is created with dynamic, visual avatar cards.</p>
                                 </div>
                             </div>
                             <div class="pipeline-step" style="padding: 1.25rem 1.5rem;">
                                 <div class="pipeline-num">03</div>
                                 <div class="pipeline-text">
-                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Compatibility Previews</h4>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.15rem;">Vibe Check Previews</h4>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.4;">
-                                        Review Twin dialog logs first. Mutual human approvals unlock direct connection.
+                                        Review simulated chat logs from virtual dates before approving direct human chat.
                                     </p>
                                 </div>
                             </div>
@@ -512,17 +545,15 @@
 
                 <!-- Interactive User Guide -->
                 <div class="interactive-guide-outer-card"
-                    style="margin-top: 3.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px;">
+                    style="margin-top: 3.5rem; background-color: var(--surface-primary); border: 1px solid var(--border-primary); border-radius: 0px;">
                     <div style="text-align: center; margin-bottom: 2rem;">
                         <span
                             style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.05em;">Interactive
                             Walkthrough</span>
-                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">In-Depth
-                            Platform Protocol Guide</h3>
+                        <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin-top: 0.25rem;">How Konvo Works</h3>
                         <p
                             style="color: var(--text-secondary); font-size: 0.88rem; max-width: 500px; margin: 0.5rem auto 0 auto;">
-                            Select a protocol phase below to examine detailed instructions, workflows, and operational
-                            requirements.</p>
+                            We protect your peace. Here is how your Twin finds the perfect vibe match for you.</p>
                     </div>
 
                     <div class="guide-grid-layout">
@@ -530,108 +561,96 @@
                         <div style="display: flex; flex-direction: column; gap: 0.5rem;" class="guide-tabs">
                             <button class="btn btn-secondary active" data-guide-tab="guide-calibration"
                                 style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                                <span>🧬</span> Phase 1: Calibration
+                                <span>🧬</span> Phase 1: Vibe Check
                             </button>
                             <button class="btn btn-secondary" data-guide-tab="guide-twin"
                                 style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                                <span>🤖</span> Phase 2: Twin Synthesis
+                                <span>🤖</span> Phase 2: Your Twin
                             </button>
                             <button class="btn btn-secondary" data-guide-tab="guide-locking"
                                 style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                                <span>🔒</span> Phase 3: Double-Lock
+                                <span>🔒</span> Phase 3: Mutual Match
                             </button>
                             <button class="btn btn-secondary" data-guide-tab="guide-virtual"
                                 style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                                <span>🌌</span> Phase 4: Virtual Dates
+                                <span>🌌</span> Phase 4: Simulated Dates
                             </button>
                             <button class="btn btn-secondary" data-guide-tab="guide-chat"
                                 style="text-align: left; padding: 0.75rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                                <span>💬</span> Phase 5: Secure Chat
+                                <span>💬</span> Phase 5: Real Connection
                             </button>
                         </div>
 
                         <!-- Guide Content Panel -->
                         <div class="guide-content-panel"
-                            style="background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; position: relative; min-height: 260px;">
+                            style="background-color: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: 0px; position: relative; min-height: 260px;">
                             <div id="guide-calibration" class="guide-content-pane">
                                 <h4
                                     style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
-                                    Behavioral Audit & Onboarding Calibration</h4>
+                                    Define Your Vibe</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    The journey begins with our 3-Stage Cognitive Calibration Wizard. Instead of basic
-                                    profile tags, you will define your communication style, conflict-resolution
-                                    preferences, and outline your lifestyle interests in raw natural language prompts.
+                                    Answer a few simple, deep prompts about your values, humor, and ideal weekend. Tell us what music makes you dance, what gets you excited, and how you deal with life's little moments. No boring checkboxes—just express yourself in your own words.
                                 </p>
                                 <div
                                     style="background-color: rgba(13,148,136,0.04); border-left: 2px solid var(--accent-teal); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Notes: All 3 onboarding stages must be complete to feed the NLP compatibility
-                                    parsing engines and generate your initial identity registry node.
+                                    Expressive: We use these answers to construct your custom AI Twin representation.
                                 </div>
                             </div>
 
                             <div id="guide-twin" class="guide-content-pane hidden" style="display: none;">
                                 <h4
                                     style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
-                                    AI Twin Representation Synthesis</h4>
+                                    Your Twin, Your Representative</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Based on your NLP assessment, the platform compiles your digital representative. The
-                                    system uses background generative networks to build customized 3D vector avatar
-                                    graphics and behavioral templates describing your archetype.</p>
+                                    Based on your answers, Konvo builds your digital representative. Your Twin is visualized by a gorgeous, unique visual avatar card that captures your aesthetic personality archetype.
+                                </p>
                                 <div
                                     style="background-color: rgba(79,70,229,0.04); border-left: 2px solid var(--accent-indigo); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Asynchronous: A background worker generates your profile avatar, notifying your
-                                    Sync Space through client-side WebSockets upon completion.
+                                    Instant: Your Twin is ready in seconds, carrying your core vibes into the matchmaking space.
                                 </div>
                             </div>
 
                             <div id="guide-locking" class="guide-content-pane hidden" style="display: none;">
                                 <h4
                                     style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
-                                    Double-Lock Security & Mutual Consent</h4>
+                                    Mutual Vibe Approval</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Safety and consent are paramount. To prevent arbitrary interactions and spam, every
-                                    feature operates on a mutual approval basis. When your twin matches with someone,
-                                    compatibility simulated date logs are generated for review.</p>
+                                    No unsolicited messages or spam. When your Twin finds a potential match, it simulates a date in a virtual space. Both humans review the simulated date logs first and must approve before direct contact is possible.
+                                </p>
                                 <div
                                     style="background-color: rgba(217,119,6,0.04); border-left: 2px solid var(--accent-amber); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Locked: Both direct chat and the interactive 3D virtual dates start as LOCKED. You
-                                    must click "Approve Simulated Date" before features are unlocked.
+                                    Control: You are always in control. Safe, private, and 100% consent-based.
                                 </div>
                             </div>
 
                             <div id="guide-virtual" class="guide-content-pane hidden" style="display: none;">
                                 <h4
                                     style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
-                                    Interactive 3D Virtual Dates Scenario Engine</h4>
+                                    Cozy Virtual Dates</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Once both nodes lock in their ready status, the 3D full-screen interactive story
-                                    engine becomes active. You and your match can enter WebGL environments (Rooftop,
-                                    Cafe, Forest, Gallery) and go through simulated scenarios, answering questions and
-                                    building affinity.</p>
+                                    Go on a virtual date together! Explore cozy virtual settings like a cyberpunk diner or a quiet zen garden. You can chat, play games, and check the chemistry before committing to a real-life meeting.
+                                </p>
                                 <div
                                     style="background-color: rgba(6,182,212,0.04); border-left: 2px solid var(--accent-cyan); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Interactive: Choose dialogue options and prompts to see real-time shifts in your
-                                    "Date Vibe" metrics meter.
+                                    Interactive: A fun, zero-pressure way to see if your vibes align in real-time.
                                 </div>
                             </div>
 
                             <div id="guide-chat" class="guide-content-pane hidden" style="display: none;">
                                 <h4
                                     style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-teal); margin-bottom: 0.75rem;">
-                                    Secure Cryptographic Direct Human Chat</h4>
+                                    Safe Connection</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    After mutual human approval of simulated logs is established, a secure communication
-                                    tunnel opens. You can now chat directly with your match. All messages are encrypted
-                                    in transit and at rest using AES-256-GCM.</p>
+                                    Once you both approve, a secure direct chat opens. You can start talking with absolute confidence. Your actual location is never shared, and all conversations are kept entirely private between you two.
+                                </p>
                                 <div
                                     style="background-color: rgba(16,185,129,0.04); border-left: 2px solid var(--success); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
-                                    Privacy: Conversations are end-to-end encrypted. Even platform administrators cannot
-                                    decrypt your message histories.
+                                    Privacy: Secure, direct, and completely spam-free connection.
                                 </div>
                             </div>
                         </div>
@@ -640,132 +659,7 @@
             </section>
         </div>
 
-        <!-- Tab Content: System Guide -->
-        <div id="landing-guide" class="landing-tab-content hidden" style="display: none;">
-            <section id="guide" class="landing-section"
-                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
-                <div class="section-header" style="margin-bottom: 2.5rem;">
-                    <span class="section-tag" style="color: var(--accent-teal);">SYSTEM COMMAND PROTOCOL</span>
-                    <h2 class="section-title">Incubation And Connection Guide</h2>
-                    <p class="section-desc">Unlock authentic connections by following the structured calibration phases.
-                        Protect your digital presence while representatives clear the path.</p>
-                </div>
 
-                <div class="problem-grid">
-                    <div class="problem-card"
-                        style="border-color: rgba(13, 148, 136, 0.2); background: linear-gradient(180deg, rgba(13, 148, 136, 0.02) 0%, transparent 100%);">
-                        <span class="section-tag" style="color: var(--accent-teal);">PHASE 01</span>
-                        <h3>Mind Incubation</h3>
-                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            Begin by seeding your behavior parameters. The onboarding calibration maps your
-                            communication styles, values, and humor. Detailed descriptions feed the semantic parsing
-                            engine to build your coordinate representative.
-                        </p>
-                    </div>
-
-                    <div class="problem-card"
-                        style="border-color: rgba(99, 102, 241, 0.2); background: linear-gradient(180deg, rgba(99, 102, 241, 0.02) 0%, transparent 100%);">
-                        <span class="section-tag" style="color: var(--accent-indigo);">PHASE 02</span>
-                        <h3>Twin Synthesis</h3>
-                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            The network compiles your digital twin representation in secure background layers. An
-                            autonomous representative is initialized, complete with custom vector visuals describing
-                            your unique personality archetype.
-                        </p>
-                    </div>
-
-                    <div class="problem-card"
-                        style="border-color: rgba(245, 158, 11, 0.2); background: linear-gradient(180deg, rgba(245, 158, 11, 0.02) 0%, transparent 100%);">
-                        <span class="section-tag" style="color: var(--accent-amber);">PHASE 03</span>
-                        <h3>Sandbox Interaction</h3>
-                        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-                            Representatives discover matching nodes and converse inside secure isolated sandboxes. They
-                            pre-run dialogues to evaluate synergy. A comprehensive simulation report details
-                            conversational harmony.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="pipeline-container" style="margin-top: 3rem;">
-                    <div class="pipeline-step">
-                        <div class="pipeline-num">04</div>
-                        <div class="pipeline-text">
-                            <h3 style="font-size: 1.25rem; font-weight: 600; margin-top: 0;">The Double Lock Gateway
-                            </h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
-                                Mutual consent remains a hard rule. Review simulated conversation transcripts. To clear
-                                the communication path, both searchers must approve the reports and lock in their ready
-                                signals.
-                            </p>
-                        </div>
-                        <div class="pipeline-meta" style="color: var(--accent-amber);">CONSENT SYNCED</div>
-                    </div>
-
-                    <div class="pipeline-step">
-                        <div class="pipeline-num">05</div>
-                        <div class="pipeline-text">
-                            <h3 style="font-size: 1.25rem; font-weight: 600; margin-top: 0;">Direct Cognitive Sync</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
-                                A cryptographic direct channel unlocks. Humans converse over fully encrypted tunnels,
-                                enjoying genuine alignment without superficial games or small talk fatigue.
-                            </p>
-                        </div>
-                        <div class="pipeline-meta" style="color: var(--accent-teal);">SECURE CONNECTION</div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- Tab Content: About Us -->
-        <div id="landing-about" class="landing-tab-content hidden" style="display: none;">
-            <section id="about" class="landing-section"
-                style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
-                <div class="section-header" style="margin-bottom: 2.5rem;">
-                    <span class="section-tag" style="color: var(--accent-amber);">Incubator Mandate</span>
-                    <h2 class="section-title">The Konvo Philosophy</h2>
-                    <p class="section-desc">Designed by cognitive scientists, social psychologists, and security
-                        architects to restore intention to digital social discovery.</p>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;" class="grid-2col-responsive">
-                    <div>
-                        <h4
-                            style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">
-                            The Human Attention Crisis</h4>
-                        <p
-                            style="font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                            Swiping platforms treat humans as commodities, using variable-ratio reward schedules to
-                            maximize screen time rather than connection. The result is small-talk fatigue, burnout, and
-                            shallow interactions.
-                        </p>
-                        <p style="font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary);">
-                            We believe connection should be deliberate. By delegating the initial discovery phase to
-                            secure, personalized AI Twin representations, we protect human attention and isolate it for
-                            meaningful interactions.
-                        </p>
-                    </div>
-                    <div>
-                        <h4
-                            style="font-size: 1.2rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 1rem;">
-                            Our Three Mandates</h4>
-                        <ul
-                            style="font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1rem;">
-                            <li style="border-left: 2px solid var(--accent-teal); padding-left: 1rem;">
-                                <strong>Sovereign Representation:</strong> Your Twin is constructed solely from
-                                calibrations you approve. We do not sell or leak behavioral parameters.
-                            </li>
-                            <li style="border-left: 2px solid var(--accent-indigo); padding-left: 1rem;">
-                                <strong>Contextual Security:</strong> Geolocation coordinates use approximate postal
-                                postal zones (DIGIPIN). Dialogues are sandbox isolated.
-                            </li>
-                            <li style="border-left: 2px solid var(--accent-amber); padding-left: 1rem;">
-                                <strong>Intentional Connection:</strong> Direct human communication is strictly locked
-                                until both users review simulation logs and approve.
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
 
         <!-- Tab Content: Security -->
         <div id="landing-security" class="landing-tab-content hidden" style="display: none;">
@@ -783,31 +677,28 @@
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
                             <h4
                                 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
-                                1. Approximate Coordinates (DIGIPIN)</h4>
+                                1. Approximate Neighborhoods (DIGIPIN)</h4>
                             <p
                                 style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Real physical locations are never processed. We map coordinates using approximate post
-                                office grid areas.
+                                We never ask for or track your exact location. Your profile is matched using approximate neighborhood grid zones to keep your personal address completely private.
                             </p>
                         </div>
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
                             <h4
                                 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
-                                2. Cryptographic OTP Verification</h4>
+                                2. Verified Profiles</h4>
                             <p
                                 style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Every active profile maps to verified device identifiers through encrypted OTP
-                                challenges.
+                                Every account is verified through a one-time code sent to your mobile device, keeping the network completely free of fake profiles, bots, and catfishers.
                             </p>
                         </div>
                         <div class="card security-pillar-card" style="margin-bottom: 0; padding: 1.25rem;">
                             <h4
                                 style="font-size: 1rem; font-family: var(--font-mono); color: var(--text-primary); text-transform: uppercase;">
-                                3. Explainability Audit Ledger</h4>
+                                3. Simulated Chat Reviews</h4>
                             <p
                                 style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin-top: 0.25rem;">
-                                Twins operate under direct limits. An auditable sandbox log outlines every automated
-                                interaction.
+                                You hold the keys. Before unlocking any chat, you can review the simulated conversation history to understand exactly why your Twin matched with them.
                             </p>
                         </div>
                     </div>
@@ -816,25 +707,21 @@
                         style="padding: 1.75rem; background-color: var(--bg-card); border-color: var(--border-color); margin-bottom: 0; height: 100%;">
                         <h4
                             style="font-family: var(--font-display); font-size: 1.15rem; color: var(--text-primary); margin-bottom: 1rem;">
-                            Security Statement & Mandate</h4>
+                            Safety & Privacy Mandate</h4>
                         <p
                             style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            To protect human connection, Konvo operates on a zero-exposure data mandate. Calibrations
-                            are secured by AES-256-GCM encryption. Sandboxed matches run inside secure container
-                            boundaries that only exchange compatibility synergy scores, never exposing raw responses or
-                            private identities.
+                            To protect your peace of mind, Konvo operates on a zero-exposure data policy. Your profile calibrations and answers are encrypted. Match simulations run in secure, private spaces that only share vibe scores, never exposing raw answers or your private identity until you both approve.
                         </p>
                         <p
                             style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
-                            Authentication mechanisms use rotating session tokens, strict CORS parameters, and secure
-                            cryptographic hashing. Rate-limit blocks prevent dictionary scanning.
+                            Authentication mechanisms use industry-standard security protocols to block dictionary scanning and automated scraping, ensuring your dating experience remains authentic and protected.
                         </p>
                         <p
                             style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
                             Verify configuration parameters inside the public configuration file at <a
                                 href="/security.txt"
                                 style="color: var(--accent-teal); text-decoration: underline;">security.txt</a> or
-                            contact system administrators.
+                            contact our support team.
                         </p>
                     </div>
                 </div>
@@ -1198,13 +1085,7 @@
                         style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.25rem;">
                         Platform</h5>
                     <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#how-it-works" style="font-size: 0.85rem; color: var(--text-secondary);">How It
-                                Works</a></li>
-                        <li><a href="#guide" class="landing-tab-btn" data-tab="landing-guide"
-                                style="font-size: 0.85rem; color: var(--text-secondary);">System Guide</a>
-                        </li>
-                        <li><a href="#about" class="landing-tab-btn" data-tab="landing-about"
-                                style="font-size: 0.85rem; color: var(--text-secondary);">About Us</a></li>
+                        <li><a href="#how-it-works" style="font-size: 0.85rem; color: var(--text-secondary);">How It Works</a></li>
                         <li><a href="/blog" style="font-size: 0.85rem; color: var(--text-secondary);">Insights Blog</a>
                         </li>
                         <li><a href="/login?register=true"
@@ -1242,8 +1123,7 @@
                         <li><a href="/pages/cookie-policy.html"
                                 onclick="if(window.konvoShowCookieSettings) { window.konvoShowCookieSettings(); } return false;"
                                 style="font-size: 0.85rem; color: var(--text-secondary);">Cookie Settings</a></li>
-                        <li><a href="/hall-of-fame" style="font-size: 0.85rem; color: var(--text-secondary);">Hall of
-                                Fame</a></li>
+
                         <li><a href="#" onclick="alert('System Status: All gateway microservices are operational.')"
                                 style="font-size: 0.85rem; color: var(--accent-teal);">● Systems: Operational</a></li>
                     </ul>
@@ -1311,6 +1191,41 @@
             initCookieConsent();
             initUserGuideTabs();
             initDemoModal();
+
+            // Mobile menu drawer toggle
+            const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
+            const mobileMenuDrawer = document.querySelector(".mobile-menu-drawer");
+            const mobileMenuClose = document.querySelector(".mobile-menu-close");
+            const mobileMenuBackdrop = document.querySelector(".mobile-menu-backdrop");
+            const mobileNavLinks = document.querySelectorAll(".mobile-menu-drawer a");
+
+            if (mobileMenuToggle && mobileMenuDrawer) {
+                mobileMenuToggle.addEventListener("click", () => {
+                    mobileMenuDrawer.classList.add("open");
+                    if (mobileMenuBackdrop) mobileMenuBackdrop.style.display = "block";
+                });
+            }
+
+            const closeMenu = () => {
+                if (mobileMenuDrawer) mobileMenuDrawer.classList.remove("open");
+                if (mobileMenuBackdrop) mobileMenuBackdrop.style.display = "none";
+            };
+
+            if (mobileMenuClose) mobileMenuClose.addEventListener("click", closeMenu);
+            if (mobileMenuBackdrop) mobileMenuBackdrop.addEventListener("click", closeMenu);
+            mobileNavLinks.forEach(link => link.addEventListener("click", closeMenu));
+
+            // Bind theme toggle buttons
+            const themeToggleBtns = document.querySelectorAll("#btn-theme-toggle, #btn-theme-toggle-mobile");
+            themeToggleBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    if (window.ThemeManager) {
+                        const currentTheme = window.ThemeManager.getTheme();
+                        const newTheme = currentTheme === "dark" ? "light" : "dark";
+                        window.ThemeManager.setTheme(newTheme);
+                    }
+                });
+            });
 
             // Trigger stat counters
             if (typeof animateStatCounters === 'function') {

@@ -21,6 +21,10 @@ import { initLandingPage, initAgentLivePreview, initCookieConsent, initUserGuide
 import { initAuthPage } from '/src/features/auth/auth.js?v=2';
 import { setupModalClosers, drainLegacyModalQueue } from '/src/components/modal.js';
 
+// ─── Observability & Analytics (lazy, optional) ───────────────────────────
+import { initErrorTracking, captureError, setErrorUser } from '/src/services/error-tracking.js';
+import { identifyUser, trackPageView, resetAnalytics } from '/src/services/analytics.js';
+
 // ─── Register SPA page initializers ──────────────────────────────────
 registerPageInit('discover', () => {
     initSwipePage('swipe-discovery-box');
@@ -73,13 +77,21 @@ async function checkAuth() {
         if (currentUser) {
             setAuth(token, currentUser);
             updateSidebarUser(currentUser);
+
+            // ── Identify user in analytics & error tracking ───────────────────
+            try {
+                await identifyUser(currentUser.id, currentUser);
+                setErrorUser(currentUser);
+            } catch (_) {} // Never let tracking break auth
+
             if (isAuthPage) {
                 window.location.href = '/';
             }
             return true;
         }
     } catch (e) {
-        console.error("[Auth] checkAuth failed:", e);
+        console.error('[Auth] checkAuth failed:', e);
+        try { captureError(e, { feature: 'auth', action: 'checkAuth' }); } catch (_) {}
         clearAuth();
         if (!isAuthPage && !isMainPage) {
             window.location.href = '/login';
@@ -88,8 +100,11 @@ async function checkAuth() {
     return false;
 }
 
-// ─── Bootstrap ─────────────────────────────────────────────────────
+// ─── Bootstrap ────────────────────────────────────────────────────────
 async function bootKonvo() {
+    // 0. Initialize error tracking (first — captures all subsequent errors)
+    try { await initErrorTracking(); } catch (_) {}
+
     // 1. Initialize modal system (must be before any modal can open)
     setupModalClosers();
     drainLegacyModalQueue();

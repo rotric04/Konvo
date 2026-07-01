@@ -33,7 +33,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # ─── Search Engine ────────────────────────────────────────
+  # ─── Search Engine ─────────────────────────────────────────
   meilisearch:
     image: getmeili/meilisearch:latest
     container_name: konvo-meilisearch
@@ -50,6 +50,27 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
+
+  # ─── Typesense (optional — uncomment for local self-hosted Typesense) ────────
+  # Alternatively, use Typesense Cloud (https://cloud.typesense.org)
+  # and set TYPESENSE_URL + TYPESENSE_API_KEY in .env
+  # typesense:
+  #   image: typesense/typesense:26.0
+  #   container_name: konvo-typesense
+  #   ports:
+  #     - "8108:8108"
+  #   environment:
+  #     TYPESENSE_DATA_DIR: /data
+  #     TYPESENSE_API_KEY: ${TYPESENSE_API_KEY:-konvo_ts_dev_key}
+  #     TYPESENSE_ENABLE_CORS: "true"
+  #   volumes:
+  #     - typesense_data:/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -sf http://localhost:8108/health || exit 1"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 15s
 
   # ─── Backend Microservices ────────────────────────────────
   auth-service:
@@ -84,6 +105,13 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      # Cloudinary CDN (optional — avatar upload uses base64 fallback without these)
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET:-}
+      # Typesense (optional — search indexing fails silently without this)
+      - TYPESENSE_URL=${TYPESENSE_URL:-http://localhost:8108}
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
@@ -156,6 +184,14 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      # Perspective API (optional — content passes through without this)
+      - PERSPECTIVE_API_KEY=${PERSPECTIVE_API_KEY:-}
+      - TOXICITY_BLOCK_THRESHOLD=${TOXICITY_BLOCK_THRESHOLD:-0.85}
+      - TOXICITY_WARN_THRESHOLD=${TOXICITY_WARN_THRESHOLD:-0.70}
+      # Cloudinary (optional — chat images use base64 fallback without this)
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET:-}
     depends_on:
       db:
         condition: service_healthy
@@ -188,11 +224,17 @@ services:
     environment:
       - PYTHONPATH=/app
       - MEILISEARCH_URL=http://meilisearch:7700
+      # Typesense (primary search — Tier 1). Falls back to Meilisearch without this.
+      - TYPESENSE_URL=${TYPESENSE_URL:-http://typesense:8108}
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY:-}
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       db:
         condition: service_healthy
       meilisearch:
         condition: service_started
+      redis:
+        condition: service_healthy
 
   community-service:
     build: .
@@ -205,6 +247,11 @@ services:
     environment:
       - PYTHONPATH=/app
       - REDIS_URL=redis://redis:6379/0
+      # Typesense (optional — indexing fails silently without this)
+      - TYPESENSE_URL=${TYPESENSE_URL:-http://typesense:8108}
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY:-}
+      # Perspective API (optional — posts pass through without this)
+      - PERSPECTIVE_API_KEY=${PERSPECTIVE_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy
@@ -300,3 +347,4 @@ volumes:
   postgres_data:
   redis_data:
   meilisearch_data:
+  # typesense_data:  # Uncomment if using self-hosted Typesense container

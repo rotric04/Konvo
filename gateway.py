@@ -40,9 +40,12 @@ if SENTRY_DSN:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[FastApiIntegration()],
-        traces_sample_rate=0.1
+        traces_sample_rate=0.2,
+        environment=os.getenv("ENV", "development"),
+        release=os.getenv("APP_VERSION", "1.0.0"),
+        send_default_pii=False,  # GDPR: no PII in error reports
     )
-    print("[GATEWAY] Sentry logging initialized.")
+    print("[GATEWAY] Sentry error monitoring initialized.")
 
 from websocket_manager import manager
 
@@ -147,11 +150,29 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers["Content-Security-Policy"] = (
             "default-src 'self' *; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com https://static.cloudflareinsights.com https://challenges.cloudflare.com blob:; "
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdnjs.cloudflare.com; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' "
+            "https://unpkg.com https://cdnjs.cloudflare.com "
+            "https://static.cloudflareinsights.com https://challenges.cloudflare.com "
+            "https://cdn.jsdelivr.net https://js.sentry-cdn.com "
+            "https://browser.sentry-cdn.com https://assets.sentry-cdn.com blob:; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com "
+            "https://unpkg.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob: https://unpkg.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
-            "connect-src 'self' ws: wss: https://formsubmit.co https://unpkg.com https://konvo-u5qb.onrender.com https://nominatim.openstreetmap.org https://challenges.cloudflare.com https://*.tile.openstreetmap.org http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com http://basemaps.cartocdn.com https://basemaps.cartocdn.com; "
+            "img-src 'self' data: blob: "
+            "https://unpkg.com https://*.tile.openstreetmap.org "
+            "http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com "
+            "http://basemaps.cartocdn.com https://basemaps.cartocdn.com "
+            "https://res.cloudinary.com; "
+            "connect-src 'self' ws: wss: "
+            "https://formsubmit.co https://unpkg.com "
+            "https://konvo-u5qb.onrender.com "
+            "https://nominatim.openstreetmap.org "
+            "https://challenges.cloudflare.com "
+            "https://*.tile.openstreetmap.org "
+            "http://*.basemaps.cartocdn.com https://*.basemaps.cartocdn.com "
+            "http://basemaps.cartocdn.com https://basemaps.cartocdn.com "
+            "https://app.posthog.com https://eu.posthog.com "
+            "https://*.ingest.sentry.io https://sentry.io; "
             "frame-src 'self' https://challenges.cloudflare.com; "
             "worker-src 'self' blob:; "
             "child-src 'self' blob: https://challenges.cloudflare.com; "
@@ -275,24 +296,51 @@ def health_check(db: Session = Depends(get_db)):
         "status": "healthy",
         "database": "disconnected",
         "redis": "disconnected",
+        "typesense": "disabled",
+        "cloudinary": "disabled",
+        "perspective": "disabled",
         "env": os.getenv("ENV", "development")
     }
-    
-    # 1. Test Supabase Database connection
+
+    # 1. Test database connection
     try:
         db.execute(text("SELECT 1"))
         health_status["database"] = "connected"
     except Exception as e:
-        health_status["status"] = "unhealthy"
+        health_status["status"] = "degraded"
         health_status["database_error"] = str(e)
-        
+
     # 2. Test Redis connection
     if redis_client.connected:
         health_status["redis"] = "connected"
     else:
-        health_status["status"] = "unhealthy"
-        health_status["redis_error"] = "Redis client not connected (using local in-memory fallback cache)"
-        
+        health_status["redis"] = "fallback"
+        health_status["redis_note"] = "Using in-memory fallback cache"
+
+    # 3. Test Typesense (optional)
+    try:
+        from typesense_client import typesense_client
+        if typesense_client.enabled:
+            health_status["typesense"] = "connected" if typesense_client.is_available() else "unreachable"
+        else:
+            health_status["typesense"] = "disabled (TYPESENSE_API_KEY not set)"
+    except ImportError:
+        health_status["typesense"] = "not installed"
+
+    # 4. Check Cloudinary (optional)
+    try:
+        from cloudinary_client import is_available as cld_available
+        health_status["cloudinary"] = "configured" if cld_available() else "disabled (credentials not set)"
+    except ImportError:
+        health_status["cloudinary"] = "not installed"
+
+    # 5. Check Perspective API (optional)
+    try:
+        from perspective_client import is_available as persp_available
+        health_status["perspective"] = "configured" if persp_available() else "disabled (API key not set)"
+    except ImportError:
+        health_status["perspective"] = "not installed"
+
     return health_status
 
 

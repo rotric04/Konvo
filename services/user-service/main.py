@@ -33,6 +33,22 @@ from hashlib import sha256
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
+# ─── Optional service integrations (feature-flagged) ──────────────────────────
+try:
+    from cloudinary_client import cloudinary_client as _cloudinary
+except ImportError:
+    _cloudinary = None
+
+try:
+    from blurhash_helper import process_image as _process_image
+except ImportError:
+    _process_image = None
+
+try:
+    from typesense_client import typesense_client as _typesense
+except ImportError:
+    _typesense = None
+
 app = FastAPI(title="User Profile Service", version="1.0.0")
 
 @app.get("/api/users/me", response_model=schemas.UserResponse)
@@ -156,25 +172,25 @@ def upload_avatar(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    from fastapi import UploadFile, File, HTTPException
+    """Upload user avatar. Uses Cloudinary CDN when configured, falls back to base64."""
     from PIL import Image
     import io
-    import uuid
-    
-    # Enforce file format checks (.png, .jpg, .jpeg)
-    filename_lower = file.filename.lower()
-    if not (filename_lower.endswith('.png') or filename_lower.endswith('.jpg') or filename_lower.endswith('.jpeg')):
+
+    # Validate file extension
+    filename_lower = (file.filename or "").lower()
+    if not any(filename_lower.endswith(ext) for ext in ('.png', '.jpg', '.jpeg', '.webp')):
         raise HTTPException(
             status_code=400,
-            detail="Invalid file extension. Only .png, .jpg, and .jpeg are allowed."
+            detail="Invalid file extension. Only .png, .jpg, .jpeg, and .webp are allowed."
         )
-    
-    if file.content_type not in ["image/png", "image/jpeg", "image/jpg"]:
+
+    if file.content_type not in ["image/png", "image/jpeg", "image/jpg", "image/webp"]:
         raise HTTPException(
             status_code=400,
-            detail="Invalid content type. Only image/png, image/jpeg, or image/jpg are allowed."
+            detail="Invalid content type. Only PNG, JPEG, and WebP images are allowed."
         )
-    
+
+    # Ensure user profile exists
     prof = current_user.profile
     if not prof:
         prof = models.UserProfile(
@@ -196,43 +212,98 @@ def upload_avatar(
 
     try:
         image_bytes = file.file.read()
+
+        # Validate image can be opened
         try:
             img = Image.open(io.BytesIO(image_bytes))
-        except Exception as e:
-            raise HTTPException(status_code=400, detail="Invalid image file format")
-            
-        # Center crop to square
-        width, height = img.size
-        min_dim = min(width, height)
-        left = (width - min_dim) // 2
-        top = (height - min_dim) // 2
-        right = left + min_dim
-        bottom = top + min_dim
-        
-        img_cropped = img.crop((left, top, right, bottom))
-        
-        # Resize to 512x512
-        img_resized = img_cropped.resize((512, 512), Image.Resampling.LANCZOS)
-        
-        # Convert to RGB or RGBA depending on transparency
-        if img_resized.mode in ("RGBA", "LA") or (img_resized.mode == "P" and "transparency" in img_resized.info):
-            img_final = img_resized.convert("RGBA")
-        else:
-            img_final = img_resized.convert("RGB")
-            
-        import base64
-        
-        buffer = io.BytesIO()
-        img_final.save(buffer, format="WEBP", quality=90)
-        webp_bytes = buffer.getvalue()
-        base64_str = base64.b64encode(webp_bytes).decode("utf-8")
-        avatar_url = f"data:image/webp;base64,{base64_str}"
-        
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid or corrupted image file.")
+
+        # Enforce max 10MB
+        if len(image_bytes) > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="Image too large. Maximum size is 10MB.")
+
+        # ── Generate BlurHash placeholder (before resizing for better accuracy) ──
+        blurhash_str = None
+        dominant_color = None
+        if _process_image:
+            try:
+                blurhash_str, dominant_color = _process_image(image_bytes)
+            except Exception:
+                pass  # Non-critical — fall through without placeholder
+
+        # ── Try Cloudinary upload (Tier 1) ────────────────────────────────────
+        avatar_url = None
+        cloudinary_public_id = None
+
+        if _cloudinary and _cloudinary.is_available():
+            cdn_result = _cloudinary.upload_avatar(image_bytes, current_user.id)
+            if cdn_result:
+                avatar_url = cdn_result["secure_url"]
+                cloudinary_public_id = cdn_result.get("public_id")
+                print(f"[AVATAR] Uploaded to Cloudinary CDN: {avatar_url}")
+
+        # ── Fallback: local base64 processing (Tier 2) ────────────────────────
+        if not avatar_url:
+            # Center crop to square
+            width, height = img.size
+            min_dim = min(width, height)
+            left   = (width  - min_dim) // 2
+            top    = (height - min_dim) // 2
+            img_cropped = img.crop((left, top, left + min_dim, top + min_dim))
+
+            # Resize to 512×512
+            img_resized = img_cropped.resize((512, 512), Image.Resampling.LANCZOS)
+
+            # Convert to safe mode
+            if img_resized.mode in ("RGBA", "LA") or (
+                img_resized.mode == "P" and "transparency" in img_resized.info
+            ):
+                img_final = img_resized.convert("RGBA")
+            else:
+                img_final = img_resized.convert("RGB")
+
+            buffer = io.BytesIO()
+            img_final.save(buffer, format="WEBP", quality=90)
+            webp_bytes = buffer.getvalue()
+            b64 = base64.b64encode(webp_bytes).decode("utf-8")
+            avatar_url = f"data:image/webp;base64,{b64}"
+            print(f"[AVATAR] Cloudinary unavailable — stored as base64 ({len(b64)//1024}KB)")
+
+        # ── Persist to DB ─────────────────────────────────────────────────────
         prof.avatar_url = avatar_url
         db.commit()
-        
-        return {"success": True, "avatar_url": avatar_url}
-        
+
+        # ── Invalidate user cache ─────────────────────────────────────────────
+        redis_client.cache_invalidate(f"user:{current_user.id}")
+
+        # ── Update Typesense index ────────────────────────────────────────────
+        if _typesense and _typesense.is_available():
+            try:
+                _typesense.upsert_document("users", {
+                    "id": str(current_user.id),
+                    "display_name": prof.display_name or "",
+                    "konvo_id": current_user.konvo_id or "",
+                    "bio": prof.bio or "",
+                    "mbti_type": prof.mbti_type or "",
+                    "gender": prof.gender or "",
+                    "interests": prof.interests or [],
+                    "style": (
+                        current_user.fingerprint.communication_style
+                        if current_user.fingerprint else "Analytical"
+                    ),
+                })
+            except Exception:
+                pass  # Search indexing failure must never break the upload
+
+        return {
+            "success": True,
+            "avatar_url": avatar_url,
+            "cdn": bool(cloudinary_public_id),
+            "blurhash": blurhash_str,
+            "dominant_color": dominant_color,
+        }
+
     except HTTPException as he:
         from fastapi.responses import JSONResponse
         return JSONResponse(status_code=he.status_code, content={"detail": he.detail})
@@ -249,14 +320,25 @@ def delete_avatar(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Delete user's avatar profile image"""
+    """Delete user's avatar profile image and remove from Cloudinary CDN if applicable."""
     prof = current_user.profile
     if not prof:
         raise HTTPException(status_code=404, detail="User profile not found")
-    
+
     try:
+        # Delete from Cloudinary CDN if the URL is a Cloudinary URL
+        existing_url = prof.avatar_url or ""
+        if _cloudinary and _cloudinary.is_available() and "cloudinary.com" in existing_url:
+            # Derive public_id from the URL pattern: .../konvo/avatars/user_{id}
+            cloudinary_public_id = f"konvo/avatars/user_{current_user.id}"
+            _cloudinary.delete_image(cloudinary_public_id)
+
         prof.avatar_url = None
         db.commit()
+
+        # Invalidate user cache
+        redis_client.cache_invalidate(f"user:{current_user.id}")
+
         return {"success": True, "message": "Avatar deleted successfully"}
     except Exception as e:
         db.rollback()

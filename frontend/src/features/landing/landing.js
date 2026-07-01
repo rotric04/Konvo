@@ -303,6 +303,9 @@ export function initLandingPage() {
     if (hash) {
         navigateToLandingSection(hash);
     }
+
+    // 6. Launch live date simulator grid console
+    initDateSimulator();
 }
 
 // ─── Feedback Submission Helpers ──────────────────────────────────────────────────
@@ -463,7 +466,7 @@ export function initDemoModal() {
                 <div style="
                     background: ${isA ? 'rgba(13,148,136,0.12)' : 'rgba(79,70,229,0.12)'};
                     border: 1px solid ${isA ? 'rgba(13,148,136,0.3)' : 'rgba(79,70,229,0.3)'};
-                    border-radius: ${isA ? '4px 16px 16px 16px' : '16px 4px 16px 16px'};
+                    border-radius: 0px;
                     padding: 0.6rem 0.9rem;
                     font-size: 0.82rem;
                     line-height: 1.5;
@@ -518,6 +521,232 @@ export function initDemoModal() {
     }
 }
 
+// ─── Live Date Simulator Grid Console Engine ─────────────────────────────────────
+export function initDateSimulator() {
+    const canvas = document.getElementById("sim-canvas");
+    const logs = document.getElementById("sim-chat-logs");
+    const gauge = document.getElementById("sim-gauge");
+    const locationEl = document.getElementById("sim-location");
+    const overlay = document.getElementById("sim-overlay");
+    const rejectBtn = document.getElementById("sim-btn-reject");
+    const approveBtn = document.getElementById("sim-btn-approve");
+
+    if (!canvas || !logs) return;
+
+    // 1. Dialect toggles inside landing page
+    const dialectButtons = document.querySelectorAll(".dialect-btn");
+    dialectButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            dialectButtons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const dialect = btn.dataset.dialect;
+            const humanBlock = document.getElementById("dialect-block-human");
+            const techBlock = document.getElementById("dialect-block-tech");
+
+            if (dialect === "tech") {
+                humanBlock?.classList.remove("active");
+                techBlock?.classList.add("active");
+            } else {
+                techBlock?.classList.remove("active");
+                humanBlock?.classList.add("active");
+            }
+        });
+    });
+
+    // 2. Canvas Particle Animation
+    const ctx = canvas.getContext("2d");
+    let width = (canvas.width = canvas.offsetWidth);
+    let height = (canvas.height = canvas.offsetHeight);
+
+    window.addEventListener("resize", () => {
+        if (canvas.offsetWidth) {
+            width = canvas.width = canvas.offsetWidth;
+            height = canvas.height = canvas.offsetHeight;
+        }
+    });
+
+    const particles = [];
+    const particleCount = 28;
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            r: Math.random() * 2 + 1
+        });
+    }
+
+    let angle = 0;
+    function animate() {
+        if (!document.getElementById("sim-canvas")) return; // Stop if page changed
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw deep tech network background
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < width; i += 20) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, height);
+            ctx.stroke();
+        }
+        for (let j = 0; j < height; j += 20) {
+            ctx.beginPath();
+            ctx.moveTo(0, j);
+            ctx.lineTo(width, j);
+            ctx.stroke();
+        }
+
+        // Draw connections
+        ctx.strokeStyle = "rgba(13, 148, 136, 0.1)";
+        for (let i = 0; i < particles.length; i++) {
+            const p1 = particles[i];
+            for (let j = i + 1; j < particles.length; j++) {
+                const p2 = particles[j];
+                const dx = p1.x - p2.x;
+                const dy = p1.y - p2.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 60) {
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // Draw particles
+        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+        particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0 || p.x > width) p.vx *= -1;
+            if (p.y < 0 || p.y > height) p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // Draw Aria & Orion nodes
+        const nodeA = { x: width * 0.25, y: height * 0.5 };
+        const nodeB = { x: width * 0.75, y: height * 0.5 };
+
+        // Pulse rings
+        angle += 0.05;
+        const pulse = Math.sin(angle) * 8 + 18;
+
+        ctx.strokeStyle = "rgba(13, 148, 136, 0.3)";
+        ctx.beginPath();
+        ctx.arc(nodeA.x, nodeA.y, pulse, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(6, 182, 212, 0.3)";
+        ctx.beginPath();
+        ctx.arc(nodeB.x, nodeB.y, pulse, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Node cores
+        ctx.fillStyle = "var(--accent-primary)";
+        ctx.beginPath();
+        ctx.arc(nodeA.x, nodeA.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "var(--accent-secondary)";
+        ctx.beginPath();
+        ctx.arc(nodeB.x, nodeB.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Connecting resonance line
+        ctx.strokeStyle = "var(--accent-warning)";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(nodeA.x, nodeA.y);
+        ctx.lineTo(nodeB.x, nodeB.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.lineWidth = 1;
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // 3. Conversation loop & Swipe Trigger
+    const conversation = [
+        { role: 'a', text: "Hey Orion! Just setting up our virtual garden date. How's your week going?", sync: 60, location: "Zen Garden" },
+        { role: 'b', text: "Hey Aria! Honestly, busy, but excited to chat. I see we both love coffee and rainy afternoons.", sync: 64, location: "Zen Garden" },
+        { role: 'a', text: "Yes! Also, I need someone who values good communication. I'm more of an active listener.", sync: 70, location: "Zen Garden" },
+        { role: 'b', text: "Same here. I prefer talking things out and keeping it real. No games, just honest vibes.", sync: 76, location: "Zen Garden" },
+        { role: 'a', text: "I love that. Let's head over to the cyberpunk diner area, it has a cool retro aesthetic.", sync: 80, location: "Cyberpunk Diner" },
+        { role: 'b', text: "Nice spot! By the way, are you more of a bookworm or an outdoor adventurer on weekends?", sync: 85, location: "Cyberpunk Diner" },
+        { role: 'a', text: "A mix of both! Sunday mornings at local bookstores, and hiking in the afternoon.", sync: 90, location: "Cyberpunk Diner" },
+        { role: 'b', text: "Perfect match. That's literally my dream weekend. Let's unlock our chat to talk for real!", sync: 94, location: "Cyberpunk Diner" }
+    ];
+
+    let stepIdx = 0;
+    let simTimeout = null;
+
+    function addMessage() {
+        if (!document.getElementById("sim-chat-logs")) return;
+        if (stepIdx >= conversation.length) {
+            // Show swiping validation card
+            overlay.classList.add("active");
+            return;
+        }
+
+        const msg = conversation[stepIdx++];
+        gauge.textContent = `VIBE: ${msg.sync}%`;
+        locationEl.textContent = msg.location;
+
+        const div = document.createElement("div");
+        div.className = `sim-msg msg-${msg.role}`;
+        div.innerHTML = `
+            <span class="sim-msg-sender">${msg.role === 'a' ? 'Aria' : 'Orion'}</span>
+            <div class="sim-msg-bubble">${msg.text}</div>
+        `;
+        logs.appendChild(div);
+        logs.scrollTop = logs.scrollHeight;
+
+        simTimeout = setTimeout(addMessage, 2200 + Math.random() * 600);
+    }
+
+    simTimeout = setTimeout(addMessage, 1000);
+
+    // 4. Overlays click handlers
+    rejectBtn.addEventListener("click", () => {
+        overlay.classList.remove("active");
+        logs.innerHTML = "";
+        stepIdx = 0;
+        gauge.textContent = "VIBE: --%";
+        locationEl.textContent = "Searching";
+        simTimeout = setTimeout(addMessage, 1500);
+    });
+
+    approveBtn.addEventListener("click", () => {
+        const title = document.getElementById("sim-overlay-title");
+        const desc = document.getElementById("sim-overlay-desc");
+        title.innerHTML = "🎉 Connection Unlocked!";
+        desc.innerHTML = "<span style='color: var(--accent-primary); font-weight: 600;'>Vibe Tunnel Established.</span><br>You can now chat directly with Orion! Head to the dashboard to begin.";
+        rejectBtn.style.display = "none";
+        approveBtn.style.display = "none";
+
+        setTimeout(() => {
+            overlay.classList.remove("active");
+            rejectBtn.style.display = "block";
+            approveBtn.style.display = "block";
+            title.textContent = "High Compatibility Detected";
+            desc.textContent = "Aria and Orion share a 94% vibe match. Connect in real life?";
+            logs.innerHTML = "";
+            stepIdx = 0;
+            gauge.textContent = "VIBE: --%";
+            locationEl.textContent = "Searching";
+            simTimeout = setTimeout(addMessage, 1500);
+        }, 5000);
+    });
+}
+
 // Make functions available globally for HTML event handlers
 window.toggleLandingTag = toggleLandingTag;
 window.setLandingSugRating = setLandingSugRating;
@@ -526,3 +755,4 @@ window.resetLandingFeedback = resetLandingFeedback;
 window.initLandingPage = initLandingPage;
 window.initAgentLivePreview = initAgentLivePreview;
 window.initDemoModal = initDemoModal;
+window.initDateSimulator = initDateSimulator;

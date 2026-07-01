@@ -19,8 +19,16 @@ Pillow==10.2.0
 celery[redis]==5.3.6
 flower==2.0.1
 
-# Search Engine
+# Search Engine (Meilisearch kept as fallback)
 meilisearch==0.31.0
+typesense==0.21.0
+
+# Cloud & Media — Cloudinary CDN, BlurHash placeholders
+cloudinary==1.40.0
+blurhash-python==1.2.1
+
+# Retry logic for external API calls
+tenacity==8.2.3
 
 # Rate Limiting
 slowapi==0.1.9
@@ -40,3 +48,4 @@ protobuf==4.25.3
 # Security Auditing (dev)
 pip-audit==2.7.3
 bandit==1.7.8
+

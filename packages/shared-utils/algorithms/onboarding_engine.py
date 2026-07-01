@@ -173,7 +173,7 @@ JSON Schema keys:
 - options: (list of objects with keys 'key' and 'text') Standard choices (A, B, C, D) with their options text. For 'open_ended' type, options must be empty/null.
 - transition_message: (string) The conversational feedback or intro transition message (e.g. 'Interesting.', 'Let's try another.').
 """
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
         headers = {"Content-Type": "application/json"}
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
@@ -313,7 +313,7 @@ JSON Schema keys:
 - emotional_profile: (string)
 - lifestyle_profile: (string)
 """
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
         headers = {"Content-Type": "application/json"}
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],

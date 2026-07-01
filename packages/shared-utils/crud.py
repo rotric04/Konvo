@@ -447,7 +447,7 @@ Keys:
 - role_type (str) (e.g., "The Strategist", "The Dreamer", "The Challenger", "The Companion", "The Builder", "The Explorer")
 """
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -565,7 +565,7 @@ def generate_avatar_via_gemini(role_type: str, display_name: str, mbti_type: str
         f"Do NOT wrap the response in markdown blocks. Return only raw JSON. Do not include outer markdown tags."
     )
     
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],

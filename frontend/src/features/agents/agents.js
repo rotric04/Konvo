@@ -14,6 +14,7 @@ export function initAgentsPage() {
 
     let activeTwin = null;
     let selectedSimId = null;
+    let cachedSims = [];
 
     if (simDetailBox) {
         simDetailBox.innerHTML = `
@@ -82,65 +83,83 @@ export function initAgentsPage() {
         if (!simHistoryList) return;
         try {
             const sims = await apiFetch('/api/agents/simulations');
-            simHistoryList.innerHTML = '';
-
-            if (!sims || sims.length === 0) {
-                simHistoryList.innerHTML = `<div style="color:var(--text-muted);font-style:italic;font-size:0.8rem;padding:1rem;">No simulations found. Swipe on matches to trigger agent interactions.</div>`;
-                return;
-            }
-
-            sims.forEach(sim => {
-                const item = document.createElement('div');
-                item.style.padding = '0.75rem 1rem';
-                item.style.border = '1px solid var(--border-color)';
-                item.style.borderRadius = '8px';
-                item.style.cursor = 'pointer';
-                item.style.transition = 'all 0.2s';
-                item.style.marginBottom = '0.5rem';
-                item.style.backgroundColor = selectedSimId === sim.id ? 'rgba(13, 148, 136, 0.08)' : 'rgba(255,255,255,0.01)';
-                if (selectedSimId === sim.id) {
-                    item.style.borderColor = 'var(--accent-teal)';
-                }
-
-                const currentUser = window.currentUser;
-                const isUserA = sim.user_a_id === currentUser?.id;
-                const myApp = isUserA ? sim.approval_user_a : sim.approval_user_b;
-                const partnerApp = isUserA ? sim.approval_user_b : sim.approval_user_a;
-
-                let appLabel = '';
-                if (myApp === 'approved' && partnerApp === 'approved') {
-                    appLabel = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-teal); border:1px solid rgba(13,148,136,0.3); padding:0.1rem 0.25rem; border-radius:3px; background:rgba(13,148,136,0.02);">✨ Unlocked</span>`;
-                } else {
-                    appLabel = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-amber); border:1px solid rgba(217,119,6,0.3); padding:0.1rem 0.25rem; border-radius:3px; background:rgba(217,119,6,0.02);">⚖ Reviewing</span>`;
-                }
-
-                item.innerHTML = `
-                    <div style="font-weight:600; font-size:0.82rem; color:var(--text-primary); display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
-                        <span>vs ${sim.partner_name}</span>
-                        ${appLabel}
-                    </div>
-                    <div style="font-size:0.7rem; color:var(--text-muted); display:flex; justify-content:space-between;">
-                        <span>Score: ${sim.compatibility_score}%</span>
-                        <span>Env: ${sim.environment}</span>
-                    </div>
-                `;
-
-                item.addEventListener('click', () => {
-                    selectedSimId = sim.id;
-                    document.querySelectorAll('#sim-history-list > div').forEach(el => {
-                        el.style.backgroundColor = 'rgba(255, 255, 255, 0.01)';
-                        el.style.borderColor = 'var(--border-color)';
-                    });
-                    item.style.backgroundColor = 'rgba(13, 148, 136, 0.08)';
-                    item.style.borderColor = 'var(--accent-teal)';
-                    renderSimulationDetails(sim);
-                });
-
-                simHistoryList.appendChild(item);
-            });
+            cachedSims = sims || [];
+            renderFilteredSimulations();
         } catch (e) {
             simHistoryList.innerHTML = `<div style="color:var(--accent-rose);font-size:0.8rem;">Load error: ${e.message}</div>`;
         }
+    }
+
+    function renderFilteredSimulations() {
+        if (!simHistoryList) return;
+        simHistoryList.innerHTML = '';
+        
+        const searchInput = document.getElementById('agent-sim-search');
+        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+        const filtered = cachedSims.filter(sim => {
+            const partnerName = sim.partner_name || '';
+            const env = sim.environment || '';
+            const score = sim.compatibility_score || '';
+            return partnerName.toLowerCase().includes(query) ||
+                   env.toLowerCase().includes(query) ||
+                   String(score).includes(query);
+        });
+
+        if (filtered.length === 0) {
+            simHistoryList.innerHTML = `<div style="color:var(--text-muted);font-style:italic;font-size:0.8rem;padding:1rem;">No matching simulations found.</div>`;
+            return;
+        }
+
+        filtered.forEach(sim => {
+            const item = document.createElement('div');
+            item.style.padding = '0.75rem 1rem';
+            item.style.border = '1px solid var(--border-color)';
+            item.style.borderRadius = '8px';
+            item.style.cursor = 'pointer';
+            item.style.transition = 'all 0.2s';
+            item.style.marginBottom = '0.5rem';
+            item.style.backgroundColor = selectedSimId === sim.id ? 'rgba(13, 148, 136, 0.08)' : 'rgba(255,255,255,0.01)';
+            if (selectedSimId === sim.id) {
+                item.style.borderColor = 'var(--accent-teal)';
+            }
+
+            const currentUser = window.currentUser;
+            const isUserA = sim.user_a_id === currentUser?.id;
+            const myApp = isUserA ? sim.approval_user_a : sim.approval_user_b;
+            const partnerApp = isUserA ? sim.approval_user_b : sim.approval_user_a;
+
+            let appLabel = '';
+            if (myApp === 'approved' && partnerApp === 'approved') {
+                appLabel = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-teal); border:1px solid rgba(13,148,136,0.3); padding:0.1rem 0.25rem; border-radius:3px; background:rgba(13,148,136,0.02);">✨ Unlocked</span>`;
+            } else {
+                appLabel = `<span style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent-amber); border:1px solid rgba(217,119,6,0.3); padding:0.1rem 0.25rem; border-radius:3px; background:rgba(217,119,6,0.02);">⚖ Reviewing</span>`;
+            }
+
+            item.innerHTML = `
+                <div style="font-weight:600; font-size:0.82rem; color:var(--text-primary); display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                    <span>vs ${sim.partner_name}</span>
+                    ${appLabel}
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+                    <span>Score: ${sim.compatibility_score}%</span>
+                    <span>Env: ${sim.environment}</span>
+                </div>
+            `;
+
+            item.addEventListener('click', () => {
+                selectedSimId = sim.id;
+                document.querySelectorAll('#sim-history-list > div').forEach(el => {
+                    el.style.backgroundColor = 'rgba(255, 255, 255, 0.01)';
+                    el.style.borderColor = 'var(--border-color)';
+                });
+                item.style.backgroundColor = 'rgba(13, 148, 136, 0.08)';
+                item.style.borderColor = 'var(--accent-teal)';
+                renderSimulationDetails(sim);
+            });
+
+            simHistoryList.appendChild(item);
+        });
     }
 
     function renderSimulationDetails(sim) {
@@ -429,6 +448,11 @@ export function initAgentsPage() {
         }
 
         setTimeout(runDialogAnimation, 1000);
+    }
+
+    const searchInput = document.getElementById('agent-sim-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', renderFilteredSimulations);
     }
 
     loadTwinAndSimulations();
