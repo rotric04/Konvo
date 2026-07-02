@@ -41,6 +41,46 @@
   ],
   "rewrites": [
     {
+      "source": "/auth",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/login",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/onboarding",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)(/.*)?",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/blog/:subpath*",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/blog",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/:page(feedback|admin_dashboard|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
+      "source": "/",
+      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "destination": "/security-verification.html"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://konvo-u5qb.onrender.com/api/:path*"
     },

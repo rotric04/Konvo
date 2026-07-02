@@ -167,6 +167,11 @@ def is_ip_in_ranges(ip_str: str, ranges: list) -> bool:
     return False
 
 def is_request_from_cloudflare(request: Request) -> bool:
+    # 1. Trust if request is proxied via Vercel (frontend deployment)
+    if request.headers.get("x-vercel-id") or request.headers.get("X-Vercel-Id"):
+        return True
+
+    # 2. Check if client IP is from Cloudflare edge IP ranges
     client_ip = request.client.host if request.client else None
     if not client_ip:
         return False
