@@ -420,7 +420,7 @@ async def verify_gate_captcha(request: Request):
                         response.set_cookie(
                             key="cf_clearance",
                             value="true",
-                            httponly=True,
+                            httponly=False,
                             samesite="lax",
                             secure=True,
                             max_age=86400  # 1 day
@@ -437,7 +437,7 @@ async def verify_gate_captcha(request: Request):
         response.set_cookie(
             key="cf_clearance",
             value="true",
-            httponly=True,
+            httponly=False,
             samesite="lax",
             secure=False,
             max_age=86400
@@ -460,7 +460,7 @@ async def verify_gate_captcha(request: Request):
                 response.set_cookie(
                     key="cf_clearance",
                     value="true",
-                    httponly=True,
+                    httponly=False,
                     samesite="lax",
                     secure=True,
                     max_age=86400  # 1 day clearance

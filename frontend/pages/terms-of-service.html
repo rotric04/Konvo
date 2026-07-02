@@ -3,6 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- Bot Protection Redirect -->
+    <script>
+        (function() {
+            var host = window.location.hostname;
+            var isLocal = host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".local");
+            if (isLocal) return;
+            if (!document.cookie.includes("cf_clearance=true")) {
+                window.location.href = "/security-verification.html?redirect=" + encodeURIComponent(window.location.pathname + window.location.search);
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Terms of Service | Konvo | Cosmic Code of Conduct</title>
     <meta name="description"

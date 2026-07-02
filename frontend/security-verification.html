@@ -256,8 +256,9 @@
                 });
                 
                 if (res.ok) {
-                    // Success! Reload the page to access the actual site
-                    window.location.reload();
+                    const params = new URLSearchParams(window.location.search);
+                    const dest = params.get("redirect") || "/";
+                    window.location.href = dest;
                 } else {
                     const errData = await res.json();
                     alert(errData.detail || "Verification failed. Please try again.");
