@@ -340,6 +340,9 @@
                             theme: 'dark',
                             callback: function(token) {
                                 onSecurityChallengeSolved(token);
+                            },
+                            'error-callback': function() {
+                                showSecurityFallback(fallbackChallenge);
                             }
                         });
                     } catch (e) {

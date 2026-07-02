@@ -21,8 +21,8 @@ export function initScrollReveal() {
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.02,
+        rootMargin: '0px 0px 120px 0px'
     });
 
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
