@@ -35,27 +35,26 @@ def test_cloudflare_headers_and_ip_validation_production():
         assert response.status_code == 403
         assert "Direct access to origin server IP is forbidden" in response.json()["detail"]
         
-        # 2. CF headers present but IP not from CF edge -> 403 Forbidden
+        # 2. All 3 CF headers present with any IP -> passes CF check, redirects to Turnstile challenge
         response = client.get("/", headers={
             "CF-IPCountry": "US",
             "CF-Ray": "1234567890abcdef",
             "CF-Connecting-IP": "8.8.8.8"
         })
-        assert response.status_code == 403
-        assert "Request did not originate from Cloudflare" in response.json()["detail"]
+        # CF headers verified -> serves Managed Challenge (no cookie sent)
+        assert response.status_code == 200
+        assert "Performing security verification" in response.text
 
-        # 3. CF headers present and IP from CF range -> Passes IP check, but redirects to challenge
-        with patch("gateway.is_request_from_cloudflare", return_value=True):
-            response = client.get("/", headers={
-                "CF-IPCountry": "US",
-                "CF-Ray": "1234567890abcdef",
-                "CF-Connecting-IP": "173.245.48.5"
-            })
-            # Since no cookie is sent, it should serve the Managed Challenge (200 OK containing challenge markup)
-            assert response.status_code == 200
-            assert "Performing security verification" in response.text
+        # 3. All 3 CF headers present with a real CF edge IP -> same result (challenge page)
+        response = client.get("/", headers={
+            "CF-IPCountry": "IN",
+            "CF-Ray": "abcdef1234567890",
+            "CF-Connecting-IP": "173.245.48.5"
+        })
+        assert response.status_code == 200
+        assert "Performing security verification" in response.text
 
-        # 4. CF headers present and X-Forwarded-For contains a CF IP -> Passes IP check, redirects to challenge
+        # 4. X-Forwarded-For present (Render proxy chain) -> CF headers still gate the check
         response = client.get("/", headers={
             "CF-IPCountry": "US",
             "CF-Ray": "1234567890abcdef",
