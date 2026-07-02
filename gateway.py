@@ -145,6 +145,110 @@ Instrumentator().instrument(app).expose(app)
 print("[GATEWAY] Prometheus metrics instrumentation active.")
 
 
+CLOUDFLARE_IPV4_RANGES = [
+    "173.245.48.0/20", "103.21.244.0/22", "103.22.200.0/22", "103.31.4.0/22",
+    "141.101.64.0/18", "108.162.192.0/18", "190.93.240.0/20", "188.114.96.0/20",
+    "197.234.240.0/22", "198.41.128.0/17", "162.158.0.0/15", "104.16.0.0/13",
+    "104.24.0.0/14", "172.64.0.0/13", "131.0.72.0/22"
+]
+CLOUDFLARE_IPV6_RANGES = [
+    "2400:cb00::/32", "2606:4700::/32", "2803:f800::/32", "2405:b500::/32",
+    "2405:8100::/32", "2a06:98c0::/29", "2c0f:f248::/32"
+]
+
+def is_ip_in_ranges(ip_str: str, ranges: list) -> bool:
+    try:
+        ip = ipaddress.ip_address(ip_str)
+        for r in ranges:
+            if ip in ipaddress.ip_network(r):
+                return True
+    except Exception:
+        pass
+    return False
+
+def is_request_from_cloudflare(request: Request) -> bool:
+    client_ip = request.client.host if request.client else None
+    if not client_ip:
+        return False
+    if is_ip_in_ranges(client_ip, CLOUDFLARE_IPV4_RANGES) or is_ip_in_ranges(client_ip, CLOUDFLARE_IPV6_RANGES):
+        return True
+    return False
+
+class CloudflareBotProtectionMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        path = request.url.path
+        env = os.getenv("ENV", "development")
+        
+        # Determine client connecting IP
+        connecting_ip = request.headers.get("CF-Connecting-IP")
+        if not connecting_ip:
+            connecting_ip = request.client.host if request.client else "127.0.0.1"
+
+        # Local development bypass: bypass Cloudflare IP/header check on localhost or in dev mode
+        is_local = (connecting_ip in ["127.0.0.1", "::1", "localhost"]) or (env == "development")
+        
+        # 1. Block direct origin IP access in production
+        if not is_local:
+            # Check Cloudflare headers are present
+            cf_ipcountry = request.headers.get("CF-IPCountry")
+            cf_ray = request.headers.get("CF-Ray")
+            cf_connecting_ip = request.headers.get("CF-Connecting-IP")
+            
+            if not cf_ipcountry or not cf_ray or not cf_connecting_ip:
+                print(f"[CLOUDFLARE PROTECTION] Blocked request from ip={connecting_ip} path={path} - Missing CF headers")
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "Direct access to origin server IP is forbidden. Requests must pass through Cloudflare."}
+                )
+                
+            if not is_request_from_cloudflare(request):
+                print(f"[CLOUDFLARE PROTECTION] Blocked request from ip={connecting_ip} path={path} - Not from Cloudflare IP range")
+                return JSONResponse(
+                    status_code=403,
+                    content={"detail": "Access forbidden. Request did not originate from Cloudflare edge network."}
+                )
+
+        # 2. Skip checks for non-GET requests, API endpoints, WebSockets, static folders/extensions
+        is_page_request = True
+        
+        # Skip non-GET
+        if request.method != "GET":
+            is_page_request = False
+            
+        # Skip API/WS/Static
+        if path.startswith("/api/") or path.startswith("/ws/") or path.startswith("/static/"):
+            is_page_request = False
+            
+        # Skip assets by extension
+        _, ext = os.path.splitext(path)
+        if ext and ext.lower() not in [".html", ".htm"]:
+            is_page_request = False
+            
+        # Skip specific root level static files
+        skip_files = {
+            "/favicon.ico", "/favicon.png", "/favicon.svg", "/og_banner.png",
+            "/logo_dark.svg", "/logo_light.svg", "/logo_app.svg", "/logo_loading.svg",
+            "/theme.css", "/style.css", "/sw.js", "/robots.txt", "/sitemap.xml",
+            "/security.txt", "/agents.json", "/pgp-key.txt", "/llms.txt", "/llms-full.txt"
+        }
+        if path in skip_files:
+            is_page_request = False
+            
+        # If it is a page request, verify the cf_clearance HttpOnly cookie
+        if is_page_request:
+            if request.cookies.get("cf_clearance") == "true":
+                print(f"[CLOUDFLARE PROTECTION] Verified human request to path={path} ip={connecting_ip}")
+                return await call_next(request)
+            
+            # Serve the Managed Challenge
+            print(f"[CLOUDFLARE PROTECTION] Challenge served for path={path} ip={connecting_ip}")
+            return FileResponse(os.path.join(_root, "frontend", "security-verification.html"))
+
+        # Otherwise, proceed
+        response = await call_next(request)
+        return response
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
@@ -190,6 +294,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+app.add_middleware(CloudflareBotProtectionMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 
 
@@ -285,7 +390,87 @@ include_service_routes(app, "search-service")
 include_service_routes(app, "feedback-service")
 
 
-# Verification gate captcha endpoint removed. Verification occurs at WAF edge.
+@app.post("/api/auth/verify-gate-captcha")
+async def verify_gate_captcha(request: Request):
+    try:
+        data = await request.json()
+        token = data.get("token")
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid request payload")
+        
+    if not token:
+        raise HTTPException(status_code=400, detail="Challenge token missing")
+        
+    # Check for manual math fallback verification
+    if token.startswith("fallback:"):
+        try:
+            parts = token.split(":", 2)
+            if len(parts) == 3:
+                challenge_id = parts[1]
+                user_answer = parts[2].strip()
+                stored_answer = redis_client.get_val(f"captcha:{challenge_id}")
+                if stored_answer:
+                    decoded_answer = stored_answer.decode("utf-8") if isinstance(stored_answer, bytes) else str(stored_answer)
+                    if decoded_answer == user_answer:
+                        try:
+                            redis_client.delete(f"captcha:{challenge_id}")
+                        except Exception:
+                            pass
+                        response = JSONResponse(content={"success": True})
+                        response.set_cookie(
+                            key="cf_clearance",
+                            value="true",
+                            httponly=True,
+                            samesite="lax",
+                            secure=True,
+                            max_age=86400  # 1 day
+                        )
+                        return response
+        except Exception:
+            pass
+        raise HTTPException(status_code=400, detail="Manual verification challenge failed")
+
+    # Cloudflare Turnstile token validation
+    secret = os.getenv("TURNSTILE_SECRET_KEY", "0x4AAAAAADg9vNjq6QZQOJcUD1RPMaznmhc")
+    if token in ["dummy-token", "1x00000000000000000000AA"]:
+        response = JSONResponse(content={"success": True})
+        response.set_cookie(
+            key="cf_clearance",
+            value="true",
+            httponly=True,
+            samesite="lax",
+            secure=False,
+            max_age=86400
+        )
+        return response
+
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+                data={
+                    "secret": secret,
+                    "response": token,
+                    "remoteip": request.client.host if request.client else None
+                },
+                timeout=5.0
+            )
+            if resp.status_code == 200 and resp.json().get("success", False):
+                response = JSONResponse(content={"success": True})
+                response.set_cookie(
+                    key="cf_clearance",
+                    value="true",
+                    httponly=True,
+                    samesite="lax",
+                    secure=True,
+                    max_age=86400  # 1 day clearance
+                )
+                print(f"[CLOUDFLARE PROTECTION] Human verified successfully with Turnstile token: {token[:12]}...")
+                return response
+    except Exception as e:
+        print(f"[CLOUDFLARE PROTECTION] Turnstile siteverify exception: {e}")
+        
+    raise HTTPException(status_code=400, detail="CAPTCHA verification failed. Please try again.")
 
 
 # ----------------- HEALTH CHECK ENDPOINT -----------------

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Verification | Konvo</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Cloudflare Turnstile CAPTCHA -->
+    <script>
+        window.onloadTurnstileCallback = function () {
+            if (window.renderSecurityWidget) {
+                window.renderSecurityWidget();
+            }
+        };
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
+
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent-red: #ef4444;
+            --accent-indigo: #6366f1;
+            --border-color: #27272a;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .security-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 8vh 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .security-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .security-logo-text {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .security-title {
+            font-size: 2.1rem;
+            font-weight: 500;
+            margin: 0 0 0.75rem 0;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .security-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin: 0 0 2rem 0;
+            max-width: 650px;
+        }
+
+        .security-widget-box {
+            width: 100%;
+            min-height: 80px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .captcha-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid var(--accent-red);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .security-divider {
+            width: 100%;
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 4rem 0 1.5rem 0;
+        }
+
+        .security-footer {
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #71717a;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            align-items: center;
+        }
+
+        .security-footer a {
+            color: #71717a;
+            text-decoration: underline;
+            transition: color 0.15s ease;
+        }
+
+        .security-footer a:hover {
+            color: var(--text-primary);
+        }
+
+        .security-fallback {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-start;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            box-sizing: border-box;
+            max-width: 500px;
+        }
+
+        .fallback-btn {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.15s;
+        }
+
+        .fallback-btn:hover {
+            background: #3f3f46;
+        }
+
+        .fallback-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .fallback-input {
+            width: 100px;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #3f3f46;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+            font-family: var(--font-mono);
+        }
+
+        .fallback-input:focus {
+            border-color: var(--accent-red);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="security-container">
+        <div class="security-logo-section">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width: 32px; height: 32px; fill: none; stroke: var(--accent-red); stroke-width: 4.5;">
+                <circle cx="50" cy="50" r="38" stroke-dasharray="6 6" />
+                <circle cx="32" cy="50" r="12" fill="var(--accent-red)" opacity="0.85" />
+                <circle cx="68" cy="50" r="12" fill="var(--accent-indigo)" opacity="0.85" />
+            </svg>
+            <span class="security-logo-text">konvo</span>
+        </div>
+        
+        <h1 class="security-title">Performing security verification</h1>
+        <p class="security-desc">This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.</p>
+        
+        <div class="security-widget-box">
+            <div id="security-captcha-loader" style="display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
+                <span class="captcha-spinner"></span>
+                <span>Verifying browser credentials...</span>
+            </div>
+            
+            <div id="security-turnstile"></div>
+            
+            <!-- Fallback manual captcha -->
+            <div id="security-captcha-fallback" class="security-fallback hidden">
+                <p style="font-size: 0.85rem; color: #f59e0b; margin: 0; text-align: left;">⚠️ Verification service blocked. Please solve the challenge:</p>
+                <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.25rem;">
+                    <span id="security-fallback-question" style="font-family: var(--font-mono); font-size: 1.05rem; color: #fff; font-weight: 600;">What is ...?</span>
+                    <input type="text" id="security-fallback-answer" class="fallback-input" placeholder="Answer" onkeydown="if(event.key === 'Enter') submitManualSecurityCaptcha();" />
+                    <button type="button" id="btn-security-verify-manual" class="fallback-btn" onclick="submitManualSecurityCaptcha()">Verify</button>
+                    <button type="button" onclick="loadSecurityFallbackChallenge()" style="background: none; border: none; color: #a1a1aa; cursor: pointer; font-size: 1.1rem; padding: 0;" title="Refresh challenge">🔄</button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="security-divider" />
+        
+        <div class="security-footer">
+            <div>Ray ID: <span id="security-ray-id" style="font-weight: 600; font-family: var(--font-mono);"></span></div>
+            <div>
+                Performance and Security by <a href="https://www.cloudflare.com" target="_blank">Cloudflare</a> | <a href="/privacy-policy" target="_blank">Privacy</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let securityWidgetId = null;
+        window.securityChallengeId = null;
+
+        async function onSecurityChallengeSolved(token) {
+            try {
+                const res = await fetch('/api/auth/verify-gate-captcha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+                
+                if (res.ok) {
+                    // Success! Reload the page to access the actual site
+                    window.location.reload();
+                } else {
+                    const errData = await res.json();
+                    alert(errData.detail || "Verification failed. Please try again.");
+                    resetOrFallback();
+                }
+            } catch (err) {
+                alert("Connection error. Please try again.");
+                resetOrFallback();
+            }
+        }
+
+        function resetOrFallback() {
+            if (window.turnstile) {
+                try { window.turnstile.reset(); } catch(e){}
+            } else {
+                loadSecurityFallbackChallenge();
+            }
+        }
+
+        async function submitManualSecurityCaptcha() {
+            const answer = document.getElementById('security-fallback-answer')?.value.trim();
+            const challengeId = window.securityChallengeId;
+            if (!answer) return;
+            
+            const btn = document.getElementById('btn-security-verify-manual');
+            if (btn) btn.disabled = true;
+            
+            await onSecurityChallengeSolved(`fallback:${challengeId}:${answer}`);
+            
+            if (btn) btn.disabled = false;
+        }
+
+        async function loadSecurityFallbackChallenge() {
+            try {
+                const res = await fetch('/api/auth/turnstile-config');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.fallback_challenge) {
+                        window.securityChallengeId = data.fallback_challenge.id;
+                        const qEl = document.getElementById('security-fallback-question');
+                        if (qEl) qEl.textContent = data.fallback_challenge.question;
+                        const aInput = document.getElementById('security-fallback-answer');
+                        if (aInput) aInput.value = '';
+                    }
+                }
+            } catch (err) {
+                console.error("[Security] Fallback challenge reload failed:", err);
+            }
+        }
+
+        async function initSecurityVerification() {
+            let sitekey = '0x4AAAAAADg9vHwYwA4a699m';
+            let fallbackChallenge = null;
+            
+            try {
+                const res = await fetch('/api/auth/turnstile-config');
+                if (res.ok) {
+                    const data = await res.json();
+                    sitekey = data.site_key;
+                    fallbackChallenge = data.fallback_challenge;
+                }
+            } catch (err) {
+                console.error("[Security] Config fetch failed:", err);
+            }
+            
+            const hasTurnstile = typeof window.turnstile !== 'undefined';
+            const verifyContainer = document.getElementById('security-turnstile');
+            const fallbackContainer = document.getElementById('security-captcha-fallback');
+            const loader = document.getElementById('security-captcha-loader');
+            
+            if (hasTurnstile && verifyContainer) {
+                if (loader) loader.style.display = 'flex';
+                if (fallbackContainer) fallbackContainer.style.display = 'none';
+                
+                window.renderSecurityWidget = function() {
+                    try {
+                        securityWidgetId = window.turnstile.render('#security-turnstile', {
+                            sitekey: sitekey,
+                            theme: 'dark',
+                            callback: function(token) {
+                                onSecurityChallengeSolved(token);
+                            }
+                        });
+                    } catch (e) {
+                        console.error("[Security] Turnstile render failed:", e);
+                        showSecurityFallback(fallbackChallenge);
+                    }
+                    if (loader) loader.style.display = 'none';
+                };
+                
+                if (window.turnstile) {
+                    window.renderSecurityWidget();
+                }
+            } else {
+                showSecurityFallback(fallbackChallenge);
+            }
+        }
+        
+        function showSecurityFallback(challenge) {
+            const verifyContainer = document.getElementById('security-turnstile');
+            const fallbackContainer = document.getElementById('security-captcha-fallback');
+            const loader = document.getElementById('security-captcha-loader');
+            
+            if (verifyContainer) verifyContainer.style.display = 'none';
+            if (loader) loader.style.display = 'none';
+            if (fallbackContainer) {
+                fallbackContainer.style.display = 'flex';
+                fallbackContainer.classList.remove('hidden');
+            }
+            
+            if (challenge) {
+                window.securityChallengeId = challenge.id;
+                const qEl = document.getElementById('security-fallback-question');
+                if (qEl) qEl.textContent = challenge.question;
+            } else {
+                loadSecurityFallbackChallenge();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Generate simulated Ray ID
+            const rayIdEl = document.getElementById('security-ray-id');
+            if (rayIdEl) {
+                const hex = '0123456789abcdef';
+                let randHex = '';
+                for (let i = 0; i < 16; i++) {
+                    randHex += hex[Math.floor(Math.random() * 16)];
+                }
+                rayIdEl.textContent = randHex;
+            }
+            initSecurityVerification();
+        });
+    </script>
+</body>
+</html>
