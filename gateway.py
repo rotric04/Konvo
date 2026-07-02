@@ -2,6 +2,7 @@ import os
 import sys
 import uvicorn
 import ipaddress
+import random
 import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, WebSocket, WebSocketDisconnect
@@ -406,7 +407,48 @@ include_service_routes(app, "search-service")
 include_service_routes(app, "feedback-service")
 
 
+
+@app.get("/api/auth/turnstile-config")
+def gateway_turnstile_config():
+    """
+    Generate and store the fallback math captcha challenge in the GATEWAY's own
+    redis_client. This must live in gateway.py (not auth-service) so that the
+    challenge answer is stored in the same Redis/in-memory instance that
+    verify-gate-captcha reads from — avoiding cross-service cache mismatches
+    when Redis is unavailable and each service falls back to its own in-memory dict.
+    """
+    import uuid as _uuid
+    site_key = os.getenv("TURNSTILE_SITE_KEY", "0x4AAAAAADg9vHwYwA4a699m")
+
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 10)
+    op = random.choice(["+", "-"])
+    if op == "+":
+        ans = num1 + num2
+    else:
+        if num1 < num2:
+            num1, num2 = num2, num1
+        ans = num1 - num2
+
+    challenge_id = str(_uuid.uuid4())
+    question = f"What is {num1} {op} {num2}?"
+
+    try:
+        redis_client.set_val(f"captcha:{challenge_id}", str(ans), ex_seconds=300)
+    except Exception as e:
+        print(f"[CAPTCHA FALLBACK] Error storing challenge in gateway redis_client: {e}")
+
+    return {
+        "site_key": site_key,
+        "fallback_challenge": {
+            "id": challenge_id,
+            "question": question
+        }
+    }
+
+
 @app.post("/api/auth/verify-gate-captcha")
+
 async def verify_gate_captcha(request: Request):
     try:
         data = await request.json()
