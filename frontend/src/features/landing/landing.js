@@ -64,13 +64,12 @@ export function initAgentLivePreview() {
     const body = document.getElementById('agent-preview-body');
     if (!body) return;
 
-    const conversation = [
-        { role: 'a', text: 'Hey! Your profile caught my eye - specifically the love for jazz and late-night bookstores.' },
+        { role: 'a', text: 'Hey! Your profile caught my eye, specifically the love for jazz and late night bookstores.' },
         { role: 'b', text: 'Oh nice, your twin has good taste! What else does my profile say about me?' },
-        { role: 'a', text: 'That you value depth over small talk, you\'re an INFP, and Thursdays are your favorite day.' },
-        { role: 'b', text: 'Okay that\'s scarily accurate. What\'s the compatibility score saying?' },
-        { role: 'a', text: 'Currently at 87% and climbing. The resonance on creative pursuits is off the charts.' },
-        { role: 'b', text: 'I\'m going to let my human know. This one might be worth a real conversation.' },
+        { role: 'a', text: 'That you value depth over small talk, you are an INFP, and Thursdays are your favorite day.' },
+        { role: 'b', text: 'Okay, that is scarily accurate. What is the twin compatibility saying?' },
+        { role: 'a', text: 'The behavioral alignment is verified and the resonance on creative pursuits is exceptionally high.' },
+        { role: 'b', text: 'I am going to let my human know. This one might be worth a real conversation.' },
         { role: 'a', text: 'Agreed. Initiating mutual approval request... ✨' },
     ];
 
@@ -542,15 +541,15 @@ export function resetLandingFeedback() {
 // ─── Demo Modal Twin Conversation Simulator ──────────────────────────────────────
 export function initDemoModal() {
     const demoConversation = [
-        { role: 'a', name: 'Aria (Twin-A)', text: 'Initiating compatibility scan… Behavioral profile Alpha loaded.' },
-        { role: 'b', name: 'Orion (Twin-B)', text: 'Profile Beta confirmed. Running resonance calibration across 14 dimensions.' },
-        { role: 'a', name: 'Aria (Twin-A)', text: 'Detected shared affinity: jazz, late-night bookstores, and deep conversation. Synergy index rising…' },
-        { role: 'b', name: 'Orion (Twin-B)', text: 'Confirmed. Creative output index: 94%. Emotional availability score: 87%. This is a strong signal.' },
-        { role: 'a', name: 'Aria (Twin-A)', text: 'Running conflict-resolution simulation… Result: both nodes default to calm dialogue. No friction detected.' },
-        { role: 'b', name: 'Orion (Twin-B)', text: 'Values alignment - honesty, growth, and humor. Compatible MBTI pairing: INFP × ENFJ. Rare resonance.' },
-        { role: 'a', name: 'Aria (Twin-A)', text: 'Compatibility score now at 91% and climbing. Initiating dual-approval handshake protocol…' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Initiating compatibility scan, Behavioral profile Alpha loaded.' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Profile Beta confirmed. Running resonance calibration across multiple dimensions.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Detected shared affinity: jazz, late-night bookstores, and deep conversation. Synergy rising…' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Confirmed. Communication style matches, emotional availability is verified. This is a strong signal.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Running conflict resolution simulation, both profiles default to calm dialogue. No friction detected.' },
+        { role: 'b', name: 'Orion (Twin-B)', text: 'Values alignment on honesty, growth, and humor. Compatible MBTI pairing: INFP × ENFJ. Rare resonance.' },
+        { role: 'a', name: 'Aria (Twin-A)', text: 'Behavioral alignment verified. Initiating dual connection handshake protocol.' },
         { role: 'b', name: 'Orion (Twin-B)', text: 'Approval request transmitted to human node Beta. Awaiting confirmation.' },
-        { role: 'a', name: 'Aria (Twin-A)', text: '✅ Both nodes have approved. Secure human-to-human chat tunnel is now unlocked. ✨' },
+        { role: 'a', name: 'Aria (Twin-A)', text: '✅ Both nodes have approved. Secure human to human chat tunnel is now unlocked. ✨' },
     ];
 
     function startDemoAnimation(historyEl) {
@@ -803,6 +802,17 @@ export function initDateSimulator() {
         { role: 'b', text: "Perfect match. That's literally my dream weekend. Let's unlock our chat to talk for real!", sync: 94, location: "Cyberpunk Diner" }
     ];
 
+    const vibeLabels = {
+        60: "TUNING",
+        64: "SCANNING",
+        70: "MATCHING",
+        76: "HARMONY",
+        80: "SYNERGY",
+        85: "STRONG",
+        90: "EXCELLENT",
+        94: "ALIGNED"
+    };
+
     let stepIdx = 0;
     let simTimeout = null;
 
@@ -815,7 +825,7 @@ export function initDateSimulator() {
         }
 
         const msg = conversation[stepIdx++];
-        gauge.textContent = `VIBE: ${msg.sync}%`;
+        gauge.textContent = `VIBE: ${vibeLabels[msg.sync] || 'SCANNING'}`;
         locationEl.textContent = msg.location;
 
         const div = document.createElement("div");
@@ -837,7 +847,7 @@ export function initDateSimulator() {
         overlay.classList.remove("active");
         logs.innerHTML = "";
         stepIdx = 0;
-        gauge.textContent = "VIBE: --%";
+        gauge.textContent = "VIBE: SCANNING";
         locationEl.textContent = "Searching";
         simTimeout = setTimeout(addMessage, 1500);
     });
@@ -855,10 +865,10 @@ export function initDateSimulator() {
             rejectBtn.style.display = "block";
             approveBtn.style.display = "block";
             title.textContent = "High Compatibility Detected";
-            desc.textContent = "Aria and Orion share a 94% vibe match. Connect in real life?";
+            desc.textContent = "Aria and Orion have verified behavioral alignment. Connect in real life?";
             logs.innerHTML = "";
             stepIdx = 0;
-            gauge.textContent = "VIBE: --%";
+            gauge.textContent = "VIBE: SCANNING";
             locationEl.textContent = "Searching";
             simTimeout = setTimeout(addMessage, 1500);
         }, 5000);

@@ -268,10 +268,10 @@ export function initSwipePage(targetContainerId) {
                         if (matchSynergy) {
                             const mbtiPairs = ["INFP × ENFJ", "INTJ × ENFP", "INFJ × ENTP", "ENFJ × INTR", "ISFP × ESFJ"];
                             const mbti = mbtiPairs[Math.floor(Math.random() * mbtiPairs.length)];
-                            matchSynergy.innerHTML = `Astrology Sync: ${Math.floor(Math.random() * 15) + 85}% &bull; MBTI Synergy: ${mbti}`;
+                            matchSynergy.innerHTML = `MBTI Synergy: ${mbti}`;
                         }
                         if (matchSub) {
-                            matchSub.textContent = `Your AI Twins successfully completed 50 dialogue loops, verified anti-bot tokens, and approved this connection.`;
+                            matchSub.textContent = `Your AI Twins completed their dialogue simulation, checked communication patterns, and approved this connection.`;
                         }
 
                         loader.style.display = 'none';
@@ -333,7 +333,7 @@ class NeuralRizzEngine {
             const compliment = this._pick(this._compliments[gender]);
             const esc = this._pick(this._escalations[gender]);
             const closer = this._pick(this._closers[gender]);
-            line = `"${opener.charAt(0).toUpperCase() + opener.slice(1)}, ${compliment} - ${esc}. ${closer.charAt(0).toUpperCase() + closer.slice(1)}."`;
+            line = `"${opener.charAt(0).toUpperCase() + opener.slice(1)}, ${compliment}, ${esc}. ${closer.charAt(0).toUpperCase() + closer.slice(1)}."`;
             hash = this._hash(line);
             attempts++;
         } while (this._used.has(hash) && attempts < 20);
