@@ -55,6 +55,16 @@ def test_cloudflare_headers_and_ip_validation_production():
             assert response.status_code == 200
             assert "Performing security verification" in response.text
 
+        # 4. CF headers present and X-Forwarded-For contains a CF IP -> Passes IP check, redirects to challenge
+        response = client.get("/", headers={
+            "CF-IPCountry": "US",
+            "CF-Ray": "1234567890abcdef",
+            "CF-Connecting-IP": "8.8.8.8",
+            "X-Forwarded-For": "8.8.8.8, 173.245.48.5"
+        })
+        assert response.status_code == 200
+        assert "Performing security verification" in response.text
+
 def test_cloudflare_clearance_cookie():
     client = TestClient(app)
     

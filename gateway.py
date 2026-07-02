@@ -172,6 +172,16 @@ def is_request_from_cloudflare(request: Request) -> bool:
         return True
 
     # 2. Check if client IP is from Cloudflare edge IP ranges
+    # Try getting the last proxy IP from X-Forwarded-For first (useful when running behind Render/reverse proxy)
+    x_forwarded_for = request.headers.get("x-forwarded-for") or request.headers.get("X-Forwarded-For")
+    if x_forwarded_for:
+        ips = [ip.strip() for ip in x_forwarded_for.split(",") if ip.strip()]
+        if ips:
+            client_ip = ips[-1]
+            if is_ip_in_ranges(client_ip, CLOUDFLARE_IPV4_RANGES) or is_ip_in_ranges(client_ip, CLOUDFLARE_IPV6_RANGES):
+                return True
+
+    # Fallback to direct client host (e.g. for local tests or direct connections)
     client_ip = request.client.host if request.client else None
     if not client_ip:
         return False
