@@ -57,7 +57,7 @@ apply_db_migrations(engine)
 
 # Initialize master FastAPI app
 app = FastAPI(
-    title="GATEWAY™ — Production-Grade Hub",
+    title="GATEWAY™ - Production-Grade Hub",
     description="Unified API gateway mounting all microservices with full observability.",
     version="1.0.0",
     debug=True
@@ -106,6 +106,8 @@ RATE_LIMIT_RULES = {
     "/api/auth/forgot-password": (2, 60),
     "/api/auth/reset-password": (2, 60),
     "/api/auth/verify-otp": (10, 60),
+    "/api/auth/verify-gate-captcha": (10, 3600),  # max 10 captcha attempts per hour per IP
+    "/api/auth/turnstile-config": (30, 60),
     "/api/compatibility/swipe": (100, 60),
     "/api/chat/messages": (120, 60),
     "/api/agents/twin": (30, 60),
@@ -414,7 +416,7 @@ def gateway_turnstile_config():
     Generate and store the fallback math captcha challenge in the GATEWAY's own
     redis_client. This must live in gateway.py (not auth-service) so that the
     challenge answer is stored in the same Redis/in-memory instance that
-    verify-gate-captcha reads from — avoiding cross-service cache mismatches
+    verify-gate-captcha reads from - avoiding cross-service cache mismatches
     when Redis is unavailable and each service falls back to its own in-memory dict.
     """
     import uuid as _uuid
@@ -448,18 +450,33 @@ def gateway_turnstile_config():
 
 
 @app.post("/api/auth/verify-gate-captcha")
-
 async def verify_gate_captcha(request: Request):
+    """
+    Verifies Cloudflare Turnstile token or math fallback captcha.
+    
+    IMPORTANT: We no longer set the cf_clearance cookie server-side because
+    the backend (render.com) and frontend (konvo.space) are on different domains.
+    Cross-origin Set-Cookie headers are blocked by browsers. Instead, we return
+    {"success": True, "set_cookie": true} and the frontend JavaScript sets the
+    cookie directly on its own domain.
+    """
+    # Extract real client IP - Cloudflare passes it in CF-Connecting-IP
+    real_ip = (
+        request.headers.get("CF-Connecting-IP")
+        or request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        or (request.client.host if request.client else "unknown")
+    )
+
     try:
         data = await request.json()
         token = data.get("token")
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid request payload")
-        
+
     if not token:
         raise HTTPException(status_code=400, detail="Challenge token missing")
-        
-    # Check for manual math fallback verification
+
+    # ── Math Fallback Verification ─────────────────────────────────────────────
     if token.startswith("fallback:"):
         try:
             parts = token.split(":", 2)
@@ -468,66 +485,61 @@ async def verify_gate_captcha(request: Request):
                 user_answer = parts[2].strip()
                 stored_answer = redis_client.get_val(f"captcha:{challenge_id}")
                 if stored_answer:
-                    decoded_answer = stored_answer.decode("utf-8") if isinstance(stored_answer, bytes) else str(stored_answer)
+                    decoded_answer = (
+                        stored_answer.decode("utf-8")
+                        if isinstance(stored_answer, bytes)
+                        else str(stored_answer)
+                    )
                     if decoded_answer == user_answer:
                         try:
                             redis_client.delete(f"captcha:{challenge_id}")
                         except Exception:
                             pass
-                        response = JSONResponse(content={"success": True})
-                        response.set_cookie(
-                            key="cf_clearance",
-                            value="true",
-                            httponly=False,
-                            samesite="lax",
-                            secure=True,
-                            max_age=86400  # 1 day
-                        )
-                        return response
+                        print(f"[CAPTCHA] Math fallback verified from IP: {real_ip}")
+                        # Cookie set client-side by the frontend to avoid cross-origin issues
+                        return JSONResponse(content={"success": True, "set_cookie": True, "max_age": 86400})
         except Exception:
             pass
         raise HTTPException(status_code=400, detail="Manual verification challenge failed")
 
-    # Cloudflare Turnstile token validation
-    secret = os.getenv("TURNSTILE_SECRET_KEY", "0x4AAAAAADg9vNjq6QZQOJcUD1RPMaznmhc")
-    if token in ["dummy-token", "1x00000000000000000000AA"]:
-        response = JSONResponse(content={"success": True})
-        response.set_cookie(
-            key="cf_clearance",
-            value="true",
-            httponly=False,
-            samesite="lax",
-            secure=False,
-            max_age=86400
-        )
-        return response
+    # ── Cloudflare Turnstile Verification ─────────────────────────────────────
+    secret = os.getenv("TURNSTILE_SECRET_KEY", "")
+    current_env = os.getenv("ENV", "production")
+
+    # Allow test tokens ONLY in development/testing environments
+    if current_env in ("development", "test", "testing") and token in [
+        "dummy-token", "1x00000000000000000000AA", "XXXX.DUMMY.TOKEN.XXXX"
+    ]:
+        print(f"[CAPTCHA] Dev bypass token accepted in {current_env} environment")
+        return JSONResponse(content={"success": True, "set_cookie": True, "max_age": 86400})
+
+    if not secret:
+        # No secret configured - fail closed in production, open in dev
+        if current_env == "production":
+            raise HTTPException(status_code=503, detail="Security service misconfigured")
+        return JSONResponse(content={"success": True, "set_cookie": True, "max_age": 86400})
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=8.0) as client:
             resp = await client.post(
                 "https://challenges.cloudflare.com/turnstile/v0/siteverify",
                 data={
                     "secret": secret,
                     "response": token,
-                    "remoteip": request.client.host if request.client else None
+                    "remoteip": real_ip
                 },
-                timeout=5.0
             )
-            if resp.status_code == 200 and resp.json().get("success", False):
-                response = JSONResponse(content={"success": True})
-                response.set_cookie(
-                    key="cf_clearance",
-                    value="true",
-                    httponly=False,
-                    samesite="lax",
-                    secure=True,
-                    max_age=86400  # 1 day clearance
-                )
-                print(f"[CLOUDFLARE PROTECTION] Human verified successfully with Turnstile token: {token[:12]}...")
-                return response
+            result = resp.json()
+            if resp.status_code == 200 and result.get("success", False):
+                print(f"[CLOUDFLARE PROTECTION] Human verified from IP {real_ip}, token: {token[:12]}...")
+                # Cookie set client-side by the frontend to avoid cross-origin issues
+                return JSONResponse(content={"success": True, "set_cookie": True, "max_age": 86400})
+            else:
+                error_codes = result.get("error-codes", [])
+                print(f"[CLOUDFLARE PROTECTION] Turnstile rejected from IP {real_ip}: {error_codes}")
     except Exception as e:
-        print(f"[CLOUDFLARE PROTECTION] Turnstile siteverify exception: {e}")
-        
+        print(f"[CLOUDFLARE PROTECTION] Turnstile siteverify exception from IP {real_ip}: {e}")
+
     raise HTTPException(status_code=400, detail="CAPTCHA verification failed. Please try again.")
 
 

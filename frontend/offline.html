@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | Konvo</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #050508;
+            color: #f4f4f8;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
+        .icon { font-size: 4rem; opacity: 0.5; }
+        h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; }
+        p { color: #8b8ba0; font-size: 0.95rem; line-height: 1.6; max-width: 360px; }
+        button {
+            background: #14b8a6;
+            color: #000;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: opacity 0.15s;
+        }
+        button:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+    <div class="icon">📡</div>
+    <h1>You're offline</h1>
+    <p>Konvo needs a connection to find your matches. Please check your internet connection and try again.</p>
+    <button onclick="location.reload()">Try Again</button>
+</body>
+</html>

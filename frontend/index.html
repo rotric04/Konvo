@@ -4,11 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Konvo - World's First AI Twin Matchmaker</title>
+    <title>Konvo - World's First AI Twin Matchmaker | Behavior-First Dating</title>
 
     <!-- SEO Metadata -->
     <meta name="description"
-        content="Meet your match without the burnout. Hire your AI Twin to run 50 parallel dates in virtual cafes, filter by vibes and India Post DIGIPIN grids, and connect in human chat.">
+        content="Meet your match without the burnout. Your AI Twin runs 50 parallel virtual dates, filters by real personality alignment and India Post DIGIPIN grids, then brings you only the ones worth your time.">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href="https://konvo.space/">
+    <meta name="theme-color" content="#14b8a6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Konvo">
+    <meta name="application-name" content="Konvo">
+    <link rel="manifest" href="/manifest.json">
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
@@ -64,7 +72,8 @@
     <!-- Heavy libs: loaded once -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js r167 - latest stable -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 
     <!-- Modal stub: queues calls before modal.js loads -->
@@ -86,12 +95,6 @@
             };
         })();
     </script>
-    <!-- Automatic Login Redirect -->
-    <script>
-        if (localStorage.getItem('konvo_token')) {
-            window.location.href = '/';
-        }
-    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -101,9 +104,12 @@
           "@id": "https://konvo.space/#website",
           "url": "https://konvo.space/",
           "name": "Konvo",
-          "description": "Sovereign behavioral representation and compatibility-first human connections on the world's first AI Twin Matchmaking Dating Network using India Post DIGIPIN grid systems for localized matches",
-          "publisher": {
-            "@id": "https://konvo.space/#organization"
+          "description": "World's first behavior-first AI Twin matchmaking platform using India Post DIGIPIN grid systems for privacy-safe localized matches.",
+          "publisher": { "@id": "https://konvo.space/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": { "@type": "EntryPoint", "urlTemplate": "https://konvo.space/discover?q={search_term_string}" },
+            "query-input": "required name=search_term_string"
           }
         },
         {
@@ -113,9 +119,21 @@
           "url": "https://konvo.space/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://konvo.space/static/favicon.svg"
+            "url": "https://konvo.space/favicon.svg",
+            "width": 512,
+            "height": 512
           },
           "sameAs": []
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Konvo",
+          "applicationCategory": "LifestyleApplication",
+          "operatingSystem": "Web, iOS, Android",
+          "url": "https://konvo.space/",
+          "description": "Behavior-first AI Twin matchmaking. Your AI Twin runs virtual dates with other Twins and brings you only the matches worth your time.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+          "author": { "@id": "https://konvo.space/#organization" }
         },
         {
           "@type": "FAQPage",
@@ -142,6 +160,14 @@
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Yes. Direct chat is end to end encrypted. All communication channels are protected with rotating session tokens."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Konvo free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, Konvo is completely free. No payment details or subscription required to get started."
               }
             }
           ]
@@ -318,9 +344,11 @@
 
                 <!-- Three.js particle canvas -->
                 <div id="three-hero-bg"
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.5; pointer-events: none;"></div>
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.5; pointer-events: none;">
+                </div>
 
-                <div class="landing-hero" style="border-top: none; padding: 0; min-height: auto; margin-bottom: 2rem; position: relative; z-index: 1;">
+                <div class="landing-hero"
+                    style="border-top: none; padding: 0; min-height: auto; margin-bottom: 2rem; position: relative; z-index: 1;">
 
                     <!-- Left: emotional headline -->
                     <div class="hero-content">
@@ -329,11 +357,15 @@
                             Your Twin dates<br>for you. <span class="gradient-text">You just say yes.</span>
                         </h1>
                         <p class="hero-subtitle">
-                            You tell us who you are. Not with a checklist but in your own words, your own rhythm, your own way of seeing the world. Konvo builds a version of you that goes out, checks chemistry in real conversations, and only brings you the ones worth your time.
+                            You tell us who you are. Not with a checklist but in your own words, your own rhythm, your
+                            own way of seeing the world. Konvo builds a version of you that goes out, checks chemistry
+                            in real conversations, and only brings you the ones worth your time.
                         </p>
                         <div class="hero-ctas" style="margin-top: 2rem;">
-                            <a href="/login?register=true" class="btn btn-primary" style="padding: 0.95rem 2.25rem; font-size: 0.88rem;">Give it a try, for free</a>
-                            <a href="/login" class="btn btn-secondary" style="padding: 0.95rem 2rem; font-size: 0.88rem;">See how it works</a>
+                            <a href="/login?register=true" class="btn btn-primary"
+                                style="padding: 0.95rem 2.25rem; font-size: 0.88rem;">Give it a try, for free</a>
+                            <a href="/login" class="btn btn-secondary"
+                                style="padding: 0.95rem 2rem; font-size: 0.88rem;">See how it works</a>
                         </div>
                     </div>
 
@@ -345,18 +377,21 @@
                                 <div class="match-success-overlay" id="match-success-overlay">
                                     <div class="match-success-icon">💚</div>
                                     <div class="match-success-title">Their personalities clicked.</div>
-                                    <div class="match-success-sub">Same humor. Same depth. Real conversation waiting.</div>
+                                    <div class="match-success-sub">Same humor. Same depth. Real conversation waiting.
+                                    </div>
                                     <a href="/login?register=true" class="match-success-cta">Build your own Twin</a>
                                 </div>
 
                                 <div class="match-card-inner">
                                     <div class="match-card-header">
-                                        <div class="match-card-avatar">🌸</div>
+                                        <div class="match-card-avatar">🤖</div>
                                         <div class="match-card-meta">
-                                            <div class="match-card-name">Aria · 24</div>
-                                            <div class="match-card-subtitle">Designer · Bengaluru</div>
+                                            <div class="match-card-name">Your Match · Preview</div>
+                                            <div class="match-card-subtitle">Based on your preferences</div>
                                         </div>
-                                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-primary); border: 1px solid rgba(13,148,136,0.25); padding: 0.3rem 0.6rem; align-self: flex-start;">TWIN PREVIEW</div>
+                                        <div
+                                            style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-primary); border: 1px solid rgba(13,148,136,0.25); padding: 0.3rem 0.6rem; align-self: flex-start;">
+                                            TWIN PREVIEW</div>
                                     </div>
 
                                     <div class="match-vibe-bar-wrap">
@@ -373,19 +408,23 @@
                                         <span class="match-tag">Philosophy</span>
                                         <span class="match-tag">Indie Music</span>
                                         <span class="match-tag">Late nights</span>
-                                        <span class="match-tag">Sci Fi</span>
+                                        <span class="match-tag">Sci-Fi</span>
                                         <span class="match-tag">Coffee runs</span>
                                     </div>
 
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-secondary); border-left: 2px solid var(--accent-primary); padding-left: 0.75rem; line-height: 1.5;">
-                                        &ldquo;Looking for someone who laughs at the absurdity of life but still shows up.&rdquo;
+                                    <div
+                                        style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-secondary); border-left: 2px solid var(--accent-primary); padding-left: 0.75rem; line-height: 1.5;">
+                                        &ldquo;This is what a real conversation looks like - not small talk, but actual
+                                        depth.&rdquo;
                                     </div>
                                 </div>
 
                                 <div class="match-card-swipe-hint">
-                                    <button class="swipe-hint-btn pass" id="hero-btn-pass" onclick="heroCardPass()">✕ Pass</button>
+                                    <button class="swipe-hint-btn pass" id="hero-btn-pass" onclick="heroCardPass()">✕
+                                        Pass</button>
                                     <div class="swipe-hint-center">Try it out<br>tap a button</div>
-                                    <button class="swipe-hint-btn connect" id="hero-btn-connect" onclick="heroCardConnect()">♡ Connect</button>
+                                    <button class="swipe-hint-btn connect" id="hero-btn-connect"
+                                        onclick="heroCardConnect()">♡ Connect</button>
                                 </div>
                             </div>
                         </div>
@@ -400,35 +439,53 @@
             <div class="trust-ribbon" aria-label="What Konvo stands for">
                 <div class="trust-ribbon-track" id="trust-ribbon-track">
                     <!-- Items duplicated for seamless loop -->
-                    <div class="trust-item"><span class="trust-item-icon">🔒</span><span>Your conversations <span class="trust-highlight">stay yours</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🧠</span><span>Matched on <span class="trust-highlight">behavior</span>, not just a photo</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">✦</span><span>No spam. <span class="trust-highlight">No unsolicited messages.</span> Ever.</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🤖</span><span>Your Twin talks to <span class="trust-highlight">other Twins</span>, not to strangers</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">📍</span><span>Matched to people <span class="trust-highlight">near you</span>, without sharing where you live</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🛡️</span><span>We never <span class="trust-highlight">sell your story</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🇮🇳</span><span>Made for how <span class="trust-highlight">India connects</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">💬</span><span>Real people. <span class="trust-highlight">Real conversations.</span> No filler.</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🔒</span><span>Your conversations <span
+                                class="trust-highlight">stay yours</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🧠</span><span>Matched on <span
+                                class="trust-highlight">behavior</span>, not just a photo</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">✦</span><span>No spam. <span
+                                class="trust-highlight">No unsolicited messages.</span> Ever.</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🤖</span><span>Your Twin talks to <span
+                                class="trust-highlight">other Twins</span>, not to strangers</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">📍</span><span>Matched to people <span
+                                class="trust-highlight">near you</span>, without sharing where you live</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🛡️</span><span>We never <span
+                                class="trust-highlight">sell your story</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🇮🇳</span><span>Made for how <span
+                                class="trust-highlight">India connects</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">💬</span><span>Real people. <span
+                                class="trust-highlight">Real conversations.</span> No filler.</span></div>
                     <!-- Duplicate for seamless loop -->
-                    <div class="trust-item"><span class="trust-item-icon">🔒</span><span>Your conversations <span class="trust-highlight">stay yours</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🧠</span><span>Matched on <span class="trust-highlight">behavior</span>, not just a photo</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">✦</span><span>No spam. <span class="trust-highlight">No unsolicited messages.</span> Ever.</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🤖</span><span>Your Twin talks to <span class="trust-highlight">other Twins</span>, not to strangers</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">📍</span><span>Matched to people <span class="trust-highlight">near you</span>, without sharing where you live</span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🛡️</span><span>We never <span class="trust-highlight">sell your story</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">🇮🇳</span><span>Made for how <span class="trust-highlight">India connects</span></span></div>
-                    <div class="trust-item"><span class="trust-item-icon">💬</span><span>Real people. <span class="trust-highlight">Real conversations.</span> No filler.</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🔒</span><span>Your conversations <span
+                                class="trust-highlight">stay yours</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🧠</span><span>Matched on <span
+                                class="trust-highlight">behavior</span>, not just a photo</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">✦</span><span>No spam. <span
+                                class="trust-highlight">No unsolicited messages.</span> Ever.</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🤖</span><span>Your Twin talks to <span
+                                class="trust-highlight">other Twins</span>, not to strangers</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">📍</span><span>Matched to people <span
+                                class="trust-highlight">near you</span>, without sharing where you live</span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🛡️</span><span>We never <span
+                                class="trust-highlight">sell your story</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">🇮🇳</span><span>Made for how <span
+                                class="trust-highlight">India connects</span></span></div>
+                    <div class="trust-item"><span class="trust-item-icon">💬</span><span>Real people. <span
+                                class="trust-highlight">Real conversations.</span> No filler.</span></div>
                 </div>
             </div>
 
             <!-- ══════════════════════════════════════════════════════════
                  HOW IT WORKS: Principle of Least Effort driver
-                 3 large punchy numbered step cards — visual > text
+                 3 large punchy numbered step cards - visual > text
                  ══════════════════════════════════════════════════════════ -->
             <section class="landing-section reveal-on-scroll" style="padding-top: 5rem;">
                 <div class="section-header">
                     <span class="section-tag">No more guessing</span>
                     <h2 class="section-title">This is what getting it<br>right actually looks like.</h2>
-                    <p class="section-desc">Most apps make you do the hard part alone. Konvo does it with you. Your Twin handles the awkward early stage so when you finally say hello to someone, it genuinely means something.</p>
+                    <p class="section-desc">Most apps make you do the hard part alone. Konvo does it with you. Your Twin
+                        handles the awkward early stage so when you finally say hello to someone, it genuinely means
+                        something.</p>
                 </div>
 
                 <div class="step-cards-grid">
@@ -436,21 +493,27 @@
                         <div class="step-num">01</div>
                         <div class="step-icon">🧠</div>
                         <div class="step-headline">You talk.<br>We listen.</div>
-                        <p class="step-body">Not a form. Not a questionnaire. Just a few honest prompts about how you see the world, what makes you laugh, and what you actually want. We build your Twin from your words, not your profile picture.</p>
+                        <p class="step-body">Not a form. Not a questionnaire. Just a few honest prompts about how you
+                            see the world, what makes you laugh, and what you actually want. We build your Twin from
+                            your words, not your profile picture.</p>
                         <div class="step-micro">Feels like talking to a friend, takes about three minutes</div>
                     </div>
                     <div class="step-card reveal-on-scroll">
                         <div class="step-num">02</div>
                         <div class="step-icon">🤖</div>
                         <div class="step-headline">Your Twin does<br>the awkward part.</div>
-                        <p class="step-body">Your AI Twin has real conversations with other Twins inside private virtual spaces, a cozy café, a rooftop at night, a quiet library. No real people talk to each other yet. Your Twin just quietly figures out if there is something there.</p>
+                        <p class="step-body">Your AI Twin has real conversations with other Twins inside private virtual
+                            spaces, a cozy café, a rooftop at night, a quiet library. No real people talk to each other
+                            yet. Your Twin just quietly figures out if there is something there.</p>
                         <div class="step-micro">Runs quietly in the background while you live your life</div>
                     </div>
                     <div class="step-card reveal-on-scroll">
                         <div class="step-num">03</div>
                         <div class="step-icon">💚</div>
                         <div class="step-headline">You decide.<br>Then you meet.</div>
-                        <p class="step-body">You read through the conversation. You see how they think, what they care about, whether something actually clicked. If it feels right, you both say yes and a private chat opens. No pressure. Your location and identity stay sealed until you are ready.</p>
+                        <p class="step-body">You read through the conversation. You see how they think, what they care
+                            about, whether something actually clicked. If it feels right, you both say yes and a private
+                            chat opens. No pressure. Your location and identity stay sealed until you are ready.</p>
                         <div class="step-micro">You are always in control, always</div>
                     </div>
                 </div>
@@ -574,7 +637,8 @@
                             <span class="tech-service-name">Private Channels</span>
                             <span class="tech-badge stream">Encrypted</span>
                         </div>
-                        <p>Chat opens only when both of you genuinely want it. No cold messages. No surprises. Just a private conversation between two people who already know they click.</p>
+                        <p>Chat opens only when both of you genuinely want it. No cold messages. No surprises. Just a
+                            private conversation between two people who already know they click.</p>
                         <div class="tech-visual-flow">
                             MUTUAL CHOICE &rarr; PRIVATE CHANNEL &rarr; REAL CONVERSATION
                         </div>
@@ -696,7 +760,10 @@
                                     Define Your Vibe</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Tell us about yourself in your own words. Not via dropdowns or sliders but through real prompts that let you express how you actually think. What makes you laugh. What you care about on a slow Sunday. How you handle a disagreement. That is where your Twin comes from.
+                                    Tell us about yourself in your own words. Not via dropdowns or sliders but through
+                                    real prompts that let you express how you actually think. What makes you laugh. What
+                                    you care about on a slow Sunday. How you handle a disagreement. That is where your
+                                    Twin comes from.
                                 </p>
                                 <div
                                     style="background-color: rgba(13,148,136,0.04); border-left: 2px solid var(--accent-teal); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
@@ -743,7 +810,10 @@
                                     Cozy Virtual Dates</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Your Twin steps into a private virtual space and has a real conversation with someone else's Twin. You are not involved yet. Both Twins just talk. A cozy cyberpunk diner. A quiet zen garden. Somewhere that feels like a first date but with zero stakes for you.
+                                    Your Twin steps into a private virtual space and has a real conversation with
+                                    someone else's Twin. You are not involved yet. Both Twins just talk. A cozy
+                                    cyberpunk diner. A quiet zen garden. Somewhere that feels like a first date but with
+                                    zero stakes for you.
                                 </p>
                                 <div
                                     style="background-color: rgba(6,182,212,0.04); border-left: 2px solid var(--accent-cyan); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
@@ -757,7 +827,9 @@
                                     Real Connection</h4>
                                 <p
                                     style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 1rem;">
-                                    Once you both approve, a secure direct chat opens. You can start talking with confidence. Your location is never shared and all your conversations are private between the two of you.
+                                    Once you both approve, a secure direct chat opens. You can start talking with
+                                    confidence. Your location is never shared and all your conversations are private
+                                    between the two of you.
                                 </p>
                                 <div
                                     style="background-color: rgba(16,185,129,0.04); border-left: 2px solid var(--success); padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
@@ -776,8 +848,11 @@
                  ══════════════════════════════════════════════════════════ -->
             <section class="final-cta-strip reveal-on-scroll">
                 <span class="final-cta-eyebrow">Honestly, just try it</span>
-                <h2 class="final-cta-headline">You have been scrolling<br><span class="gradient-text">long enough.</span></h2>
-                <p class="final-cta-sub">Give Konvo one honest try. Set up your Twin. See what it learns about you. See who it finds. If it does not feel different from everything else you have tried, you lose nothing. But we think it will feel different.</p>
+                <h2 class="final-cta-headline">You have been scrolling<br><span class="gradient-text">long
+                        enough.</span></h2>
+                <p class="final-cta-sub">Give Konvo one honest try. Set up your Twin. See what it learns about you. See
+                    who it finds. If it does not feel different from everything else you have tried, you lose nothing.
+                    But we think it will feel different.</p>
                 <div class="final-cta-actions">
                     <a href="/login?register=true" class="btn-cta-primary">Build my Twin, it is free</a>
                     <a href="/login" class="btn btn-secondary" style="padding: 1rem 2rem;">I already have an account</a>
@@ -1215,7 +1290,8 @@
                             style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-teal); border: 1px solid rgba(13,148,136,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">TLS
                             1.3</span>
                         <span
-                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES 256 GCM</span>
+                            style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent-amber); border: 1px solid rgba(217,119,6,0.3); padding: 0.2rem 0.5rem; border-radius: 4px;">AES
+                            256 GCM</span>
                         <span
                             style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px;">E2E
                             Encrypted</span>
@@ -1266,8 +1342,8 @@
                                 onclick="if(window.konvoShowCookieSettings) { window.konvoShowCookieSettings(); } return false;"
                                 style="font-size: 0.85rem; color: var(--text-secondary);">Cookie Settings</a></li>
 
-                        <li><a href="#" onclick="alert('System Status: All gateway microservices are operational.')"
-                                style="font-size: 0.85rem; color: var(--accent-teal);">● Systems: Operational</a></li>
+                        <li><a href="#" id="btn-system-status" style="font-size: 0.85rem; color: var(--accent-teal);">●
+                                Systems: Operational</a></li>
                     </ul>
                 </div>
             </div>
@@ -1392,147 +1468,326 @@
 
     <!-- Psychology-Driven Match Card + Vibe Bar JS -->
     <script>
-    // ── Vibe bar animation ──────────────────────────────────────────
-    function startVibeAnimation() {
-        const fill = document.getElementById('vibe-fill-bar');
-        const pct  = document.getElementById('vibe-pct-display');
-        if (!fill || !pct) return;
-        fill.classList.add('animate');
-        const phases = [
-            'analyzing behavior...',
-            'reading conversation pattern...',
-            'verifying personality match...',
-            'strong alignment found'
-        ];
-        let phaseIdx = 0;
-        pct.textContent = phases[0];
-        const interval = setInterval(() => {
-            phaseIdx++;
-            if (phaseIdx < phases.length) {
-                pct.textContent = phases[phaseIdx];
-            } else {
-                clearInterval(interval);
-                pct.textContent = 'strong alignment found';
-            }
-        }, 600);
-    }
+        // ── Vibe bar animation ──────────────────────────────────────────
+        function startVibeAnimation() {
+            const fill = document.getElementById('vibe-fill-bar');
+            const pct = document.getElementById('vibe-pct-display');
+            if (!fill || !pct) return;
+            fill.classList.add('animate');
+            const phases = [
+                'analyzing behavior...',
+                'reading conversation pattern...',
+                'verifying personality match...',
+                'strong alignment found'
+            ];
+            let phaseIdx = 0;
+            pct.textContent = phases[0];
+            const interval = setInterval(() => {
+                phaseIdx++;
+                if (phaseIdx < phases.length) {
+                    pct.textContent = phases[phaseIdx];
+                } else {
+                    clearInterval(interval);
+                    pct.textContent = 'strong alignment found';
+                }
+            }, 600);
+        }
 
-    // Start vibe animation 1.5s after load
-    window.addEventListener('load', () => setTimeout(startVibeAnimation, 1500));
+        // Start vibe animation 1.5s after load
+        window.addEventListener('load', () => setTimeout(startVibeAnimation, 1500));
 
-    // ── Confetti burst ──────────────────────────────────────────────
-    function burstConfetti(originX, originY) {
-        const colors = ['#0d9488','#06b6d4','#f59e0b','#6366f1','#ec4899','#10b981'];
-        for (let i = 0; i < 36; i++) {
-            const el = document.createElement('div');
-            el.className = 'confetti-particle';
-            const angle = (i / 36) * Math.PI * 2;
-            const speed = 80 + Math.random() * 160;
-            const vx = Math.cos(angle) * speed;
-            const vy = -(Math.sin(angle) * speed + 80 + Math.random() * 120);
-            const rot = Math.random() * 720 - 360;
-            const dur = 0.9 + Math.random() * 0.8;
-            const delay = Math.random() * 0.15;
-            el.style.cssText = `
+        // ── Confetti burst ──────────────────────────────────────────────
+        function burstConfetti(originX, originY) {
+            const colors = ['#0d9488', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899', '#10b981'];
+            for (let i = 0; i < 36; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-particle';
+                const angle = (i / 36) * Math.PI * 2;
+                const speed = 80 + Math.random() * 160;
+                const vx = Math.cos(angle) * speed;
+                const vy = -(Math.sin(angle) * speed + 80 + Math.random() * 120);
+                const rot = Math.random() * 720 - 360;
+                const dur = 0.9 + Math.random() * 0.8;
+                const delay = Math.random() * 0.15;
+                el.style.cssText = `
                 left:${originX}px; top:${originY}px;
                 background:${colors[Math.floor(Math.random() * colors.length)]};
                 --vx:${vx}px; --vy:${vy}px; --rot:${rot}deg;
                 --dur:${dur}s; --delay:${delay}s;
                 border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
             `;
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), (dur + delay) * 1000 + 100);
-        }
-    }
-
-    // ── Card swipe helpers ──────────────────────────────────────────
-    function showMatchSuccess() {
-        const overlay = document.getElementById('match-success-overlay');
-        if (overlay) {
-            overlay.classList.add('show');
-            // Confetti from center of viewport
-            burstConfetti(window.innerWidth / 2, window.innerHeight / 3);
-        }
-    }
-
-    function heroCardConnect() {
-        const card = document.getElementById('hero-match-card');
-        if (!card || card.classList.contains('swiping-right')) return;
-        card.classList.add('swiping-right');
-        setTimeout(showMatchSuccess, 300);
-    }
-
-    function heroCardPass() {
-        const card = document.getElementById('hero-match-card');
-        if (!card || card.classList.contains('swiping-left')) return;
-        card.classList.add('swiping-left');
-        setTimeout(() => {
-            card.style.transform = '';
-            card.style.opacity = '';
-            card.classList.remove('swiping-left');
-            // Reset vibe bar
-            const fill = document.getElementById('vibe-fill-bar');
-            const pct  = document.getElementById('vibe-pct-display');
-            if (fill) { fill.classList.remove('animate'); fill.style.width = '0%'; }
-            if (pct)  pct.textContent = 'analyzing behavior...';
-            setTimeout(startVibeAnimation, 400);
-        }, 600);
-    }
-
-    // ── Touch/drag swipe support ────────────────────────────────────
-    (function initSwipeGesture() {
-        const card = document.getElementById('hero-match-card');
-        if (!card) return;
-        let startX = 0, currentX = 0, dragging = false;
-
-        function onStart(e) {
-            if (card.classList.contains('swiping-right') || card.classList.contains('swiping-left')) return;
-            dragging = true;
-            startX = (e.touches ? e.touches[0].clientX : e.clientX);
-            card.style.transition = 'none';
-        }
-        function onMove(e) {
-            if (!dragging) return;
-            currentX = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
-            const rotate = currentX / 20;
-            card.style.transform = `translateX(${currentX}px) rotate(${rotate}deg)`;
-        }
-        function onEnd() {
-            if (!dragging) return;
-            dragging = false;
-            card.style.transition = '';
-            if (currentX > 80) {
-                heroCardConnect();
-            } else if (currentX < -80) {
-                heroCardPass();
-            } else {
-                card.style.transform = '';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), (dur + delay) * 1000 + 100);
             }
-            currentX = 0;
         }
 
-        card.addEventListener('mousedown', onStart);
-        card.addEventListener('touchstart', onStart, { passive: true });
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('touchmove', onMove, { passive: true });
-        window.addEventListener('mouseup', onEnd);
-        window.addEventListener('touchend', onEnd);
-    })();
+        // ── Card swipe helpers ──────────────────────────────────────────
+        function showMatchSuccess() {
+            const overlay = document.getElementById('match-success-overlay');
+            if (overlay) {
+                overlay.classList.add('show');
+                // Confetti from center of viewport
+                burstConfetti(window.innerWidth / 2, window.innerHeight / 3);
+            }
+        }
 
-    // ── Enhanced scroll reveal with stagger ────────────────────────
-    (function enhancedReveal() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
+        function heroCardConnect() {
+            const card = document.getElementById('hero-match-card');
+            if (!card || card.classList.contains('swiping-right')) return;
+            card.classList.add('swiping-right');
+            setTimeout(showMatchSuccess, 300);
+        }
+
+        function heroCardPass() {
+            const card = document.getElementById('hero-match-card');
+            if (!card || card.classList.contains('swiping-left')) return;
+            card.classList.add('swiping-left');
+            setTimeout(() => {
+                card.style.transform = '';
+                card.style.opacity = '';
+                card.classList.remove('swiping-left');
+                // Reset vibe bar
+                const fill = document.getElementById('vibe-fill-bar');
+                const pct = document.getElementById('vibe-pct-display');
+                if (fill) { fill.classList.remove('animate'); fill.style.width = '0%'; }
+                if (pct) pct.textContent = 'analyzing behavior...';
+                setTimeout(startVibeAnimation, 400);
+            }, 600);
+        }
+
+        // ── Touch/drag swipe support ────────────────────────────────────
+        (function initSwipeGesture() {
+            const card = document.getElementById('hero-match-card');
+            if (!card) return;
+            let startX = 0, currentX = 0, dragging = false;
+
+            function onStart(e) {
+                if (card.classList.contains('swiping-right') || card.classList.contains('swiping-left')) return;
+                dragging = true;
+                startX = (e.touches ? e.touches[0].clientX : e.clientX);
+                card.style.transition = 'none';
+            }
+            function onMove(e) {
+                if (!dragging) return;
+                currentX = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
+                const rotate = currentX / 20;
+                card.style.transform = `translateX(${currentX}px) rotate(${rotate}deg)`;
+            }
+            function onEnd() {
+                if (!dragging) return;
+                dragging = false;
+                card.style.transition = '';
+                if (currentX > 80) {
+                    heroCardConnect();
+                } else if (currentX < -80) {
+                    heroCardPass();
+                } else {
+                    card.style.transform = '';
                 }
-            });
-        }, { threshold: 0.02, rootMargin: '0px 0px 120px 0px' });
+                currentX = 0;
+            }
 
-        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-    })();
+            card.addEventListener('mousedown', onStart);
+            card.addEventListener('touchstart', onStart, { passive: true });
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('mouseup', onEnd);
+            window.addEventListener('touchend', onEnd);
+        })();
+
+        // ── Enhanced scroll reveal with stagger ────────────────────────
+        (function enhancedReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.02, rootMargin: '0px 0px 120px 0px' });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        })();
     </script>
+    <!-- ─── PWA Install Prompt ─────────────────────────────────────────────── -->
+    <div id="pwa-install-banner" style="
+        display: none;
+        position: fixed;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(120px);
+        z-index: 9999;
+        width: min(420px, calc(100vw - 2rem));
+        background: rgba(15,15,22,0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(20,184,166,0.25);
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(20,184,166,0.1);
+        transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+        opacity: 0;
+    " aria-live="polite" role="dialog" aria-label="Install Konvo app">
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+            <img src="/favicon.svg" alt="Konvo"
+                style="width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; background: #14b8a6; padding: 4px;">
+            <div style="flex: 1; min-width: 0;">
+                <div
+                    style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: #f4f4f8; margin-bottom: 0.2rem;">
+                    Install Konvo</div>
+                <div style="font-size: 0.8rem; color: #8b8ba0; line-height: 1.4;">Add to your home screen for instant
+                    access. Works offline too.</div>
+            </div>
+            <button id="pwa-install-close" aria-label="Dismiss install prompt"
+                style="background: none; border: none; color: #4a4a5e; cursor: pointer; font-size: 1.2rem; padding: 0; line-height: 1; flex-shrink: 0; transition: color 0.15s;"
+                onmouseover="this.style.color='#f4f4f8'" onmouseout="this.style.color='#4a4a5e'">&times;</button>
+        </div>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <button id="pwa-install-btn" style="
+                flex: 1;
+                background: linear-gradient(135deg, #14b8a6, #0891b2);
+                color: #000;
+                border: none;
+                padding: 0.65rem 1.25rem;
+                border-radius: 10px;
+                font-weight: 700;
+                font-size: 0.85rem;
+                cursor: pointer;
+                font-family: 'Outfit', sans-serif;
+                transition: opacity 0.15s;
+            " onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">📲 Install App</button>
+            <button id="pwa-install-later" style="
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.1);
+                color: #8b8ba0;
+                padding: 0.65rem 1rem;
+                border-radius: 10px;
+                font-size: 0.82rem;
+                cursor: pointer;
+                font-family: 'Outfit', sans-serif;
+                transition: border-color 0.15s;
+            ">Not now</button>
+        </div>
+    </div>
+
+    <script>
+        // ─── PWA Install Prompt Logic ──────────────────────────────────────────────
+        (function initPWAPrompt() {
+            const DISMISS_KEY = 'konvo_pwa_dismissed';
+            const DISMISS_EXPIRY_DAYS = 14;
+            let deferredPrompt = null;
+            const banner = document.getElementById('pwa-install-banner');
+            const installBtn = document.getElementById('pwa-install-btn');
+            const closeBtn = document.getElementById('pwa-install-close');
+            const laterBtn = document.getElementById('pwa-install-later');
+
+            function isDismissed() {
+                const ts = localStorage.getItem(DISMISS_KEY);
+                if (!ts) return false;
+                const age = (Date.now() - parseInt(ts)) / (1000 * 60 * 60 * 24);
+                return age < DISMISS_EXPIRY_DAYS;
+            }
+
+            function showBanner() {
+                if (!banner || isDismissed()) return;
+                banner.style.display = 'block';
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        banner.style.transform = 'translateX(-50%) translateY(0)';
+                        banner.style.opacity = '1';
+                    });
+                });
+            }
+
+            function hideBanner(permanent) {
+                if (!banner) return;
+                banner.style.transform = 'translateX(-50%) translateY(120px)';
+                banner.style.opacity = '0';
+                setTimeout(() => { banner.style.display = 'none'; }, 400);
+                if (permanent) {
+                    localStorage.setItem(DISMISS_KEY, Date.now().toString());
+                }
+            }
+
+            // Capture the browser's native install event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                // Show the banner after 3 seconds on the page
+                setTimeout(showBanner, 3000);
+            });
+
+            // If already installed, never show
+            window.addEventListener('appinstalled', () => {
+                hideBanner(true);
+                deferredPrompt = null;
+            });
+
+            if (installBtn) {
+                installBtn.addEventListener('click', async () => {
+                    if (!deferredPrompt) return;
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    hideBanner(outcome === 'accepted');
+                });
+            }
+
+            if (closeBtn) closeBtn.addEventListener('click', () => hideBanner(true));
+            if (laterBtn) laterBtn.addEventListener('click', () => hideBanner(true));
+
+            // System status - no more alert(), link to /api/health
+            const statusBtn = document.getElementById('btn-system-status');
+            if (statusBtn) {
+                statusBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        const res = await fetch('/api/health');
+                        const data = await res.json();
+                        const status = data.status === 'healthy' ? '✅ All systems operational' : '⚠️ Partial degradation detected';
+                        statusBtn.textContent = status;
+                        setTimeout(() => { statusBtn.textContent = '● Systems: Operational'; }, 4000);
+                    } catch {
+                        statusBtn.textContent = '⚠️ Status check failed';
+                        setTimeout(() => { statusBtn.textContent = '● Systems: Operational'; }, 4000);
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <!-- ─── Service Worker Registration ──────────────────────────────────── -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then(reg => {
+                        console.log('[SW] Registered:', reg.scope);
+                        // If a new SW is waiting, activate it on next navigation
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            if (newWorker) {
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New version available - send skip waiting
+                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    }
+                                });
+                            }
+                        });
+                    })
+                    .catch(err => console.warn('[SW] Registration failed:', err));
+
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    // New SW took control - reload if we were previously controlled
+                    if (navigator.serviceWorker.controller) {
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+    </script>
+
 </body>
 
 </html>

@@ -43,8 +43,8 @@
     <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <!-- Three.js: lazy-loaded on-demand in openVirtualDate() only -->
-    <script>window._threeJsLoaded = false; window._loadThreeJS = function (cb) { if (window._threeJsLoaded) { cb(); return; } var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; s.onload = function () { window._threeJsLoaded = true; cb(); }; document.head.appendChild(s); };</script>
+    <!-- Three.js r167: lazy-loaded on-demand in openVirtualDate() only -->
+    <script>window._threeJsLoaded = false; window._loadThreeJS = function (cb) { if (window._threeJsLoaded) { cb(); return; } var s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.min.js'; s.onload = function () { window._threeJsLoaded = true; cb(); }; s.onerror = function() { console.error('[Three.js] Failed to load r167'); }; document.head.appendChild(s); };</script>
     <!-- Modal stub: queues calls before app.js loads, drained when real function is defined -->
     <script>
         (function () {

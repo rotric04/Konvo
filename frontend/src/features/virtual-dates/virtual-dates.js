@@ -16,7 +16,7 @@ const VirtualDateScenarios = [
     {
         id: 'future_planning',
         name: 'Future Planning',
-        npc: 'Evelyn (Advisor)',
+        npc: 'Calibration Engine',
         intro: 'How do you structure your long-term roadmap? Do you prioritize nesting and stability, or rapid career scaling and global nomadism?',
         choices: [
             { text: 'Settle in a vibrant city with local community roots.', outcome: 'You build a stable local support system with rich shared spaces.', insight: 'Nesting & Community. Planning Style: Structured.', delta: 10 },
@@ -31,7 +31,7 @@ const VirtualDateScenarios = [
     {
         id: 'dream_home',
         name: 'Dream Home Builder',
-        npc: 'Marcus (Architect)',
+        npc: 'Scenario Module',
         intro: 'You are designing your ideal shared space. Do you prefer a minimalist smart-home condo in the metropolitan core, or a rustic off-grid cabin?',
         choices: [
             { text: 'A sleek, automated high-rise with skyline views.', outcome: 'You prioritize metropolitan access, high technology, and modern conveniences.', insight: 'Urban Active. Priorities: Access, technology, convenience.', delta: 10 },
@@ -46,7 +46,7 @@ const VirtualDateScenarios = [
     {
         id: 'weekend_simulation',
         name: 'Weekend Simulation',
-        npc: 'Aria (Concierge)',
+        npc: 'Resonance Engine',
         intro: 'A free Saturday arises. Do you lock in a detailed itinerary of cultural activities, or turn off alarms and go completely unscheduled?',
         choices: [
             { text: 'A pre-planned cultural tour followed by dining reservations.', outcome: 'You maximize efficiency and ensure entry to high-demand venues.', insight: 'Structured. Planning Style: Curated, high productivity.', delta: 10 },
@@ -61,7 +61,7 @@ const VirtualDateScenarios = [
     {
         id: 'team_challenges',
         name: 'Team Challenges',
-        npc: 'Zara (Founder)',
+        npc: 'Alignment Module',
         intro: 'You are co-organizing a charity event. Do you divide tasks cleanly and check in weekly, or work side-by-side in real-time collaborative sprints?',
         choices: [
             { text: 'Divide tasks by specialty and trust each other to execute.', outcome: 'You optimize for individual focus, checking in on milestone deadlines.', insight: 'Autonomous Work. Cooperation: Specialized, high trust.', delta: 10 },
@@ -76,7 +76,7 @@ const VirtualDateScenarios = [
     {
         id: 'conflict_resolution',
         name: 'Conflict Resolution',
-        npc: 'Dax (Mediator)',
+        npc: 'Behavior Analyzer',
         intro: 'You disagree on a major life direction. Do you immediately talk through the friction point, or take personal cool-down space before conversing?',
         choices: [
             { text: 'Address and discuss the friction point immediately.', outcome: 'You process emotions dynamically in real time to reach early resolution.', insight: 'Direct Resolution. Emotional Maturity: Immediate closure.', delta: 10 },
@@ -91,7 +91,7 @@ const VirtualDateScenarios = [
     {
         id: 'financial_priorities',
         name: 'Financial Priorities',
-        npc: 'Kaelen (Treasurer)',
+        npc: 'Vibe Calibrator',
         intro: 'A major windfall arrives. Do you invest it into aggressive, high-upside financial assets, or secure a protective emergency safety net first?',
         choices: [
             { text: 'Aggressive equity/crypto investments for high-growth potential.', outcome: 'You accept volatility in pursuit of compound growth.', insight: 'Wealth Builder. Risk Profile: High risk, growth-oriented.', delta: 10 },
@@ -1495,41 +1495,175 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
         const animatedObjects = [];
         let locationColor = 0xffffff;
 
-        // Custom environment items
+        // Custom environment items — enhanced with terrain, particles, stars
         if (locationId === 'rooftop') {
             locationColor = 0xfacc15;
-            for (let i = 0; i < 20; i++) {
-                const bH = 10 + Math.random() * 20;
-                const bGeo = new THREE.BoxGeometry(3, bH, 3);
-                const bMat = new THREE.MeshStandardMaterial({ color: 0x0a0a16, roughness: 0.5, metalness: 0.8, emissive: 0x111827 });
-                const bMesh = new THREE.Mesh(bGeo, bMat);
-                bMesh.position.set((Math.random() - 0.5) * 40, bH/2 - 2, -15 - Math.random() * 15);
-                envGroup.add(bMesh);
+
+            // ── Star field ──────────────────────────────────────────────────────
+            const starCount = isMobile ? 600 : 1800;
+            const starGeo = new THREE.BufferGeometry();
+            const starPos = new Float32Array(starCount * 3);
+            for (let i = 0; i < starCount * 3; i += 3) {
+                starPos[i]   = (Math.random() - 0.5) * 400;
+                starPos[i+1] = 20 + Math.random() * 150;
+                starPos[i+2] = -20 - Math.random() * 200;
             }
+            starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.35, transparent: true, opacity: 0.85, sizeAttenuation: true });
+            const stars = new THREE.Points(starGeo, starMat);
+            envGroup.add(stars);
+            animatedObjects.push({ mesh: stars, type: 'stars' });
+
+            // ── City skyline with glowing windows ──────────────────────────────
+            const windowColors = [0xfacc15, 0x38bdf8, 0xf472b6, 0xa78bfa, 0x34d399, 0xfb923c];
+            for (let i = 0; i < 28; i++) {
+                const bH = 8 + Math.random() * 28;
+                const bW = 2 + Math.random() * 4;
+                const bGeo = new THREE.BoxGeometry(bW, bH, bW * 0.7);
+                const bMat = new THREE.MeshStandardMaterial({
+                    color: 0x07070f,
+                    roughness: 0.4,
+                    metalness: 0.9,
+                    emissive: 0x050510,
+                    emissiveIntensity: 0.5
+                });
+                const bMesh = new THREE.Mesh(bGeo, bMat);
+                const bX = (i % 2 === 0 ? -1 : 1) * (12 + Math.random() * 22);
+                bMesh.position.set(bX, bH / 2 - 4, -18 - Math.random() * 20);
+                envGroup.add(bMesh);
+
+                // Add glowing windows
+                const winRows = Math.floor(bH / 2.5);
+                const winCols = Math.max(1, Math.floor(bW / 1.8));
+                for (let r = 0; r < winRows; r++) {
+                    for (let c = 0; c < winCols; c++) {
+                        if (Math.random() < 0.55) {
+                            const wGeo = new THREE.PlaneGeometry(0.4, 0.3);
+                            const wColor = windowColors[Math.floor(Math.random() * windowColors.length)];
+                            const wMat = new THREE.MeshBasicMaterial({ color: wColor });
+                            const wMesh = new THREE.Mesh(wGeo, wMat);
+                            wMesh.position.set(
+                                bX + (c - (winCols - 1) / 2) * 1.6,
+                                (r + 0.5) * 2.4 - 3,
+                                bMesh.position.z + bW * 0.35 + 0.01
+                            );
+                            envGroup.add(wMesh);
+                            animatedObjects.push({ mesh: wMesh, type: 'window', phase: Math.random() * Math.PI * 2 });
+                        }
+                    }
+                }
+
+                // Rooftop glow point light
+                if (i % 4 === 0) {
+                    const bLight = new THREE.PointLight(windowColors[Math.floor(Math.random() * windowColors.length)], 0.4, 25);
+                    bLight.position.set(bX, bH / 2 - 2, bMesh.position.z + 3);
+                    scene.add(bLight);
+                }
+            }
+
+            // ── Horizon glow plane ──────────────────────────────────────────────
+            const horizonGeo = new THREE.PlaneGeometry(200, 12);
+            const horizonMat = new THREE.MeshBasicMaterial({ color: 0x1c0a2e, transparent: true, opacity: 0.9, side: THREE.DoubleSide });
+            const horizon = new THREE.Mesh(horizonGeo, horizonMat);
+            horizon.rotation.x = -Math.PI / 2;
+            horizon.position.set(0, -1.5, -30);
+            envGroup.add(horizon);
+
         } else if (locationId === 'cafe') {
             locationColor = 0xd97706;
+
+            // ── Enhanced steam particle system ──────────────────────────────────
+            const steamCount = isMobile ? 30 : 60;
             const steamGeo = new THREE.BufferGeometry();
-            const steamCount = 15;
             const steamPos = new Float32Array(steamCount * 3);
+            const steamPhase = new Float32Array(steamCount);
             for (let i = 0; i < steamCount * 3; i += 3) {
-                steamPos[i] = (Math.random() - 0.5) * 0.4;
-                steamPos[i+1] = 2.2 + Math.random() * 2;
-                steamPos[i+2] = (Math.random() - 0.5) * 0.4;
+                steamPos[i]   = (Math.random() - 0.5) * 0.6;
+                steamPos[i+1] = 2.2 + Math.random() * 2.5;
+                steamPos[i+2] = (Math.random() - 0.5) * 0.6;
+                steamPhase[i / 3] = Math.random() * Math.PI * 2;
             }
             steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3));
-            const steamMat = new THREE.PointsMaterial({ color: 0xffedd5, size: 0.1, transparent: true, opacity: 0.4 });
+            const steamMat = new THREE.PointsMaterial({ color: 0xfff0e0, size: 0.12, transparent: true, opacity: 0.45, sizeAttenuation: true });
             const steamPoints = new THREE.Points(steamGeo, steamMat);
             envGroup.add(steamPoints);
-            animatedObjects.push({ mesh: steamPoints, type: 'steam', speed: 0.015, count: steamCount });
+            animatedObjects.push({ mesh: steamPoints, type: 'steam', speed: 0.012, count: steamCount, phase: steamPhase });
+
+            // ── Warm pendant lights ─────────────────────────────────────────────
+            const lampPositions = [[-3, 6, -3], [3, 6, -3], [0, 5.5, 2], [-4, 5, 2], [4, 5, 2]];
+            lampPositions.forEach(([lx, ly, lz]) => {
+                const lampLight = new THREE.PointLight(0xfbbf24, 0.7, 14);
+                lampLight.position.set(lx, ly, lz);
+                scene.add(lampLight);
+
+                // Lamp sphere
+                const lampGeo = new THREE.SphereGeometry(0.18, 8, 8);
+                const lampMat = new THREE.MeshBasicMaterial({ color: 0xfde68a });
+                const lampMesh = new THREE.Mesh(lampGeo, lampMat);
+                lampMesh.position.set(lx, ly - 0.2, lz);
+                envGroup.add(lampMesh);
+            });
+
+            // ── Cafe floor tiles ───────────────────────────────────────────────
+            const floorGeo = new THREE.PlaneGeometry(24, 24, 1, 1);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a100a, roughness: 0.6, metalness: 0.1 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -0.41;
+            envGroup.add(floor);
+
         } else if (locationId === 'beach') {
             locationColor = 0xf43f5e;
-            const waveGeo = new THREE.PlaneGeometry(60, 60, 10, 10);
-            const waveMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2, wireframe: true });
+
+            // ── Procedural ocean with vertex displacement ───────────────────────
+            const waveRes = isMobile ? 24 : 60;
+            const waveGeo = new THREE.PlaneGeometry(80, 80, waveRes, waveRes);
+            const waveMat = new THREE.MeshStandardMaterial({
+                color: 0x0d3752,
+                roughness: 0.1,
+                metalness: 0.4,
+                transparent: true,
+                opacity: 0.88
+            });
             const waveMesh = new THREE.Mesh(waveGeo, waveMat);
             waveMesh.rotation.x = -Math.PI / 2;
-            waveMesh.position.set(0, -0.4, -20);
+            waveMesh.position.set(0, -0.45, -20);
             envGroup.add(waveMesh);
-            animatedObjects.push({ mesh: waveMesh, type: 'waves', time: 0 });
+            animatedObjects.push({ mesh: waveMesh, type: 'ocean', time: 0 });
+
+            // ── Shore glow line ─────────────────────────────────────────────────
+            const shoreGeo = new THREE.BoxGeometry(40, 0.05, 1.2);
+            const shoreMat = new THREE.MeshBasicMaterial({ color: 0x14b8a6, transparent: true, opacity: 0.25 });
+            const shore = new THREE.Mesh(shoreGeo, shoreMat);
+            shore.position.set(0, -0.4, -4.5);
+            envGroup.add(shore);
+
+            // ── Beach sand terrain ──────────────────────────────────────────────
+            const sandGeo = new THREE.PlaneGeometry(60, 20, 12, 6);
+            const sandMat = new THREE.MeshStandardMaterial({ color: 0xd4a96a, roughness: 0.95, metalness: 0.0 });
+            const sandMesh = new THREE.Mesh(sandGeo, sandMat);
+            sandMesh.rotation.x = -Math.PI / 2;
+            sandMesh.position.set(0, -0.42, 8);
+            envGroup.add(sandMesh);
+
+            // ── Flying particle seagulls ────────────────────────────────────────
+            const birdCount = 18;
+            const birdGeo = new THREE.BufferGeometry();
+            const birdPos = new Float32Array(birdCount * 3);
+            for (let i = 0; i < birdCount * 3; i += 3) {
+                birdPos[i]   = (Math.random() - 0.5) * 60;
+                birdPos[i+1] = 8 + Math.random() * 10;
+                birdPos[i+2] = -10 - Math.random() * 30;
+            }
+            birdGeo.setAttribute('position', new THREE.BufferAttribute(birdPos, 3));
+            const birdMat = new THREE.PointsMaterial({ color: 0xfff9f0, size: 0.22, transparent: true, opacity: 0.7 });
+            const birds = new THREE.Points(birdGeo, birdMat);
+            envGroup.add(birds);
+            animatedObjects.push({ mesh: birds, type: 'birds', time: 0 });
+
+            // ── Sunset sky gradient ─────────────────────────────────────────────
+            scene.background = null;
+            scene.fog = new THREE.FogExp2(0x1a0520, isMobile ? 0.005 : 0.003);
         }
 
         const vibeLight = new THREE.PointLight(locationColor, 1.5, 12);
@@ -1588,17 +1722,60 @@ async function openVirtualDate(startLocationId = 'rooftop', userData = {}) {
                     const pos = obj.mesh.geometry.attributes.position;
                     for (let i = 0; i < obj.count; i++) {
                         let y = pos.getY(i) + obj.speed;
-                        if (y > 4.5) y = 2.2 + Math.random() * 0.5;
+                        // Organic side-to-side wobble using per-particle phase
+                        const phase = obj.phase ? obj.phase[i] : 0;
+                        const drift = Math.sin(animTime * 1.2 + phase) * 0.003;
+                        pos.setX(i, pos.getX(i) + drift);
+                        if (y > 4.8) {
+                            y = 2.2 + Math.random() * 0.3;
+                            pos.setX(i, (Math.random() - 0.5) * 0.5);
+                        }
                         pos.setY(i, y);
                     }
                     pos.needsUpdate = true;
-                } else if (obj.type === 'waves') {
-                    obj.time += 0.01;
+                    // Fade steam opacity with time cycle
+                    obj.mesh.material.opacity = 0.3 + Math.sin(animTime * 0.5) * 0.12;
+                } else if (obj.type === 'ocean') {
+                    obj.time += 0.008;
                     const pos = obj.mesh.geometry.attributes.position;
                     for (let i = 0; i < pos.count; i++) {
                         const x = pos.getX(i);
                         const y = pos.getY(i);
+                        // Two overlapping wave frequencies for realism
+                        const wave1 = Math.sin(x * 0.18 + obj.time * 1.2) * 0.28;
+                        const wave2 = Math.cos(y * 0.22 + obj.time * 0.9) * 0.18;
+                        const wave3 = Math.sin((x + y) * 0.12 + obj.time * 0.6) * 0.1;
+                        pos.setZ(i, wave1 + wave2 + wave3);
+                    }
+                    pos.needsUpdate = true;
+                    obj.mesh.geometry.computeVertexNormals();
+                } else if (obj.type === 'waves') {
+                    // Legacy support
+                    obj.time += 0.01;
+                    const pos = obj.mesh.geometry.attributes.position;
+                    for (let i = 0; i < pos.count; i++) {
+                        const x = pos.getX(i);
                         pos.setZ(i, Math.sin(x * 0.2 + obj.time) * 0.3);
+                    }
+                    pos.needsUpdate = true;
+                } else if (obj.type === 'stars') {
+                    // Slow star field drift
+                    obj.mesh.rotation.y = animTime * 0.0008;
+                    obj.mesh.rotation.x = Math.sin(animTime * 0.0003) * 0.004;
+                } else if (obj.type === 'window') {
+                    // Realistic window flicker (most stay on, occasional turn off)
+                    if (Math.random() < 0.002) {
+                        const lit = Math.random() > 0.15;
+                        obj.mesh.visible = lit;
+                    }
+                } else if (obj.type === 'birds') {
+                    obj.time += 0.006;
+                    const pos = obj.mesh.geometry.attributes.position;
+                    for (let i = 0; i < pos.count / 3; i++) {
+                        const offset = i * 0.7;
+                        // Circular drift pattern
+                        pos.setX(i, pos.getX(i) + Math.cos(obj.time + offset) * 0.04);
+                        pos.setY(i, pos.getY(i) + Math.sin(obj.time * 0.3 + offset) * 0.008);
                     }
                     pos.needsUpdate = true;
                 }

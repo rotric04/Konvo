@@ -2,6 +2,15 @@
   "version": 2,
   "headers": [
     {
+      "source": "/(auth|login|onboarding)(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -30,11 +39,11 @@
         },
         {
           "key": "Cross-Origin-Resource-Policy",
-          "value": "same-origin"
+          "value": "cross-origin"
         },
         {
           "key": "Cross-Origin-Embedder-Policy",
-          "value": "require-corp"
+          "value": "unsafe-none"
         }
       ]
     }
@@ -42,42 +51,37 @@
   "rewrites": [
     {
       "source": "/auth",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
       "source": "/login",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
       "source": "/onboarding",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
-      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)(/.*)?",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)(/.+)?",
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
-      "source": "/blog/:subpath*",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "source": "/blog/:subpath+",
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
       "source": "/blog",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
       "source": "/:page(feedback|admin_dashboard|hall-of-fame|security-policy|privacy-policy|terms-of-service)",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
-      "destination": "/security-verification.html"
-    },
-    {
-      "source": "/",
-      "missing": [{ "type": "cookie", "key": "cf_clearance", "value": "true" }],
+      "missing": [{ "type": "cookie", "key": "cf_clearance" }],
       "destination": "/security-verification.html"
     },
     {
@@ -93,11 +97,11 @@
       "destination": "/txt/:file"
     },
     {
-      "source": "/\\.well-known/security.txt",
+      "source": "/.well-known/security.txt",
       "destination": "/txt/security.txt"
     },
     {
-      "source": "/\\.well-known/agents.json",
+      "source": "/.well-known/agents.json",
       "destination": "/txt/agents.json"
     },
     {
@@ -117,11 +121,11 @@
       "destination": "/pages/onboarding.html"
     },
     {
-      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)(/.*)?",
+      "source": "/:page(discover|chat|grid|compatibility|communities|graph|profile|virtual-dates|agents|settings)(/.+)?",
       "destination": "/pages/app.html"
     },
     {
-      "source": "/blog/:subpath*",
+      "source": "/blog/:subpath+",
       "destination": "/pages/blog.html"
     },
     {

@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Security Verification | Konvo</title>
-    
+    <meta name="robots" content="noindex, nofollow">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
-    <!-- Cloudflare Turnstile CAPTCHA -->
+    <!-- Cloudflare Turnstile - explicit render mode -->
     <script>
         window.onloadTurnstileCallback = function () {
             if (window.renderSecurityWidget) {
@@ -23,175 +27,332 @@
             }
         };
     </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit"
+        async defer></script>
 
     <style>
         :root {
-            --bg-primary: #000000;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --accent-red: #ef4444;
+            --bg: #050508;
+            --surface: #0f0f14;
+            --border: #1e1e2a;
+            --text-primary: #f4f4f8;
+            --text-secondary: #8b8ba0;
+            --text-muted: #4a4a5e;
+            --accent-teal: #14b8a6;
             --accent-indigo: #6366f1;
-            --border-color: #27272a;
+            --accent-rose: #f43f5e;
             --font-mono: 'JetBrains Mono', monospace;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-primary);
+            background: var(--bg);
             color: var(--text-secondary);
             font-family: var(--font-sans);
-            display: flex;
-            justify-content: center;
             min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        .security-container {
-            max-width: 800px;
-            width: 100%;
-            padding: 8vh 2rem 2rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            text-align: left;
-            box-sizing: border-box;
-        }
-
-        .security-logo-section {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 2.5rem;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .security-logo-text {
-            font-size: 1.85rem;
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(ellipse, rgba(20, 184, 166, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .verify-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            margin: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2.25rem;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .verify-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 2rem;
+        }
+
+        .verify-logo-icon {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .verify-logo-text {
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: -0.02em;
         }
 
-        .security-title {
-            font-size: 2.1rem;
-            font-weight: 500;
-            margin: 0 0 0.75rem 0;
-            color: var(--text-primary);
-            letter-spacing: -0.01em;
-        }
-
-        .security-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin: 0 0 2rem 0;
-            max-width: 650px;
-        }
-
-        .security-widget-box {
-            width: 100%;
-            min-height: 80px;
-            display: flex;
-            justify-content: flex-start;
+        .verify-badge {
+            display: inline-flex;
             align-items: center;
-            box-sizing: border-box;
+            gap: 0.4rem;
+            background: rgba(20, 184, 166, 0.08);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            color: var(--accent-teal);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.04em;
         }
 
-        .captcha-spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid var(--accent-red);
+        .verify-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
+            background: var(--accent-teal);
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        .verify-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 0.6rem;
+        }
+
+        .verify-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.75rem;
+        }
+
+        /* Widget area */
+        .verify-widget-area {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Spinner loader */
+        .verify-loader {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-top-color: var(--accent-teal);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .security-divider {
-            width: 100%;
-            border: none;
-            border-top: 1px solid var(--border-color);
-            margin: 4rem 0 1.5rem 0;
-        }
-
-        .security-footer {
-            width: 100%;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #71717a;
-            display: flex;
+        /* Success state */
+        .verify-success {
+            display: none;
             flex-direction: column;
-            gap: 0.35rem;
-            align-items: center;
+            align-items: flex-start;
+            gap: 0.5rem;
         }
 
-        .security-footer a {
-            color: #71717a;
-            text-decoration: underline;
-            transition: color 0.15s ease;
+        .verify-success-icon {
+            font-size: 1.5rem;
         }
 
-        .security-footer a:hover {
-            color: var(--text-primary);
+        .verify-success-text {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-teal);
         }
 
-        .security-fallback {
-            display: flex;
+        .verify-progress-bar {
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .verify-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-teal), var(--accent-indigo));
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Fallback math captcha */
+        .verify-fallback {
+            display: none;
             flex-direction: column;
             gap: 0.75rem;
-            align-items: flex-start;
             width: 100%;
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
             padding: 1.25rem;
-            box-sizing: border-box;
-            max-width: 500px;
         }
 
-        .fallback-btn {
-            background: #27272a;
-            border: 1px solid #3f3f46;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: background 0.15s;
+        .fallback-warning {
+            font-size: 0.8rem;
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
-        .fallback-btn:hover {
-            background: #3f3f46;
+        .fallback-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
-        .fallback-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .fallback-question {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .fallback-input {
-            width: 100px;
-            padding: 0.5rem;
-            border-radius: 6px;
-            border: 1px solid #3f3f46;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
+            width: 90px;
+            padding: 0.45rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-primary);
             text-align: center;
-            font-size: 1rem;
-            outline: none;
+            font-size: 0.95rem;
             font-family: var(--font-mono);
+            outline: none;
+            transition: border-color 0.15s;
         }
 
         .fallback-input:focus {
-            border-color: var(--accent-red);
+            border-color: var(--accent-teal);
+        }
+
+        .fallback-btn {
+            background: var(--accent-teal);
+            border: none;
+            color: #000;
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.82rem;
+            transition: opacity 0.15s;
+            font-family: var(--font-sans);
+        }
+
+        .fallback-btn:hover {
+            opacity: 0.85;
+        }
+
+        .fallback-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .fallback-refresh {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+
+        .fallback-refresh:hover {
+            color: var(--text-primary);
+        }
+
+        /* Divider + footer */
+        .verify-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0 1.25rem;
+        }
+
+        .verify-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .verify-footer a {
+            color: var(--text-muted);
+            text-decoration: underline;
+            transition: color 0.15s;
+        }
+
+        .verify-footer a:hover {
+            color: var(--text-primary);
+        }
+
+        .verify-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.25rem;
         }
 
         .hidden {
@@ -199,201 +360,260 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="security-container">
-        <div class="security-logo-section">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width: 32px; height: 32px; fill: none; stroke: var(--accent-red); stroke-width: 4.5;">
-                <circle cx="50" cy="50" r="38" stroke-dasharray="6 6" />
-                <circle cx="32" cy="50" r="12" fill="var(--accent-red)" opacity="0.85" />
-                <circle cx="68" cy="50" r="12" fill="var(--accent-indigo)" opacity="0.85" />
+    <div class="verify-card">
+        <!-- Logo -->
+        <div class="verify-logo">
+            <svg class="verify-logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="38" stroke="#14b8a6" stroke-width="4" stroke-dasharray="6 6" />
+                <circle cx="32" cy="50" r="12" fill="#14b8a6" opacity="0.9" />
+                <circle cx="68" cy="50" r="12" fill="#6366f1" opacity="0.9" />
             </svg>
-            <span class="security-logo-text">konvo</span>
+            <span class="verify-logo-text">konvo</span>
         </div>
-        
-        <h1 class="security-title">Performing security verification</h1>
-        <p class="security-desc">This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.</p>
-        
-        <div class="security-widget-box">
-            <div id="security-captcha-loader" style="display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary);">
-                <span class="captcha-spinner"></span>
-                <span>Verifying browser credentials...</span>
+
+        <!-- Status badge -->
+        <div class="verify-badge">SECURITY CHECKPOINT</div>
+
+        <!-- Title / Description -->
+        <h1 class="verify-title">Verifying your browser</h1>
+        <p class="verify-desc">Konvo uses Cloudflare Turnstile to block bots and spam. This takes just a second - no
+            puzzle solving needed.</p>
+
+        <!-- Widget area -->
+        <div class="verify-widget-area">
+            <!-- Loading spinner -->
+            <div class="verify-loader" id="verify-loader">
+                <div class="spinner"></div>
+                <span>Loading verification...</span>
             </div>
-            
-            <div id="security-turnstile"></div>
-            
-            <!-- Fallback manual captcha -->
-            <div id="security-captcha-fallback" class="security-fallback hidden">
-                <p style="font-size: 0.85rem; color: #f59e0b; margin: 0; text-align: left;">⚠️ Verification service blocked. Please solve the challenge:</p>
-                <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.25rem;">
-                    <span id="security-fallback-question" style="font-family: var(--font-mono); font-size: 1.05rem; color: #fff; font-weight: 600;">What is ...?</span>
-                    <input type="text" id="security-fallback-answer" class="fallback-input" placeholder="Answer" onkeydown="if(event.key === 'Enter') submitManualSecurityCaptcha();" />
-                    <button type="button" id="btn-security-verify-manual" class="fallback-btn" onclick="submitManualSecurityCaptcha()">Verify</button>
-                    <button type="button" onclick="loadSecurityFallbackChallenge()" style="background: none; border: none; color: #a1a1aa; cursor: pointer; font-size: 1.1rem; padding: 0;" title="Refresh challenge">🔄</button>
+
+            <!-- Turnstile widget mount point -->
+            <div id="turnstile-widget"></div>
+
+            <!-- Success state -->
+            <div class="verify-success" id="verify-success">
+                <div class="verify-success-icon">✓</div>
+                <div class="verify-success-text">Verified. Redirecting you now...</div>
+                <div class="verify-progress-bar">
+                    <div class="verify-progress-fill" id="verify-progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Fallback math captcha -->
+            <div class="verify-fallback" id="verify-fallback">
+                <div class="fallback-warning">⚠ Verification service unavailable. Please solve this:</div>
+                <div class="fallback-row">
+                    <span class="fallback-question" id="fallback-question">...</span>
+                    <input type="text" id="fallback-answer" class="fallback-input" placeholder="Answer"
+                        inputmode="numeric" onkeydown="if(event.key==='Enter') submitFallback();" />
+                    <button class="fallback-btn" id="fallback-submit-btn" onclick="submitFallback()">Verify →</button>
+                    <button class="fallback-refresh" onclick="loadFallbackChallenge()" title="New question">↻</button>
                 </div>
             </div>
         </div>
 
-        <hr class="security-divider" />
-        
-        <div class="security-footer">
-            <div>Ray ID: <span id="security-ray-id" style="font-weight: 600; font-family: var(--font-mono);"></span></div>
+        <hr class="verify-divider" />
+
+        <!-- Footer -->
+        <div class="verify-footer">
+            <div class="verify-footer-row">
+                <span>Performance &amp; Security by <a href="https://www.cloudflare.com" target="_blank"
+                        rel="noopener">Cloudflare</a></span>
+                <a href="/privacy-policy" target="_blank" rel="noopener">Privacy</a>
+            </div>
             <div>
-                Performance and Security by <a href="https://www.cloudflare.com" target="_blank">Cloudflare</a> | <a href="/privacy-policy" target="_blank">Privacy</a>
+                <a href="https://konvo.space" style="color: var(--accent-teal); text-decoration: none;">konvo.space</a>
+                &nbsp;·&nbsp; Protected Connection
             </div>
         </div>
     </div>
-    
-    <script>
-        let securityWidgetId = null;
-        window.securityChallengeId = null;
 
-        async function onSecurityChallengeSolved(token) {
+    <script>
+        // ─── State ────────────────────────────────────────────────────────────────
+        let _widgetId = null;
+        let _challengeId = null;
+        let _siteKey = '0x4AAAAAADg9vHwYwA4a699m'; // fallback default
+
+        // ─── DOM helpers ─────────────────────────────────────────────────────────
+        const $ = id => document.getElementById(id);
+
+        function showLoader() {
+            $('verify-loader').style.display = 'flex';
+            $('turnstile-widget').style.display = 'block';
+            $('verify-success').style.display = 'none';
+            $('verify-fallback').style.display = 'none';
+        }
+
+        function showSuccess() {
+            $('verify-loader').style.display = 'none';
+            $('turnstile-widget').style.display = 'none';
+            $('verify-fallback').style.display = 'none';
+            const s = $('verify-success');
+            s.style.display = 'flex';
+            // Animate progress bar
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    $('verify-progress-fill').style.width = '100%';
+                });
+            });
+        }
+
+        function showFallback() {
+            $('verify-loader').style.display = 'none';
+            $('turnstile-widget').style.display = 'none';
+            $('verify-success').style.display = 'none';
+            $('verify-fallback').style.display = 'flex';
+            loadFallbackChallenge();
+        }
+
+        // ─── Cookie helper - set on THIS domain (konvo.space) ────────────────────
+        function setVerifiedCookie(maxAge) {
+            const age = maxAge || 86400;
+            const secure = location.protocol === 'https:' ? ';Secure' : '';
+            // Set on root domain to cover all subdomains
+            document.cookie = `cf_clearance=true;Max-Age=${age};Path=/${secure};SameSite=Lax`;
+        }
+
+        // ─── Redirect logic ───────────────────────────────────────────────────────
+        function redirectAfterVerify() {
+            showSuccess();
+            const params = new URLSearchParams(window.location.search);
+            const dest = params.get('redirect') || '/';
+            // Sanitize: only allow relative redirects on same origin
+            const safeDest = dest.startsWith('/') ? dest : '/';
+            setTimeout(() => { window.location.href = safeDest; }, 1600);
+        }
+
+        // ─── Main callback after Turnstile/fallback success ──────────────────────
+        async function onVerified(token) {
             try {
                 const res = await fetch('/api/auth/verify-gate-captcha', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token })
+                    credentials: 'include',
+                    body: JSON.stringify({ token })
                 });
-                
+
                 if (res.ok) {
-                    const params = new URLSearchParams(window.location.search);
-                    const dest = params.get("redirect") || "/";
-                    window.location.href = dest;
+                    const data = await res.json();
+                    // The backend confirms verification - set cookie CLIENT-SIDE on konvo.space
+                    if (data.set_cookie) {
+                        setVerifiedCookie(data.max_age || 86400);
+                    }
+                    redirectAfterVerify();
                 } else {
-                    const errData = await res.json();
-                    alert(errData.detail || "Verification failed. Please try again.");
-                    resetOrFallback();
+                    const err = await res.json().catch(() => ({}));
+                    // Reset widget and show error
+                    if (window.turnstile && _widgetId !== null) {
+                        window.turnstile.reset(_widgetId);
+                    } else {
+                        showFallback();
+                    }
+                    alert(err.detail || 'Verification failed. Please try again.');
                 }
             } catch (err) {
-                alert("Connection error. Please try again.");
-                resetOrFallback();
+                console.error('[Security] Verify request failed:', err);
+                // On network error, show fallback
+                showFallback();
             }
         }
 
-        function resetOrFallback() {
-            if (window.turnstile) {
-                try { window.turnstile.reset(); } catch(e){}
-            } else {
-                loadSecurityFallbackChallenge();
+        // ─── Turnstile init ───────────────────────────────────────────────────────
+        window.renderSecurityWidget = function () {
+            const container = $('turnstile-widget');
+            const loader = $('verify-loader');
+            if (!container) return;
+
+            // Hide spinner once widget renders
+            if (loader) loader.style.display = 'none';
+
+            try {
+                _widgetId = window.turnstile.render('#turnstile-widget', {
+                    sitekey: _siteKey,
+                    theme: 'dark',
+                    size: 'normal',
+                    callback: function (token) {
+                        onVerified(token);
+                    },
+                    'expired-callback': function () {
+                        // Token expired before submission - reset silently
+                        window.turnstile.reset(_widgetId);
+                    },
+                    'error-callback': function () {
+                        console.warn('[Security] Turnstile error - showing fallback');
+                        showFallback();
+                    }
+                });
+            } catch (e) {
+                console.error('[Security] Turnstile render failed:', e);
+                showFallback();
+            }
+        };
+
+        // ─── Fallback math captcha ───────────────────────────────────────────────
+        async function loadFallbackChallenge() {
+            try {
+                const res = await fetch('/api/auth/turnstile-config');
+                if (res.ok) {
+                    const data = await res.json();
+                    _siteKey = data.site_key || _siteKey;
+                    if (data.fallback_challenge) {
+                        _challengeId = data.fallback_challenge.id;
+                        const qEl = $('fallback-question');
+                        if (qEl) qEl.textContent = data.fallback_challenge.question;
+                        const inp = $('fallback-answer');
+                        if (inp) { inp.value = ''; inp.focus(); }
+                    }
+                }
+            } catch (err) {
+                console.error('[Security] Fallback challenge load failed:', err);
             }
         }
 
-        async function submitManualSecurityCaptcha() {
-            const answer = document.getElementById('security-fallback-answer')?.value.trim();
-            const challengeId = window.securityChallengeId;
-            if (!answer) return;
-            
-            const btn = document.getElementById('btn-security-verify-manual');
+        async function submitFallback() {
+            const answer = $('fallback-answer')?.value.trim();
+            if (!answer || !_challengeId) return;
+            const btn = $('fallback-submit-btn');
             if (btn) btn.disabled = true;
-            
-            await onSecurityChallengeSolved(`fallback:${challengeId}:${answer}`);
-            
+            await onVerified(`fallback:${_challengeId}:${answer}`);
             if (btn) btn.disabled = false;
         }
 
-        async function loadSecurityFallbackChallenge() {
+        // ─── Bootstrap ────────────────────────────────────────────────────────────
+        async function init() {
+            // Fetch config to get real sitekey
             try {
                 const res = await fetch('/api/auth/turnstile-config');
                 if (res.ok) {
                     const data = await res.json();
+                    _siteKey = data.site_key || _siteKey;
                     if (data.fallback_challenge) {
-                        window.securityChallengeId = data.fallback_challenge.id;
-                        const qEl = document.getElementById('security-fallback-question');
-                        if (qEl) qEl.textContent = data.fallback_challenge.question;
-                        const aInput = document.getElementById('security-fallback-answer');
-                        if (aInput) aInput.value = '';
+                        _challengeId = data.fallback_challenge.id;
                     }
                 }
-            } catch (err) {
-                console.error("[Security] Fallback challenge reload failed:", err);
+            } catch (_) { }
+
+            // If Turnstile already loaded, render immediately
+            if (typeof window.turnstile !== 'undefined') {
+                window.renderSecurityWidget();
             }
+            // Otherwise onloadTurnstileCallback will fire when script loads
+
+            // Auto-show fallback if Turnstile doesn't load within 6s
+            setTimeout(() => {
+                const widget = $('turnstile-widget');
+                const loader = $('verify-loader');
+                // If loader is still visible, Turnstile failed to load
+                if (loader && loader.style.display !== 'none') {
+                    showFallback();
+                }
+            }, 6000);
         }
 
-        async function initSecurityVerification() {
-            let sitekey = '0x4AAAAAADg9vHwYwA4a699m';
-            let fallbackChallenge = null;
-            
-            try {
-                const res = await fetch('/api/auth/turnstile-config');
-                if (res.ok) {
-                    const data = await res.json();
-                    sitekey = data.site_key;
-                    fallbackChallenge = data.fallback_challenge;
-                }
-            } catch (err) {
-                console.error("[Security] Config fetch failed:", err);
-            }
-            
-            const hasTurnstile = typeof window.turnstile !== 'undefined';
-            const verifyContainer = document.getElementById('security-turnstile');
-            const fallbackContainer = document.getElementById('security-captcha-fallback');
-            const loader = document.getElementById('security-captcha-loader');
-            
-            if (hasTurnstile && verifyContainer) {
-                if (loader) loader.style.display = 'flex';
-                if (fallbackContainer) fallbackContainer.style.display = 'none';
-                
-                window.renderSecurityWidget = function() {
-                    try {
-                        securityWidgetId = window.turnstile.render('#security-turnstile', {
-                            sitekey: sitekey,
-                            theme: 'dark',
-                            callback: function(token) {
-                                onSecurityChallengeSolved(token);
-                            },
-                            'error-callback': function() {
-                                showSecurityFallback(fallbackChallenge);
-                            }
-                        });
-                    } catch (e) {
-                        console.error("[Security] Turnstile render failed:", e);
-                        showSecurityFallback(fallbackChallenge);
-                    }
-                    if (loader) loader.style.display = 'none';
-                };
-                
-                if (window.turnstile) {
-                    window.renderSecurityWidget();
-                }
-            } else {
-                showSecurityFallback(fallbackChallenge);
-            }
-        }
-        
-        function showSecurityFallback(challenge) {
-            const verifyContainer = document.getElementById('security-turnstile');
-            const fallbackContainer = document.getElementById('security-captcha-fallback');
-            const loader = document.getElementById('security-captcha-loader');
-            
-            if (verifyContainer) verifyContainer.style.display = 'none';
-            if (loader) loader.style.display = 'none';
-            if (fallbackContainer) {
-                fallbackContainer.style.display = 'flex';
-                fallbackContainer.classList.remove('hidden');
-            }
-            
-            if (challenge) {
-                window.securityChallengeId = challenge.id;
-                const qEl = document.getElementById('security-fallback-question');
-                if (qEl) qEl.textContent = challenge.question;
-            } else {
-                loadSecurityFallbackChallenge();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Generate simulated Ray ID
-            const rayIdEl = document.getElementById('security-ray-id');
-            if (rayIdEl) {
-                const hex = '0123456789abcdef';
-                let randHex = '';
-                for (let i = 0; i < 16; i++) {
-                    randHex += hex[Math.floor(Math.random() * 16)];
-                }
-                rayIdEl.textContent = randHex;
-            }
-            initSecurityVerification();
-        });
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+
 </html>
