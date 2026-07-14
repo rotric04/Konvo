@@ -21,7 +21,8 @@ const PRECACHE_ASSETS = [
   '/src/styles/landing.css',
   '/style.css',
   '/theme.css',
-  '/offline.html'
+  '/offline.html',
+  '/pages/app.html'
 ];
 
 // App shell routes (served from cache-first when offline)

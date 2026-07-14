@@ -49,7 +49,20 @@ Allow: /
 User-agent: *
 Allow: /
 Allow: /static/
+Disallow: /discover
+Disallow: /chat
+Disallow: /grid
+Disallow: /profile
+Disallow: /settings
+Disallow: /agents
+Disallow: /compatibility
+Disallow: /communities
+Disallow: /graph
+Disallow: /virtual-dates
+Disallow: /onboarding
+Disallow: /login
+Disallow: /auth
 Disallow: /admin-portal-secured
 Disallow: /api/admin/
 
-Sitemap: http://konvo.space/sitemap.xml
+Sitemap: https://konvo.space/sitemap.xml

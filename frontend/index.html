@@ -1022,7 +1022,7 @@
 
         <!-- Tab Content 6: Feedback -->
         <div id="landing-feedback" class="landing-tab-content hidden" style="display: none;">
-            <section class="landing-section"
+            <section id="feedback" class="landing-section"
                 style="border-top: none; padding-top: calc(8rem + env(safe-area-inset-top));">
                 <div class="section-header" style="margin-bottom: 2.5rem;">
                     <span class="section-tag" style="color: var(--accent-teal);">Community Signal</span>
@@ -1595,19 +1595,6 @@
             window.addEventListener('touchend', onEnd);
         })();
 
-        // ── Enhanced scroll reveal with stagger ────────────────────────
-        (function enhancedReveal() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.02, rootMargin: '0px 0px 120px 0px' });
-
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-        })();
     </script>
     <!-- ─── PWA Install Prompt ─────────────────────────────────────────────── -->
     <div id="pwa-install-banner" style="
