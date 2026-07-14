@@ -151,13 +151,6 @@
 
 body {
     background-color: var(--bg-main);
-    background-image: 
-        radial-gradient(circle at 100% 150px, rgba(13,148,136,0.06) 0%, transparent 40%),
-        radial-gradient(circle at 0% 100%, rgba(79,70,229,0.06) 0%, transparent 40%),
-        linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-    background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-sans);
     line-height: 1.6;
@@ -165,6 +158,23 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+}
+
+/* GPU-accelerated background container to replace background-attachment: fixed */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(circle at 100% 150px, rgba(13,148,136,0.06) 0%, transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(79,70,229,0.06) 0%, transparent 40%),
+        linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    transform: translateZ(0);
+    contain: strict;
 }
 
 /* Typography */

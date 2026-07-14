@@ -11,18 +11,28 @@ let _demoInterval = null;
 
 // ─── Scroll-driven Reveal Animation ──────────────────────────────────────────────
 export function initScrollReveal() {
-    const targets = document.querySelectorAll('.card, .landing-section, .problem-card, .pipeline-step, .faq-item');
-    targets.forEach(t => t.classList.add('reveal-on-scroll'));
+    // Only target top-level sections and explicit reveal-tagged elements
+    // Avoid observing every .card (can be 100s of elements = IntersectionObserver spam)
+    const targets = document.querySelectorAll(
+        '.landing-section, .problem-card, .pipeline-step, .faq-item, .flat-card, .reveal-on-scroll'
+    );
+    targets.forEach(t => {
+        if (!t.classList.contains('reveal-on-scroll')) {
+            t.classList.add('reveal-on-scroll');
+        }
+    });
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                // Unobserve after reveal to free up observer bandwidth
+                observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.02,
-        rootMargin: '0px 0px 120px 0px'
+        threshold: 0.04,
+        rootMargin: '0px 0px 80px 0px'
     });
 
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
@@ -157,20 +167,26 @@ export function initUserGuideTabs() {
 }
 
 function initThreeHeroBg() {
+    // Skip on mobile devices — not worth the GPU cost
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (isMobile) return;
+
     const container = document.getElementById('three-hero-bg');
     if (!container || typeof THREE === 'undefined') return;
 
-    // Clear existing renderer if any
     container.innerHTML = '';
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    // Disable antialias on hero bg — significant GPU savings, barely visible at small size
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'low-power' });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Cap at 1x pixel ratio for hero bg — it's a background element
+    renderer.setPixelRatio(1);
     container.appendChild(renderer.domElement);
 
-    const particleCount = 200;
+    // Reduced particle count — 120 is visually indistinguishable from 200
+    const particleCount = 120;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -182,7 +198,6 @@ function initThreeHeroBg() {
         positions[i] = (Math.random() - 0.5) * 12;
         positions[i + 1] = (Math.random() - 0.5) * 12;
         positions[i + 2] = (Math.random() - 0.5) * 12;
-
         const mixed = colorTeal.clone().lerp(colorIndigo, Math.random());
         colors[i] = mixed.r;
         colors[i + 1] = mixed.g;
@@ -203,19 +218,26 @@ function initThreeHeroBg() {
 
     const points = new THREE.Points(geometry, material);
     scene.add(points);
-
     camera.position.z = 5;
 
-    let mouseX = 0;
-    let mouseY = 0;
+    // Throttled mouse tracking — update target only, lerp in rAF
+    let mouseTargetX = 0;
+    let mouseTargetY = 0;
+    let mouseRafPending = false;
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
 
     const onMouseMove = (event) => {
-        mouseX = (event.clientX - windowHalfX) / 100;
-        mouseY = (event.clientY - windowHalfY) / 100;
+        if (!mouseRafPending) {
+            mouseRafPending = true;
+            requestAnimationFrame(() => {
+                mouseTargetX = (event.clientX - windowHalfX) / 100;
+                mouseTargetY = (event.clientY - windowHalfY) / 100;
+                mouseRafPending = false;
+            });
+        }
     };
-    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', onMouseMove, { passive: true });
 
     const onResize = () => {
         if (!container.clientWidth) return;
@@ -223,26 +245,32 @@ function initThreeHeroBg() {
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
     };
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', onResize, { passive: true });
 
-    let frameId;
+    // Cache scroll value — only update via scroll event, NOT inside rAF
+    let cachedScrollY = 0;
+    window.addEventListener('scroll', () => { cachedScrollY = window.scrollY; }, { passive: true });
+
     function animate() {
         if (!document.getElementById('three-hero-bg')) {
             renderer.dispose();
+            geometry.dispose();
+            material.dispose();
             document.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('resize', onResize);
             return;
         }
-        frameId = requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
 
-        points.rotation.y += 0.005;
-        points.rotation.x += 0.003;
+        points.rotation.y += 0.004;
+        points.rotation.x += 0.002;
 
-        points.position.x += (mouseX * 0.2 - points.position.x) * 0.05;
-        points.position.y += (-mouseY * 0.2 - points.position.y) * 0.05;
+        // Smooth lerp toward mouse target — no DOM read inside loop
+        points.position.x += (mouseTargetX * 0.2 - points.position.x) * 0.04;
+        points.position.y += (-mouseTargetY * 0.2 - points.position.y) * 0.04;
 
-        const scrollY = window.scrollY || 0;
-        camera.position.z = 5 + scrollY * 0.0015;
+        // Use cached scroll — no forced reflow
+        camera.position.z = 5 + cachedScrollY * 0.0015;
 
         renderer.render(scene, camera);
     }
@@ -261,13 +289,15 @@ export function initLandingPage() {
         gsap.from('.sim-console', { opacity: 0, scale: 0.95, duration: 1.0, delay: 0.5, ease: 'power2.out' });
     }
 
-    // Initialize Lenis smooth scroll if loaded
+    // Initialize Lenis smooth scroll
     if (typeof Lenis !== 'undefined') {
         const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            direction: 'vertical',
-            smooth: true
+            // Shorter duration = snappier, less laggy feel
+            duration: 0.85,
+            easing: (t) => 1 - Math.pow(1 - t, 3), // Simple ease-out-cubic, much cheaper than the original
+            orientation: 'vertical',
+            smoothWheel: true,
+            syncTouch: false, // Disable on touch — native scroll is faster on mobile
         });
         function raf(time) {
             lenis.raf(time);
@@ -276,9 +306,21 @@ export function initLandingPage() {
         requestAnimationFrame(raf);
     }
 
-    // 1. Mobile Menu Drawer Toggle
+    // 1. Scroll-driven header compact state — passive + rAF throttled
     const header = document.querySelector('.landing-header');
-    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    if (header) {
+        let scrollHeaderPending = false;
+        window.addEventListener('scroll', () => {
+            if (!scrollHeaderPending) {
+                scrollHeaderPending = true;
+                requestAnimationFrame(() => {
+                    header.classList.toggle('scrolled', window.scrollY > 60);
+                    scrollHeaderPending = false;
+                });
+            }
+        }, { passive: true });
+    }
+
     const drawerLinks = document.querySelectorAll('.mobile-menu-drawer .landing-tab-btn');
 
     if (menuToggle && header) {

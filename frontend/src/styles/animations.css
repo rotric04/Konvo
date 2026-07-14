@@ -4,6 +4,8 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Universal Theme Transition (flicker-free theme switching) ── */
+/* NOTE: SVG elements intentionally excluded — animating fill/stroke on SVG triggers
+   expensive paint work on every frame. Only transition interactive elements. */
 html,
 body,
 .card,
@@ -18,20 +20,13 @@ select,
 textarea,
 button,
 label,
-a,
-svg,
-path,
-circle,
-rect,
-line {
+a {
     transition:
-        background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
-        background       250ms cubic-bezier(0.4, 0, 0.2, 1),
-        color            250ms cubic-bezier(0.4, 0, 0.2, 1),
-        border-color     250ms cubic-bezier(0.4, 0, 0.2, 1),
-        fill             250ms cubic-bezier(0.4, 0, 0.2, 1),
-        stroke           250ms cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow       250ms cubic-bezier(0.4, 0, 0.2, 1);
+        background-color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+        background       220ms cubic-bezier(0.4, 0, 0.2, 1),
+        color            220ms cubic-bezier(0.4, 0, 0.2, 1),
+        border-color     220ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow       220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Block transitions during page init to prevent theme flash */
@@ -70,20 +65,23 @@ html.preload * {
     animation: pageFadeOut 0.2s ease forwards;
 }
 
-/* ── Scroll Reveal ── */
+/* -- Scroll Reveal -- */
 .reveal-on-scroll,
 .reveal-left,
 .reveal-right,
 .reveal-scale {
     opacity: 0;
-    transition: opacity 0.6s var(--ease-spring), transform 0.6s var(--ease-spring);
-    will-change: opacity, transform;
+    /* Hardcoded easing — CSS vars in transitions cause per-frame style resolution */
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+    /* Contain layout to limit repaint scope to this element's subtree */
+    contain: layout;
 }
 
-.reveal-on-scroll { transform: translateY(24px); }
-.reveal-left      { transform: translateX(-24px); }
-.reveal-right     { transform: translateX(24px); }
-.reveal-scale     { transform: scale(0.95); }
+.reveal-on-scroll { transform: translateY(20px); }
+.reveal-left      { transform: translateX(-20px); }
+.reveal-right     { transform: translateX(20px); }
+.reveal-scale     { transform: scale(0.96); }
 
 .reveal-on-scroll.active,
 .reveal-left.active,
@@ -91,6 +89,8 @@ html.preload * {
 .reveal-scale.active {
     opacity: 1;
     transform: none;
+    /* Release compositor layer after animation to free GPU memory */
+    will-change: auto;
 }
 
 /* ── Skeleton Pulse ── */

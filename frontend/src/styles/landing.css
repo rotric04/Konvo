@@ -26,12 +26,14 @@ textarea {
     border-radius: 0px !important;
 }
 
-/* ── Glassmorphism Core ── */
+/* -- Glassmorphism Core -- */
 .glass-panel {
     backdrop-filter: blur(16px) saturate(120%);
     -webkit-backdrop-filter: blur(16px) saturate(120%);
     background-color: rgba(9, 9, 11, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Promote to own compositing layer to avoid full-page repaint */
+    transform: translateZ(0);
 }
 
 html[data-theme="light"] .glass-panel {
@@ -39,7 +41,7 @@ html[data-theme="light"] .glass-panel {
     border: 1px solid rgba(9, 9, 11, 0.08);
 }
 
-/* ── Landing Header ── */
+/* -- Landing Header -- */
 .landing-header {
     position: fixed;
     top: 0;
@@ -50,7 +52,13 @@ html[data-theme="light"] .glass-panel {
     align-items: center;
     padding: calc(1rem + env(safe-area-inset-top)) 4rem 1rem 4rem;
     z-index: 1000;
-    transition: padding 0.3s ease, background-color 0.3s ease;
+    /* Transition only transform + padding — avoid layout-triggering props */
+    transition: padding 0.25s ease;
+    /* Own compositing layer: prevents full page repaint on scroll */
+    transform: translateZ(0);
+    will-change: transform;
+    /* Contain paint — children can't overflow and trigger outer repaints */
+    contain: layout paint;
 }
 
 .landing-header.scrolled {
@@ -215,12 +223,16 @@ html[data-theme="light"] .glass-panel {
     to { transform: rotate(0deg); }
 }
 
-/* ── Landing Sections ── */
+/* -- Landing Sections -- */
 .landing-section {
     padding: 6rem 4rem;
     border-top: 1px solid var(--border-primary);
     max-width: 1280px;
     margin: 0 auto;
+    /* Defer layout cost of off-screen sections — major RAM + CPU win on long pages */
+    content-visibility: auto;
+    /* Hint to browser how tall this section roughly is (avoids layout shift) */
+    contain-intrinsic-size: 0 600px;
 }
 
 .section-header {

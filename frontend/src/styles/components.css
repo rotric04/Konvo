@@ -11,16 +11,9 @@
     padding: 0;
 }
 
-/* ── Body & Base ── */
+/* -- Body & Base -- */
 body {
     background-color: var(--bg-primary);
-    background-image:
-        radial-gradient(circle at 100% 150px, rgba(13,148,136,0.06) 0%, transparent 40%),
-        radial-gradient(circle at 0% 100%, rgba(6,182,212,0.04) 0%, transparent 40%),
-        linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-    background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-sans);
     line-height: 1.6;
@@ -28,14 +21,34 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    /* Prevent scroll chaining / bounce jank */
+    overscroll-behavior: none;
 }
 
-html[data-theme="light"] body {
+/* Decorative background grid — isolated to its own compositing layer.
+   background-attachment:fixed on body causes full repaint on EVERY scroll pixel.
+   Using a fixed pseudo-element instead is GPU-accelerated and repaint-free. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle at 100% 150px, rgba(13,148,136,0.06) 0%, transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(6,182,212,0.04) 0%, transparent 40%),
+        linear-gradient(rgba(255,255,255,0.007) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.007) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+}
+
+html[data-theme="light"] body::before {
     background-image:
         radial-gradient(circle at 100% 150px, rgba(13,148,136,0.04) 0%, transparent 40%),
         radial-gradient(circle at 0% 100%, rgba(6,182,212,0.02) 0%, transparent 40%),
         linear-gradient(rgba(9,9,11,0.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(9,9,11,0.025) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
 }
 
 /* ── Typography ── */
@@ -67,7 +80,7 @@ a:hover {
     min-height: 100vh;
 }
 
-/* ── Sidebar ── */
+/* -- Sidebar -- */
 .sidebar {
     width: var(--sidebar-width);
     border-right: 1px solid var(--border-color);
@@ -80,7 +93,13 @@ a:hover {
     z-index: var(--z-sidebar);
     overflow-y: auto;
     scrollbar-width: none;
-    transition: transform 0.3s var(--ease-spring);
+    /* Use cubic-bezier directly — var() in transition causes per-frame resolution */
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Own compositing layer to avoid full-page repaint on sidebar open/close */
+    will-change: transform;
+    /* Enable GPU-accelerated scroll on sidebar */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 .sidebar::-webkit-scrollbar { display: none; }
