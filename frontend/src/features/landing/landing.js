@@ -251,6 +251,15 @@ function initThreeHeroBg() {
     let cachedScrollY = 0;
     window.addEventListener('scroll', () => { cachedScrollY = window.scrollY; }, { passive: true });
 
+    // Intersection Observer to pause rendering when the background is off-screen
+    let isCanvasVisible = true;
+    const visibilityObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            isCanvasVisible = entry.isIntersecting;
+        });
+    }, { threshold: 0 });
+    visibilityObserver.observe(container);
+
     function animate() {
         if (!document.getElementById('three-hero-bg')) {
             renderer.dispose();
@@ -258,9 +267,13 @@ function initThreeHeroBg() {
             material.dispose();
             document.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('resize', onResize);
+            visibilityObserver.disconnect();
             return;
         }
         requestAnimationFrame(animate);
+
+        // Pause loop if the canvas is off-screen to free up GPU resources
+        if (!isCanvasVisible) return;
 
         points.rotation.y += 0.004;
         points.rotation.x += 0.002;
@@ -289,22 +302,7 @@ export function initLandingPage() {
         gsap.from('.sim-console', { opacity: 0, scale: 0.95, duration: 1.0, delay: 0.5, ease: 'power2.out' });
     }
 
-    // Initialize Lenis smooth scroll
-    if (typeof Lenis !== 'undefined') {
-        const lenis = new Lenis({
-            // Shorter duration = snappier, less laggy feel
-            duration: 0.85,
-            easing: (t) => 1 - Math.pow(1 - t, 3), // Simple ease-out-cubic, much cheaper than the original
-            orientation: 'vertical',
-            smoothWheel: true,
-            syncTouch: false, // Disable on touch — native scroll is faster on mobile
-        });
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-    }
+    // Native hardware-accelerated scrolling is enabled (Lenis disabled for main-thread performance)
 
     // 1. Scroll-driven header compact state — passive + rAF throttled
     const header = document.querySelector('.landing-header');
@@ -738,9 +736,26 @@ export function initDateSimulator() {
         });
     }
 
+    // Intersection Observer to pause rendering when the simulator is off-screen
+    let isSimVisible = true;
+    const visibilityObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            isSimVisible = entry.isIntersecting;
+        });
+    }, { threshold: 0 });
+    visibilityObserver.observe(canvas);
+
     let angle = 0;
     function animate() {
-        if (!document.getElementById("sim-canvas")) return; // Stop if page changed
+        if (!document.getElementById("sim-canvas")) {
+            visibilityObserver.disconnect();
+            return; // Stop if page changed
+        }
+        requestAnimationFrame(animate);
+
+        // Pause loop if simulator is off-screen to save CPU resources
+        if (!isSimVisible) return;
+
         ctx.clearRect(0, 0, width, height);
 
         // Draw deep tech network background
