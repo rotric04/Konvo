@@ -321,6 +321,7 @@ export function initLandingPage() {
         }, { passive: true });
     }
 
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
     const drawerLinks = document.querySelectorAll('.mobile-menu-drawer .landing-tab-btn');
 
     if (menuToggle && header) {
